@@ -1,0 +1,6 @@
+[submodule "NAnonym"]
+	path = NAnonym
+	url = git@github.com:urasandesu/NAnonym.git
+[submodule "CppAnonym"]
+	path = CppAnonym
+	url = git@github.com:urasandesu/CppAnonym.git
