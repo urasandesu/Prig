@@ -1,0 +1,16 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {532C1F05-F8F3-4FBA-8724-699A31756ABD} = s 'Weaver Class'
+		{
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Both'
+			}
+			TypeLib = s '{9D7CB40B-03CE-4B6A-87D8-9B332CBDFCC0}'
+			Version = s '1.0'
+		}
+	}
+}

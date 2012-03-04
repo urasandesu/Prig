@@ -3,9 +3,11 @@
 
 #include "stdafx.h"
 
+namespace {
 
-int _tmain(int argc, _TCHAR* argv[])
-{
-	return 0;
+    // Test.Urasandesu.Prig.exe --gtest_filter=TestUrasandesuPrigSuite.UrasandesuPrigTest
+    TEST(TestUrasandesuPrigSuite, UrasandesuPrigTest)
+    {
+        SUCCEED();
+    }
 }
-

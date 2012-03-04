@@ -23,3 +23,12 @@
 #include <atlbase.h>
 #include <atlcom.h>
 #include <atlctl.h>
+
+#ifndef URASANDESU_CPPANONYM_H
+#include <Urasandesu/CppAnonym.h>
+#endif
+
+#include <boost/timer.hpp>
+#include <StrongName.h>
+#include <mscoree.h>
+#include <fusion.h>

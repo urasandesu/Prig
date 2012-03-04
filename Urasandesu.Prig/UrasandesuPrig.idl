@@ -8,11 +8,27 @@ import "oaidl.idl";
 import "ocidl.idl";
 
 [
+	object,
+	uuid(80108475-6918-4861-B7B5-981A3A6A098F),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IWeaver : IDispatch{
+};
+[
 	uuid(9D7CB40B-03CE-4B6A-87D8-9B332CBDFCC0),
 	version(1.0),
 ]
 library UrasandesuPrigLib
 {
 	importlib("stdole2.tlb");
+	[
+		uuid(532C1F05-F8F3-4FBA-8724-699A31756ABD)		
+	]
+	coclass Weaver
+	{
+		[default] interface IWeaver;
+	};
 };
 

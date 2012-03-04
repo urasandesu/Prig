@@ -17,3 +17,8 @@
 #include <atlstr.h>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。
+#ifndef URASANDESU_CPPANONYM_CPPANONYMDEPENDSON_H
+#include <Urasandesu/CppAnonym/CppAnonymDependsOn.h>
+#endif
+
+#include <gtest/gtest.h>

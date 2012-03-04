@@ -39,3 +39,11 @@
 *.gif
 *.log
 *.patch
+*.exe.config
+*.opensdf
+*.sdf
+*.tlog
+*.lastbuildstate
+*_manifest.rc
+*.locked
+*.ipch
