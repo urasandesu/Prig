@@ -4,3 +4,6 @@
 [submodule "CppAnonym"]
 	path = CppAnonym
 	url = git@github.com:urasandesu/CppAnonym.git
+[submodule "Swathe"]
+	path = Swathe
+	url = git@github.com:urasandesu/Swathe.git
