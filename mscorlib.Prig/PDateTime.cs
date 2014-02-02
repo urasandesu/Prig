@@ -1,4 +1,33 @@
-﻿using System;
+﻿/* 
+ * File: PDateTime.cs
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
 using Urasandesu.Prig.Framework;
 
 namespace System.Prig
@@ -7,27 +36,25 @@ namespace System.Prig
     {
         public static class NowGet
         {
-            public static Func<DateTime> Body
+            public static IndirectionFunc<DateTime> Body
             {
                 set
                 {
-                    var t = typeof(DateTime);
                     var info = new IndirectionInfo();
-                    info.AssemblyName = t.Assembly.FullName;
-                    info.TypeFullName = t.FullName;
-                    info.MethodName = "get_Now";
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x060002D2;
                     if (value == null)
                     {
-                        var holder = default(IndirectionHolder<Func<DateTime>>);
+                        var holder = default(IndirectionHolder<IndirectionFunc<DateTime>>);
                         if (LooseCrossDomainAccessor.TryGet(out holder))
                         {
-                            var method = default(Func<DateTime>);
+                            var method = default(IndirectionFunc<DateTime>);
                             holder.TryRemove(info, out method);
                         }
                     }
                     else
                     {
-                        var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Func<DateTime>>>();
+                        var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<DateTime>>>();
                         holder.AddOrUpdate(info, value);
                     }
                 }

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ConsoleContext.cs
+ * File: PInt32.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,42 +28,37 @@
  */
 
 
-using System;
-using System.IO;
+using Urasandesu.Prig.Framework;
 
-namespace Test.program1
+namespace System.Prig
 {
-    public class ConsoleContext : IDisposable
+    public static class PInt32
     {
-        bool m_disposed;
-        TextWriter m_lastOut;
-
-        public ConsoleContext()
+        public static class TryParse
         {
-            m_lastOut = Console.Out;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!m_disposed)
+            public static IndirectionOutFunc<string, int, bool> Body
             {
-                if (disposing)
+                set
                 {
-                    Console.SetOut(m_lastOut);
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x06000B2B;
+                    if (value == null)
+                    {
+                        var holder = default(IndirectionHolder<IndirectionOutFunc<string, int, bool>>);
+                        if (LooseCrossDomainAccessor.TryGet(out holder))
+                        {
+                            var method = default(IndirectionOutFunc<string, int, bool>);
+                            holder.TryRemove(info, out method);
+                        }
+                    }
+                    else
+                    {
+                        var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionOutFunc<string, int, bool>>>();
+                        holder.AddOrUpdate(info, value);
+                    }
                 }
             }
-            m_disposed = true;
-        }
-
-        ~ConsoleContext()
-        {
-            Dispose(false);
         }
     }
 }

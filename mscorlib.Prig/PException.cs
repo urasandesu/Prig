@@ -1,5 +1,5 @@
 ﻿/* 
- * File: InstanceGetters.h
+ * File: PException.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,20 +28,38 @@
  */
 
 
-#pragma once
+using Urasandesu.Prig.Framework;
 
-#ifndef INDIRETIONINTERFACES_H
-#define INDIRETIONINTERFACES_H
-
-#ifdef URASANDESU_PRIG_EXPORTS
-#define URASANDESU_PRIG_API __declspec(dllexport)
-#else
-#define URASANDESU_PRIG_API __declspec(dllimport)
-#endif
-
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
-
-#endif  // #ifndef INDIRETIONINTERFACES_H
+namespace System.Prig
+{
+    public static class PException
+    {
+        public static class InternalToString
+        {
+            public static IndirectionFunc<string> Body
+            {
+                set
+                {
+                    var t = typeof(Exception);
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = t.Assembly.FullName;
+                    info.Token = 0x06000293;
+                    if (value == null)
+                    {
+                        var holder = default(IndirectionHolder<IndirectionFunc<string>>);
+                        if (LooseCrossDomainAccessor.TryGet(out holder))
+                        {
+                            var method = default(IndirectionFunc<string>);
+                            holder.TryRemove(info, out method);
+                        }
+                    }
+                    else
+                    {
+                        var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<string>>>();
+                        holder.AddOrUpdate(info, value);
+                    }
+                }
+            }
+        }
+    }
+}

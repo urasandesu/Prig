@@ -1,6 +1,36 @@
-// stdafx.h : •W€‚ÌƒVƒXƒeƒ€ ƒCƒ“ƒNƒ‹[ƒh ƒtƒ@ƒCƒ‹‚ÌƒCƒ“ƒNƒ‹[ƒh ƒtƒ@ƒCƒ‹A‚Ü‚½‚Í
-// QÆ‰ñ”‚ª‘½‚­A‚©‚Â‚ ‚Ü‚è•ÏX‚³‚ê‚È‚¢AƒvƒƒWƒFƒNƒgê—p‚ÌƒCƒ“ƒNƒ‹[ƒh ƒtƒ@ƒCƒ‹
-// ‚ğ‹Lq‚µ‚Ü‚·B
+ï»¿/* 
+ * File: stdafx.h
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
+// stdafx.h : ï¿½Wï¿½ï¿½ï¿½ÌƒVï¿½Xï¿½eï¿½ï¿½ ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Aï¿½Ü‚ï¿½ï¿½ï¿½
+// ï¿½Qï¿½Æ‰ñ”‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Â‚ï¿½ï¿½Ü‚ï¿½ÏXï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Aï¿½vï¿½ï¿½ï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½pï¿½ÌƒCï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h ï¿½tï¿½@ï¿½Cï¿½ï¿½
+// ï¿½ï¿½Lï¿½qï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 
 #pragma once
 
@@ -14,7 +44,7 @@
 
 #define _ATL_NO_AUTOMATIC_NAMESPACE
 
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// ˆê•”‚Ì CString ƒRƒ“ƒXƒgƒ‰ƒNƒ^[‚Í–¾¦“I‚Å‚·B
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// ï¿½ê•”ï¿½ï¿½ CString ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Í–ï¿½ï¿½ï¿½ï¿½Iï¿½Å‚ï¿½ï¿½B
 
 
 #define ATL_NO_ASSERT_ON_DESTROY_NONEXISTENT_WINDOW
@@ -24,11 +54,11 @@
 #include <atlcom.h>
 #include <atlctl.h>
 
-#ifndef URASANDESU_CPPANONYM_H
-#include <Urasandesu/CppAnonym.h>
+#ifndef URASANDESU_SWATHE_SWATHEDEPENDSON_H
+#include <Urasandesu/Swathe/SwatheDependsOn.h>
 #endif
 
-#include <boost/timer.hpp>
-#include <StrongName.h>
-#include <mscoree.h>
-#include <fusion.h>
+//#include <boost/timer.hpp>
+//#include <StrongName.h>
+//#include <mscoree.h>
+//#include <fusion.h>

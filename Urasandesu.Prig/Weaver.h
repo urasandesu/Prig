@@ -1,40 +1,122 @@
-// Weaver.h : CWeaver ÇÃêÈåæ
+Ôªø/* 
+ * File: Weaver.h
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
 
 #pragma once
-#include "resource.h"       // ÉÅÉCÉì ÉVÉìÉ{Éã
 
-
+#include "resource.h"
 
 #include "UrasandesuPrig_i.h"
 
-
-
 #if defined(_WIN32_WCE) && !defined(_CE_DCOM) && !defined(_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA)
-#error "DCOM ÇÃäÆëSÉTÉ|Å[ÉgÇä‹ÇÒÇ≈Ç¢Ç»Ç¢ Windows Mobile ÉvÉâÉbÉgÉtÉHÅ[ÉÄÇÃÇÊÇ§Ç» Windows CE ÉvÉâÉbÉgÉtÉHÅ[ÉÄÇ≈ÇÕÅAíPàÍÉXÉåÉbÉh COM ÉIÉuÉWÉFÉNÉgÇÕê≥ÇµÇ≠ÉTÉ|Å[ÉgÇ≥ÇÍÇƒÇ¢Ç‹ÇπÇÒÅBATL Ç™íPàÍÉXÉåÉbÉh COM ÉIÉuÉWÉFÉNÉgÇÃçÏê¨ÇÉTÉ|Å[ÉgÇ∑ÇÈÇ±Ç∆ÅAÇ®ÇÊÇ—ÇªÇÃíPàÍÉXÉåÉbÉh COM ÉIÉuÉWÉFÉNÉgÇÃé¿ëïÇÃégópÇãñâ¬Ç∑ÇÈÇ±Ç∆Çã≠êßÇ∑ÇÈÇ…ÇÕÅA_CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA ÇíËã`ÇµÇƒÇ≠ÇæÇ≥Ç¢ÅBÇ≤égópÇÃ rgs ÉtÉ@ÉCÉãÇÃÉXÉåÉbÉh ÉÇÉfÉãÇÕ 'Free' Ç…ê›íËÇ≥ÇÍÇƒÇ®ÇËÅADCOM Windows CE à»äOÇÃÉvÉâÉbÉgÉtÉHÅ[ÉÄÇ≈ÉTÉ|Å[ÉgÇ≥ÇÍÇÈóBàÍÇÃÉXÉåÉbÉh ÉÇÉfÉãÇ∆ê›íËÇ≥ÇÍÇƒÇ¢Ç‹ÇµÇΩÅB"
+#error "Single-threaded COM objects are not properly supported on Windows CE platform, such as the Windows Mobile platforms that do not include full DCOM support. Define _CE_ALLOW_SINGLE_THREADED_OBJECTS_IN_MTA to force ATL to support creating single-thread COM object's and allow use of it's single-threaded COM object implementations. The threading model in your rgs file was set to 'Free' as that is the only threading model supported in non DCOM Windows CE platforms."
 #endif
 
-using namespace ATL;
+#ifndef URASANDESU_SWATHE_H
+#include <Urasandesu/Swathe.h>
+#endif
 
+namespace CWeaverDetail {
 
-// CWeaver
-#ifdef UNP
-#error This .h temporarily reserves the word "UNP" that means "Urasandesu::CppAnonym::Profiling".
-#else
-#define UNP Urasandesu::CppAnonym::Profiling
+    using namespace Urasandesu::Swathe;
+    using namespace Urasandesu::Swathe::Hosting;
+    using namespace Urasandesu::Swathe::Metadata;
+    using namespace Urasandesu::Swathe::Profiling;
+    using boost::unordered_map;
+    using std::wstring;
 
-class ATL_NO_VTABLE CWeaver :
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CWeaver, &CLSID_Weaver>,
-    public UNP::ICorProfilerCallback2Impl<ICorProfilerCallback2>,
-	public IDispatchImpl<IWeaver, &IID_IWeaver, &LIBID_UrasandesuPrigLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+    struct PrigData;
+
+    class CWeaverImpl : 
+        public ICorProfilerCallback2Impl<ICorProfilerCallback2>
+    {
+    public: 
+        CWeaverImpl();
+
+    protected:
+        STDMETHOD(InitializeCore)( 
+            /* [in] */ IUnknown *pICorProfilerInfoUnk);
+
+        STDMETHOD(ShutdownCore)();
+
+        STDMETHOD(AppDomainCreationStartedCore)( 
+            /* [in] */ AppDomainID appDomainId);
+
+        STDMETHOD(AppDomainCreationFinishedCore)( 
+            /* [in] */ AppDomainID appDomainId,
+            /* [in] */ HRESULT hrStatus);
+
+        STDMETHOD(AppDomainShutdownStartedCore)( 
+            /* [in] */ AppDomainID appDomainId);
+
+        STDMETHOD(AppDomainShutdownFinishedCore)( 
+            /* [in] */ AppDomainID appDomainId,
+            /* [in] */ HRESULT hrStatus);
+
+        STDMETHOD(ModuleLoadStartedCore)( 
+            /* [in] */ ModuleID moduleId);
+        
+        STDMETHOD(ModuleLoadFinishedCore)( 
+            /* [in] */ ModuleID moduleId,
+            /* [in] */ HRESULT hrStatus);
+
+        STDMETHOD(ModuleUnloadStartedCore)( 
+            /* [in] */ ModuleID moduleId);
+        
+        STDMETHOD(ModuleUnloadFinishedCore)( 
+            /* [in] */ ModuleID moduleId,
+            /* [in] */ HRESULT hrStatus);
+
+        STDMETHOD(JITCompilationStartedCore)( 
+            /* [in] */ FunctionID functionId,
+            /* [in] */ BOOL fIsSafeToBlock);
+    
+    private:
+        SIZE_T EmitNewMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData);
+        void EmitParameters(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen);
+        IType const *GetIndirectionDelegateInstance(IMethod const *pTarget, IModule const *pIndDll, IType const *pIndDlgtAttrType, PrigData &prigData) const;
+
+        ProfilingInfo *m_pProfInfo;
+    };
+
+}   // namespace CWeaverDetail {
+
+struct ATL_NO_VTABLE CWeaver :
+	ATL::CComObjectRootEx<ATL::CComMultiThreadModel>,
+	ATL::CComCoClass<CWeaver, &CLSID_Weaver>,
+    CWeaverDetail::CWeaverImpl,
+	ATL::IDispatchImpl<IWeaver, &IID_IWeaver, &LIBID_UrasandesuPrigLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
-public:
 	CWeaver()
-	{
-	}
+	{ }
 
 DECLARE_REGISTRY_RESOURCEID(IDR_WEAVER)
-
 
 BEGIN_COM_MAP(CWeaver)
 	COM_INTERFACE_ENTRY(IWeaver)
@@ -42,40 +124,11 @@ BEGIN_COM_MAP(CWeaver)
     COM_INTERFACE_ENTRY(ICorProfilerCallback2)
 END_COM_MAP()
 
-
-
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
     HRESULT FinalConstruct();
 
     void FinalRelease();
-
-protected:
-    STDMETHOD(InitializeCore)(
-        /* [in] */ IUnknown *pICorProfilerInfoUnk);
-
-    STDMETHOD(ShutdownCore)(void);
-
-    STDMETHOD(ModuleLoadStartedCore)( 
-        /* [in] */ ModuleID moduleId);
-
-    STDMETHOD(JITCompilationStartedCore)( 
-        /* [in] */ FunctionID functionId,
-        /* [in] */ BOOL fIsSafeToBlock);
-
-private:
-    boost::timer m_timer;
-
-    ATL::CComPtr<ICorProfilerInfo2> m_pInfo;
-    ATL::CComPtr<IMetaDataEmit2> m_pEmtMSCorLib;
-
-    static std::wstring const MODULE_NAME_OF_MS_COR_LIB;
-    static std::wstring const TYPE_NAME_OF_SYSTEM_DATE_TIME_GET_NOW;
-
-    std::auto_ptr<BYTE> m_pDateTimeget_NowBody;
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(Weaver), CWeaver)
-
-#undef UNP
-#endif

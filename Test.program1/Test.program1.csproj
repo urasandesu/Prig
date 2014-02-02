@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -54,6 +54,10 @@
     <ProjectReference Include="..\program1\program1.csproj">
       <Project>{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}</Project>
       <Name>program1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj">
+      <Project>{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}</Project>
+      <Name>Urasandesu.Prig.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

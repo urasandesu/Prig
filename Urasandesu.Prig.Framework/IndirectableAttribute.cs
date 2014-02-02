@@ -1,5 +1,5 @@
 ﻿/* 
- * File: InstanceGetters.h
+ * File: IndirectableAttribute.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,20 +28,20 @@
  */
 
 
-#pragma once
+using System;
 
-#ifndef INDIRETIONINTERFACES_H
-#define INDIRETIONINTERFACES_H
+namespace Urasandesu.Prig.Framework
+{
+    [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = true)]
+    public sealed class IndirectableAttribute : Attribute
+    {
+        readonly uint m_token;
 
-#ifdef URASANDESU_PRIG_EXPORTS
-#define URASANDESU_PRIG_API __declspec(dllexport)
-#else
-#define URASANDESU_PRIG_API __declspec(dllimport)
-#endif
+        public IndirectableAttribute(uint token)
+        {
+            m_token = token;
+        }
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
-
-#endif  // #ifndef INDIRETIONINTERFACES_H
+        public uint Token { get { return m_token; } }
+    }
+}

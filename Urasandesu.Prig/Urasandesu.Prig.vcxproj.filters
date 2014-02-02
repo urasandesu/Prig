@@ -1,110 +1,662 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
+    <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="ヘッダー ファイル">
+    <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="リソース ファイル">
+    <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="生成されたファイル">
+    <Filter Include="Generated Files">
       <UniqueIdentifier>{af50394b-14a8-4308-a9ce-4da9f529642e}</UniqueIdentifier>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="ソース ファイル\Urasandesu">
+    <Filter Include="Source Files\Urasandesu">
       <UniqueIdentifier>{777306f8-c050-45ef-9164-851f526c3b92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Urasandesu\CppAnonym">
+    <Filter Include="Source Files\Urasandesu\CppAnonym">
       <UniqueIdentifier>{2694fd59-763e-4ae6-ae5a-310014a0e445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\CppAnonym\Utilities">
+      <UniqueIdentifier>{0536A620-17AB-41E7-84D8-63FD206B02A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass">
+      <UniqueIdentifier>{5309c621-a363-4d29-b5da-9fc25cf4ab56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Fusion">
+      <UniqueIdentifier>{3a46c0e7-0ffa-4102-9a1e-9468f59cb761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen">
+      <UniqueIdentifier>{9385f887-9c76-4b9c-8329-92f1f3790eb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe">
+      <UniqueIdentifier>{0519139e-8da3-4307-8c98-655f0bea054d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\Metadata">
+      <UniqueIdentifier>{58882841-1AD8-4A79-8BE6-ADBA07F5578B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPersistedHandler">
+      <UniqueIdentifier>{c47675bd-06fa-4a24-bbfb-298b5b75031d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl">
+      <UniqueIdentifier>{4749a19b-d57f-4c34-924d-16a080095bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClass">
+      <UniqueIdentifier>{860f0da9-47d6-47ec-8372-1593c46f8bbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Hosting">
+      <UniqueIdentifier>{8c0450e7-8b78-4fcc-9020-6513eed26720}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPersistedHandler">
+      <UniqueIdentifier>{130e7d9c-27cb-47d0-b162-8fac849c4b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl">
+      <UniqueIdentifier>{d96a73e5-5eb2-415e-b535-d10370fcaf84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass">
+      <UniqueIdentifier>{4d57a380-ae8b-439a-a838-3d745db8cdd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Metadata">
+      <UniqueIdentifier>{de3ce35b-6c53-4892-9aee-0c444f827b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler">
+      <UniqueIdentifier>{4ac96cd0-2e59-4166-a2f5-2b9a8d18be0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl">
+      <UniqueIdentifier>{b92c8d81-6b53-49ab-b6f3-188238add32a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass">
+      <UniqueIdentifier>{aa8e3815-b37c-42a8-9ddf-5a442bb193cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Profiling">
+      <UniqueIdentifier>{079122dc-d04c-4ff3-b298-059c7eb76efb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler">
+      <UniqueIdentifier>{ec9c63e1-b545-423f-952b-ff81a1aee66b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl">
+      <UniqueIdentifier>{92c3c6a5-7314-4145-adfc-b3d4ec1a3015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClass">
+      <UniqueIdentifier>{9c10a56c-a71e-42b3-8971-a307b8e375a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\StrongNaming">
+      <UniqueIdentifier>{61ca73f3-8920-483e-84dc-0ac671dd5226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPersistedHandler">
+      <UniqueIdentifier>{6d13b073-5b7f-4a14-bcdd-7e8333199fa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl">
+      <UniqueIdentifier>{5f8e91e0-eb1a-4963-ac67-1dcec541b0a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Urasandesu.Prig.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UrasandesuPrig_i.c">
-      <Filter>生成されたファイル</Filter>
+      <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="Weaver.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymArgumentException.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymCOMException.cpp">
-      <Filter>ソース ファイル\Urasandesu\CppAnonym</Filter>
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymException.cpp">
-      <Filter>ソース ファイル\Urasandesu\CppAnonym</Filter>
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymInvalidOperationException.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymNotImplementedException.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymNotSupportedException.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymObjectDisposedException.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymSystemException.cpp">
-      <Filter>ソース ファイル\Urasandesu\CppAnonym</Filter>
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Environment.cpp">
-      <Filter>ソース ファイル\Urasandesu\CppAnonym</Filter>
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\SimpleDisposable.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\StackFrame.cpp">
-      <Filter>ソース ファイル\Urasandesu\CppAnonym</Filter>
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\StackTrace.cpp">
-      <Filter>ソース ファイル\Urasandesu\CppAnonym</Filter>
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\AutoPtr.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\SemiAutoPtr.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\TypeInfo.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ControlFlow.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\MetadataSpecialValues.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\OpCode.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\OpCodeKind.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\OpCodes.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\OperandParam.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\StackBehaviour.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\Signature.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IFieldEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IFieldHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IMethodEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IMethodHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ITypeEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ITypeHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IPropertyEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IPropertyHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\MetadataResolver.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IParameterEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IParameterHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>
     <ClCompile Include="InstanceGetters.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyInfo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseFusionInfo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPersistedHandler\BaseFusionInfoPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl\BaseAssemblyInfoPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl\BaseFusionInfoPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClass\BaseHostInfo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClass\BasePortableExecutableInfo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClass\BasePortableExecutableWriter.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClass\BaseRuntimeHost.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPersistedHandler\BaseHostInfoPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPersistedHandler\BasePortableExecutableInfoPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPersistedHandler\BaseRuntimeHostPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl\BaseHostInfoPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl\BasePortableExecutableInfoPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl\BasePortableExecutableWriterPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl\BaseRuntimeHostPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseAssemblyGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseAssemblyMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseCustomAttributeGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseFieldGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseInstructionGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseLocalGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseMetadataDispenser.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseMetadataInfo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseMethodBodyGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseMethodGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseMethodMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseModuleGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseModuleMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseParameterGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseParameterMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BasePropertyGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BasePropertyMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseTypeGenerator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseTypeMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseAssemblyGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseAssemblyMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseCustomAttributeGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseFieldGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseLocalGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseMetadataDispenserPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseMetadataInfoPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseMethodBodyGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseMethodGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseMethodMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseModuleGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseModuleMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseParameterGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseParameterMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BasePropertyGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BasePropertyMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseTypeGeneratorPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseTypeMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseAssemblyGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseAssemblyMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseCustomAttributeGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseFieldGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseInstructionGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseLocalGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseMetadataDispenserPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseMetadataInfoPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseMethodBodyGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseMethodGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseMethodMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseModuleGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseModuleMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseParameterGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseParameterMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BasePropertyGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BasePropertyMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseTypeGeneratorPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseTypeMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseProfilingInfo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseProfilingInfoPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseProfilingInfoPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClass\BaseStrongNameInfo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClass\BaseStrongNameKey.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPersistedHandler\BaseStrongNameInfoPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl\BaseStrongNameInfoPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl\BaseStrongNameKeyPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\BaseSwatheStorage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseProcessProfiler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseProcessProfilerPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseProcessProfilerPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseAppDomainProfiler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseAppDomainProfilerPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseAppDomainProfilerPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseAssemblyProfiler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseAssemblyProfilerPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseAssemblyProfilerPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseModuleProfiler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseModuleProfilerPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseModuleProfilerPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseClassProfiler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseClassProfilerPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseClassProfilerPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseFunctionProfiler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseFunctionProfilerPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseFunctionProfilerPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseCustomAttributeMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseCustomAttributeMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseCustomAttributeMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyCache.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl\BaseAssemblyCachePimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyName.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl\BaseAssemblyNamePimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyNameRange.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl\BaseAssemblyNameRangePimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyNameIterator.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IModuleEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IModuleHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseLocalMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseMethodBodyMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseLocalMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseMethodBodyMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseInstructionMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseLocalMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseMethodBodyMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseInstructionMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClass\BasePortableExecutableReader.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl\BasePortableExecutableReaderPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Hosting\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ILocalEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ILocalHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IMethodBodyEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IMethodBodyHash.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseFunctionBodyProfiler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler\BaseFunctionBodyProfilerPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseFunctionBodyProfilerPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dllmain.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UrasandesuPrig_i.h">
-      <Filter>生成されたファイル</Filter>
+      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Weaver.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InstanceGetters.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Urasandesu.Prig.rc">
-      <Filter>リソース ファイル</Filter>
+      <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
     <None Include="Urasandesu.Prig.rgs">
-      <Filter>リソース ファイル</Filter>
+      <Filter>Resource Files</Filter>
     </None>
     <None Include="Urasandesu.Prig.def">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Source Files</Filter>
     </None>
     <None Include="Weaver.rgs">
-      <Filter>リソース ファイル</Filter>
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="UrasandesuPrig.idl">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Source Files</Filter>
     </Midl>
   </ItemGroup>
 </Project>

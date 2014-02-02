@@ -1,8 +1,38 @@
+ï»¿/* 
+ * File: targetver.h
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
 #pragma once
 
-// SDKDDKVer.h ‚ğƒCƒ“ƒNƒ‹[ƒh‚·‚é‚ÆA—˜—p‚Å‚«‚éÅ‚àãˆÊ‚Ì Windows ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚ª’è‹`‚³‚ê‚Ü‚·B
+// SDKDDKVer.h ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ÆAï¿½ï¿½ï¿½pï¿½Å‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ê‚ï¿½ Windows ï¿½vï¿½ï¿½ï¿½bï¿½gï¿½tï¿½Hï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 
-// ˆÈ‘O‚Ì Windows ƒvƒ‰ƒbƒgƒtƒH[ƒ€—p‚ÉƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğƒrƒ‹ƒh‚·‚éê‡‚ÍAWinSDKVer.h ‚ğƒCƒ“ƒNƒ‹[ƒh‚µA
-// SDKDDKVer.h ‚ğƒCƒ“ƒNƒ‹[ƒh‚·‚é‘O‚ÉAƒTƒ|[ƒg‘ÎÛ‚Æ‚·‚éƒvƒ‰ƒbƒgƒtƒH[ƒ€‚ğ¦‚·‚æ‚¤‚É _WIN32_WINNT ƒ}ƒNƒ‚ğİ’è‚µ‚Ü‚·B
+// ï¿½È‘Oï¿½ï¿½ Windows ï¿½vï¿½ï¿½ï¿½bï¿½gï¿½tï¿½Hï¿½[ï¿½ï¿½ï¿½pï¿½ÉƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAWinSDKVer.h ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½A
+// SDKDDKVer.h ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½Oï¿½ÉAï¿½Tï¿½|ï¿½[ï¿½gï¿½ÎÛ‚Æ‚ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½bï¿½gï¿½tï¿½Hï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ‚¤ï¿½ï¿½ _WIN32_WINNT ï¿½}ï¿½Nï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
 
 #include <SDKDDKVer.h>

@@ -1,4 +1,34 @@
-// Urasandesu.Prig.cpp : DLL ƒGƒNƒXƒ|[ƒg‚ÌÀ‘•‚Å‚·B
+ï»¿/* 
+ * File: Urasandesu.Prig.cpp
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
+// Urasandesu.Prig.cpp : DLL ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã®å®Ÿè£…ã§ã™ã€‚
 
 
 #include "stdafx.h"
@@ -7,34 +37,34 @@
 #include "dllmain.h"
 
 
-// DLL ‚ğ OLE ‚É‚æ‚Á‚ÄƒAƒ“ƒ[ƒh‚Å‚«‚é‚æ‚¤‚É‚·‚é‚©‚Ç‚¤‚©‚ğw’è‚µ‚Ü‚·B
+// DLL ã‚’ OLE ã«ã‚ˆã£ã¦ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã‹ã©ã†ã‹ã‚’æŒ‡å®šã—ã¾ã™ã€‚
 STDAPI DllCanUnloadNow(void)
 {
 			return _AtlModule.DllCanUnloadNow();
 	}
 
-// —v‹‚³‚ê‚½Œ^‚ÌƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚éƒNƒ‰ƒX ƒtƒ@ƒNƒgƒŠ‚ğ•Ô‚µ‚Ü‚·B
+// è¦æ±‚ã•ã‚ŒãŸå‹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹ã‚¯ãƒ©ã‚¹ ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’è¿”ã—ã¾ã™ã€‚
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 		return _AtlModule.DllGetClassObject(rclsid, riid, ppv);
 }
 
-// DllRegisterServer - ƒGƒ“ƒgƒŠ‚ğƒVƒXƒeƒ€ ƒŒƒWƒXƒgƒŠ‚É’Ç‰Á‚µ‚Ü‚·B
+// DllRegisterServer - ã‚¨ãƒ³ãƒˆãƒªã‚’ã‚·ã‚¹ãƒ†ãƒ  ãƒ¬ã‚¸ã‚¹ãƒˆãƒªã«è¿½åŠ ã—ã¾ã™ã€‚
 STDAPI DllRegisterServer(void)
 {
-	// ƒIƒuƒWƒFƒNƒgAƒ^ƒCƒv ƒ‰ƒCƒuƒ‰ƒŠ‚¨‚æ‚Ñƒ^ƒCƒv ƒ‰ƒCƒuƒ‰ƒŠ“à‚Ì‚·‚×‚Ä‚ÌƒCƒ“ƒ^[ƒtƒFƒCƒX‚ğ“o˜^‚µ‚Ü‚·
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€ã‚¿ã‚¤ãƒ— ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŠã‚ˆã³ã‚¿ã‚¤ãƒ— ãƒ©ã‚¤ãƒ–ãƒ©ãƒªå†…ã®ã™ã¹ã¦ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’ç™»éŒ²ã—ã¾ã™
 	HRESULT hr = _AtlModule.DllRegisterServer();
 		return hr;
 }
 
-// DllUnregisterServer - ƒGƒ“ƒgƒŠ‚ğƒŒƒWƒXƒgƒŠ‚©‚çíœ‚µ‚Ü‚·B
+// DllUnregisterServer - ã‚¨ãƒ³ãƒˆãƒªã‚’ãƒ¬ã‚¸ã‚¹ãƒˆãƒªã‹ã‚‰å‰Šé™¤ã—ã¾ã™ã€‚
 STDAPI DllUnregisterServer(void)
 {
 	HRESULT hr = _AtlModule.DllUnregisterServer();
 		return hr;
 }
 
-// DllInstall - ƒ†[ƒU[‚¨‚æ‚ÑƒRƒ“ƒsƒ…[ƒ^[‚²‚Æ‚ÌƒVƒXƒeƒ€ ƒŒƒWƒXƒgƒŠ ƒGƒ“ƒgƒŠ‚ğ’Ç‰Á‚Ü‚½‚Ííœ‚µ‚Ü‚·B
+// DllInstall - ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŠã‚ˆã³ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ãƒ¼ã”ã¨ã®ã‚·ã‚¹ãƒ†ãƒ  ãƒ¬ã‚¸ã‚¹ãƒˆãƒª ã‚¨ãƒ³ãƒˆãƒªã‚’è¿½åŠ ã¾ãŸã¯å‰Šé™¤ã—ã¾ã™ã€‚
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
 	HRESULT hr = E_FAIL;

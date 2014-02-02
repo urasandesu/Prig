@@ -47,3 +47,7 @@
 *_manifest.rc
 *.locked
 *.ipch
+*.xlsx
+*.asta
+*.dasm
+*.unsuccessfulbuild

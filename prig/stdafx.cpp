@@ -1,8 +1,38 @@
-// stdafx.cpp : •W€ƒCƒ“ƒNƒ‹[ƒh prig.pch ‚Ì‚İ‚ğ
-// ŠÜ‚Şƒ\[ƒX ƒtƒ@ƒCƒ‹‚ÍAƒvƒŠƒRƒ“ƒpƒCƒ‹Ï‚İƒwƒbƒ_[‚É‚È‚è‚Ü‚·B
-// stdafx.obj ‚É‚ÍƒvƒŠƒRƒ“ƒpƒCƒ‹Ï‚İŒ^î•ñ‚ªŠÜ‚Ü‚ê‚Ü‚·B
+ï»¿/* 
+ * File: stdafx.cpp
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
+// stdafx.cpp : ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½h prig.pch ï¿½Ì‚İ‚ï¿½
+// ï¿½Ü‚Şƒ\ï¿½[ï¿½X ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÍAï¿½vï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½Ï‚İƒwï¿½bï¿½_ï¿½[ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B
+// stdafx.obj ï¿½É‚Íƒvï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½pï¿½Cï¿½ï¿½ï¿½Ï‚İŒ^ï¿½ï¿½ñ‚ªŠÜ‚Ü‚ï¿½Ü‚ï¿½ï¿½B
 
 #include "stdafx.h"
 
-// TODO: ‚±‚Ìƒtƒ@ƒCƒ‹‚Å‚Í‚È‚­ASTDAFX.H ‚Å•K—v‚È
-// ’Ç‰Áƒwƒbƒ_[‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+// TODO: ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½Å‚Í‚È‚ï¿½ï¿½ASTDAFX.H ï¿½Å•Kï¿½vï¿½ï¿½
+// ï¿½Ç‰ï¿½ï¿½wï¿½bï¿½_ï¿½[ï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B

@@ -1,4 +1,36 @@
-﻿using System;
+﻿/* 
+ * File: LooseCrossDomainAccessor.cs
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
+using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
@@ -10,9 +42,13 @@ namespace Urasandesu.Prig.Framework
     {
         protected LooseCrossDomainAccessor() { }
 
+        static readonly HashSet<Type> ms_registrations = new HashSet<Type>();
+
         public static void Register<T>() where T : InstanceHolder<T>
         {
             LooseCrossDomainAccessor<T>.Register();
+            lock (ms_registrations)
+                ms_registrations.Add(typeof(T));
         }
 
         public static void Unload<T>() where T : InstanceHolder<T>
@@ -30,7 +66,7 @@ namespace Urasandesu.Prig.Framework
             var holder = default(T);
             if ((holder = LooseCrossDomainAccessor<T>.HolderOrDefault) == null)
             {
-                LooseCrossDomainAccessor<T>.Register();
+                Register<T>();
                 holder = LooseCrossDomainAccessor<T>.Holder;
             }
             return holder;
@@ -40,6 +76,17 @@ namespace Urasandesu.Prig.Framework
         {
             holder = LooseCrossDomainAccessor<T>.HolderOrDefault;
             return holder != null;
+        }
+
+        public static void Clear()
+        {
+            lock (ms_registrations)
+            {
+                foreach (var unloadMethod in ms_registrations.Select(_ => typeof(LooseCrossDomainAccessor<>).MakeGenericType(_)).
+                                                              Select(_ => _.GetMethod("Unload")))
+                    unloadMethod.Invoke(null, new object[0]);
+            }
+            InstanceGetters.Clear();
         }
     }
 
