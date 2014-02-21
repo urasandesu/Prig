@@ -45,7 +45,8 @@ namespace CWeaverDetail {
             {
                 auto hash = [](IParameter const *pParam) { return HashValue(pParam); };
                 auto hasRet = static_cast<INT>(v->GetReturnType()->GetKind() != TypeKinds::TK_VOID);
-                return hasRet ^ SequenceHashValue(v->GetParameters(), hash);
+                auto isStatic = static_cast<INT>(v->IsStatic());
+                return hasRet ^ SequenceHashValue(v->GetParameters(), hash) ^ isStatic;
             }
 
             static result_type HashValue(IParameter const *pParam)
@@ -67,6 +68,7 @@ namespace CWeaverDetail {
 
     namespace IMethodSigEqualToDetail {
 
+        using std::vector;
         using Urasandesu::CppAnonym::Traits::EqualityComparable;
         using Urasandesu::CppAnonym::Collections::SequenceEqual;
 
@@ -75,13 +77,25 @@ namespace CWeaverDetail {
         {
             result_type operator()(param_type x, param_type y) const
             {
-                auto equalTo = [](IParameter const *pParamX, IParameter const *pParamY) { return EqualTo(pParamX, pParamY); };
-                auto hasRetX = x->GetReturnType()->GetKind() != TypeKinds::TK_VOID;
-                auto hasRetY = y->GetReturnType()->GetKind() != TypeKinds::TK_VOID;
-                return hasRetX == hasRetY && SequenceEqual(x->GetParameters(), y->GetParameters(), equalTo);
+                auto isStaticX = x->IsStatic();
+                auto isStaticY = y->IsStatic();
+                return isStaticX == isStaticY && ReturnTypeEqual(x->GetReturnType(), y->GetReturnType()) && ParametersEqual(x->GetParameters(), y->GetParameters());
             }
             
-            static result_type EqualTo(IParameter const *pParamX, IParameter const *pParamY)
+            static result_type ReturnTypeEqual(IType const *pRetTypeX, IType const *pRetTypeY)
+            {
+                auto hasRetX = pRetTypeX->GetKind() != TypeKinds::TK_VOID;
+                auto hasRetY = pRetTypeY->GetKind() != TypeKinds::TK_VOID;
+                return hasRetX == hasRetY;
+            }
+            
+            static result_type ParametersEqual(vector<IParameter const *> const &paramsX, vector<IParameter const *> const &paramsY)
+            {
+                auto equalTo = [](IParameter const *pParamX, IParameter const *pParamY) { return ParameterEqual(pParamX, pParamY); };
+                return SequenceEqual(paramsX, paramsY, equalTo);
+            }
+            
+            static result_type ParameterEqual(IParameter const *pParamX, IParameter const *pParamY)
             {
                 auto dwattrX = pParamX->GetAttribute().Value();
                 auto isByRefX = pParamX->GetParameterType()->IsByRef();
@@ -123,7 +137,10 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::InitializeCore( 
         /* [in] */ IUnknown *pICorProfilerInfoUnk)
     {
-        D_WCOUT1(L"InitializeCore(IUnknown *: 0x%|1$08X|)", reinterpret_cast<SIZE_T>(pICorProfilerInfoUnk));
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW1(L"InitializeCore(IUnknown *: 0x%|1$08X|)", reinterpret_cast<SIZE_T>(pICorProfilerInfoUnk));
+
+        auto _ = guard_type(m_lock);
 
         auto const *pHost = HostInfo::CreateHost();
         auto const *pRuntime = pHost->GetRuntime(L"v2.0.50727");
@@ -134,6 +151,8 @@ namespace CWeaverDetail {
         pProcProf->SetEventMask(ProfilerEvents::PE_MONITOR_APPDOMAIN_LOADS | 
                                 ProfilerEvents::PE_MONITOR_MODULE_LOADS | 
                                 ProfilerEvents::PE_MONITOR_JIT_COMPILATION | 
+                                ProfilerEvents::PE_DISABLE_INLINING | 
+                                ProfilerEvents::PE_DISABLE_OPTIMIZATIONS | 
                                 ProfilerEvents::PE_USE_PROFILE_IMAGES);
 
         return S_OK;
@@ -143,8 +162,11 @@ namespace CWeaverDetail {
 
     STDMETHODIMP CWeaverImpl::ShutdownCore()
     {
-        D_WCOUT(L"ShutdownCore()");
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW(L"ShutdownCore()");
 
+        auto _ = guard_type(m_lock);
+        
         m_pProfInfo->DetachFromCurrentProcess();
 
         return S_OK;
@@ -155,7 +177,10 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::AppDomainCreationStartedCore( 
         /* [in] */ AppDomainID appDomainId)
     {
-        D_WCOUT1(L"AppDomainCreationStartedCore(AppDomainID: 0x%|1$08X|)", appDomainId);
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW1(L"AppDomainCreationStartedCore(AppDomainID: 0x%|1$08X|)", appDomainId);
+
+        auto _ = guard_type(m_lock);
 
         return S_OK;
     }
@@ -166,7 +191,10 @@ namespace CWeaverDetail {
         /* [in] */ AppDomainID appDomainId,
         /* [in] */ HRESULT hrStatus)
     {
-        D_WCOUT2(L"AppDomainCreationFinishedCore(AppDomainID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", appDomainId, hrStatus);
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW2(L"AppDomainCreationFinishedCore(AppDomainID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", appDomainId, hrStatus);
+
+        auto _ = guard_type(m_lock);
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         auto pDomainProf = pProcProf->AttachToAppDomain(appDomainId);
@@ -180,7 +208,10 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::AppDomainShutdownStartedCore( 
         /* [in] */ AppDomainID appDomainId)
     {
-        D_WCOUT1(L"AppDomainShutdownStartedCore(AppDomainID: 0x%|1$08X|)", appDomainId);
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW1(L"AppDomainShutdownStartedCore(AppDomainID: 0x%|1$08X|)", appDomainId);
+
+        auto _ = guard_type(m_lock);
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         pProcProf->DetachFromAppDomain(appDomainId);
@@ -194,7 +225,10 @@ namespace CWeaverDetail {
         /* [in] */ AppDomainID appDomainId,
         /* [in] */ HRESULT hrStatus)
     {
-        D_WCOUT2(L"AppDomainShutdownFinishedCore(AppDomainID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", appDomainId, hrStatus);
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW2(L"AppDomainShutdownFinishedCore(AppDomainID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", appDomainId, hrStatus);
+
+        auto _ = guard_type(m_lock);
 
         return S_OK;
     }
@@ -204,7 +238,10 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::ModuleLoadStartedCore( 
         /* [in] */ ModuleID moduleId)
     {
-        D_WCOUT1(L"ModuleLoadStartedCore(ModuleID: 0x%|1$08X|)", moduleId);
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW1(L"ModuleLoadStartedCore(ModuleID: 0x%|1$08X|)", moduleId);
+
+        auto _ = guard_type(m_lock);
 
         return S_OK;
     }
@@ -226,21 +263,29 @@ namespace CWeaverDetail {
         /* [in] */ ModuleID moduleId,
         /* [in] */ HRESULT hrStatus)
     {
+        BOOST_LOG_FUNCTION();
+
         using boost::lexical_cast;
+        using boost::log::current_scope;
+        using boost::filesystem::current_path;
         using boost::filesystem::exists;
         using boost::filesystem::path;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
 
-        D_WCOUT2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", moduleId, hrStatus);
+        CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", moduleId, hrStatus);
+
+        auto _ = guard_type(m_lock);
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         auto pModProf = pProcProf->AttachToModule(moduleId);
+        CPPANONYM_D_LOGW1(L"Current Path: %|1$s|", current_path().native());
         auto modPath = path(pModProf->GetName());
         auto modPrigPath = path(modPath.stem().native() + L".Prig.dll");
         if (!exists(modPrigPath))
             return S_OK;
         
-        D_WCOUT1(L"    Detour module: %|1$s| is found. Start to modify the module.", modPrigPath.native());
+        BOOST_LOG_NAMED_SCOPE("if (exists(modPrigPath))");
+        CPPANONYM_D_LOGW1(L"Detour module: %|1$s| is found. Start to modify the module.", modPrigPath.native());
         pModProf.Persist();
         auto pAsmProf = pModProf->AttachToAssembly();
         pAsmProf.Persist();
@@ -267,7 +312,10 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::ModuleUnloadStartedCore( 
         /* [in] */ ModuleID moduleId)
     {
-        D_WCOUT1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$08X|)", moduleId);
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$08X|)", moduleId);   // TODO: この辺実装中。。。
+
+        auto _ = guard_type(m_lock);
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         pProcProf->DetachFromModule(moduleId);
@@ -281,7 +329,10 @@ namespace CWeaverDetail {
         /* [in] */ ModuleID moduleId,
         /* [in] */ HRESULT hrStatus)
     {
-        D_WCOUT2(L"ModuleUnloadFinishedCore(ModuleID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", moduleId, hrStatus);
+        BOOST_LOG_FUNCTION();
+        CPPANONYM_D_LOGW2(L"ModuleUnloadFinishedCore(ModuleID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", moduleId, hrStatus);
+
+        auto _ = guard_type(m_lock);
 
         return S_OK;
     }
@@ -292,20 +343,25 @@ namespace CWeaverDetail {
         /* [in] */ FunctionID functionId,
         /* [in] */ BOOL fIsSafeToBlock)
     {
+        BOOST_LOG_FUNCTION();
+
         using boost::lexical_cast;
         using boost::filesystem::path;
         using std::vector;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
         
-        D_WCOUT2(L"JITCompilationStartedCore(FunctionID: 0x%|1$08X|, BOOL: 0x%|2$08X|)", functionId, fIsSafeToBlock);
+        CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$08X|, BOOL: 0x%|2$08X|)", functionId, fIsSafeToBlock);
         
+        auto _ = guard_type(m_lock);
+
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         auto pFuncProf = pProcProf->AttachToFunction(functionId);
         auto pModProf = pFuncProf->AttachToModule();
         if (!pModProf.IsPersisted())
             return S_OK;
         
-        D_WCOUT(L"    This method is candidate for the module that can detour.");
+        BOOST_LOG_NAMED_SCOPE("pModProf.IsPersisted()");
+        CPPANONYM_D_LOGW(L"This method is candidate for the module that can detour.");
         
         auto pAsmProf = pModProf->AttachToAssembly();
         auto pDomainProf = pAsmProf->AttachToAppDomain();
@@ -317,8 +373,8 @@ namespace CWeaverDetail {
         _ASSERTE(!prigData.m_modPrigPath.empty());
         if (!prigData.m_indirectablesInit && pDisp->IsCOMMetaDataDispenserPrepared())
         {
-            auto prigFrmwrkPath = canonical(path(L"Urasandesu.Prig.Framework.dll"));
-            auto const *pPrigFrmwrk = pDisp->GetAssemblyFrom(prigFrmwrkPath);
+            BOOST_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit && pDisp->IsCOMMetaDataDispenserPrepared()");
+            auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
             auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
             auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
             auto const *pPrigAsm = pDisp->GetAssemblyFrom(prigData.m_modPrigPath);
@@ -326,10 +382,11 @@ namespace CWeaverDetail {
             BOOST_FOREACH (auto const *pIndAttr, indAttrs)
                 prigData.m_indirectables[GetIndirectableToken(pIndAttr)] = pIndAttr;
 
-#ifdef OUTPUT_DEBUG
-            BOOST_FOREACH (auto const &pair, prigData.m_indirectables)
-                D_WCOUT1(L"    Indirectable Token: 0x%|1$08X|", pair.first);
-#endif
+            if (CPPANONYM_D_LOG_ENABLED())
+            {
+                BOOST_FOREACH (auto const &pair, prigData.m_indirectables)
+                    CPPANONYM_D_LOGW1(L"Indirectable Token: 0x%|1$08X|", pair.first);
+            }
 
             prigData.m_indirectablesInit = true;
         }
@@ -339,12 +396,13 @@ namespace CWeaverDetail {
         
         auto const *pMethodGen = pFuncProf->GetMethodGenerator();
         auto mdt = pMethodGen->GetToken();
-        D_WCOUT1(L"    Token: 0x%|1$08X|)", mdt);
+        CPPANONYM_D_LOGW1(L"Token: 0x%|1$08X|", mdt);
         auto result = Iterator();
         if ((result = prigData.m_indirectables.find(mdt)) == prigData.m_indirectables.end())
             return S_OK;
         
-        D_WCOUT(L"    This method is marked by IndirectableAttribute.");
+        BOOST_LOG_NAMED_SCOPE("(result = prigData.m_indirectables.find(mdt)) != prigData.m_indirectables.end()");
+        CPPANONYM_D_LOGW(L"This method is marked by IndirectableAttribute.");
         pFuncProf.Persist();
         
         auto pNewBodyProf = pFuncProf->NewFunctionBody();
@@ -354,7 +412,7 @@ namespace CWeaverDetail {
         BOOST_FOREACH (auto const *pLocal, pBody->GetLocals())
             pNewBodyGen->DefineLocal(pLocal->GetLocalType());
 
-        auto offset = EmitNewMethodBody(pNewBodyGen, pDisp, pMethodGen, prigData);
+        auto offset = EmitIndirectMethodBody(pNewBodyGen, pDisp, pMethodGen, prigData);
         
         BOOST_FOREACH (auto const *pInst, pBody->GetInstructions())
             pNewBodyGen->Emit(pInst);
@@ -371,13 +429,14 @@ namespace CWeaverDetail {
 
 
 
-    SIZE_T CWeaverImpl::EmitNewMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData)
+    SIZE_T CWeaverImpl::EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData)
     {
+        BOOST_LOG_FUNCTION();
+
         using boost::filesystem::path;
         using std::vector;
 
-        auto prigFrmwrkPath = canonical(path(L"Urasandesu.Prig.Framework.dll"));
-        auto const *pPrigFrmwrk = pDisp->GetAssemblyFrom(prigFrmwrkPath);
+        auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
         auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
 
         auto const *pIndInfo = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionInfo");
@@ -435,7 +494,7 @@ namespace CWeaverDetail {
         pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
 
         pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal2_ind);
-        EmitParameters(pNewBodyGen, pMethodGen);
+        EmitIndirectParameters(pNewBodyGen, pMethodGen);
         pNewBodyGen->Emit(OpCodes::Callvirt, pIndDlgtInst_Invoke);
         pNewBodyGen->Emit(OpCodes::Ret);
 
@@ -446,38 +505,104 @@ namespace CWeaverDetail {
 
 
     
-    void CWeaverImpl::EmitParameters(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen)
+    void CWeaverImpl::EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen)
     {
-        // TODO: インスタンスメソッドの場合はどうする？
         auto isStatic = pMethodGen->IsStatic();
+        auto offset = isStatic ? 1 : 0;
+        if (!isStatic)
+        {
+            pNewBodyGen->Emit(OpCodes::Ldarg_0);
+            auto const *pDeclaringType = pMethodGen->GetDeclaringType();
+            if (pDeclaringType->IsValueType())
+                pNewBodyGen->Emit(OpCodes::Ldobj, pDeclaringType);
+        }
+    
         auto const &params = pMethodGen->GetParameters();
         BOOST_FOREACH (auto const &pParam, params)
         {
-            auto position = pParam->GetPosition();
-            if (isStatic)
-                --position;
-            
-            switch (position)
-            {
-                case 0:
-                    pNewBodyGen->Emit(OpCodes::Ldarg_0);
-                    break;
-                case 1:
-                    pNewBodyGen->Emit(OpCodes::Ldarg_1);
-                    break;
-                case 2:
-                    pNewBodyGen->Emit(OpCodes::Ldarg_2);
-                    break;
-                case 3:
-                    pNewBodyGen->Emit(OpCodes::Ldarg_3);
-                    break;
-                default:
-                    BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
-            }
+            auto position = pParam->GetPosition() - offset;
+        
+            if (position == 0)
+                pNewBodyGen->Emit(OpCodes::Ldarg_0);
+            else if (position == 1)
+                pNewBodyGen->Emit(OpCodes::Ldarg_1);
+            else if (position == 2)
+                pNewBodyGen->Emit(OpCodes::Ldarg_2);
+            else if (position == 3)
+                pNewBodyGen->Emit(OpCodes::Ldarg_3);
+            else if (4 <= position && position <= 255)
+                pNewBodyGen->Emit(OpCodes::Ldarg_S, static_cast<BYTE>(position));
+            else
+                pNewBodyGen->Emit(OpCodes::Ldarg, static_cast<SHORT>(position));
         }
     }
 
 
+
+    class ExplicitThis : 
+        public IParameter
+    {
+    public:
+        ExplicitThis() : 
+            m_pParamType(nullptr)
+        { }
+
+        mdToken GetToken() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        ULONG GetPosition() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        std::wstring const &GetName() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        ParameterAttributes GetAttribute() const { return ParameterAttributes::PA_NONE; }
+        IType const *GetParameterType() const { return m_pParamType; }
+        Signature const &GetSignature() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        IMethod const *GetMethod() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        IProperty const *GetProperty() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        ParameterProvider const &GetMember() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        IAssembly const *GetAssembly() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        IParameter const *GetSourceParameter() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        void OutDebugInfo() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+
+        void Set(IType const *pParamType)
+        {
+            _ASSERTE(!m_pParamType);
+            _ASSERTE(pParamType);
+            m_pParamType = pParamType;
+        }
+
+    private:
+        IType const *m_pParamType;
+    };
+
+    class IndirectionDelegateFinder
+    {
+    public:
+        IndirectionDelegateFinder(IMethod const *pTarget) : 
+            m_pTarget(pTarget)
+        { }
+
+        bool operator ()(IType const *pType) const
+        {
+            using std::vector;
+
+            auto pType_Invoke = pType->GetMethod(L"Invoke");
+            auto params = vector<IParameter const *>();
+            auto explicitThis = ExplicitThis();
+            if (m_pTarget->IsStatic())
+            {
+                params = m_pTarget->GetParameters();
+            }
+            else
+            {
+                explicitThis.Set(m_pTarget->GetDeclaringType());
+                params.push_back(&explicitThis);
+                params.insert(params.end(), m_pTarget->GetParameters().begin(), m_pTarget->GetParameters().end());
+            }
+
+            return IMethodSigEqualTo::ReturnTypeEqual(pType_Invoke->GetReturnType(), m_pTarget->GetReturnType()) && 
+                   IMethodSigEqualTo::ParametersEqual(pType_Invoke->GetParameters(), params);
+        }
+
+    private:
+        IMethod const *m_pTarget;
+    };
 
     IType const *CWeaverImpl::GetIndirectionDelegateInstance(IMethod const *pTarget, IModule const *pIndDll, IType const *pIndDlgtAttrType, PrigData &prigData) const
     {
@@ -486,11 +611,12 @@ namespace CWeaverDetail {
         using Urasandesu::CppAnonym::Collections::FindIf;
         using Urasandesu::CppAnonym::CppAnonymCOMException;
         
-        // check whether the delegate is cached
+        auto const *pIndDlgt = static_cast<IType *>(nullptr);
+        // check whether the delegate is cached.
         {
             auto result = prigData.m_indDlgtCache.find(pTarget);
             if (result != prigData.m_indDlgtCache.end())
-                return (*result).second;
+                pIndDlgt = (*result).second;
         }
         
         // find IndirectionDelegate which has same signature with the target method and cache it.
@@ -498,25 +624,28 @@ namespace CWeaverDetail {
             auto const &types = pIndDll->GetTypes();
             auto isIndDlgt = [pIndDlgtAttrType](IType const *pType) { return pType->IsDefined(pIndDlgtAttrType, false); };
             auto indDlgts = types | filtered(isIndDlgt);
-            auto isTarget = [pTarget](IType const *pType) { return IMethodSigEqualTo()(pType->GetMethod(L"Invoke"), pTarget); };
-            auto result = FindIf(indDlgts, isTarget);
+            auto result = FindIf(indDlgts, IndirectionDelegateFinder(pTarget));
             if (!result)
                 BOOST_THROW_EXCEPTION(CppAnonymCOMException(CLDB_E_RECORD_NOTFOUND));
             
-            auto const *pIndDlgt = *result;
-            auto genericArgs = vector<IType const *>();
-            auto const &params = pTarget->GetParameters();
-            BOOST_FOREACH (auto const &pParam, params)
-            {
-                auto const *pParamType = pParam->GetParameterType();
-                genericArgs.push_back(pParamType->IsByRef() ? pParamType->GetDeclaringType() : pParamType);
-            }
-            if (pTarget->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
-                genericArgs.push_back(pTarget->GetReturnType());
-            auto const *pIndDlgtInst = pIndDlgt->MakeGenericType(genericArgs);
-            prigData.m_indDlgtCache[pTarget] = pIndDlgtInst;
-            return pIndDlgtInst;
+            pIndDlgt = *result;
+            prigData.m_indDlgtCache[pTarget] = pIndDlgt;
         }
+
+        // make Generic Type Instance of IndirectionDelegate.
+        auto genericArgs = vector<IType const *>();
+        if (!pTarget->IsStatic())
+            genericArgs.push_back(pTarget->GetDeclaringType());
+        auto const &params = pTarget->GetParameters();
+        BOOST_FOREACH (auto const &pParam, params)
+        {
+            auto const *pParamType = pParam->GetParameterType();
+            genericArgs.push_back(pParamType->IsByRef() ? pParamType->GetDeclaringType() : pParamType);
+        }
+        if (pTarget->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
+            genericArgs.push_back(pTarget->GetReturnType());
+        auto const *pIndDlgtInst = pIndDlgt->MakeGenericType(genericArgs);
+        return pIndDlgtInst;
     }
 
 }   // namespace CWeaverDetail {
@@ -525,7 +654,7 @@ namespace CWeaverDetail {
 
 HRESULT CWeaver::FinalConstruct()
 {
-    D_WCOUT(L"CWeaver::FinalConstruct()");
+    CPPANONYM_D_LOGW(L"CWeaver::FinalConstruct()");
     
     //::_CrtDbgBreak();
     

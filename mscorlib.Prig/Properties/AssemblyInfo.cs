@@ -66,6 +66,3 @@ using Urasandesu.Prig.Framework;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-//[assembly: Indirectable(0x060002D2)]
-//[assembly: Indirectable(0x06000293)]
-[assembly: Indirectable(0x06000B2B)]

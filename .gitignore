@@ -51,3 +51,4 @@
 *.asta
 *.dasm
 *.unsuccessfulbuild
+TemporaryGeneratedFile*

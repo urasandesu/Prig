@@ -1,0 +1,7 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" processModel="Default" domainUsage="Default" />
+  <Config name="Debug" binpathtype="Auto" appbase="C:\Users\Akira\Prig\Test.program1\bin\Debug(.NET 3.5)\x86">
+    <assembly path="Test.program1.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto" />
+</NUnitProject>

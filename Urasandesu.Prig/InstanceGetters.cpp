@@ -35,33 +35,60 @@ typedef Urasandesu::CppAnonym::Collections::GlobalSafeDictionary<std::wstring, v
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr)
 {
+    BOOST_LOG_FUNCTION();
+
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.TryAdd(std::wstring(key), pFuncPtr);
-    D_WCOUT3(L"InstanceGettersTryAdd(key: %|1$s|, pFuncPtr: 0x%|2$08X|): %|3$d|", key, pFuncPtr, result);
+    CPPANONYM_D_LOGW3(L"InstanceGettersTryAdd(key: %|1$s|, pFuncPtr: 0x%|2$08X|): %|3$d|", key, pFuncPtr, result);
     return result;
 }
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr)
 {
+    BOOST_LOG_FUNCTION();
+
     _ASSERTE(ppFuncPtr != NULL);
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.TryGet(std::wstring(key), *ppFuncPtr);
-    D_WCOUT3(L"InstanceGettersTryGet(key: %|1$s|, *ppFuncPtr: 0x%|2$08X|): %|3$d|", key, *ppFuncPtr, result);
+    CPPANONYM_D_LOGW3(L"InstanceGettersTryGet(key: %|1$s|, *ppFuncPtr: 0x%|2$08X|): %|3$d|", key, *ppFuncPtr, result);
     return result;
 }
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr)
 {
+    BOOST_LOG_FUNCTION();
+
     _ASSERTE(ppFuncPtr != NULL);
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.TryRemove(std::wstring(key), *ppFuncPtr);
-    D_WCOUT3(L"InstanceGettersTryRemove(key: %|1$s|, *ppFuncPtr: 0x%|2$08X|): %|3$d|", key, *ppFuncPtr, result);
+    CPPANONYM_D_LOGW3(L"InstanceGettersTryRemove(key: %|1$s|, *ppFuncPtr: 0x%|2$08X|): %|3$d|", key, *ppFuncPtr, result);
     return result;
 }
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear()
 {
-    D_WCOUT(L"InstanceGettersClear()");
+    BOOST_LOG_FUNCTION();
+
+    CPPANONYM_D_LOGW(L"InstanceGettersClear()");
     auto &ing = InstanceGetters::GetInstance();
     ing.Clear();
+}
+
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsEnabled()
+{
+    BOOST_LOG_FUNCTION();
+
+    auto &ing = InstanceGetters::GetInstance();
+    auto result = ing.IsEnabled();
+    CPPANONYM_D_LOGW1(L"InstanceGettersIsEnabled(): %|1$d|", result);
+    return result;
+}
+
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersSetIsEnabled(BOOL value)
+{
+    BOOST_LOG_FUNCTION();
+
+    auto &ing = InstanceGetters::GetInstance();
+    ing.SetIsEnabled(value);
+    CPPANONYM_D_LOGW1(L"InstanceGettersSetIsEnabled(value: %|1$s|)", value);
 }

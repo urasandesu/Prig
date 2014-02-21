@@ -30,13 +30,15 @@
 
 using Urasandesu.Prig.Framework;
 
+[assembly: Indirectable(0x06000293)]
+
 namespace System.Prig
 {
     public static class PException
     {
         public static class InternalToString
         {
-            public static IndirectionFunc<string> Body
+            public static IndirectionFunc<Exception, string> Body
             {
                 set
                 {
@@ -44,20 +46,8 @@ namespace System.Prig
                     var info = new IndirectionInfo();
                     info.AssemblyName = t.Assembly.FullName;
                     info.Token = 0x06000293;
-                    if (value == null)
-                    {
-                        var holder = default(IndirectionHolder<IndirectionFunc<string>>);
-                        if (LooseCrossDomainAccessor.TryGet(out holder))
-                        {
-                            var method = default(IndirectionFunc<string>);
-                            holder.TryRemove(info, out method);
-                        }
-                    }
-                    else
-                    {
-                        var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<string>>>();
-                        holder.AddOrUpdate(info, value);
-                    }
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Exception, string>>>();
+                    holder.AddOrUpdate(info, value);
                 }
             }
         }

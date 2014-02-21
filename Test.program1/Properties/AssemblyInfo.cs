@@ -64,3 +64,12 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+
+// SET COR_ENABLE_PROFILING=1
+// SET COR_PROFILER={532C1F05-F8F3-4FBA-8724-699A31756ABD}
+// SET COMPLUS_ProfAPI_ProfilerCompatibilitySetting=EnableV2Profiler
+
+// SET URASANDESU_CPPANONYM_LOGGING_SEVERITY=0
+
+// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None

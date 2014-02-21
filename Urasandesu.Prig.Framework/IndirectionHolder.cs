@@ -28,11 +28,12 @@
  */
 
 
+using System;
 using System.Collections.Generic;
 
 namespace Urasandesu.Prig.Framework
 {
-    public class IndirectionHolder<TDelegate> : InstanceHolder<IndirectionHolder<TDelegate>>
+    public class IndirectionHolder<TDelegate> : InstanceHolder<IndirectionHolder<TDelegate>>, IDisposable
     {
         IndirectionHolder() { }
 
@@ -40,56 +41,73 @@ namespace Urasandesu.Prig.Framework
 
         public bool TryGet(IndirectionInfo info, out TDelegate method)
         {
+            method = default(TDelegate);
+            if (!InstanceGetters.IsEnabled())
+                return false;
+
             lock (m_dict)
             {
                 var key = info + "";
-                if (m_dict.ContainsKey(key))
-                {
-                    method = m_dict[key];
-                    return true;
-                }
-                else
-                {
-                    method = default(TDelegate);
+                if (!m_dict.ContainsKey(key))
                     return false;
-                }
+
+                method = m_dict[key];
+                return true;
             }
         }
 
         public bool TryRemove(IndirectionInfo info, out TDelegate method)
         {
+            method = default(TDelegate);
+            if (!InstanceGetters.IsEnabled())
+                return false;
+
             lock (m_dict)
             {
                 var key = info + "";
-                if (m_dict.ContainsKey(key))
-                {
-                    method = m_dict[key];
-                    m_dict.Remove(key);
-                    return true;
-                }
-                else
-                {
-                    method = default(TDelegate);
+                if (!m_dict.ContainsKey(key))
                     return false;
-                }
+
+                method = m_dict[key];
+                m_dict.Remove(key);
+                return true;
             }
         }
 
         public TDelegate AddOrUpdate(IndirectionInfo info, TDelegate method)
         {
+            if (!InstanceGetters.IsEnabled())
+                return method;
+
             lock (m_dict)
             {
                 var key = info + "";
-                if (m_dict.ContainsKey(key))
-                {
-                    m_dict.Add(key, method);
-                }
-                else
-                {
-                    m_dict[key] = method;
-                }
+                m_dict[key] = method; 
                 return method;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (m_dict)
+            {
+                if (disposing)
+                {
+                    m_dict.Clear(); // You must not set m_dict null, because this instance will be reused usually. 
+                                    // Also the normal disposable pattern is not available.
+                }
+            }
+        }
+
+        ~IndirectionHolder()
+        {
+            Dispose(false);
         }
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -203,9 +203,6 @@
       <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IPropertyHash.cpp">
-      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\MetadataResolver.cpp">
       <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IParameterEqualTo.cpp">
@@ -612,6 +609,18 @@
     </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl\BaseFunctionBodyProfilerPimpl.cpp">
       <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Log.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClass\BaseFieldMetadata.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler\BaseFieldMetadataPersistedHandler.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPersistedHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseFieldMetadataPimpl.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

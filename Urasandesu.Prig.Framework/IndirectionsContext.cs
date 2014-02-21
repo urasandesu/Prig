@@ -36,6 +36,24 @@ namespace Urasandesu.Prig.Framework
     {
         bool m_disposed;
 
+        public static void ExecuteOriginal(IndirectionAction action)
+        {
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            using (InstanceGetters.DisableProcessing())
+                action();
+        }
+
+        public static T ExecuteOriginal<T>(IndirectionFunc<T> func)
+        {
+            if (func == null)
+                throw new ArgumentNullException("func");
+
+            using (InstanceGetters.DisableProcessing())
+                return func();
+        }
+
         public void Dispose()
         {
             Dispose(true);

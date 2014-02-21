@@ -28,13 +28,32 @@
  */
 
 
+using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Urasandesu.Prig.Framework
 {
     static class InstanceGetters
     {
+        static InstanceGetters()
+        {
+            var weaverPath = GetWeaverPath();
+            var weaverDir = Path.GetDirectoryName(weaverPath);
+            SetDllDirectory(weaverDir);
+        }
+
+        static string GetWeaverPath()
+        {
+            var subKey = Registry.ClassesRoot.OpenSubKey(@"CLSID\{532C1F05-F8F3-4FBA-8724-699A31756ABD}\InprocServer32");
+            return (string)subKey.GetValue("");
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool SetDllDirectory(string lpPathName);
+
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryAdd")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool TryAdd([MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr);
@@ -49,5 +68,26 @@ namespace Urasandesu.Prig.Framework
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersClear")]
         public static extern void Clear();
+
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersIsEnabled")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsEnabled();
+
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersSetIsEnabled")]
+        static extern void SetIsEnabled([MarshalAs(UnmanagedType.Bool)] bool value);
+
+        public struct InstanceGettersProcessingDisabled : IDisposable
+        {
+            public void Dispose()
+            {
+                SetIsEnabled(true);
+            }
+        }
+
+        public static InstanceGettersProcessingDisabled DisableProcessing()
+        {
+            SetIsEnabled(false);
+            return new InstanceGettersProcessingDisabled();
+        }
     }
 }

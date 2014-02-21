@@ -28,7 +28,7 @@
  */
 
 
-//#define PDateTime
+#define PDateTime
 
 using program1.MyLibrary;
 using System;

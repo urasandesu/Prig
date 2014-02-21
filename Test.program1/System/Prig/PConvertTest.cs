@@ -1,5 +1,5 @@
 ﻿/* 
- * File: stdafx.h
+ * File: PConvertTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,36 +28,30 @@
  */
 
 
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but are changed infrequently
+using NUnit.Framework;
+using System;
+using System.Prig;
+using Urasandesu.Prig.Framework;
 
-#pragma once
+namespace Test.program1.System.Prig
+{
+    [TestFixture]
+    public class PConvertTest
+    {
+        [Test]
+        public void ToInt32_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PConvert.ToInt32.Body = value => 42;
 
-#ifndef STRICT
-#define STRICT
-#endif
+                // Act
+                var actual = Convert.ToInt32(103.919);
 
-#include "targetver.h"
-
-#define _ATL_APARTMENT_THREADED
-
-#define _ATL_NO_AUTOMATIC_NAMESPACE
-
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
-
-
-#define ATL_NO_ASSERT_ON_DESTROY_NONEXISTENT_WINDOW
-
-#include "resource.h"
-#include <atlbase.h>
-#include <atlcom.h>
-#include <atlctl.h>
-
-#ifndef URASANDESU_SWATHE_SWATHEDEPENDSON_H
-#include <Urasandesu/Swathe/SwatheDependsOn.h>
-#endif
-
-//#include <boost/timer.hpp>
-//#include <StrongName.h>
-//#include <mscoree.h>
-//#include <fusion.h>
+                // Assert
+                Assert.AreEqual(42, actual);
+            }
+        }
+    }
+}

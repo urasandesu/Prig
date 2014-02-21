@@ -211,7 +211,16 @@ namespace Urasandesu.Prig.Framework
                     {
                         var funcPtr = default(IntPtr);
                         InstanceGetters.TryRemove(ms_key, out funcPtr);
-                        ms_holder = null;
+                        if (ms_holder != null)
+                        {
+                            var disposable = ms_holder as IDisposable;
+                            if (disposable != null)
+                            {
+                                disposable.Dispose();
+                                disposable = null;
+                            }
+                            ms_holder = null;
+                        }
                         Thread.MemoryBarrier();
                         ms_ready = false;
                     }

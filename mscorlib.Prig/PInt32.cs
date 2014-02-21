@@ -30,6 +30,8 @@
 
 using Urasandesu.Prig.Framework;
 
+[assembly: Indirectable(0x06000B2B)]
+
 namespace System.Prig
 {
     public static class PInt32
@@ -43,20 +45,8 @@ namespace System.Prig
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
                     info.Token = 0x06000B2B;
-                    if (value == null)
-                    {
-                        var holder = default(IndirectionHolder<IndirectionOutFunc<string, int, bool>>);
-                        if (LooseCrossDomainAccessor.TryGet(out holder))
-                        {
-                            var method = default(IndirectionOutFunc<string, int, bool>);
-                            holder.TryRemove(info, out method);
-                        }
-                    }
-                    else
-                    {
-                        var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionOutFunc<string, int, bool>>>();
-                        holder.AddOrUpdate(info, value);
-                    }
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionOutFunc<string, int, bool>>>();
+                    holder.AddOrUpdate(info, value);
                 }
             }
         }

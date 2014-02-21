@@ -30,6 +30,9 @@
 
 using Urasandesu.Prig.Framework;
 
+[assembly: Indirectable(0x060002BC)]
+[assembly: Indirectable(0x060002D2)]
+
 namespace System.Prig
 {
     public class PDateTime
@@ -43,20 +46,23 @@ namespace System.Prig
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
                     info.Token = 0x060002D2;
-                    if (value == null)
-                    {
-                        var holder = default(IndirectionHolder<IndirectionFunc<DateTime>>);
-                        if (LooseCrossDomainAccessor.TryGet(out holder))
-                        {
-                            var method = default(IndirectionFunc<DateTime>);
-                            holder.TryRemove(info, out method);
-                        }
-                    }
-                    else
-                    {
-                        var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<DateTime>>>();
-                        holder.AddOrUpdate(info, value);
-                    }
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<DateTime>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class FromBinary
+        {
+            public static IndirectionFunc<long, DateTime> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x060002BC;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<long, DateTime>>>();
+                    holder.AddOrUpdate(info, value);
                 }
             }
         }

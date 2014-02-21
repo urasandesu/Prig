@@ -1,5 +1,5 @@
 ﻿/* 
- * File: stdafx.h
+ * File: PStringBuilder.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,36 +28,27 @@
  */
 
 
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but are changed infrequently
+using Urasandesu.Prig.Framework;
 
-#pragma once
+[assembly: Indirectable(0x0600023B)]
 
-#ifndef STRICT
-#define STRICT
-#endif
-
-#include "targetver.h"
-
-#define _ATL_APARTMENT_THREADED
-
-#define _ATL_NO_AUTOMATIC_NAMESPACE
-
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
-
-
-#define ATL_NO_ASSERT_ON_DESTROY_NONEXISTENT_WINDOW
-
-#include "resource.h"
-#include <atlbase.h>
-#include <atlcom.h>
-#include <atlctl.h>
-
-#ifndef URASANDESU_SWATHE_SWATHEDEPENDSON_H
-#include <Urasandesu/Swathe/SwatheDependsOn.h>
-#endif
-
-//#include <boost/timer.hpp>
-//#include <StrongName.h>
-//#include <mscoree.h>
-//#include <fusion.h>
+namespace System.Text.Prig
+{
+    public static class PStringBuilder
+    {
+        public static class Insert
+        {
+            public static IndirectionFunc<StringBuilder, int, string, int, StringBuilder> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x0600023B;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<StringBuilder, int, string, int, StringBuilder>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+    }
+}

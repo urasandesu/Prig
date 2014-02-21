@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ConsoleContext.cs
+ * File: PArray.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,42 +28,27 @@
  */
 
 
-using System;
-using System.IO;
+using Urasandesu.Prig.Framework;
 
-namespace Test.program1
+[assembly: Indirectable(0x06000029)]
+
+namespace System.Prig
 {
-    public class ConsoleContext : IDisposable
+    public static class PArray
     {
-        bool m_disposed;
-        TextWriter m_lastOut;
-
-        public ConsoleContext()
+        public static class CreateInstance
         {
-            m_lastOut = Console.Out;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!m_disposed)
+            public static IndirectionFunc<Type, int[], int[], Array> Body
             {
-                if (disposing)
+                set
                 {
-                    Console.SetOut(m_lastOut);
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x06000029;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Type, int[], int[], Array>>>();
+                    holder.AddOrUpdate(info, value);
                 }
             }
-            m_disposed = true;
-        }
-
-        ~ConsoleContext()
-        {
-            Dispose(false);
         }
     }
 }

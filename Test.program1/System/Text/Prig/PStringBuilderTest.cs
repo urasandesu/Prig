@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PDateTimeContext.cs
+ * File: PStringBuilderTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,72 +28,33 @@
  */
 
 
-using System;
+using NUnit.Framework;
+using System.Prig;
+using System.Text;
+using System.Text.Prig;
+using Urasandesu.Prig.Framework;
 
-namespace System.Prig
+namespace Test.program1.System.Prig
 {
-#if FALSE
-    public class PDateTimeContext : IDisposable
+    [TestFixture]
+    public class PStringBuilderTest
     {
-        bool m_disposed;
-
-        public PDateTimeContext()
+        [Test]
+        public void Insert_ShouldBeCallableIndirectly()
         {
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!m_disposed)
+            using (new IndirectionsContext())
             {
-                if (disposing)
-                {
-                }
-            }
-            m_disposed = true;
-        }
+                // Arrange
+                PStringBuilder.Insert.Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
 
-        ~PDateTimeContext()
-        {
-            Dispose(false);
-        }
+                // Act
+                var sb = new StringBuilder();
+                sb.Append("abd");
+                var actual = sb.Insert(2, "c", 3);
 
-        public class NowGet : IDisposable
-        {
-            bool m_disposed;
-
-            public NowGet()
-            {
-            }
-
-            public void Dispose()
-            {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-
-            protected virtual void Dispose(bool disposing)
-            {
-                if (!m_disposed)
-                {
-                    if (disposing)
-                    {
-                        PDateTime.NowGet.Body = null;
-                    }
-                }
-                m_disposed = true;
-            }
-
-            ~NowGet()
-            {
-                Dispose(false);
+                // Assert
+                Assert.AreEqual("にゃんぱすー", actual.ToString());
             }
         }
     }
-#endif
 }

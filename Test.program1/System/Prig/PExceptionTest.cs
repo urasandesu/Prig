@@ -1,5 +1,5 @@
 ﻿/* 
- * File: stdafx.h
+ * File: PExceptionTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,36 +28,43 @@
  */
 
 
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but are changed infrequently
+using NUnit.Framework;
+using System;
+using System.Prig;
+using System.Reflection;
+using Urasandesu.Prig.Framework;
 
-#pragma once
+namespace Test.program1.System.Prig
+{
+    [TestFixture]
+    public class PExceptionTest
+    {
+        [Test]
+        public void InternalToString_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PException.InternalToString.Body = _ => "にゃんぱすー";
 
-#ifndef STRICT
-#define STRICT
-#endif
+                // Act
+                var actual = new NotImplementedException().InternalToString();
 
-#include "targetver.h"
+                // Assert
+                Assert.AreEqual("にゃんぱすー", actual);
+            }
+        }
+    }
 
-#define _ATL_APARTMENT_THREADED
+    public static class ExceptionMixin
+    {
+        public static string InternalToString(this Exception source)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
 
-#define _ATL_NO_AUTOMATIC_NAMESPACE
-
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
-
-
-#define ATL_NO_ASSERT_ON_DESTROY_NONEXISTENT_WINDOW
-
-#include "resource.h"
-#include <atlbase.h>
-#include <atlcom.h>
-#include <atlctl.h>
-
-#ifndef URASANDESU_SWATHE_SWATHEDEPENDSON_H
-#include <Urasandesu/Swathe/SwatheDependsOn.h>
-#endif
-
-//#include <boost/timer.hpp>
-//#include <StrongName.h>
-//#include <mscoree.h>
-//#include <fusion.h>
+            var internalToStringInfo = source.GetType().GetMethod("InternalToString", BindingFlags.Instance | BindingFlags.NonPublic);
+            return (string)internalToStringInfo.Invoke(source, new object[0]);
+        }
+    }
+}

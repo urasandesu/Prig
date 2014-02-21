@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ConfigurationManager.cs
+ * File: PArrayTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,17 +28,31 @@
  */
 
 
+using NUnit.Framework;
+using System;
+using System.Prig;
+using Urasandesu.Prig.Framework;
 
-namespace program1.ThirdPartyLibrary
+namespace Test.program1.System.Prig
 {
-    public static class ConfigurationManager
+    [TestFixture]
+    public class PArrayTest
     {
-        public static T GetProperty<T>(string key, T defaultValue)
+        [Test]
+        public void CreateInstance_ShouldBeCallableIndirectly()
         {
-            // Returns the value which is linked by key.
-            // If any errors are occurred, returns defaultValue.
-            // ...
-            return default(T);
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PArray.CreateInstance.Body = (elementType, lengths, lowerBounds) => new int[5, 5];
+
+                // Act
+                var actual = (int[,])Array.CreateInstance(typeof(int), new int[] { 3, 3 }, new int[] { 0, 0 });
+
+                // Assert
+                Assert.AreEqual(5, actual.GetLength(0));
+                Assert.AreEqual(5, actual.GetLength(1));
+            }
         }
     }
 }
