@@ -31,6 +31,7 @@
 using Urasandesu.Prig.Framework;
 
 [assembly: Indirectable(0x06000029)]
+[assembly: Indirectable(0x06000068)]
 
 namespace System.Prig
 {
@@ -46,6 +47,21 @@ namespace System.Prig
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
                     info.Token = 0x06000029;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Type, int[], int[], Array>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class Exists<T>
+        {
+            public static IndirectionFunc<T[], Predicate<T>, bool> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x06000068;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<T[], Predicate<T>, bool>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

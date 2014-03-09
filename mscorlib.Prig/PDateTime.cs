@@ -32,6 +32,7 @@ using Urasandesu.Prig.Framework;
 
 [assembly: Indirectable(0x060002BC)]
 [assembly: Indirectable(0x060002D2)]
+[assembly: Indirectable(0x060002B8)]
 
 namespace System.Prig
 {
@@ -62,6 +63,21 @@ namespace System.Prig
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
                     info.Token = 0x060002BC;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<long, DateTime>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class DoubleDateToTicks
+        {
+            public static IndirectionFunc<double, long> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x060002B8;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, long>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

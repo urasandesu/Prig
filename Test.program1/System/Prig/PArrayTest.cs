@@ -54,5 +54,21 @@ namespace Test.program1.System.Prig
                 Assert.AreEqual(5, actual.GetLength(1));
             }
         }
+
+        [Test]
+        public void Exists_T__ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PArray.Exists<int>.Body = (array, match) => true;
+
+                // Act
+                var actual = Array.Exists(new int[] { 1, 2, 3 }, x => x == 42);
+
+                // Assert
+                Assert.IsTrue(actual);
+            }
+        }
     }
 }

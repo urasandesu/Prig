@@ -32,6 +32,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Prig;
+using System.Reflection;
 using System.Threading;
 using Urasandesu.Prig.Framework;
 
@@ -106,6 +107,32 @@ namespace Test.program1.System.Prig
                 // Assert
                 Assert.AreEqual(new DateTime(2014, 12, 23, 01, 02, 03, 00), actual);
             }
+        }
+
+        [Test]
+        public void DoubleDateToTicks_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PDateTime.DoubleDateToTicks.Body = value => 635233945530440000L;
+
+                // Act
+                var oaDate = DateTime.Now.ToOADate();
+                var actual = new DateTime(DateTimeMixin.DoubleDateToTicks(oaDate), DateTimeKind.Unspecified);
+
+                // Assert
+                Assert.AreEqual(new DateTime(2013, 12, 23, 11, 22, 33, 44), actual);
+            }
+        }
+    }
+
+    public static class DateTimeMixin
+    {
+        public static long DoubleDateToTicks(double value)
+        {
+            var doubleDateToTicksInfo = typeof(DateTime).GetMethod("DoubleDateToTicks", BindingFlags.NonPublic | BindingFlags.Static);
+            return (long)doubleDateToTicksInfo.Invoke(null, new object[] { value });
         }
     }
 }

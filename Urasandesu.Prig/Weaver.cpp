@@ -378,7 +378,7 @@ namespace CWeaverDetail {
             auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
             auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
             auto const *pPrigAsm = pDisp->GetAssemblyFrom(prigData.m_modPrigPath);
-            auto indAttrs = pPrigAsm->GetCustomAttributes(pIndAttrType, false);
+            auto indAttrs = pPrigAsm->GetCustomAttributes(pIndAttrType);
             BOOST_FOREACH (auto const *pIndAttr, indAttrs)
                 prigData.m_indirectables[GetIndirectableToken(pIndAttr)] = pIndAttr;
 
@@ -558,6 +558,8 @@ namespace CWeaverDetail {
         ParameterProvider const &GetMember() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
         IAssembly const *GetAssembly() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
         IParameter const *GetSourceParameter() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        bool Equals(IParameter const *pParam) const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        ULONG GetHashCode() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
         void OutDebugInfo() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
 
         void Set(IType const *pParamType)
@@ -621,8 +623,8 @@ namespace CWeaverDetail {
         
         // find IndirectionDelegate which has same signature with the target method and cache it.
         {
-            auto const &types = pIndDll->GetTypes();
-            auto isIndDlgt = [pIndDlgtAttrType](IType const *pType) { return pType->IsDefined(pIndDlgtAttrType, false); };
+            auto types = pIndDll->GetTypes();
+            auto isIndDlgt = [pIndDlgtAttrType](IType const *pType) { return pType->IsDefined(pIndDlgtAttrType); };
             auto indDlgts = types | filtered(isIndDlgt);
             auto result = FindIf(indDlgts, IndirectionDelegateFinder(pTarget));
             if (!result)

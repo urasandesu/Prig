@@ -535,13 +535,13 @@ namespace {
         auto mscorlibPrigPath = path(currentDir);
         mscorlibPrigPath /= L"mscorlib.Prig.dll";
         auto const *pMSCorLibPrig = pMetaDisp->GetAssemblyFrom(mscorlibPrigPath);
-        auto indirectableAttrs = pMSCorLibPrig->GetCustomAttributes(pIndirectableAttrInfo, false);
-        ASSERT_EQ(3, distance(indirectableAttrs));
+        auto indirectableAttrs = pMSCorLibPrig->GetCustomAttributes(pIndirectableAttrInfo);
+        ASSERT_EQ(10, distance(indirectableAttrs));
         auto const *pIndirectableAttr = *begin(indirectableAttrs);
         auto const &args = pIndirectableAttr->GetConstructorArguments();
         ASSERT_EQ(1, args.size());
         auto mdmdTarget = get<UINT>(args[0]);
-        ASSERT_EQ(0x060002D2, mdmdTarget);
+        ASSERT_EQ(0x0600023B, mdmdTarget);
     }
     
     
