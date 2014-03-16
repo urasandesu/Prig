@@ -73,3 +73,4 @@ using System.Runtime.InteropServices;
 // SET URASANDESU_CPPANONYM_LOGGING_SEVERITY=0
 
 // "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None
+// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" Test.program1.dll /domain=None

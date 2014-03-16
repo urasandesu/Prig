@@ -30,8 +30,13 @@
 
 using Urasandesu.Prig.Framework;
 
+#if _M_IX86
 [assembly: Indirectable(0x0600023B)]
 [assembly: Indirectable(0x06000267)]
+#else
+[assembly: Indirectable(0x0600023D)]
+[assembly: Indirectable(0x06000269)]
+#endif
 
 namespace System.Text.Prig
 {
@@ -45,7 +50,11 @@ namespace System.Text.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+#if _M_IX86
                     info.Token = 0x0600023B;
+#else
+                    info.Token = 0x0600023D;
+#endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<StringBuilder, int, string, int, StringBuilder>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -60,7 +69,11 @@ namespace System.Text.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+#if _M_IX86
                     info.Token = 0x06000267;
+#else
+                    info.Token = 0x06000269;
+#endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<StringBuilder, char, char, int, int, StringBuilder>>>();
                     holder.AddOrUpdate(info, value);
                 }

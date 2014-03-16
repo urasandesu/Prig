@@ -30,7 +30,11 @@
 
 using Urasandesu.Prig.Framework;
 
+#if _M_IX86
 [assembly: Indirectable(0x06000B2B)]
+#else
+[assembly: Indirectable(0x06000B2D)]
+#endif
 
 namespace System.Prig
 {
@@ -44,7 +48,11 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+#if _M_IX86
                     info.Token = 0x06000B2B;
+#else
+                    info.Token = 0x06000B2D;
+#endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionOutFunc<string, int, bool>>>();
                     holder.AddOrUpdate(info, value);
                 }

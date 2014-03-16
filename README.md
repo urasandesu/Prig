@@ -11,7 +11,7 @@ This framework enables that any methods that are normally impossible to do it ar
 
 
 ## STATUS
-As of Feb 22, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of Mar 16, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
@@ -40,7 +40,9 @@ using Urasandesu.Prig.Framework;
 
 // You should grant the metadata token that you want to replace to the stub assembly with IndirectableAttribute.
 // The getter method of DateTime.Now in question is the static method that named get_Now, 
-// so you should specify its token 0x060002D2.
+// so you should specify its token 0x060002D2(*).
+// [*] You can confirm the Metadata Token in the decompiled assembly(e.g. by using ildasm), 
+//     or by referring MethodInfo.MetadataToken.
 [assembly: Indirectable(0x060002D2)]
 
 namespace System.Prig
@@ -126,7 +128,7 @@ namespace Test.program1.MyLibraryTest
 To build this project needs the following dependencies: 
 * [Visual Studio 2013(more than Professional Edition)](http://www.visualstudio.com/)
 * [Boost 1.55.0](http://www.boost.org/)  
-Extract to C:\boost_1_55_0, and will build with the following options:
+Extract to C:\boost_1_55_0, and will build with the following options(x86 and x64 libs are required):
 ```dos
 CMD boost_1_55_0>cd
 C:\boost_1_55_0
@@ -140,19 +142,26 @@ Bootstrapping is done. To build, run:
 
 To adjust configuration, edit 'project-config.jam'.
 Further information:
-・・・
+...
 
 CMD boost_1_55_0>.\b2 link=static threading=multi variant=debug,release runtime-link=shared,static -j 4
 
 Building the Boost C++ Libraries.
 
 Performing configuration checks
-・・・
+...
+
+CMD boost_1_55_0>.\b2 link=static threading=multi variant=debug,release runtime-link=shared,static -j 4 --stagedir=.\stage\x64 address-model=64
+
+Building the Boost C++ Libraries.
+
+Performing configuration checks
+...
 ```
 * [NUnit 2.6.3.13283](http://www.nunit.org/)  
 Install using with the installer(NUnit-2.6.3.msi).
 * [Google Test 1.6](https://code.google.com/p/googletest/)  
-Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Then build all(Debug/Release) configurations.
+Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the `Build` menu, and open `Configuration Manager...`. On `Configuration Manager` dialog box, in the `Active Solution Platform` drop-down list, select the `<New...>` option. After the `New Solution Platform` dialog box is opened, in the `Type or select the new platform` drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.
 
 
 
@@ -164,7 +173,7 @@ Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual S
 
 
 ## REGISTRATION
-Run Developer Command Prompt for VS2013 as Administrator, and register dlls that were outputted to ```$(SolutionDir)$(Configuration)\$(PlatformTarget)\``` to registry and GAC as follows: 
+Run Developer Command Prompt for VS2013 as Administrator, and register dlls that were outputted to ```$(SolutionDir)$(Configuration)\$(PlatformTarget)\``` to registry and GAC as follows(these are the examples for x86, but also the x64 are in the same manner): 
 ```dos
 CMD x86>cd
 C:\Users\User\Prig\Release(.NET 3.5)\x86

@@ -138,7 +138,7 @@ namespace CWeaverDetail {
         /* [in] */ IUnknown *pICorProfilerInfoUnk)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW1(L"InitializeCore(IUnknown *: 0x%|1$08X|)", reinterpret_cast<SIZE_T>(pICorProfilerInfoUnk));
+        CPPANONYM_D_LOGW1(L"InitializeCore(IUnknown *: 0x%|1$X|)", reinterpret_cast<void *>(pICorProfilerInfoUnk));
 
         auto _ = guard_type(m_lock);
 
@@ -178,7 +178,7 @@ namespace CWeaverDetail {
         /* [in] */ AppDomainID appDomainId)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW1(L"AppDomainCreationStartedCore(AppDomainID: 0x%|1$08X|)", appDomainId);
+        CPPANONYM_D_LOGW1(L"AppDomainCreationStartedCore(AppDomainID: 0x%|1$X|)", reinterpret_cast<void *>(appDomainId));
 
         auto _ = guard_type(m_lock);
 
@@ -192,7 +192,7 @@ namespace CWeaverDetail {
         /* [in] */ HRESULT hrStatus)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW2(L"AppDomainCreationFinishedCore(AppDomainID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", appDomainId, hrStatus);
+        CPPANONYM_D_LOGW2(L"AppDomainCreationFinishedCore(AppDomainID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(appDomainId), hrStatus);
 
         auto _ = guard_type(m_lock);
 
@@ -209,7 +209,7 @@ namespace CWeaverDetail {
         /* [in] */ AppDomainID appDomainId)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW1(L"AppDomainShutdownStartedCore(AppDomainID: 0x%|1$08X|)", appDomainId);
+        CPPANONYM_D_LOGW1(L"AppDomainShutdownStartedCore(AppDomainID: 0x%|1$X|)", reinterpret_cast<void *>(appDomainId));
 
         auto _ = guard_type(m_lock);
 
@@ -226,7 +226,7 @@ namespace CWeaverDetail {
         /* [in] */ HRESULT hrStatus)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW2(L"AppDomainShutdownFinishedCore(AppDomainID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", appDomainId, hrStatus);
+        CPPANONYM_D_LOGW2(L"AppDomainShutdownFinishedCore(AppDomainID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(appDomainId), hrStatus);
 
         auto _ = guard_type(m_lock);
 
@@ -239,7 +239,7 @@ namespace CWeaverDetail {
         /* [in] */ ModuleID moduleId)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW1(L"ModuleLoadStartedCore(ModuleID: 0x%|1$08X|)", moduleId);
+        CPPANONYM_D_LOGW1(L"ModuleLoadStartedCore(ModuleID: 0x%|1$X|)", reinterpret_cast<void *>(moduleId));
 
         auto _ = guard_type(m_lock);
 
@@ -272,7 +272,7 @@ namespace CWeaverDetail {
         using boost::filesystem::path;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
 
-        CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", moduleId, hrStatus);
+        CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
 
         auto _ = guard_type(m_lock);
 
@@ -313,7 +313,7 @@ namespace CWeaverDetail {
         /* [in] */ ModuleID moduleId)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$08X|)", moduleId);   // TODO: この辺実装中。。。
+        CPPANONYM_D_LOGW1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$X|)", reinterpret_cast<void *>(moduleId));   // TODO: この辺実装中。。。
 
         auto _ = guard_type(m_lock);
 
@@ -330,7 +330,7 @@ namespace CWeaverDetail {
         /* [in] */ HRESULT hrStatus)
     {
         BOOST_LOG_FUNCTION();
-        CPPANONYM_D_LOGW2(L"ModuleUnloadFinishedCore(ModuleID: 0x%|1$08X|, HRESULT: 0x%|2$08X|)", moduleId, hrStatus);
+        CPPANONYM_D_LOGW2(L"ModuleUnloadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
 
         auto _ = guard_type(m_lock);
 
@@ -350,7 +350,7 @@ namespace CWeaverDetail {
         using std::vector;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
         
-        CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$08X|, BOOL: 0x%|2$08X|)", functionId, fIsSafeToBlock);
+        CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$X|, BOOL: 0x%|2$08X|)", reinterpret_cast<void *>(functionId), fIsSafeToBlock);
         
         auto _ = guard_type(m_lock);
 
@@ -559,7 +559,7 @@ namespace CWeaverDetail {
         IAssembly const *GetAssembly() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
         IParameter const *GetSourceParameter() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
         bool Equals(IParameter const *pParam) const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        ULONG GetHashCode() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
+        size_t GetHashCode() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
         void OutDebugInfo() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
 
         void Set(IType const *pParamType)

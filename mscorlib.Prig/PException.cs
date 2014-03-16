@@ -30,7 +30,11 @@
 
 using Urasandesu.Prig.Framework;
 
+#if _M_IX86
 [assembly: Indirectable(0x06000293)]
+#else
+[assembly: Indirectable(0x06000295)]
+#endif
 
 namespace System.Prig
 {
@@ -45,7 +49,11 @@ namespace System.Prig
                     var t = typeof(Exception);
                     var info = new IndirectionInfo();
                     info.AssemblyName = t.Assembly.FullName;
+#if _M_IX86
                     info.Token = 0x06000293;
+#else
+                    info.Token = 0x06000295;
+#endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Exception, string>>>();
                     holder.AddOrUpdate(info, value);
                 }

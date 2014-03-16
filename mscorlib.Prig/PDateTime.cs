@@ -30,9 +30,15 @@
 
 using Urasandesu.Prig.Framework;
 
+#if _M_IX86
 [assembly: Indirectable(0x060002BC)]
 [assembly: Indirectable(0x060002D2)]
 [assembly: Indirectable(0x060002B8)]
+#else
+[assembly: Indirectable(0x060002BE)]
+[assembly: Indirectable(0x060002D4)]
+[assembly: Indirectable(0x060002BA)]
+#endif
 
 namespace System.Prig
 {
@@ -46,7 +52,11 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+#if _M_IX86
                     info.Token = 0x060002D2;
+#else
+                    info.Token = 0x060002D4;
+#endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<DateTime>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -61,7 +71,11 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+#if _M_IX86
                     info.Token = 0x060002BC;
+#else
+                    info.Token = 0x060002BE;
+#endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<long, DateTime>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -76,7 +90,11 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+#if _M_IX86
                     info.Token = 0x060002B8;
+#else
+                    info.Token = 0x060002BA;
+#endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, long>>>();
                     holder.AddOrUpdate(info, value);
                 }
