@@ -371,7 +371,7 @@ namespace CWeaverDetail {
         _ASSERTE(pData);
         auto &prigData = *pData.Get<PrigData *>();
         _ASSERTE(!prigData.m_modPrigPath.empty());
-        if (!prigData.m_indirectablesInit && pDisp->IsCOMMetaDataDispenserPrepared())
+        if (!prigData.m_indirectablesInit)
         {
             BOOST_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit && pDisp->IsCOMMetaDataDispenserPrepared()");
             auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
