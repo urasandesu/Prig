@@ -1,5 +1,5 @@
 ﻿/* 
- * File: Program.cs
+ * File: PULDictionaryTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,17 +28,30 @@
  */
 
 
+using NUnit.Framework;
+using UntestableLibrary;
+using UntestableLibrary.Prig;
+using Urasandesu.Prig.Framework;
 
-using program1.MyLibrary;
-using System;
-
-namespace program1
+namespace Test.program1.UntestableLibrary.Prig
 {
-    class Program
+    [TestFixture]
+    public class PULDictionaryTest
     {
-        static void Main(string[] args)
+        [Test]
+        public void IsCompatibleKey_ShouldBeCallableIndirectly()
         {
-            Console.WriteLine(LifeInfo.IsLunchBreak() ? "お昼休みなう！" : "お仕事なう・・・");
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PULDictionary<int, string>.IsCompatibleKey.Body = key => key is string;
+
+                // Act
+                var actual = ULDictionary<int, string>.IsCompatibleKey("aiueo");
+
+                // Assert
+                Assert.IsTrue(actual);
+            }
         }
     }
 }

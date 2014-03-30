@@ -373,7 +373,7 @@ namespace CWeaverDetail {
         _ASSERTE(!prigData.m_modPrigPath.empty());
         if (!prigData.m_indirectablesInit)
         {
-            BOOST_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit && pDisp->IsCOMMetaDataDispenserPrepared()");
+            BOOST_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit");
             auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
             auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
             auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");

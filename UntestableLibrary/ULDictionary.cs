@@ -1,5 +1,5 @@
 ﻿/* 
- * File: Program.cs
+ * File: ULDictionary.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,16 +29,17 @@
 
 
 
-using program1.MyLibrary;
 using System;
 
-namespace program1
+namespace UntestableLibrary
 {
-    class Program
+    public class ULDictionary<TKey, TValue>
     {
-        static void Main(string[] args)
+        public static bool IsCompatibleKey(object key)
         {
-            Console.WriteLine(LifeInfo.IsLunchBreak() ? "お昼休みなう！" : "お仕事なう・・・");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            return key is TKey;
         }
     }
 }

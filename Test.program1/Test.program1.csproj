@@ -70,6 +70,7 @@
     <Compile Include="System\Prig\PExceptionTest.cs" />
     <Compile Include="System\Prig\PDateTimeTest.cs" />
     <Compile Include="System\Text\Prig\PStringBuilderTest.cs" />
+    <Compile Include="UntestableLibrary\Prig\PULDictionaryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mscorlib.Prig\mscorlib.Prig.csproj">
@@ -79,6 +80,14 @@
     <ProjectReference Include="..\program1\program1.csproj">
       <Project>{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}</Project>
       <Name>program1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UntestableLibrary.Prig\UntestableLibrary.Prig.csproj">
+      <Project>{aabf8deb-7517-44d6-9c9c-c23b9a5f1dd5}</Project>
+      <Name>UntestableLibrary.Prig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UntestableLibrary\UntestableLibrary.csproj">
+      <Project>{23389061-145f-4cb1-86ed-64a9f35f52a6}</Project>
+      <Name>UntestableLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj">
       <Project>{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}</Project>

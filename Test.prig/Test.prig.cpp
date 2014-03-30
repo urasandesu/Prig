@@ -524,21 +524,20 @@ namespace {
         auto const *pRuntime = pHost->GetRuntime(L"v2.0.50727");
         auto const *pMetaInfo = pRuntime->GetInfo<MetadataInfo>();
         auto *pMetaDisp = pMetaInfo->CreateDispenser();
-        
-        auto prigFrameworkPath = canonical(path(L"Urasandesu.Prig.Framework.dll"));
-        auto const *pPrigFramework = pMetaDisp->GetAssemblyFrom(prigFrameworkPath);
-        auto const *pPrigFrameworkDll = pPrigFramework->GetMainModule();
-        auto const *pIndirectableAttrInfo = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
+
+        auto const *pPrigFrmwrk = pMetaDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
+        auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
+        auto const *pIndAttrInfo = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
         
         auto currentDir = current_path().native();
         boost::replace_all(currentDir, L"Test.prig", L"mscorlib.Prig");
         auto mscorlibPrigPath = path(currentDir);
         mscorlibPrigPath /= L"mscorlib.Prig.dll";
         auto const *pMSCorLibPrig = pMetaDisp->GetAssemblyFrom(mscorlibPrigPath);
-        auto indirectableAttrs = pMSCorLibPrig->GetCustomAttributes(pIndirectableAttrInfo);
-        ASSERT_EQ(10, distance(indirectableAttrs));
-        auto const *pIndirectableAttr = *begin(indirectableAttrs);
-        auto const &args = pIndirectableAttr->GetConstructorArguments();
+        auto indAttrs = pMSCorLibPrig->GetCustomAttributes(pIndAttrInfo);
+        ASSERT_EQ(10, distance(indAttrs));
+        auto const *pIndAttr = *begin(indAttrs);
+        auto const &args = pIndAttr->GetConstructorArguments();
         ASSERT_EQ(1, args.size());
         auto mdmdTarget = get<UINT>(args[0]);
         ASSERT_EQ(0x0600023B, mdmdTarget);

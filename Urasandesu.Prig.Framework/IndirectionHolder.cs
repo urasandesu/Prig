@@ -82,7 +82,7 @@ namespace Urasandesu.Prig.Framework
             lock (m_dict)
             {
                 var key = info + "";
-                m_dict[key] = method; 
+                m_dict[key] = method;
                 return method;
             }
         }
@@ -100,7 +100,7 @@ namespace Urasandesu.Prig.Framework
                 if (disposing)
                 {
                     m_dict.Clear(); // You must not set m_dict null, because this instance will be reused usually. 
-                                    // Also the normal disposable pattern is not available.
+                    // Also the normal disposable pattern is not available.
                 }
             }
         }

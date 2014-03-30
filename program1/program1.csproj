@@ -69,13 +69,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mscorlib.Prig\mscorlib.Prig.csproj">
-      <Project>{c7265716-797e-4358-8b93-7f60af0e4ff0}</Project>
-      <Name>mscorlib.Prig</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj">
-      <Project>{b4f8abb2-2feb-484c-9ef5-404c88c44e1a}</Project>
-      <Name>Urasandesu.Prig.Framework</Name>
+    <ProjectReference Include="..\UntestableLibrary\UntestableLibrary.csproj">
+      <Project>{23389061-145f-4cb1-86ed-64a9f35f52a6}</Project>
+      <Name>UntestableLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

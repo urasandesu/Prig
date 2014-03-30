@@ -55,6 +55,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Urasandesu.Swathe", "Swathe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Urasandesu.SwathePS", "Swathe\Urasandesu.Swathe\Urasandesu.SwathePS.vcxproj", "{E77A53EC-A69E-41CA-ACE0-5D83636610C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UntestableLibrary", "UntestableLibrary\UntestableLibrary.csproj", "{23389061-145F-4CB1-86ED-64A9F35F52A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UntestableLibrary.Prig", "UntestableLibrary.Prig\UntestableLibrary.Prig.csproj", "{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug(.NET 3.5)|x64 = Debug(.NET 3.5)|x64
@@ -195,6 +199,22 @@ Global
 		{E77A53EC-A69E-41CA-ACE0-5D83636610C4}.Debug(.NET 3.5)|x86.ActiveCfg = Debug(.NET 3.5)|Win32
 		{E77A53EC-A69E-41CA-ACE0-5D83636610C4}.Release(.NET 3.5)|x64.ActiveCfg = Release(.NET 3.5)|x64
 		{E77A53EC-A69E-41CA-ACE0-5D83636610C4}.Release(.NET 3.5)|x86.ActiveCfg = Release(.NET 3.5)|Win32
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x64.ActiveCfg = Debug(.NET 3.5)|Any CPU
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x64.Build.0 = Debug(.NET 3.5)|Any CPU
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x86.ActiveCfg = Debug(.NET 3.5)|Any CPU
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x86.Build.0 = Debug(.NET 3.5)|Any CPU
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x64.ActiveCfg = Release(.NET 3.5)|Any CPU
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x64.Build.0 = Release(.NET 3.5)|Any CPU
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x86.ActiveCfg = Release(.NET 3.5)|Any CPU
+		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x86.Build.0 = Release(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Debug(.NET 3.5)|x64.ActiveCfg = Debug(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Debug(.NET 3.5)|x64.Build.0 = Debug(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Debug(.NET 3.5)|x86.ActiveCfg = Debug(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Debug(.NET 3.5)|x86.Build.0 = Debug(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Release(.NET 3.5)|x64.ActiveCfg = Release(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Release(.NET 3.5)|x64.Build.0 = Release(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Release(.NET 3.5)|x86.ActiveCfg = Release(.NET 3.5)|Any CPU
+		{AABF8DEB-7517-44D6-9C9C-C23B9A5F1DD5}.Release(.NET 3.5)|x86.Build.0 = Release(.NET 3.5)|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: Program.cs
+ * File: PULDictionary.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,16 +29,28 @@
 
 
 
-using program1.MyLibrary;
 using System;
+using Urasandesu.Prig.Framework;
 
-namespace program1
+[assembly: Indirectable(0x06000001)]
+
+namespace UntestableLibrary.Prig
 {
-    class Program
+    public static class PULDictionary<TKey, TValue>
     {
-        static void Main(string[] args)
+        public static class IsCompatibleKey
         {
-            Console.WriteLine(LifeInfo.IsLunchBreak() ? "お昼休みなう！" : "お仕事なう・・・");
+            public static IndirectionFunc<object, bool> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                    info.Token = 0x06000001;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<object, bool>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
         }
     }
 }
