@@ -35,6 +35,9 @@ using Urasandesu.Prig.Framework;
 #else
 [assembly: Indirectable(0x06000880)]
 #endif
+[assembly: Indirectable(0x0600082D)]
+[assembly: Indirectable(0x06000850)]
+[assembly: Indirectable(0x060008A2)]
 
 namespace System.Prig
 {
@@ -54,6 +57,51 @@ namespace System.Prig
                     info.Token = 0x06000880;
 #endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, int>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class ToSByte
+        {
+            public static IndirectionFunc<char, sbyte> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x0600082D;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<char, sbyte>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class ToInt16
+        {
+            public static IndirectionFunc<char, Int16> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x06000850;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<char, Int16>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class ToInt64
+        {
+            public static IndirectionFunc<double, long> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x060008A2;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, long>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

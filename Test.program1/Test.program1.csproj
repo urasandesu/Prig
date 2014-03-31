@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x86'">
     <OutputPath>bin\Release%28.NET 3.5%29\x86\</OutputPath>
@@ -31,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -41,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x64'">
     <OutputPath>bin\Release%28.NET 3.5%29\x64\</OutputPath>
@@ -51,6 +54,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
@@ -70,6 +74,8 @@
     <Compile Include="System\Prig\PExceptionTest.cs" />
     <Compile Include="System\Prig\PDateTimeTest.cs" />
     <Compile Include="System\Text\Prig\PStringBuilderTest.cs" />
+    <Compile Include="UntestableLibrary\Prig\PULIntPtrTest.cs" />
+    <Compile Include="UntestableLibrary\Prig\PULIdnMappingTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULDictionaryTest.cs" />
   </ItemGroup>
   <ItemGroup>

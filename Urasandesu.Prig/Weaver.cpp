@@ -510,12 +510,7 @@ namespace CWeaverDetail {
         auto isStatic = pMethodGen->IsStatic();
         auto offset = isStatic ? 1 : 0;
         if (!isStatic)
-        {
             pNewBodyGen->Emit(OpCodes::Ldarg_0);
-            auto const *pDeclaringType = pMethodGen->GetDeclaringType();
-            if (pDeclaringType->IsValueType())
-                pNewBodyGen->Emit(OpCodes::Ldobj, pDeclaringType);
-        }
     
         auto const &params = pMethodGen->GetParameters();
         BOOST_FOREACH (auto const &pParam, params)
@@ -593,7 +588,10 @@ namespace CWeaverDetail {
             }
             else
             {
-                explicitThis.Set(m_pTarget->GetDeclaringType());
+                auto const *pDeclaringType = m_pTarget->GetDeclaringType();
+                if (pDeclaringType->IsValueType())
+                    pDeclaringType = pDeclaringType->MakeByRefType();
+                explicitThis.Set(pDeclaringType);
                 params.push_back(&explicitThis);
                 params.insert(params.end(), m_pTarget->GetParameters().begin(), m_pTarget->GetParameters().end());
             }

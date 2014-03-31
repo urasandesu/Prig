@@ -40,14 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PULIntPtr.cs" />
+    <Compile Include="PULIdnMapping.cs" />
     <Compile Include="PULDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
       <Project>{c04a5e86-30e1-4c38-b916-324d000e240e}</Project>
       <Name>Urasandesu.NAnonym</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UntestableLibrary\UntestableLibrary.csproj">
+      <Project>{23389061-145f-4cb1-86ed-64a9f35f52a6}</Project>
+      <Name>UntestableLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj">
       <Project>{b4f8abb2-2feb-484c-9ef5-404c88c44e1a}</Project>

@@ -371,4 +371,324 @@ namespace Urasandesu.Prig.Framework
     public delegate TResult IndirectionRefRefFunc<in T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TRef1, TRef2, out TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, ref TRef1 ref1, ref TRef2 ref2);
     [IndirectionDelegate]
     public delegate TResult IndirectionRefRefFunc<in T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TRef1, TRef2, out TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T>(ref T obj);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2>(ref T1 arg1, T2 arg2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3>(ref T1 arg1, T2 arg2, T3 arg3);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T, TOut>(ref T obj, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, TOut>(ref T1 arg1, T2 arg2, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, TOut>(ref T1 arg1, T2 arg2, T3 arg3, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TOut>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, out TOut @out);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T, TOut1, TOut2>(ref T obj, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, TOut1, TOut2>(ref T1 arg1, T2 arg2, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisOutOutAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TOut1, TOut2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T, TRef>(ref T obj, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, TRef>(ref T1 arg1, T2 arg2, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, TRef>(ref T1 arg1, T2 arg2, T3 arg3, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TRef>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T, TRef1, TRef2>(ref T obj, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, TRef1, TRef2>(ref T1 arg1, T2 arg2, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate void IndirectionRefThisRefRefAction<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TRef1, TRef2>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T, out TResult>(ref T arg);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, out TResult>(ref T1 arg1, T2 arg2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, out TResult>(ref T1 arg1, T2 arg2, T3 arg3);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T, TOut, out TResult>(ref T arg, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, TOut, out TResult>(ref T1 arg1, T2 arg2, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TOut, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, out TOut @out);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T, TOut1, TOut2, out TResult>(ref T arg, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisOutOutFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TOut1, TOut2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, out TOut1 out1, out TOut2 out2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T, TRef, out TResult>(ref T arg, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, TRef, out TResult>(ref T1 arg1, T2 arg2, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TRef, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, ref TRef @ref);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T, TRef1, TRef2, out TResult>(ref T arg, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, ref TRef1 ref1, ref TRef2 ref2);
+    [IndirectionDelegate]
+    public delegate TResult IndirectionRefThisRefRefFunc<T1, in T2, in T3, in T4, in T5, in T6, in T7, in T8, in T9, in T10, in T11, in T12, in T13, in T14, in T15, in T16, TRef1, TRef2, out TResult>(ref T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16, ref TRef1 ref1, ref TRef2 ref2);
 }

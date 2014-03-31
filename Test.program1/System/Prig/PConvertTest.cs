@@ -53,5 +53,53 @@ namespace Test.program1.System.Prig
                 Assert.AreEqual(42, actual);
             }
         }
+
+        [Test]
+        public void ToSByte_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PConvert.ToSByte.Body = value => (sbyte)42;
+
+                // Act
+                var actual = Convert.ToSByte('a');
+
+                // Assert
+                Assert.AreEqual((sbyte)42, actual);
+            }
+        }
+
+        [Test]
+        public void ToInt16_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PConvert.ToInt16.Body = value => (Int16)42;
+
+                // Act
+                var actual = Convert.ToInt16('b');
+
+                // Assert
+                Assert.AreEqual((Int16)42, actual);
+            }
+        }
+
+        [Test]
+        public void ToInt64_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PConvert.ToInt64.Body = value => 42L;
+
+                // Act
+                var actual = Convert.ToInt64(9223372036854775807.5);
+
+                // Assert
+                Assert.AreEqual(42L, actual);
+            }
+        }
     }
 }
