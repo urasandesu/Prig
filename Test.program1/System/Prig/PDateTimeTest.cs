@@ -31,6 +31,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Prig;
 using System.Reflection;
 using System.Threading;
@@ -123,6 +124,44 @@ namespace Test.program1.System.Prig
 
                 // Assert
                 Assert.AreEqual(new DateTime(2013, 12, 23, 11, 22, 33, 44), actual);
+            }
+        }
+        
+        [Test]
+        public void DateTimeParse_TryParse_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PDateTimeParse.TryParse.Body = (string s, DateTimeFormatInfo dtfi, DateTimeStyles styles, out DateTime result) =>
+                {
+                    result = new DateTime(2014, 02, 14, 11, 30, 55, 00);
+                    return true;
+                };
+
+                // Act
+                var actualResult = default(DateTime);
+                var actualReturn = DateTime.TryParse(DateTime.Now.ToString("yyyyMMddHHmmss"), new CultureInfo("en-us"), DateTimeStyles.None, out actualResult);
+
+                // Assert
+                Assert.IsTrue(actualReturn);
+                Assert.AreEqual(new DateTime(2014, 02, 14, 11, 30, 55, 00), actualResult);
+            }
+        }
+
+        [Test]
+        public void CompareTo_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PDateTime.CompareTo.Body = (ref DateTime @this, object value) => ((DateTime)value).CompareTo(new DateTime(2013, 12, 23));
+
+                // Act
+                var actual = DateTime.Now.CompareTo((object)new DateTime(2013, 12, 23));
+
+                // Assert
+                Assert.AreEqual(0, actual);
             }
         }
     }

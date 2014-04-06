@@ -28,10 +28,12 @@
  */
 
 
+using System.Collections;
 using Urasandesu.Prig.Framework;
 
 [assembly: Indirectable(0x06000029)]
 [assembly: Indirectable(0x06000068)]
+[assembly: Indirectable(0x0600005F)]
 
 namespace System.Prig
 {
@@ -62,6 +64,21 @@ namespace System.Prig
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
                     info.Token = 0x06000068;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<T[], Predicate<T>, bool>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class BinarySearch
+        {
+            public static IndirectionFunc<Array, int, int, object, IComparer, int> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x0600005F;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Array, int, int, object, IComparer, int>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

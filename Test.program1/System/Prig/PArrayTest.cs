@@ -31,6 +31,7 @@
 using NUnit.Framework;
 using System;
 using System.Prig;
+using Urasandesu.NAnonym.Collections.Generic;
 using Urasandesu.Prig.Framework;
 
 namespace Test.program1.System.Prig
@@ -56,7 +57,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void Exists_T__ShouldBeCallableIndirectly()
+        public void Exists_T_ShouldBeCallableIndirectly()
         {
             using (new IndirectionsContext())
             {
@@ -68,6 +69,22 @@ namespace Test.program1.System.Prig
 
                 // Assert
                 Assert.IsTrue(actual);
+            }
+        }
+
+        [Test]
+        public void BinarySearch_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PArray.BinarySearch.Body = (array, index, length, value, comparer) => 42;
+
+                // Act
+                var actual = Array.BinarySearch(new int[] { 1, 2, 3 }, 0, 3, (object)2, new LambdaComparer<int>((_1, _2) => _1 - _2));
+
+                // Assert
+                Assert.AreEqual(42, actual);
             }
         }
     }

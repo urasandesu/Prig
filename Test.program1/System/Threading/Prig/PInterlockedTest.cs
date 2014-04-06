@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULIntPtr.cs
+ * File: PInterlockedTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,46 +28,51 @@
  */
 
 
-
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x06000005)]
-[assembly: Indirectable(0x06000009)]
-
-namespace UntestableLibrary.Prig
+namespace Test.program1.System.Threading.Prig
 {
-    public static class PULIntPtr
+    [TestFixture]
+    public class PInterlockedTest
     {
-        public static class Constructor
+        [Test]
+        public void Exchange_T_ShouldBeCallableIndirectly()
         {
-            // NOTE: To call indirectly a instance member of a struct, you have to use a delegate IndirectionRefThis** instead of a delegate Indirection**.
-            public static IndirectionRefThisAction<ULIntPtr, long> Body
+            using (new IndirectionsContext())
             {
-                set
+                // Arrange
+                PInterlocked.Exchange<MyData>.Body = (ref MyData location1, MyData value) =>
                 {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = 0x06000005;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<ULIntPtr, long>>>();
-                    holder.AddOrUpdate(info, value);
-                }
+                    location1 = value;
+                    return new MyData(42);
+                };
+
+                // Act
+                var data1 = new MyData(100);
+                var data2 = new MyData(200);
+                var actual = Interlocked.Exchange(ref data1, data2);
+
+                // Assert
+                Assert.AreEqual(200, data1.Value);
+                Assert.AreEqual(42, actual.Value);
             }
         }
 
-        public static class SizeGet
+        class MyData
         {
-            public static IndirectionFunc<int> Body
+            public MyData(int value)
             {
-                set
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = 0x06000009;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<int>>>();
-                    holder.AddOrUpdate(info, value);
-                }
+                Value = value;
             }
+
+            public int Value { get; private set; }
         }
     }
 }

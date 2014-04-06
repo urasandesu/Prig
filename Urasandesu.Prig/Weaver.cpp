@@ -635,7 +635,12 @@ namespace CWeaverDetail {
         // make Generic Type Instance of IndirectionDelegate.
         auto genericArgs = vector<IType const *>();
         if (!pTarget->IsStatic())
-            genericArgs.push_back(pTarget->GetDeclaringType());
+        {
+            auto const *pDeclaringType = pTarget->GetDeclaringType();
+            if (pDeclaringType->IsGenericType())
+                pDeclaringType = MakeGenericExplicitThisType(pDeclaringType);
+            genericArgs.push_back(pDeclaringType);
+        }
         auto const &params = pTarget->GetParameters();
         BOOST_FOREACH (auto const &pParam, params)
         {
@@ -646,6 +651,22 @@ namespace CWeaverDetail {
             genericArgs.push_back(pTarget->GetReturnType());
         auto const *pIndDlgtInst = pIndDlgt->MakeGenericType(genericArgs);
         return pIndDlgtInst;
+    }
+
+
+
+    IType const *CWeaverImpl::MakeGenericExplicitThisType(IType const *pTarget) const
+    {
+        using std::vector;
+
+        auto const *pAsm = pTarget->GetAssembly();
+        
+        auto genericParamPos = 0ul;
+        auto genericArgs = vector<IType const *>();
+        BOOST_FOREACH (auto const &_, pTarget->GetGenericArguments())
+            genericArgs.push_back(pAsm->GetGenericTypeParameter(genericParamPos++));
+        
+        return pTarget->MakeGenericType(genericArgs);
     }
 
 }   // namespace CWeaverDetail {

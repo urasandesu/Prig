@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULIntPtr.cs
+ * File: PPersianCalendar.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,43 +28,24 @@
  */
 
 
-
-using System;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x06000005)]
-[assembly: Indirectable(0x06000009)]
+[assembly: Indirectable(0x06002626)]
 
-namespace UntestableLibrary.Prig
+namespace System.Globalization.Prig
 {
-    public static class PULIntPtr
+    public static class PPersianCalendar
     {
-        public static class Constructor
+        public static class CheckTicksRange
         {
-            // NOTE: To call indirectly a instance member of a struct, you have to use a delegate IndirectionRefThis** instead of a delegate Indirection**.
-            public static IndirectionRefThisAction<ULIntPtr, long> Body
+            public static IndirectionAction<PersianCalendar, long> Body
             {
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = 0x06000005;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<ULIntPtr, long>>>();
-                    holder.AddOrUpdate(info, value);
-                }
-            }
-        }
-
-        public static class SizeGet
-        {
-            public static IndirectionFunc<int> Body
-            {
-                set
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = 0x06000009;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<int>>>();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x06002626;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<PersianCalendar, long>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

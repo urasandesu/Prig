@@ -68,20 +68,28 @@
   <ItemGroup>
     <Compile Include="MyLibraryTest\LifeInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\Globalization\Prig\PPersianCalendarTest.cs" />
+    <Compile Include="System\IO\Prig\PMemoryStreamTest.cs" />
     <Compile Include="System\Prig\PConvertTest.cs" />
     <Compile Include="System\Prig\PArrayTest.cs" />
     <Compile Include="System\Prig\PInt32Test.cs" />
     <Compile Include="System\Prig\PExceptionTest.cs" />
     <Compile Include="System\Prig\PDateTimeTest.cs" />
     <Compile Include="System\Text\Prig\PStringBuilderTest.cs" />
+    <Compile Include="System\Threading\Prig\PInterlockedTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULIntPtrTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULIdnMappingTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULDictionaryTest.cs" />
+    <Compile Include="UntestableLibrary\Prig\PULNullableTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mscorlib.Prig\mscorlib.Prig.csproj">
       <Project>{c7265716-797e-4358-8b93-7f60af0e4ff0}</Project>
       <Name>mscorlib.Prig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
+      <Project>{c04a5e86-30e1-4c38-b916-324d000e240e}</Project>
+      <Name>Urasandesu.NAnonym</Name>
     </ProjectReference>
     <ProjectReference Include="..\program1\program1.csproj">
       <Project>{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}</Project>

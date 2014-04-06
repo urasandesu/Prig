@@ -38,6 +38,7 @@ using Urasandesu.Prig.Framework;
 [assembly: Indirectable(0x0600082D)]
 [assembly: Indirectable(0x06000850)]
 [assembly: Indirectable(0x060008A2)]
+[assembly: Indirectable(0x06000813)]
 
 namespace System.Prig
 {
@@ -102,6 +103,21 @@ namespace System.Prig
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
                     info.Token = 0x060008A2;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, long>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class ToBoolean
+        {
+            public static IndirectionFunc<float, bool> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x06000813;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<float, bool>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

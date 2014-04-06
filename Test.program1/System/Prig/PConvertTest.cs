@@ -101,5 +101,21 @@ namespace Test.program1.System.Prig
                 Assert.AreEqual(42L, actual);
             }
         }
+
+        [Test]
+        public void ToBoolean_ShouldBeCallableIndirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PConvert.ToBoolean.Body = value => true;
+
+                // Act
+                var actual = Convert.ToBoolean(0f);
+
+                // Assert
+                Assert.IsTrue(actual);
+            }
+        }
     }
 }

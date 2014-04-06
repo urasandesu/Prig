@@ -39,6 +39,7 @@ using Urasandesu.Prig.Framework;
 [assembly: Indirectable(0x060002D4)]
 [assembly: Indirectable(0x060002BA)]
 #endif
+[assembly: Indirectable(0x060002B3)]
 
 namespace System.Prig
 {
@@ -96,6 +97,21 @@ namespace System.Prig
                     info.Token = 0x060002BA;
 #endif
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, long>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        }
+
+        public static class CompareTo
+        {
+            public static IndirectionRefThisFunc<DateTime, object, int> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = 0x060002B3;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisFunc<DateTime, object, int>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

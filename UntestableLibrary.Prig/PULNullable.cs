@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULIntPtr.cs
+ * File: PULNullable.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,42 +29,24 @@
 
 
 
-using System;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x06000005)]
-[assembly: Indirectable(0x06000009)]
+[assembly: Indirectable(0x0600000C)]
 
 namespace UntestableLibrary.Prig
 {
-    public static class PULIntPtr
+    public static class PULNullable<T> where T : struct
     {
-        public static class Constructor
+        public static new class ToString
         {
-            // NOTE: To call indirectly a instance member of a struct, you have to use a delegate IndirectionRefThis** instead of a delegate Indirection**.
-            public static IndirectionRefThisAction<ULIntPtr, long> Body
+            public static IndirectionRefFunc<ULNullable<T>, string> Body
             {
                 set
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = 0x06000005;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<ULIntPtr, long>>>();
-                    holder.AddOrUpdate(info, value);
-                }
-            }
-        }
-
-        public static class SizeGet
-        {
-            public static IndirectionFunc<int> Body
-            {
-                set
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = 0x06000009;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<int>>>();
+                    info.Token = 0x0600000C;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefFunc<ULNullable<T>, string>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

@@ -44,6 +44,7 @@
     <Compile Include="PULIntPtr.cs" />
     <Compile Include="PULIdnMapping.cs" />
     <Compile Include="PULDictionary.cs" />
+    <Compile Include="PULNullable.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">

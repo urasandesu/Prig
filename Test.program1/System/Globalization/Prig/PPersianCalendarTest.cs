@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ULIntPtr.cs
+ * File: PPersianCalendarTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,41 +28,32 @@
  */
 
 
+using NUnit.Framework;
+using System;
+using System.Globalization;
+using System.Globalization.Prig;
+using Urasandesu.Prig.Framework;
 
-namespace UntestableLibrary
+namespace Test.program1.System.Globalization.Prig
 {
-    public struct ULIntPtr
+    [TestFixture]
+    public class PPersianCalendarTest
     {
-        unsafe void* m_p;
-
-        public unsafe ULIntPtr(int value)
+        [Test]
+        public void CheckTicksRange_ShouldBeCallableIndirectly()
         {
-            this.m_p = (void*)value;
-        }
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PPersianCalendar.CheckTicksRange.Body = (@this, ticks) => { };
 
-        public unsafe ULIntPtr(long value)
-        {
-            this.m_p = (void*)checked((int)value);
-        }
+                // Act
+                var calendar = new PersianCalendar();
+                var actual = calendar.GetEra(new DateTime(622, 3, 20));
 
-        public unsafe bool IsNull()
-        {
-            return this.m_p == null;
-        }
-
-        public unsafe int ToInt32()
-        {
-            return (int)this.m_p;
-        }
-
-        public unsafe long ToInt64()
-        {
-            return (long)this.m_p;
-        }
-
-        public static unsafe int Size
-        {
-            get { return sizeof(void*); }
+                // Assert
+                Assert.AreEqual(PersianCalendar.PersianEra, actual);
+            }
         }
     }
 }

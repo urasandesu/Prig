@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULIntPtrTest.cs
+ * File: PMemoryStreamTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,49 +29,63 @@
 
 
 using NUnit.Framework;
-using System;
-using UntestableLibrary;
-using UntestableLibrary.Prig;
+using System.IO;
+using System.IO.Prig;
 using Urasandesu.Prig.Framework;
 
-namespace Test.program1.UntestableLibrary.Prig
+namespace Test.program1.System.IO.Prig
 {
     [TestFixture]
-    public class PULIntPtrTest
+    public class PMemoryStreamTest
     {
         [Test]
-        public void Constructor_ShouldBeCallableIndirectly()
+        public void Seek_ShouldBeCallableIndirectly()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIntPtr.Constructor.Body = (ref ULIntPtr @this, long value) =>
+                PMemoryStream.Seek.Body = (@this, offset, loc) => 42L;
+
+                var buffer = new byte[256];
+                for (int i = 0; i < buffer.Length; i++)
+                    buffer[i] = (byte)i;
+
+                
+                using (var ms = new MemoryStream(buffer))
                 {
-                    var ctorInfo = typeof(ULIntPtr).GetConstructor(new Type[] { typeof(int) });
-                    @this = (ULIntPtr)ctorInfo.Invoke(new object[] { 42 });
-                };
+                    // Act
+                    var actual = ms.Seek(128, SeekOrigin.Begin);
 
-                // Act
-                var actual = new ULIntPtr(2147483648L);
-
-                // Assert
-                Assert.AreEqual(42, actual.ToInt32());
+                    // Assert
+                    Assert.AreEqual(42L, actual);
+                }
             }
         }
 
         [Test]
-        public void get_Size_ShouldBeCallableIndirectly()
+        public void Stream_BeginRead_ShouldBeCallableIndirectly()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIntPtr.SizeGet.Body = () => 42;
+                PStream.BeginRead.Body = (@this, _buffer, offset, count, callback, state) => 
+                    IndirectionsContext.ExecuteOriginal(() => @this.BeginRead(_buffer, offset, 42, callback, state));
 
-                // Act
-                var actual = ULIntPtr.Size;
+                var buffer = new byte[256];
+                for (int i = 0; i < buffer.Length; i++)
+                    buffer[i] = (byte)i;
 
-                // Assert
-                Assert.AreEqual(42, actual);
+
+                using (var ms = new MemoryStream(buffer))
+                {
+                    // Act
+                    var _buffer = new byte[1024];
+                    var ar = ms.BeginRead(_buffer, 0, _buffer.Length, null, null);
+                    var actual = ms.EndRead(ar);
+
+                    // Assert
+                    Assert.AreEqual(42, actual);
+                }
             }
         }
     }

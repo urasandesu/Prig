@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ULIntPtr.cs
+ * File: ULNullable.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -31,38 +31,25 @@
 
 namespace UntestableLibrary
 {
-    public struct ULIntPtr
+    public struct ULNullable<T> where T : struct
     {
-        unsafe void* m_p;
+        bool m_hasValue;
+        T m_value;
 
-        public unsafe ULIntPtr(int value)
+        public ULNullable(T value)
         {
-            this.m_p = (void*)value;
+            m_value = value;
+            m_hasValue = true;
         }
 
-        public unsafe ULIntPtr(long value)
+        public bool HasValue
         {
-            this.m_p = (void*)checked((int)value);
+            get { return m_hasValue; }
         }
 
-        public unsafe bool IsNull()
+        public override string ToString()
         {
-            return this.m_p == null;
-        }
-
-        public unsafe int ToInt32()
-        {
-            return (int)this.m_p;
-        }
-
-        public unsafe long ToInt64()
-        {
-            return (long)this.m_p;
-        }
-
-        public static unsafe int Size
-        {
-            get { return sizeof(void*); }
+            return !HasValue ? string.Empty : m_value.ToString();
         }
     }
 }

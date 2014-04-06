@@ -101,6 +101,7 @@ namespace CWeaverDetail {
         SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData);
         void EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen);
         IType const *GetIndirectionDelegateInstance(IMethod const *pTarget, IModule const *pIndDll, IType const *pIndDlgtAttrType, PrigData &prigData) const;
+        IType const *MakeGenericExplicitThisType(IType const *pTarget) const;
 
         typedef boost::lock_guard<boost::mutex> guard_type;
         ProfilingInfo *m_pProfInfo;

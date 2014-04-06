@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ULIntPtr.cs
+ * File: PULNullableTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,41 +28,30 @@
  */
 
 
+using NUnit.Framework;
+using UntestableLibrary;
+using UntestableLibrary.Prig;
+using Urasandesu.Prig.Framework;
 
-namespace UntestableLibrary
+namespace Test.program1.UntestableLibrary.Prig
 {
-    public struct ULIntPtr
+    [TestFixture]
+    public class PULNullableTest
     {
-        unsafe void* m_p;
-
-        public unsafe ULIntPtr(int value)
+        [Test]
+        public void ToString_ShouldBeCallableIndirectly()
         {
-            this.m_p = (void*)value;
-        }
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PULNullable<int>.ToString.Body = (ref ULNullable<int> @this) => "42";
 
-        public unsafe ULIntPtr(long value)
-        {
-            this.m_p = (void*)checked((int)value);
-        }
+                // Act
+                var actual = new ULNullable<int>(100).ToString();
 
-        public unsafe bool IsNull()
-        {
-            return this.m_p == null;
-        }
-
-        public unsafe int ToInt32()
-        {
-            return (int)this.m_p;
-        }
-
-        public unsafe long ToInt64()
-        {
-            return (long)this.m_p;
-        }
-
-        public static unsafe int Size
-        {
-            get { return sizeof(void*); }
+                // Assert
+                Assert.AreEqual("42", actual);
+            }
         }
     }
 }
