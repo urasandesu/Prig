@@ -28,7 +28,7 @@
  */
 
 
-// dllmain.cpp : DllMain �̎���
+// dllmain.cpp : Implementation of DllMain.
 
 #include "stdafx.h"
 #include "resource.h"
@@ -37,9 +37,12 @@
 
 CUrasandesuPrigModule _AtlModule;
 
-// DLL �G���g�� �|�C���g
+// DLL Entry Point
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
+    //::_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //::_CrtSetBreakAlloc(3625);
+
 	hInstance;
 	return _AtlModule.DllMain(dwReason, lpReserved); 
 }

@@ -137,7 +137,7 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::InitializeCore( 
         /* [in] */ IUnknown *pICorProfilerInfoUnk)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"InitializeCore(IUnknown *: 0x%|1$X|)", reinterpret_cast<void *>(pICorProfilerInfoUnk));
 
         auto _ = guard_type(m_lock);
@@ -162,12 +162,15 @@ namespace CWeaverDetail {
 
     STDMETHODIMP CWeaverImpl::ShutdownCore()
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW(L"ShutdownCore()");
 
         auto _ = guard_type(m_lock);
         
         m_pProfInfo->DetachFromCurrentProcess();
+
+        // If we delegate releasing the resources to system, the result will become unintended consequences for Boost.Log.
+        boost::log::core::get()->remove_all_sinks();
 
         return S_OK;
     }
@@ -177,7 +180,7 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::AppDomainCreationStartedCore( 
         /* [in] */ AppDomainID appDomainId)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"AppDomainCreationStartedCore(AppDomainID: 0x%|1$X|)", reinterpret_cast<void *>(appDomainId));
 
         auto _ = guard_type(m_lock);
@@ -191,7 +194,7 @@ namespace CWeaverDetail {
         /* [in] */ AppDomainID appDomainId,
         /* [in] */ HRESULT hrStatus)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW2(L"AppDomainCreationFinishedCore(AppDomainID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(appDomainId), hrStatus);
 
         auto _ = guard_type(m_lock);
@@ -208,7 +211,7 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::AppDomainShutdownStartedCore( 
         /* [in] */ AppDomainID appDomainId)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"AppDomainShutdownStartedCore(AppDomainID: 0x%|1$X|)", reinterpret_cast<void *>(appDomainId));
 
         auto _ = guard_type(m_lock);
@@ -225,7 +228,7 @@ namespace CWeaverDetail {
         /* [in] */ AppDomainID appDomainId,
         /* [in] */ HRESULT hrStatus)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW2(L"AppDomainShutdownFinishedCore(AppDomainID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(appDomainId), hrStatus);
 
         auto _ = guard_type(m_lock);
@@ -238,7 +241,7 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::ModuleLoadStartedCore( 
         /* [in] */ ModuleID moduleId)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"ModuleLoadStartedCore(ModuleID: 0x%|1$X|)", reinterpret_cast<void *>(moduleId));
 
         auto _ = guard_type(m_lock);
@@ -263,7 +266,7 @@ namespace CWeaverDetail {
         /* [in] */ ModuleID moduleId,
         /* [in] */ HRESULT hrStatus)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
 
         using boost::lexical_cast;
         using boost::log::current_scope;
@@ -284,7 +287,7 @@ namespace CWeaverDetail {
         if (!exists(modPrigPath))
             return S_OK;
         
-        BOOST_LOG_NAMED_SCOPE("if (exists(modPrigPath))");
+        CPPANONYM_LOG_NAMED_SCOPE("if (exists(modPrigPath))");
         CPPANONYM_D_LOGW1(L"Detour module: %|1$s| is found. Start to modify the module.", modPrigPath.native());
         pModProf.Persist();
         auto pAsmProf = pModProf->AttachToAssembly();
@@ -312,7 +315,7 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::ModuleUnloadStartedCore( 
         /* [in] */ ModuleID moduleId)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$X|)", reinterpret_cast<void *>(moduleId));   // TODO: この辺実装中。。。
 
         auto _ = guard_type(m_lock);
@@ -329,7 +332,7 @@ namespace CWeaverDetail {
         /* [in] */ ModuleID moduleId,
         /* [in] */ HRESULT hrStatus)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW2(L"ModuleUnloadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
 
         auto _ = guard_type(m_lock);
@@ -343,7 +346,7 @@ namespace CWeaverDetail {
         /* [in] */ FunctionID functionId,
         /* [in] */ BOOL fIsSafeToBlock)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
 
         using boost::lexical_cast;
         using boost::filesystem::path;
@@ -360,7 +363,7 @@ namespace CWeaverDetail {
         if (!pModProf.IsPersisted())
             return S_OK;
         
-        BOOST_LOG_NAMED_SCOPE("pModProf.IsPersisted()");
+        CPPANONYM_LOG_NAMED_SCOPE("pModProf.IsPersisted()");
         CPPANONYM_D_LOGW(L"This method is candidate for the module that can detour.");
         
         auto pAsmProf = pModProf->AttachToAssembly();
@@ -373,7 +376,7 @@ namespace CWeaverDetail {
         _ASSERTE(!prigData.m_modPrigPath.empty());
         if (!prigData.m_indirectablesInit)
         {
-            BOOST_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit");
+            CPPANONYM_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit");
             auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
             auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
             auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
@@ -401,7 +404,7 @@ namespace CWeaverDetail {
         if ((result = prigData.m_indirectables.find(mdt)) == prigData.m_indirectables.end())
             return S_OK;
         
-        BOOST_LOG_NAMED_SCOPE("(result = prigData.m_indirectables.find(mdt)) != prigData.m_indirectables.end()");
+        CPPANONYM_LOG_NAMED_SCOPE("(result = prigData.m_indirectables.find(mdt)) != prigData.m_indirectables.end()");
         CPPANONYM_D_LOGW(L"This method is marked by IndirectableAttribute.");
         pFuncProf.Persist();
         
@@ -431,7 +434,7 @@ namespace CWeaverDetail {
 
     SIZE_T CWeaverImpl::EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData)
     {
-        BOOST_LOG_FUNCTION();
+        CPPANONYM_LOG_FUNCTION();
 
         using boost::filesystem::path;
         using std::vector;

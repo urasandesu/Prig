@@ -35,7 +35,7 @@ typedef Urasandesu::CppAnonym::Collections::GlobalSafeDictionary<std::wstring, v
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr)
 {
-    BOOST_LOG_FUNCTION();
+    CPPANONYM_LOG_FUNCTION();
 
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.TryAdd(std::wstring(key), pFuncPtr);
@@ -45,7 +45,7 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR k
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr)
 {
-    BOOST_LOG_FUNCTION();
+    CPPANONYM_LOG_FUNCTION();
 
     _ASSERTE(ppFuncPtr != NULL);
     auto &ing = InstanceGetters::GetInstance();
@@ -56,7 +56,7 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR k
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr)
 {
-    BOOST_LOG_FUNCTION();
+    CPPANONYM_LOG_FUNCTION();
 
     _ASSERTE(ppFuncPtr != NULL);
     auto &ing = InstanceGetters::GetInstance();
@@ -67,7 +67,7 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWST
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear()
 {
-    BOOST_LOG_FUNCTION();
+    CPPANONYM_LOG_FUNCTION();
 
     CPPANONYM_D_LOGW(L"InstanceGettersClear()");
     auto &ing = InstanceGetters::GetInstance();
@@ -76,7 +76,7 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear()
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsEnabled()
 {
-    BOOST_LOG_FUNCTION();
+    CPPANONYM_LOG_FUNCTION();
 
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.IsEnabled();
@@ -86,7 +86,7 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsEnabled()
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersSetIsEnabled(BOOL value)
 {
-    BOOST_LOG_FUNCTION();
+    CPPANONYM_LOG_FUNCTION();
 
     auto &ing = InstanceGetters::GetInstance();
     ing.SetIsEnabled(value);
