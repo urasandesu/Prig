@@ -28,20 +28,29 @@
  */
 
 
+using System.Text.Prig;
 using Urasandesu.Prig.Framework;
 
-#if _M_IX86
-[assembly: Indirectable(0x0600023B)]
-[assembly: Indirectable(0x06000267)]
-#else
-[assembly: Indirectable(0x0600023D)]
-[assembly: Indirectable(0x06000269)]
-#endif
+[assembly: Indirectable(PStringBuilder.TokenOfInsert_Func_StringBuilder_int_string_int_StringBuilder)]
+[assembly: Indirectable(PStringBuilder.TokenOfReplace_Func_StringBuilder_char_char_int_int_StringBuilder)]
 
 namespace System.Text.Prig
 {
     public static class PStringBuilder
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfInsert_Func_StringBuilder_int_string_int_StringBuilder = 0x0600023B;
+        internal const int TokenOfReplace_Func_StringBuilder_char_char_int_int_StringBuilder = 0x06000267;
+#else
+        internal const int TokenOfInsert_Func_StringBuilder_int_string_int_StringBuilder = 0x0600023D;
+        internal const int TokenOfReplace_Func_StringBuilder_char_char_int_int_StringBuilder = 0x06000269;
+#endif
+#else
+        internal const int TokenOfInsert_Func_StringBuilder_int_string_int_StringBuilder = 0x060003FF;
+        internal const int TokenOfReplace_Func_StringBuilder_char_char_int_int_StringBuilder = 0x0600042A;
+#endif
+
         public static class Insert
         {
             public static IndirectionFunc<StringBuilder, int, string, int, StringBuilder> Body
@@ -49,12 +58,8 @@ namespace System.Text.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-#if _M_IX86
-                    info.Token = 0x0600023B;
-#else
-                    info.Token = 0x0600023D;
-#endif
+                    info.AssemblyName = typeof(StringBuilder).Assembly.FullName;
+                    info.Token = TokenOfInsert_Func_StringBuilder_int_string_int_StringBuilder;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<StringBuilder, int, string, int, StringBuilder>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -68,12 +73,8 @@ namespace System.Text.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-#if _M_IX86
-                    info.Token = 0x06000267;
-#else
-                    info.Token = 0x06000269;
-#endif
+                    info.AssemblyName = typeof(StringBuilder).Assembly.FullName;
+                    info.Token = TokenOfReplace_Func_StringBuilder_char_char_int_int_StringBuilder;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<StringBuilder, char, char, int, int, StringBuilder>>>();
                     holder.AddOrUpdate(info, value);
                 }

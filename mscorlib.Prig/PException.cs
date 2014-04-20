@@ -28,18 +28,25 @@
  */
 
 
+using System.Prig;
 using Urasandesu.Prig.Framework;
 
-#if _M_IX86
-[assembly: Indirectable(0x06000293)]
-#else
-[assembly: Indirectable(0x06000295)]
-#endif
+[assembly: Indirectable(PException.TokenOfInternalToString_Func_Exception_string)]
 
 namespace System.Prig
 {
     public static class PException
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfInternalToString_Func_Exception_string = 0x06000293;
+#else
+        internal const int TokenOfInternalToString_Func_Exception_string = 0x06000295;
+#endif
+#else
+        internal const int TokenOfInternalToString_Func_Exception_string = 0x06000041;
+#endif
+
         public static class InternalToString
         {
             public static IndirectionFunc<Exception, string> Body
@@ -48,12 +55,8 @@ namespace System.Prig
                 {
                     var t = typeof(Exception);
                     var info = new IndirectionInfo();
-                    info.AssemblyName = t.Assembly.FullName;
-#if _M_IX86
-                    info.Token = 0x06000293;
-#else
-                    info.Token = 0x06000295;
-#endif
+                    info.AssemblyName = typeof(Exception).Assembly.FullName;
+                    info.Token = TokenOfInternalToString_Func_Exception_string;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Exception, string>>>();
                     holder.AddOrUpdate(info, value);
                 }

@@ -29,16 +29,27 @@
 
 
 using System.Collections;
+using System.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x06000029)]
-[assembly: Indirectable(0x06000068)]
-[assembly: Indirectable(0x0600005F)]
+[assembly: Indirectable(PArray.TokenOfCreateInstance_Func_Type_Int32Array_Int32Array_Array)]
+[assembly: Indirectable(PArray.TokenOfExists_T_Func_TArray_Predicate_T_bool)]
+[assembly: Indirectable(PArray.TokenOfBinarySearch_Func_Array_int_int_object_IComparer_int)]
 
 namespace System.Prig
 {
     public static class PArray
     {
+#if _NET_3_5
+        internal const int TokenOfCreateInstance_Func_Type_Int32Array_Int32Array_Array = 0x06000029;
+        internal const int TokenOfExists_T_Func_TArray_Predicate_T_bool = 0x06000068;
+        internal const int TokenOfBinarySearch_Func_Array_int_int_object_IComparer_int = 0x0600005F;
+#else
+        internal const int TokenOfCreateInstance_Func_Type_Int32Array_Int32Array_Array = 0x0600018C;
+        internal const int TokenOfExists_T_Func_TArray_Predicate_T_bool = 0x060001D0;
+        internal const int TokenOfBinarySearch_Func_Array_int_int_object_IComparer_int = 0x060001C7;
+#endif
+
         public static class CreateInstance
         {
             public static IndirectionFunc<Type, int[], int[], Array> Body
@@ -46,8 +57,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x06000029;
+                    info.AssemblyName = typeof(Array).Assembly.FullName;
+                    info.Token = TokenOfCreateInstance_Func_Type_Int32Array_Int32Array_Array;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Type, int[], int[], Array>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -61,8 +72,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x06000068;
+                    info.AssemblyName = typeof(Array).Assembly.FullName;
+                    info.Token = TokenOfExists_T_Func_TArray_Predicate_T_bool;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<T[], Predicate<T>, bool>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -76,8 +87,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x0600005F;
+                    info.AssemblyName = typeof(Array).Assembly.FullName;
+                    info.Token = TokenOfBinarySearch_Func_Array_int_int_object_IComparer_int;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Array, int, int, object, IComparer, int>>>();
                     holder.AddOrUpdate(info, value);
                 }

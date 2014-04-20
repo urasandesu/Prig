@@ -29,14 +29,29 @@
 
 
 using System.Globalization;
+using System.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x0600245B)]
+[assembly: Indirectable(PDateTimeParse.TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool)]
 
 namespace System.Prig
 {
     public static class PDateTimeParse
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x0600245B;
+#else
+        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x060024AE;
+#endif
+#else
+#if _M_IX86
+        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x06003021;
+#else
+        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x0600301E;
+#endif
+#endif
+
         public static class TryParse
         {
             public static IndirectionOutFunc<string, DateTimeFormatInfo, DateTimeStyles, DateTime, bool> Body
@@ -44,8 +59,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x0600245B;
+                    info.AssemblyName = typeof(DateTime).Assembly.FullName; // This class is commonly used from class DateTime.
+                    info.Token = TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionOutFunc<string, DateTimeFormatInfo, DateTimeStyles, DateTime, bool>>>();
                     holder.AddOrUpdate(info, value);
                 }

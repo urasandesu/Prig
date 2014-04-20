@@ -45,7 +45,11 @@ namespace Test.program1.System.Globalization.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
+#if _NET_3_5
                 PPersianCalendar.CheckTicksRange.Body = (@this, ticks) => { };
+#else
+                PPersianCalendar.CheckTicksRange.Body = ticks => { };
+#endif
 
                 // Act
                 var calendar = new PersianCalendar();

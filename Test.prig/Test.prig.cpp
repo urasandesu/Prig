@@ -95,16 +95,23 @@ namespace {
         }
 
         auto const *pIndirectionInfo_set_AssemblyName = pIndirectionInfo->GetMethod(L"set_AssemblyName");
+        ASSERT_TRUE(pIndirectionInfo_set_AssemblyName != nullptr);
         auto const *pIndirectionInfo_set_Token = pIndirectionInfo->GetMethod(L"set_Token");
+        ASSERT_TRUE(pIndirectionInfo_set_Token != nullptr);
         auto const *pLooseCrossDomainAccessor_TryGet = pLooseCrossDomainAccessor->GetMethod(L"TryGet");
+        ASSERT_TRUE(pLooseCrossDomainAccessor_TryGet != nullptr);
         auto const *pLooseCrossDomainAccessor_GetOrRegister = pLooseCrossDomainAccessor->GetMethod(L"GetOrRegister");
+        ASSERT_TRUE(pLooseCrossDomainAccessor_GetOrRegister != nullptr);
         auto const *pIndirectionHolder1IndirectionFunc1DateTime_TryRemove = pIndirectionHolder1IndirectionFunc1DateTime->GetMethod(L"TryRemove");
+        ASSERT_TRUE(pIndirectionHolder1IndirectionFunc1DateTime_TryRemove != nullptr);
         auto const *pIndirectionHolder1IndirectionFunc1DateTime_AddOrUpdate = pIndirectionHolder1IndirectionFunc1DateTime->GetMethod(L"AddOrUpdate");
+        ASSERT_TRUE(pIndirectionHolder1IndirectionFunc1DateTime_AddOrUpdate != nullptr);
         auto const *pIndirectableAttr_ctor = static_cast<IMethod *>(nullptr);
         {
             auto paramTypes = vector<IType const *>();
             paramTypes.push_back(pUInt32);
             pIndirectableAttr_ctor = pIndirectableAttrType->GetConstructor(paramTypes);
+            ASSERT_TRUE(pIndirectableAttr_ctor != nullptr);
         }
 
         auto const *pLooseCrossDomainAccessor_TryGetIndirectionHolder1IndirectionFunc1DateTime = static_cast<IMethod *>(nullptr);
@@ -272,12 +279,19 @@ namespace {
         }
 
         auto const *pDateTime_get_UtcNow = pDateTime->GetMethod(L"get_UtcNow");
+        ASSERT_TRUE(pDateTime_get_UtcNow != nullptr);
         auto const *pDateTime_ToLocalTime = pDateTime->GetMethod(L"ToLocalTime");
+        ASSERT_TRUE(pDateTime_ToLocalTime != nullptr);
         auto const *pIndirectionInfo_set_AssemblyName = pIndirectionInfo->GetMethod(L"set_AssemblyName");
+        ASSERT_TRUE(pIndirectionInfo_set_AssemblyName != nullptr);
         auto const *pIndirectionInfo_set_Token = pIndirectionInfo->GetMethod(L"set_Token");
+        ASSERT_TRUE(pIndirectionInfo_set_Token != nullptr);
         auto const *pIndirectionFunc1DateTime_Invoke = pIndirectionFunc1DateTime->GetMethod(L"Invoke");
+        ASSERT_TRUE(pIndirectionFunc1DateTime_Invoke != nullptr);
         auto const *pLooseCrossDomainAccessor_TryGet = pLooseCrossDomainAccessor->GetMethod(L"TryGet");
+        ASSERT_TRUE(pLooseCrossDomainAccessor_TryGet != nullptr);
         auto const *pIndirectionHolder1IndirectionFunc1DateTime_TryGet = pIndirectionHolder1IndirectionFunc1DateTime->GetMethod(L"TryGet");
+        ASSERT_TRUE(pIndirectionHolder1IndirectionFunc1DateTime_TryGet != nullptr);
 
         auto const *pLooseCrossDomainAccessor_TryGetIndirectionHolder1IndirectionFunc1DateTime = static_cast<IMethod *>(nullptr);
         {
@@ -403,6 +417,7 @@ namespace {
             auto params = vector<IType const *>();
             params.push_back(pString);
             pStreamReader_ctor_string = pStreamReader->GetConstructor(params);
+            ASSERT_TRUE(pStreamReader_ctor_string != nullptr);
         }
         auto const *pTextReader_ReadBlock_CharArr_Int32_Int32 = static_cast<IMethod *>(nullptr);
         {
@@ -411,9 +426,12 @@ namespace {
             params.push_back(pInt32);
             params.push_back(pInt32);
             pTextReader_ReadBlock_CharArr_Int32_Int32 = pTextReader->GetMethod(L"ReadBlock", params);
+            ASSERT_TRUE(pTextReader_ReadBlock_CharArr_Int32_Int32 != nullptr);
         }
         auto const *pTextReader_Close = pTextReader->GetMethod(L"Close");
+        ASSERT_TRUE(pTextReader_Close != nullptr);
         auto const *pException_get_Message = pException->GetMethod(L"get_Message");
+        ASSERT_TRUE(pException_get_Message != nullptr);
         auto const *pConsole_WriteLine_string_object_object = static_cast<IMethod *>(nullptr);
         {
             auto params = vector<IType const *>();
@@ -421,6 +439,7 @@ namespace {
             params.push_back(pObject);
             params.push_back(pObject);
             pConsole_WriteLine_string_object_object = pConsole->GetMethod(L"WriteLine", params);
+            ASSERT_TRUE(pConsole_WriteLine_string_object_object != nullptr);
         }
 
 
@@ -521,7 +540,8 @@ namespace {
         using boost::filesystem::path;
         
         auto const *pHost = HostInfo::CreateHost();
-        auto const *pRuntime = pHost->GetRuntime(L"v2.0.50727");
+        //auto const *pRuntime = pHost->GetRuntime(L"v2.0.50727");
+        auto const *pRuntime = pHost->GetRuntime(L"v4.0.30319");
         auto const *pMetaInfo = pRuntime->GetInfo<MetadataInfo>();
         auto *pMetaDisp = pMetaInfo->CreateDispenser();
 
@@ -569,6 +589,7 @@ namespace {
         auto const *pMSCorLibPrigDll = pMSCorLibPrig->GetMainModule();
         auto const *pEHClass = pMSCorLibPrigDll->GetType(L"mscorlib.Prig.EHClass");
         auto const *pEHClass_ReadFile = pEHClass->GetMethod(L"ReadFile");
+        ASSERT_TRUE(pEHClass_ReadFile != nullptr);
         {
             auto const *pBody = pEHClass_ReadFile->GetMethodBody();
             auto insts = pBody->GetInstructions();

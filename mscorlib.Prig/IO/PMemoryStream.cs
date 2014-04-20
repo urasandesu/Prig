@@ -28,14 +28,29 @@
  */
 
 
+using System.IO.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x060035FF)]
+[assembly: Indirectable(PMemoryStream.TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long)]
 
 namespace System.IO.Prig
 {
     public static class PMemoryStream
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x060035FF;
+#else
+        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x06003652;
+#endif
+#else
+#if _M_IX86
+        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x06004755;
+#else
+        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x06004752;
+#endif
+#endif
+
         public static class Seek
         {
             public static IndirectionFunc<MemoryStream, long, SeekOrigin, long> Body
@@ -43,8 +58,8 @@ namespace System.IO.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x060035FF;
+                    info.AssemblyName = typeof(MemoryStream).Assembly.FullName;
+                    info.Token = TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<MemoryStream, long, SeekOrigin, long>>>();
                     holder.AddOrUpdate(info, value);
                 }

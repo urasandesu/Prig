@@ -28,24 +28,47 @@
  */
 
 
+using System.Globalization.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x06002626)]
+[assembly: Indirectable(PPersianCalendar.TokenOfCheckTicksRange_Action_PersianCalendar_long)]
 
 namespace System.Globalization.Prig
 {
     public static class PPersianCalendar
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x06002626;
+#else
+        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x06002679;
+#endif
+#else
+#if _M_IX86
+        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x0600326B;
+#else
+        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x06003268;
+#endif
+#endif
+
         public static class CheckTicksRange
         {
+#if _NET_3_5
             public static IndirectionAction<PersianCalendar, long> Body
+#else
+            public static IndirectionAction<long> Body
+#endif
             {
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x06002626;
+                    info.AssemblyName = typeof(PersianCalendar).Assembly.FullName;
+                    info.Token = TokenOfCheckTicksRange_Action_PersianCalendar_long;
+#if _NET_3_5
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<PersianCalendar, long>>>();
+#else
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<long>>>();
+#endif
                     holder.AddOrUpdate(info, value);
                 }
             }

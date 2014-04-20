@@ -28,22 +28,41 @@
  */
 
 
+using System.Prig;
 using Urasandesu.Prig.Framework;
 
-#if _M_IX86
-[assembly: Indirectable(0x0600087E)]
-#else
-[assembly: Indirectable(0x06000880)]
-#endif
-[assembly: Indirectable(0x0600082D)]
-[assembly: Indirectable(0x06000850)]
-[assembly: Indirectable(0x060008A2)]
-[assembly: Indirectable(0x06000813)]
+[assembly: Indirectable(PConvert.TokenOfToInt32_Func_double_int)]
+[assembly: Indirectable(PConvert.TokenOfToSByte_Func_char_sbyte)]
+[assembly: Indirectable(PConvert.TokenOfToInt16_Func_char_Int16)]
+[assembly: Indirectable(PConvert.TokenOfToInt64_Func_double_long)]
+[assembly: Indirectable(PConvert.TokenOfToBoolean_Func_float_bool)]
 
 namespace System.Prig
 {
     public static class PConvert
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfToInt32_Func_double_int = 0x0600087E;
+        internal const int TokenOfToSByte_Func_char_sbyte = 0x0600082D;
+        internal const int TokenOfToInt16_Func_char_Int16 = 0x06000850;
+        internal const int TokenOfToInt64_Func_double_long = 0x060008A2;
+        internal const int TokenOfToBoolean_Func_float_bool = 0x06000813;
+#else
+        internal const int TokenOfToInt32_Func_double_int = 0x06000880;
+        internal const int TokenOfToSByte_Func_char_sbyte = 0x0600082F;
+        internal const int TokenOfToInt16_Func_char_Int16 = 0x06000852;
+        internal const int TokenOfToInt64_Func_double_long = 0x060008A4;
+        internal const int TokenOfToBoolean_Func_float_bool = 0x06000815;
+#endif
+#else
+        internal const int TokenOfToInt32_Func_double_int = 0x06000A6B;
+        internal const int TokenOfToSByte_Func_char_sbyte = 0x06000A1A;
+        internal const int TokenOfToInt16_Func_char_Int16 = 0x06000A3D;
+        internal const int TokenOfToInt64_Func_double_long = 0x06000A8F;
+        internal const int TokenOfToBoolean_Func_float_bool = 0x06000A00;
+#endif
+
         public static class ToInt32
         {
             public static IndirectionFunc<double, int> Body
@@ -51,12 +70,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-#if _M_IX86
-                    info.Token = 0x0600087E;
-#else
-                    info.Token = 0x06000880;
-#endif
+                    info.AssemblyName = typeof(Convert).Assembly.FullName;
+                    info.Token = TokenOfToInt32_Func_double_int;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, int>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -70,8 +85,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x0600082D;
+                    info.AssemblyName = typeof(Convert).Assembly.FullName;
+                    info.Token = TokenOfToSByte_Func_char_sbyte;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<char, sbyte>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -85,8 +100,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x06000850;
+                    info.AssemblyName = typeof(Convert).Assembly.FullName;
+                    info.Token = TokenOfToInt16_Func_char_Int16;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<char, Int16>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -100,8 +115,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x060008A2;
+                    info.AssemblyName = typeof(Convert).Assembly.FullName;
+                    info.Token = TokenOfToInt64_Func_double_long;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, long>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -115,8 +130,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x06000813;
+                    info.AssemblyName = typeof(Convert).Assembly.FullName;
+                    info.Token = TokenOfToBoolean_Func_float_bool;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<float, bool>>>();
                     holder.AddOrUpdate(info, value);
                 }

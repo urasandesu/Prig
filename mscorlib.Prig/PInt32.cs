@@ -28,18 +28,25 @@
  */
 
 
+using System.Prig;
 using Urasandesu.Prig.Framework;
 
-#if _M_IX86
-[assembly: Indirectable(0x06000B2B)]
-#else
-[assembly: Indirectable(0x06000B2D)]
-#endif
+[assembly: Indirectable(PInt32.TokenOfTryParse_OutFunc_string_int_bool)]
 
 namespace System.Prig
 {
     public static class PInt32
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfTryParse_OutFunc_string_int_bool = 0x06000B2B;
+#else
+        internal const int TokenOfTryParse_OutFunc_string_int_bool = 0x06000B2D;
+#endif
+#else
+        internal const int TokenOfTryParse_OutFunc_string_int_bool = 0x06000D76;
+#endif
+
         public static class TryParse
         {
             public static IndirectionOutFunc<string, int, bool> Body
@@ -47,12 +54,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-#if _M_IX86
-                    info.Token = 0x06000B2B;
-#else
-                    info.Token = 0x06000B2D;
-#endif
+                    info.AssemblyName = typeof(int).Assembly.FullName;
+                    info.Token = TokenOfTryParse_OutFunc_string_int_bool;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionOutFunc<string, int, bool>>>();
                     holder.AddOrUpdate(info, value);
                 }

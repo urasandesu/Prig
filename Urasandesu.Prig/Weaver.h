@@ -54,7 +54,7 @@ namespace CWeaverDetail {
     struct PrigData;
 
     class CWeaverImpl : 
-        public ICorProfilerCallback2Impl<ICorProfilerCallback2>
+        public ICorProfilerCallback5Impl<ICorProfilerCallback5>
     {
     public: 
         CWeaverImpl();
@@ -125,6 +125,9 @@ BEGIN_COM_MAP(CWeaver)
 	COM_INTERFACE_ENTRY(IWeaver)
 	COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ICorProfilerCallback2)
+    COM_INTERFACE_ENTRY(ICorProfilerCallback3)
+    COM_INTERFACE_ENTRY(ICorProfilerCallback4)
+    COM_INTERFACE_ENTRY(ICorProfilerCallback5)
 END_COM_MAP()
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()

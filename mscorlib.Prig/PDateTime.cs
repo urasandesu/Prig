@@ -28,23 +28,37 @@
  */
 
 
+using System.Prig;
 using Urasandesu.Prig.Framework;
 
-#if _M_IX86
-[assembly: Indirectable(0x060002BC)]
-[assembly: Indirectable(0x060002D2)]
-[assembly: Indirectable(0x060002B8)]
-#else
-[assembly: Indirectable(0x060002BE)]
-[assembly: Indirectable(0x060002D4)]
-[assembly: Indirectable(0x060002BA)]
-#endif
-[assembly: Indirectable(0x060002B3)]
+[assembly: Indirectable(PDateTime.TokenOfNowGet_Func_DateTime)]
+[assembly: Indirectable(PDateTime.TokenOfFromBinary_Func_long_DateTime)]
+[assembly: Indirectable(PDateTime.TokenOfDoubleDateToTicks_Func_double_long)]
+[assembly: Indirectable(PDateTime.TokenOfCompareTo_RefThisFunc_DateTime_object_int)]
 
 namespace System.Prig
 {
     public class PDateTime
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfNowGet_Func_DateTime = 0x060002D2;
+        internal const int TokenOfFromBinary_Func_long_DateTime = 0x060002BC;
+        internal const int TokenOfDoubleDateToTicks_Func_double_long = 0x060002B8;
+        internal const int TokenOfCompareTo_RefThisFunc_DateTime_object_int = 0x060002B3;
+#else
+        internal const int TokenOfNowGet_Func_DateTime = 0x060002D4;
+        internal const int TokenOfFromBinary_Func_long_DateTime = 0x060002BE;
+        internal const int TokenOfDoubleDateToTicks_Func_double_long = 0x060002BA;
+        internal const int TokenOfCompareTo_RefThisFunc_DateTime_object_int = 0x060002B5;
+#endif
+#else
+        internal const int TokenOfNowGet_Func_DateTime = 0x0600047B;
+        internal const int TokenOfFromBinary_Func_long_DateTime = 0x06000465;
+        internal const int TokenOfDoubleDateToTicks_Func_double_long = 0x0600045F;
+        internal const int TokenOfCompareTo_RefThisFunc_DateTime_object_int = 0x0600045C;
+#endif
+
         public static class NowGet
         {
             public static IndirectionFunc<DateTime> Body
@@ -52,12 +66,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-#if _M_IX86
-                    info.Token = 0x060002D2;
-#else
-                    info.Token = 0x060002D4;
-#endif
+                    info.AssemblyName = typeof(DateTime).Assembly.FullName;
+                    info.Token = TokenOfNowGet_Func_DateTime;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<DateTime>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -71,12 +81,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-#if _M_IX86
-                    info.Token = 0x060002BC;
-#else
-                    info.Token = 0x060002BE;
-#endif
+                    info.AssemblyName = typeof(DateTime).Assembly.FullName;
+                    info.Token = TokenOfFromBinary_Func_long_DateTime;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<long, DateTime>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -90,12 +96,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-#if _M_IX86
-                    info.Token = 0x060002B8;
-#else
-                    info.Token = 0x060002BA;
-#endif
+                    info.AssemblyName = typeof(DateTime).Assembly.FullName;
+                    info.Token = TokenOfDoubleDateToTicks_Func_double_long;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<double, long>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -109,8 +111,8 @@ namespace System.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x060002B3;
+                    info.AssemblyName = typeof(DateTime).Assembly.FullName;
+                    info.Token = TokenOfCompareTo_RefThisFunc_DateTime_object_int;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisFunc<DateTime, object, int>>>();
                     holder.AddOrUpdate(info, value);
                 }

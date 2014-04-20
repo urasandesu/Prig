@@ -28,16 +28,29 @@
  */
 
 
-using System;
-using System.IO;
+using System.IO.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x06003400)]
+[assembly: Indirectable(PStream.TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult)]
 
 namespace System.IO.Prig
 {
     public static class PStream
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x06003400;
+#else
+        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x06003453;
+#endif
+#else
+#if _M_IX86
+        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x06004488;
+#else
+        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x06004485;
+#endif
+#endif
+
         public static class BeginRead
         {
             public static IndirectionFunc<Stream, byte[], int, int, AsyncCallback, object, IAsyncResult> Body
@@ -45,8 +58,8 @@ namespace System.IO.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x06003400;
+                    info.AssemblyName = typeof(Stream).Assembly.FullName;
+                    info.Token = TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<Stream, byte[], int, int, AsyncCallback, object, IAsyncResult>>>();
                     holder.AddOrUpdate(info, value);
                 }

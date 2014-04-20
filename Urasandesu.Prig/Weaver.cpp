@@ -137,13 +137,19 @@ namespace CWeaverDetail {
     STDMETHODIMP CWeaverImpl::InitializeCore( 
         /* [in] */ IUnknown *pICorProfilerInfoUnk)
     {
+        using ATL::CComQIPtr;
+
         CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"InitializeCore(IUnknown *: 0x%|1$X|)", reinterpret_cast<void *>(pICorProfilerInfoUnk));
 
         auto _ = guard_type(m_lock);
 
+        auto version = wstring(L"v2.0.50727");
+        if (CComQIPtr<ICorProfilerInfo3>(pICorProfilerInfoUnk))
+            version = wstring(L"v4.0.30319");
+
         auto const *pHost = HostInfo::CreateHost();
-        auto const *pRuntime = pHost->GetRuntime(L"v2.0.50727");
+        auto const *pRuntime = pHost->GetRuntime(version);
         m_pProfInfo = pRuntime->GetInfo<ProfilingInfo>();
         
         auto pProcProf = m_pProfInfo->AttachToCurrentProcess(pICorProfilerInfoUnk);
@@ -153,7 +159,8 @@ namespace CWeaverDetail {
                                 ProfilerEvents::PE_MONITOR_JIT_COMPILATION | 
                                 ProfilerEvents::PE_DISABLE_INLINING | 
                                 ProfilerEvents::PE_DISABLE_OPTIMIZATIONS | 
-                                ProfilerEvents::PE_USE_PROFILE_IMAGES);
+                                ProfilerEvents::PE_USE_PROFILE_IMAGES | 
+                                ProfilerEvents::PE_DISABLE_TRANSPARENCY_CHECKS_UNDER_FULL_TRUST);
 
         return S_OK;
     }
@@ -456,10 +463,15 @@ namespace CWeaverDetail {
         }
 
         auto const *pIndInfo_set_AssemblyName = pIndInfo->GetMethod(L"set_AssemblyName");
+        _ASSERTE(pIndInfo_set_AssemblyName);
         auto const *pIndInfo_set_Token = pIndInfo->GetMethod(L"set_Token");
+        _ASSERTE(pIndInfo_set_Token);
         auto const *pIndDlgtInst_Invoke = pIndDlgtInst->GetMethod(L"Invoke");
+        _ASSERTE(pIndDlgtInst_Invoke);
         auto const *pLooseCrossDomainAccessor_TryGet = pLooseCrossDomainAccessor->GetMethod(L"TryGet");
+        _ASSERTE(pLooseCrossDomainAccessor_TryGet);
         auto const *pIndHolder1IndDlgtInst_TryGet = pIndHolder1IndDlgtInst->GetMethod(L"TryGet");
+        _ASSERTE(pIndHolder1IndDlgtInst_TryGet);
 
         auto const *pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst = static_cast<IMethod *>(nullptr);
         {
@@ -583,6 +595,7 @@ namespace CWeaverDetail {
             using std::vector;
 
             auto pType_Invoke = pType->GetMethod(L"Invoke");
+            _ASSERTE(pType_Invoke);
             auto params = vector<IParameter const *>();
             auto explicitThis = ExplicitThis();
             if (m_pTarget->IsStatic())
@@ -678,9 +691,28 @@ namespace CWeaverDetail {
 
 HRESULT CWeaver::FinalConstruct()
 {
+    using boost::lexical_cast;
+    using boost::bad_lexical_cast;
+    using Urasandesu::CppAnonym::Environment;
+
     CPPANONYM_D_LOGW(L"CWeaver::FinalConstruct()");
-    
-    //::_CrtDbgBreak();
+
+#ifdef _DEBUG
+    auto dbgBreak = 0ul;
+    try
+    {
+        auto strDbgBreak = Environment::GetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK");
+        dbgBreak = lexical_cast<DWORD>(strDbgBreak);
+    }
+    catch(bad_lexical_cast const &)
+    {
+        dbgBreak = -1;
+    }
+    if (dbgBreak == 0)
+        ::_CrtDbgBreak();
+    else if (dbgBreak != -1)
+        ::Sleep(dbgBreak);
+#endif
     
     return S_OK;
 }

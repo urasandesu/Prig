@@ -71,6 +71,8 @@ using System.Runtime.InteropServices;
 // SET COMPLUS_ProfAPI_ProfilerCompatibilitySetting=EnableV2Profiler
 
 // SET URASANDESU_CPPANONYM_LOGGING_SEVERITY=0
+// SET URASANDESU_PRIG_DEBUGGING_BREAK=10000
+//  System.Environment.SetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK", "-1");
 
 // "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None
 // "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" Test.program1.dll /domain=None

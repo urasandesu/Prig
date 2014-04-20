@@ -28,14 +28,29 @@
  */
 
 
+using System.Threading.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(0x06001206)]
+[assembly: Indirectable(PInterlocked.TokenOfExchange_T_RefThisFunc_T_T_T)]
 
 namespace System.Threading.Prig
 {
     public class PInterlocked
     {
+#if _NET_3_5
+#if _M_IX86
+        internal const int TokenOfExchange_T_RefThisFunc_T_T_T = 0x06001206;
+#else
+        internal const int TokenOfExchange_T_RefThisFunc_T_T_T = 0x06001259;
+#endif
+#else
+#if _M_IX86
+        internal const int TokenOfExchange_T_RefThisFunc_T_T_T = 0x0600165F;
+#else
+        internal const int TokenOfExchange_T_RefThisFunc_T_T_T = 0x0600165C;
+#endif
+#endif
+
         public static class Exchange<T> where T : class
         {
             public static IndirectionRefThisFunc<T, T, T> Body
@@ -43,8 +58,8 @@ namespace System.Threading.Prig
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x06001206;
+                    info.AssemblyName = typeof(Interlocked).Assembly.FullName;
+                    info.Token = TokenOfExchange_T_RefThisFunc_T_T_T;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisFunc<T, T, T>>>();
                     holder.AddOrUpdate(info, value);
                 }
