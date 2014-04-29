@@ -75,4 +75,6 @@ using System.Runtime.InteropServices;
 //  System.Environment.SetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK", "-1");
 
 // "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None
+// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None /framework=v4.0
 // "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" Test.program1.dll /domain=None
+// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" Test.program1.dll /domain=None /framework=v4.0

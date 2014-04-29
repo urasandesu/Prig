@@ -39,7 +39,7 @@ namespace Test.program1.System.Prig
     public class PConvertTest
     {
         [Test]
-        public void ToInt32_ShouldBeCallableIndirectly()
+        public void ToInt32_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -55,7 +55,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void ToSByte_ShouldBeCallableIndirectly()
+        public void ToSByte_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -71,7 +71,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void ToInt16_ShouldBeCallableIndirectly()
+        public void ToInt16_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -87,7 +87,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void ToInt64_ShouldBeCallableIndirectly()
+        public void ToInt64_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -103,7 +103,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void ToBoolean_ShouldBeCallableIndirectly()
+        public void ToBoolean_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

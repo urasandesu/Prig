@@ -40,7 +40,7 @@ namespace Test.program1.System.Prig
     public class PArrayTest
     {
         [Test]
-        public void CreateInstance_ShouldBeCallableIndirectly()
+        public void CreateInstance_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -57,7 +57,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void Exists_T_ShouldBeCallableIndirectly()
+        public void ExistsT_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -73,7 +73,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void BinarySearch_ShouldBeCallableIndirectly()
+        public void BinarySearch_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

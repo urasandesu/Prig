@@ -40,7 +40,7 @@ namespace Test.program1.System.Globalization.Prig
     public class PPersianCalendarTest
     {
         [Test]
-        public void CheckTicksRange_ShouldBeCallableIndirectly()
+        public void CheckTicksRange_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

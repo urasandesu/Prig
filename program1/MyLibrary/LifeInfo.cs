@@ -34,7 +34,7 @@ namespace program1.MyLibrary
 {
     public static class LifeInfo
     {
-        public static bool IsLunchBreak()
+        public static bool IsNowLunchBreak()
         {
             var now = DateTime.Now;
             return 12 <= now.Hour && now.Hour < 13;

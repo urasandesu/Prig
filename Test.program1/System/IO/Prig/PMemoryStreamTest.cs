@@ -39,7 +39,7 @@ namespace Test.program1.System.IO.Prig
     public class PMemoryStreamTest
     {
         [Test]
-        public void Seek_ShouldBeCallableIndirectly()
+        public void Seek_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -63,7 +63,7 @@ namespace Test.program1.System.IO.Prig
         }
 
         [Test]
-        public void Stream_BeginRead_ShouldBeCallableIndirectly()
+        public void BeginRead_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

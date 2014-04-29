@@ -43,7 +43,7 @@ namespace Test.program1.System.Threading.Prig
     public class PInterlockedTest
     {
         [Test]
-        public void Exchange_T_ShouldBeCallableIndirectly()
+        public void ExchangeT_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

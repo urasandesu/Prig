@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>mscorlib.Prig</RootNamespace>
-    <AssemblyName>mscorlib.Prig</AssemblyName>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup>
@@ -27,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v2.0.50727.v2.0.0.0.x86.Prig</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x86'">
     <OutputPath>bin\Release%28.NET 3.5%29\x86\</OutputPath>
@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v2.0.50727.v2.0.0.0.x86.Prig</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v2.0.50727.v2.0.0.0.AMD64.Prig</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x64'">
     <OutputPath>bin\Release%28.NET 3.5%29\x64\</OutputPath>
@@ -57,6 +59,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v2.0.50727.v2.0.0.0.AMD64.Prig</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +70,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v4.0.30319.v4.0.0.0.x86.Prig</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +81,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v4.0.30319.v4.0.0.0.AMD64.Prig</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x86'">
     <OutputPath>bin\Release%28.NET 4%29\x86\</OutputPath>
@@ -87,6 +92,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v4.0.30319.v4.0.0.0.x86.Prig</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x64'">
     <OutputPath>bin\Release%28.NET 4%29\x64\</OutputPath>
@@ -97,6 +103,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>mscorlib.v4.0.30319.v4.0.0.0.AMD64.Prig</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

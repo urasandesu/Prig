@@ -38,7 +38,7 @@ namespace program1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(LifeInfo.IsLunchBreak() ? "お昼休みなう！" : "お仕事なう・・・");
+            Console.WriteLine(LifeInfo.IsNowLunchBreak() ? "お昼休みなう！" : "お仕事なう・・・");
         }
     }
 }

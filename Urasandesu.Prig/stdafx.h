@@ -57,7 +57,4 @@
 #include <Urasandesu/Swathe/SwatheDependsOn.h>
 #endif
 
-//#include <boost/timer.hpp>
-//#include <StrongName.h>
-//#include <mscoree.h>
-//#include <fusion.h>
+#include <regex>

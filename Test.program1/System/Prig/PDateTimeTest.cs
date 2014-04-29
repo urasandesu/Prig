@@ -43,7 +43,7 @@ namespace Test.program1.System.Prig
     public class PDateTimeTest
     {
         [Test]
-        public void get_Now_ShouldBeCallableIndirectly()
+        public void GetterOfNow_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -59,7 +59,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void get_Now_ShouldBeCallableOriginally_AnyTime()
+        public void GetterOfNow_ShouldBeCallableOriginally_AnyTime()
         {
             using (new IndirectionsContext())
             {
@@ -94,7 +94,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void FromBinary_ShouldBeCallableIndirectly()
+        public void FromBinary_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -111,7 +111,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void DoubleDateToTicks_ShouldBeCallableIndirectly()
+        public void DoubleDateToTicks_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -128,7 +128,7 @@ namespace Test.program1.System.Prig
         }
         
         [Test]
-        public void DateTimeParse_TryParse_ShouldBeCallableIndirectly()
+        public void TryParse_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -150,7 +150,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void CompareTo_ShouldBeCallableIndirectly()
+        public void CompareTo_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

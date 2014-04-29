@@ -45,11 +45,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIntPtr.Constructor.Body = (ref ULIntPtr @this, long value) =>
-                {
-                    var ctorInfo = typeof(ULIntPtr).GetConstructor(new Type[] { typeof(int) });
-                    @this = (ULIntPtr)ctorInfo.Invoke(new object[] { 42 });
-                };
+                PULIntPtr.Constructor.Body = (ref ULIntPtr @this, long value) => @this = new ULIntPtr(42);
 
                 // Act
                 var actual = new ULIntPtr(2147483648L);

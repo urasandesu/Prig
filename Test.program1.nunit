@@ -1,6 +1,6 @@
 ﻿<NUnitProject>
-  <Settings activeconfig="Debug" />
-  <Config name="Debug" appbase="Test.program1\bin\Debug(.NET 4)\x86" binpathtype="Auto" runtimeFramework="v4.0">
+  <Settings activeconfig="Debug" domainUsage="None" />
+  <Config name="Debug" appbase="Test.program1\bin\Release(.NET 4)\x86" binpathtype="Auto" runtimeFramework="v4.0">
     <assembly path="Test.program1.dll" />
   </Config>
   <Config name="Release" binpathtype="Auto" />

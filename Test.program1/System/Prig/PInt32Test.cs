@@ -38,7 +38,7 @@ namespace Test.program1.System.Prig
     public class PInt32Test
     {
         [Test]
-        public void TryParse_ShouldBeCallableIndirectly()
+        public void TryParse_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

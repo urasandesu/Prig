@@ -40,7 +40,7 @@ namespace Test.program1.System.Prig
     public class PStringBuilderTest
     {
         [Test]
-        public void Insert_ShouldBeCallableIndirectly()
+        public void Insert_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -58,7 +58,7 @@ namespace Test.program1.System.Prig
         }
         
         [Test]
-        public void Replace_ShouldBeCallableIndirectly()
+        public void Replace_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

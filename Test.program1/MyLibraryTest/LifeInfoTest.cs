@@ -40,7 +40,7 @@ namespace Test.program1.MyLibraryTest
     public class LifeInfoTest
     {
         [Test]
-        public void IsLunchBreak_ShouldReturnTrue_When12OClock()
+        public void IsNowLunchBreak_should_return_true_when_12_oclock()
         {
             using (new IndirectionsContext())
             {
@@ -48,7 +48,7 @@ namespace Test.program1.MyLibraryTest
                 PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 12, 00, 00);
 
                 // Act
-                var result = LifeInfo.IsLunchBreak();
+                var result = LifeInfo.IsNowLunchBreak();
 
                 // Assert
                 Assert.IsTrue(result);
@@ -56,7 +56,7 @@ namespace Test.program1.MyLibraryTest
         }
 
         [Test]
-        public void IsLunchBreak_ShouldReturnFalse_When13OClock()
+        public void IsNowLunchBreak_should_return_false_when_13_oclock()
         {
             using (new IndirectionsContext())
             {
@@ -64,7 +64,7 @@ namespace Test.program1.MyLibraryTest
                 PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 13, 00, 00);
 
                 // Act
-                var result = LifeInfo.IsLunchBreak();
+                var result = LifeInfo.IsNowLunchBreak();
 
                 // Assert
                 Assert.IsFalse(result);

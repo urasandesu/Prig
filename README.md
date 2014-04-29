@@ -5,17 +5,17 @@ Prig is a lightweight framework for test indirections in .NET Framework.
 
 
 ## DESCRIPTION
-Prig(PRototyping jIG) is a framework that generates a Test Double such like Microsoft Fakes/Typemock Isolator/Telerik JustMock based on Unmanaged Profiler APIs.
-This framework enables that any methods that are normally impossible to do it are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.
+Prig(PRototyping jIG) is a framework that generates a Test Double like Microsoft Fakes/Typemock Isolator/Telerik JustMock based on Unmanaged Profiler APIs.
+This framework enables that any methods are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.
 
 
 
 ## STATUS
-As of Mar 16, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of Apr 29, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
-## MOTIVATION
+## QUICK TOUR
 Let's say you want to test the following code: 
 ```cs
 using System;
@@ -24,7 +24,7 @@ namespace program1.MyLibrary
 {
     public static class LifeInfo
     {
-        public static bool IsLunchBreak()
+        public static bool IsNowLunchBreak()
         {
             var now = DateTime.Now;
             return 12 <= now.Hour && now.Hour < 13;
@@ -32,27 +32,29 @@ namespace program1.MyLibrary
     }
 }
 ```
-You probably can't test this code, because ```DateTime.Now``` returns the value that depends on an external environment if it is without any change. For to be testable, you should replace ```DateTime.Now``` to the Test Double that returns dummy information. If you use Prig, it will enable you to generate a Test Double by the following operation:
+You probably can't test this code, because ```DateTime.Now``` returns the value that depends on an external environment. For to make be testable, you should replace ```DateTime.Now``` to the Test Double that returns dummy information. If you use Prig, it will enable you to generate a Test Double by the following operation without any editing the product code:
 
-First, you make the following stub into the assembly that named ```'dll name of the assembly that contains dependency' + '.Prig.dll'```(e.g. DateTime.Now is in mscorlib.dll ==>> you should make the stub into mscorlib.Prig.dll).
+First, you make the following stub into the assembly that named ```'dll name of the assembly that contains dependency' + '.' + 'runtime version string' + '.' + 'assembly version string' + '.' + 'processor architecture' + '.Prig.dll'```(e.g. DateTime.Now is in mscorlib.dll under .NET v2.0.50727 runtime, x86 processor architecture environment ==>> you should make the stub into mscorlib.v2.0.50727.v2.0.0.0.x86.Prig.dll).
 ```cs
 using Urasandesu.Prig.Framework;
 
 // You should grant the metadata token that you want to replace to the stub assembly with IndirectableAttribute.
-// The getter method of DateTime.Now in question is the static method that named get_Now, 
+// The getter method of DateTime.Now is the static method that named get_Now, 
 // so you should specify its token 0x060002D2(*).
-// [*] You can confirm the Metadata Token in the decompiled assembly(e.g. by using ildasm), 
-//     or by referring MethodInfo.MetadataToken.
-[assembly: Indirectable(0x060002D2)]
+// [*] You can find the metadata token in the decompiled assembly, or by referring MethodInfo.MetadataToken. 
+//     If using the ildasm, the menu View->MetaInfo->Show, or simply Ctrl+M shortcut is very convenience.
+[assembly: Indirectable(PDateTime.TokenOfNowGet_Func_DateTime)]
 
 namespace System.Prig
 {
     public class PDateTime
     {
+        internal const int TokenOfNowGet_Func_DateTime = 0x060002D2;
+
         public static class NowGet
         {
             // Please select the delegate that has same signature as target method.
-            // You can select the delegate that have IndirectionDelegateAttribute.
+            // You can select the delegate that have IndirectionDelegateAttribute(see also IndirectionDelegates.cs).
             public static IndirectionFunc<DateTime> Body
             {
                 set
@@ -61,8 +63,8 @@ namespace System.Prig
                     // - Full name of the assembly that contains target method.
                     // - Metadata token of the target method.
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = 0x060002D2;
+                    info.AssemblyName = typeof(DateTime).Assembly.FullName;
+                    info.Token = TokenOfNowGet_Func_DateTime;
                     var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<DateTime>>>();
                     holder.AddOrUpdate(info, value);
                 }
@@ -86,7 +88,7 @@ namespace Test.program1.MyLibraryTest
     public class LifeInfoTest
     {
         [Test]
-        public void IsLunchBreak_ShouldReturnTrue_When12OClock()
+        public void IsNowLunchBreak_should_return_true_when_12_oclock()
         {
             using (new IndirectionsContext())
             {
@@ -102,7 +104,7 @@ namespace Test.program1.MyLibraryTest
         }
 
         [Test]
-        public void IsLunchBreak_ShouldReturnFalse_When13OClock()
+        public void IsNowLunchBreak_should_return_false_when_13_oclock()
         {
             using (new IndirectionsContext())
             {
@@ -119,7 +121,7 @@ namespace Test.program1.MyLibraryTest
     }
 }
 ```
-
+Prig helps the test that depends on an untestable library get trig. Enjoy your trip!!
 
 
 
@@ -173,7 +175,7 @@ Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual S
 
 
 ## REGISTRATION
-Run Developer Command Prompt for VS2013 as Administrator, and register dlls that were outputted to ```$(SolutionDir)$(Configuration)\$(PlatformTarget)\``` to registry and GAC as follows(these are the examples for x86, but also the x64 are in the same manner): 
+Run Developer Command Prompt for VS2013 as Administrator, and register dlls that were outputted to ```$(SolutionDir)$(Configuration)\$(PlatformTarget)\``` to registry and GAC as follows(these are the examples for x86/.NET 3.5, but also another environments are in the same manner): 
 ```dos
 CMD x86>cd
 C:\Users\User\Prig\Release(.NET 3.5)\x86
@@ -231,7 +233,7 @@ CMD x86>
 
 
 ## RUN
-Let's say the test class library that made in EXAMPLE is stored into Test.program1.dll. To enable Prig, you only have to set some environment variables before running the test:
+Let's say the test class library that made in EXAMPLE is stored into Test.program1.dll. To enable Prig, you only have to set some environment variables ```COR_ENABLE_PROFILING``` and ```COR_PROFILER``` before running the test:
 ```dos
 CMD x86>cd
 C:\Users\User\Prig\Test.program1\bin\Release(.NET 3.5)\x86

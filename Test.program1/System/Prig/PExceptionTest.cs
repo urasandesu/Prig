@@ -40,7 +40,7 @@ namespace Test.program1.System.Prig
     public class PExceptionTest
     {
         [Test]
-        public void InternalToString_ShouldBeCallableIndirectly()
+        public void InternalToString_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

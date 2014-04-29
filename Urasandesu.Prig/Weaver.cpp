@@ -68,7 +68,6 @@ namespace CWeaverDetail {
 
     namespace IMethodSigEqualToDetail {
 
-        using std::vector;
         using Urasandesu::CppAnonym::Traits::EqualityComparable;
         using Urasandesu::CppAnonym::Collections::SequenceEqual;
 
@@ -120,10 +119,10 @@ namespace CWeaverDetail {
             m_indirectablesInit(false)
         { }
 
-        boost::filesystem::path m_modPrigPath;
-        boost::unordered_map<mdToken, ICustomAttribute const *> m_indirectables;
+        path m_indDllPath;
+        unordered_map<mdToken, ICustomAttribute const *> m_indirectables;
         bool m_indirectablesInit;
-        boost::unordered_map<IMethod const *, IType const *, IMethodSigHash, IMethodSigEqualTo> m_indDlgtCache;
+        unordered_map<IMethod const *, IType const *, IMethodSigHash, IMethodSigEqualTo> m_indDlgtCache;
     };
 
 
@@ -138,6 +137,11 @@ namespace CWeaverDetail {
         /* [in] */ IUnknown *pICorProfilerInfoUnk)
     {
         using ATL::CComQIPtr;
+        using boost::filesystem::current_path;
+        using boost::filesystem::directory_iterator;
+        using boost::filesystem::is_regular_file;
+        using std::regex_search;
+        using std::wregex;
 
         CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"InitializeCore(IUnknown *: 0x%|1$X|)", reinterpret_cast<void *>(pICorProfilerInfoUnk));
@@ -147,6 +151,7 @@ namespace CWeaverDetail {
         auto version = wstring(L"v2.0.50727");
         if (CComQIPtr<ICorProfilerInfo3>(pICorProfilerInfoUnk))
             version = wstring(L"v4.0.30319");
+        CPPANONYM_D_LOGW1(L"Runtime Version: %|1$s|", version);
 
         auto const *pHost = HostInfo::CreateHost();
         auto const *pRuntime = pHost->GetRuntime(version);
@@ -161,7 +166,27 @@ namespace CWeaverDetail {
                                 ProfilerEvents::PE_DISABLE_OPTIMIZATIONS | 
                                 ProfilerEvents::PE_USE_PROFILE_IMAGES | 
                                 ProfilerEvents::PE_DISABLE_TRANSPARENCY_CHECKS_UNDER_FULL_TRUST);
-
+        
+        auto currentDir = current_path().native();
+        auto patternStr = version + L".v\\d+.\\d+.\\d+.\\d+.((x86)|(AMD64)|(MSIL)).Prig.dll";
+        boost::replace_all(patternStr, L".", L"\\.");
+        auto pattern = wregex(patternStr);
+        for (directory_iterator i(currentDir), i_end; i != i_end; ++i)
+        {
+            if (!is_regular_file(i->status()))
+                continue;
+            
+            if (!regex_search(i->path().filename().native(), pattern))
+                continue;
+            
+            m_indDllPaths.push_back(i->path().filename());
+        }
+        if (CPPANONYM_D_LOG_ENABLED())
+        {
+            BOOST_FOREACH (auto const &indDllPath, m_indDllPaths)
+                CPPANONYM_D_LOGW1(L"Indirection DLL: %|1$s|", indDllPath.native());
+        }
+        
         return S_OK;
     }
 
@@ -175,9 +200,6 @@ namespace CWeaverDetail {
         auto _ = guard_type(m_lock);
         
         m_pProfInfo->DetachFromCurrentProcess();
-
-        // If we delegate releasing the resources to system, the result will become unintended consequences for Boost.Log.
-        boost::log::core::get()->remove_all_sinks();
 
         return S_OK;
     }
@@ -275,11 +297,13 @@ namespace CWeaverDetail {
     {
         CPPANONYM_LOG_FUNCTION();
 
+        using boost::adaptors::filtered;
         using boost::lexical_cast;
         using boost::log::current_scope;
         using boost::filesystem::current_path;
-        using boost::filesystem::exists;
-        using boost::filesystem::path;
+        using boost::range::for_each;
+        using std::wostringstream;
+        using Urasandesu::CppAnonym::CppAnonymNotSupportedException;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
 
         CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
@@ -290,16 +314,63 @@ namespace CWeaverDetail {
         auto pModProf = pProcProf->AttachToModule(moduleId);
         CPPANONYM_D_LOGW1(L"Current Path: %|1$s|", current_path().native());
         auto modPath = path(pModProf->GetName());
-        auto modPrigPath = path(modPath.stem().native() + L".Prig.dll");
-        if (!exists(modPrigPath))
+        auto modName = modPath.stem().native();
+        
+        auto candidateIndDllPaths = unordered_set<path, Hash<path>, EqualTo<path> >();
+        auto isCandidate = [&](path const &p) { return p.native().find(modName) != wstring::npos; };
+        for_each(m_indDllPaths | filtered(isCandidate), [&](path const &p) { candidateIndDllPaths.insert(p); });
+        if (candidateIndDllPaths.empty())
             return S_OK;
         
-        CPPANONYM_LOG_NAMED_SCOPE("if (exists(modPrigPath))");
-        CPPANONYM_D_LOGW1(L"Detour module: %|1$s| is found. Start to modify the module.", modPrigPath.native());
-        pModProf.Persist();
+        
+        CPPANONYM_LOG_NAMED_SCOPE("if (!candidateIndDllPaths.empty())");
+        if (CPPANONYM_D_LOG_ENABLED())
+        {
+            auto oss = std::wostringstream();
+            oss << L"Candidate modules:";
+            BOOST_FOREACH (auto const &candidateIndDllPath, candidateIndDllPaths)
+                oss << boost::wformat(L" \"%|1$s|\"") % candidateIndDllPath.native();
+            CPPANONYM_D_LOGW(oss.str());
+        }
+
+        auto const *pRuntime = m_pProfInfo->GetRuntime();
         auto pAsmProf = pModProf->AttachToAssembly();
-        pAsmProf.Persist();
         auto pDomainProf = pAsmProf->AttachToAppDomain();
+        auto *pDisp = pDomainProf->GetMetadataDispenser();
+        auto const *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
+        auto const &amd = pAsmGen->GetAssemblyMetadata();
+        auto procArch = pAsmGen->GetProcessorArchitectures()[0];    // TODO: んー、MSIL にならない・・・。
+        auto targetIndDllName = wostringstream();
+        targetIndDllName << modName;
+        targetIndDllName << L"." << pRuntime->GetCORVersion();
+        targetIndDllName << L".v" << amd.usMajorVersion << L"." << amd.usMinorVersion << L"." << amd.usBuildNumber << L"." << amd.usRevisionNumber;
+        switch (procArch.Value())
+        {
+            case ProcessorArchitecture::PA_INTEL:
+                targetIndDllName << L".x86";
+                break;
+            case ProcessorArchitecture::PA_IA64:
+                BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+            case ProcessorArchitecture::PA_AMD64:
+                targetIndDllName << L".AMD64";
+                break;
+            case ProcessorArchitecture::PA_MSIL:
+                targetIndDllName << L".MSIL";
+                break;
+            default:
+                BOOST_THROW_EXCEPTION(CppAnonymNotSupportedException());
+        }
+        targetIndDllName << L".Prig.dll";
+        
+        auto targetIndDllPath = path(targetIndDllName.str());
+        if (candidateIndDllPaths.find(targetIndDllPath) == candidateIndDllPaths.end())
+            return S_OK;
+        
+        
+        CPPANONYM_LOG_NAMED_SCOPE("if (candidateIndDllPaths.find(targetIndDllPath) != candidateIndDllPaths.end())");
+        CPPANONYM_D_LOGW1(L"Detour module: %|1$s| is found. Start to modify the module.", targetIndDllPath.native());
+        pModProf.Persist();
+        pAsmProf.Persist();
         pDomainProf.Persist();
 
         auto asmId = lexical_cast<wstring>(pAsmProf->GetID());
@@ -308,11 +379,9 @@ namespace CWeaverDetail {
         {
             auto *pPrigData = new PrigData();
             pData = AnyPtr(pPrigData);
-            pPrigData->m_modPrigPath = modPrigPath;
+            pPrigData->m_indDllPath = targetIndDllPath;
             pDomainProf->SetData(asmId, pData);
         }
-
-        auto *pAsmGen = pAsmProf->GetAssemblyGenerator();
 
         return S_OK;
     }
@@ -356,8 +425,6 @@ namespace CWeaverDetail {
         CPPANONYM_LOG_FUNCTION();
 
         using boost::lexical_cast;
-        using boost::filesystem::path;
-        using std::vector;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
         
         CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$X|, BOOL: 0x%|2$08X|)", reinterpret_cast<void *>(functionId), fIsSafeToBlock);
@@ -380,15 +447,15 @@ namespace CWeaverDetail {
         auto pData = pDomainProf->GetData(asmId);
         _ASSERTE(pData);
         auto &prigData = *pData.Get<PrigData *>();
-        _ASSERTE(!prigData.m_modPrigPath.empty());
+        _ASSERTE(!prigData.m_indDllPath.empty());
         if (!prigData.m_indirectablesInit)
         {
             CPPANONYM_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit");
             auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
             auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
             auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
-            auto const *pPrigAsm = pDisp->GetAssemblyFrom(prigData.m_modPrigPath);
-            auto indAttrs = pPrigAsm->GetCustomAttributes(pIndAttrType);
+            auto const *pIndAsm = pDisp->GetAssemblyFrom(prigData.m_indDllPath);
+            auto indAttrs = pIndAsm->GetCustomAttributes(pIndAttrType);
             BOOST_FOREACH (auto const *pIndAttr, indAttrs)
                 prigData.m_indirectables[GetIndirectableToken(pIndAttr)] = pIndAttr;
 
@@ -404,7 +471,8 @@ namespace CWeaverDetail {
         typedef decltype(prigData.m_indirectables) Indirectables;
         typedef Indirectables::iterator Iterator;
         
-        auto const *pMethodGen = pFuncProf->GetMethodGenerator();
+        auto *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
+        auto *pMethodGen = pFuncProf->GetMethodGenerator(pAsmGen);
         auto mdt = pMethodGen->GetToken();
         CPPANONYM_D_LOGW1(L"Token: 0x%|1$08X|", mdt);
         auto result = Iterator();
@@ -416,7 +484,7 @@ namespace CWeaverDetail {
         pFuncProf.Persist();
         
         auto pNewBodyProf = pFuncProf->NewFunctionBody();
-        auto *pNewBodyGen = pNewBodyProf->GetMethodBodyGenerator();
+        auto *pNewBodyGen = pNewBodyProf->GetMethodBodyGenerator(pMethodGen);
         
         auto const *pBody = pMethodGen->GetMethodBody();
         BOOST_FOREACH (auto const *pLocal, pBody->GetLocals())
@@ -442,9 +510,6 @@ namespace CWeaverDetail {
     SIZE_T CWeaverImpl::EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData)
     {
         CPPANONYM_LOG_FUNCTION();
-
-        using boost::filesystem::path;
-        using std::vector;
 
         auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
         auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
@@ -592,8 +657,6 @@ namespace CWeaverDetail {
 
         bool operator ()(IType const *pType) const
         {
-            using std::vector;
-
             auto pType_Invoke = pType->GetMethod(L"Invoke");
             _ASSERTE(pType_Invoke);
             auto params = vector<IParameter const *>();
@@ -623,7 +686,6 @@ namespace CWeaverDetail {
     IType const *CWeaverImpl::GetIndirectionDelegateInstance(IMethod const *pTarget, IModule const *pIndDll, IType const *pIndDlgtAttrType, PrigData &prigData) const
     {
         using boost::adaptors::filtered;
-        using std::vector;
         using Urasandesu::CppAnonym::Collections::FindIf;
         using Urasandesu::CppAnonym::CppAnonymCOMException;
         
@@ -673,8 +735,6 @@ namespace CWeaverDetail {
 
     IType const *CWeaverImpl::MakeGenericExplicitThisType(IType const *pTarget) const
     {
-        using std::vector;
-
         auto const *pAsm = pTarget->GetAssembly();
         
         auto genericParamPos = 0ul;

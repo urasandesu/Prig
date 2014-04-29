@@ -44,11 +44,15 @@
 
 namespace CWeaverDetail {
 
+    using namespace Urasandesu::CppAnonym::Utilities;
     using namespace Urasandesu::Swathe;
     using namespace Urasandesu::Swathe::Hosting;
     using namespace Urasandesu::Swathe::Metadata;
     using namespace Urasandesu::Swathe::Profiling;
+    using boost::filesystem::path;
     using boost::unordered_map;
+    using boost::unordered_set;
+    using std::vector;
     using std::wstring;
 
     struct PrigData;
@@ -104,6 +108,7 @@ namespace CWeaverDetail {
         IType const *MakeGenericExplicitThisType(IType const *pTarget) const;
 
         typedef boost::lock_guard<boost::mutex> guard_type;
+        vector<path> m_indDllPaths;
         ProfilingInfo *m_pProfInfo;
         boost::mutex m_lock;
     };
