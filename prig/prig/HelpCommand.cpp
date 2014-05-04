@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: HelpCommand.cpp
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,55 +28,42 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
 
 #ifndef PRIG_HELPCOMMAND_H
 #include <prig/HelpCommand.h>
 #endif
 
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
-#endif
+namespace prig { 
 
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
-#endif
+    namespace HelpCommandDetail {
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+        int HelpCommandImpl::Execute()
+        {
+            using std::cout;
+            using std::endl;
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
+            cout << m_msg << endl;
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
+            return 1;
+        }
 
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+        
+        
+        void HelpCommandImpl::SetHelp(options_description const &desc)
+        {
+            using boost::algorithm::replace_all;
+            using std::stringstream;
 
+            _ASSERTE(m_msg.empty());
+
+            auto ss = stringstream();
+            ss << desc;
+            m_msg = ss.str();
+            replace_all(m_msg, "--", " -");
+        }
+
+    }   // namespace HelpCommandDetail {
+
+}   // namespace prig { 

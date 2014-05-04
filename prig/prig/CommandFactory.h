@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: CommandFactory.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,55 +28,49 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
+#pragma once
+#ifndef PRIG_COMMANDFACTORY_H
+#define PRIG_COMMANDFACTORY_H
 
-#include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
+#ifndef PRIG_HELPCOMMANDFWD_H
+#include <prig/HelpCommandFwd.h>
 #endif
 
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
+#ifndef PRIG_RUNNERCOMMANDFWD_H
+#include <prig/RunnerCommandFwd.h>
 #endif
 
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
+#ifndef PRIG_STUBBERCOMMANDFWD_H
+#include <prig/StubberCommandFwd.h>
 #endif
 
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
+#ifndef PRIG_COMMANDFACTORYFWD_H
+#include <prig/CommandFactoryFwd.h>
 #endif
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+namespace prig { 
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
+    namespace CommandFactoryDetail {
+
+        using boost::program_options::options_description;
+        using boost::shared_ptr;
+        using std::wstring;
+
+        class CommandFactoryImpl
+        {
+        public:
+            static shared_ptr<HelpCommand> MakeHelpCommand(options_description const &desc);
+            static shared_ptr<RunnerCommand> MakeRunnerCommand(wstring const &process, wstring const &arguments);
+        };
+
+    }   // namespace CommandFactoryDetail {
+
+    struct CommandFactory : 
+        CommandFactoryDetail::CommandFactoryImpl
     {
-        return pCommand->Execute();
-    }
-};
+    };
+    
+}   // namespace prig { 
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
-
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+#endif  // PRIG_COMMANDFACTORY_H
 

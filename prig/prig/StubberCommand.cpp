@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: StubberCommand.cpp
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,55 +28,18 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
-
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
-#endif
-
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
-#endif
 
 #ifndef PRIG_STUBBERCOMMAND_H
 #include <prig/StubberCommand.h>
 #endif
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+namespace prig { 
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
+    int StubberCommand::Execute()
     {
-        return pCommand->Execute();
+        BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
     }
-};
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
-
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
-
+}   // namespace prig { 

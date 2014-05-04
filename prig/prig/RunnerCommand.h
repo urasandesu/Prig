@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: RunnerCommand.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,55 +28,48 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
-
-#include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
-
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
-#endif
-
+#pragma once
 #ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
+#define PRIG_RUNNERCOMMAND_H
+
+#ifndef PRIG_COMMANDFACTORYFWD_H
+#include <prig/CommandFactoryFwd.h>
 #endif
 
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
+#ifndef PRIG_RUNNERCOMMANDFWD_H
+#include <prig/RunnerCommandFwd.h>
 #endif
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+namespace prig { 
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
+    namespace RunnerCommandDetail {
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
+        using std::wstring;
+        using std::vector;
 
-    try
+        class RunnerCommandImpl
+        {
+        public:
+            int Execute();
+
+        private:
+            friend class CommandFactoryDetail::CommandFactoryImpl;
+
+            void SetProcess(wstring const &process);
+            void SetArguments(wstring const &arguments);
+
+            wstring m_process;
+            wstring m_arguments;
+        };
+
+    }   // namespace RunnerCommandDetail {
+
+    struct RunnerCommand : 
+        RunnerCommandDetail::RunnerCommandImpl
     {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+    };
+    
+}   // namespace prig { 
+
+#endif  // PRIG_RUNNERCOMMAND_H
 

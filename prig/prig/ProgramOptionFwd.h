@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: ProgramOptionFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,55 +28,39 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
+#pragma once
+#ifndef PRIG_PROGRAMOPTIONFWDFWD_H
+#define PRIG_PROGRAMOPTIONFWDFWD_H
 
-#include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
+#ifndef PRIG_HELPCOMMANDFWD_H
+#include <prig/HelpCommandFwd.h>
 #endif
 
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
+#ifndef PRIG_RUNNERCOMMANDFWD_H
+#include <prig/RunnerCommandFwd.h>
 #endif
 
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
+#ifndef PRIG_STUBBERCOMMANDFWD_H
+#include <prig/StubberCommandFwd.h>
 #endif
 
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
-#endif
+namespace prig { 
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+    typedef boost::variant<
+        boost::shared_ptr<HelpCommand>, 
+        boost::shared_ptr<RunnerCommand>, 
+        boost::shared_ptr<StubberCommand>
+    > Command;
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
+    namespace ProgramOptionDetail {
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
+        class ProgramOptionImpl;
 
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+    }   // namespace ProgramOptionDetail {
+
+    struct ProgramOption;
+    
+}   // namespace prig { 
+
+#endif  // PRIG_PROGRAMOPTIONFWDFWD_H
 

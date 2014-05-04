@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: HelpCommand.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,55 +28,46 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
-
-#include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
-
+#pragma once
 #ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
+#define PRIG_HELPCOMMAND_H
+
+#ifndef PRIG_COMMANDFACTORYFWD_H
+#include <prig/CommandFactoryFwd.h>
 #endif
 
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
+#ifndef PRIG_HELPCOMMANDFWD_H
+#include <prig/HelpCommandFwd.h>
 #endif
 
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
-#endif
+namespace prig { 
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+    namespace HelpCommandDetail {
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
+        using boost::program_options::options_description;
+        using std::string;
+
+        class HelpCommandImpl
+        {
+        public:
+            int Execute();
+
+        private:
+            friend class CommandFactoryDetail::CommandFactoryImpl;
+
+            void SetHelp(options_description const &desc);
+
+            string m_msg;
+        };
+
+    }   // namespace HelpCommandDetail {
+
+    struct HelpCommand : 
+        HelpCommandDetail::HelpCommandImpl
     {
-        return pCommand->Execute();
-    }
-};
+    };
+    
+}   // namespace prig { 
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
-
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+#endif  // PRIG_HELPCOMMAND_H
 

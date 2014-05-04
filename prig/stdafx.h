@@ -43,3 +43,7 @@
 
 #include <atlbase.h>
 #include <atlstr.h>
+
+#ifndef URASANDESU_SWATHE_SWATHEDEPENDSON_H
+#include <Urasandesu/Swathe/SwatheDependsOn.h>
+#endif

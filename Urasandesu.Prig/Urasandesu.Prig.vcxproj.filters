@@ -454,9 +454,6 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl\BaseStrongNameKeyPimpl.cpp">
       <Filter>Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl</Filter>
     </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\BaseSwatheStorage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Profiling\BaseClass\BaseProcessProfiler.cpp">
       <Filter>Source Files\Urasandesu\Swathe\AutoGen\Profiling\BaseClass</Filter>
     </ClCompile>
@@ -621,6 +618,9 @@
     </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseFieldMetadataPimpl.cpp">
       <Filter>Source Files\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\BaseSwatheStorage.cpp">
+      <Filter>Source Files\Urasandesu\Swathe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: CommandFactory.cpp
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,14 +28,8 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
 
 #ifndef PRIG_HELPCOMMAND_H
 #include <prig/HelpCommand.h>
@@ -49,34 +43,35 @@
 #include <prig/StubberCommand.h>
 #endif
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
+#ifndef PRIG_COMMANDFACTORY_H
+#include <prig/CommandFactory.h>
 #endif
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
+namespace prig { 
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
+    namespace CommandFactoryDetail {
 
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+        shared_ptr<HelpCommand> CommandFactoryImpl::MakeHelpCommand(options_description const &desc)
+        {
+            using boost::make_shared;
 
+            auto pCommand = make_shared<HelpCommand>();
+            pCommand->SetHelp(desc);
+            return pCommand;
+        }
+
+
+
+        shared_ptr<RunnerCommand> CommandFactoryImpl::MakeRunnerCommand(wstring const &process, wstring const &arguments)
+        {
+            using boost::make_shared;
+
+            auto pCommand = make_shared<RunnerCommand>();
+            pCommand->SetProcess(process);
+            pCommand->SetArguments(arguments);
+            return pCommand;
+        }
+
+    }   // namespace CommandFactoryDetail {
+
+}   // namespace prig { 

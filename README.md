@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Apr 29, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of May 4, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
@@ -32,7 +32,7 @@ namespace program1.MyLibrary
     }
 }
 ```
-You probably can't test this code, because ```DateTime.Now``` returns the value that depends on an external environment. For to make be testable, you should replace ```DateTime.Now``` to the Test Double that returns dummy information. If you use Prig, it will enable you to generate a Test Double by the following operation without any editing the product code:
+You probably can't test this code, because ```DateTime.Now``` returns the value that depends on an external environment. For to make be testable, you should replace ```DateTime.Now``` to the Test Double that returns the fake information. If you use Prig, it will enable you to generate a Test Double by the following operation without any editing the product code:
 
 First, you make the following stub into the assembly that named ```'dll name of the assembly that contains dependency' + '.' + 'runtime version string' + '.' + 'assembly version string' + '.' + 'processor architecture' + '.Prig.dll'```(e.g. DateTime.Now is in mscorlib.dll under .NET v2.0.50727 runtime, x86 processor architecture environment ==>> you should make the stub into mscorlib.v2.0.50727.v2.0.0.0.x86.Prig.dll).
 ```cs
@@ -74,7 +74,7 @@ namespace System.Prig
 }
 ```
 Make a new class library for unit test, and add the stub dll reference to it.
-In the test code, it become testable through the use of the stub and the replacement to Test Double that returns dummy information.
+In the test code, it become testable through the use of the stub and the replacement to Test Double that returns the fake information.
 ```cs
 using NUnit.Framework;
 using program1.MyLibrary;
@@ -121,7 +121,32 @@ namespace Test.program1.MyLibraryTest
     }
 }
 ```
-Prig helps the test that depends on an untestable library get trig. Enjoy your trip!!
+To enable any profiler based mocking tool, you has to set the environment variables originally. Microsoft Fakes/Typemock Isolator/Telerik JustMock provides the small runner it required, it is true at Prig. So use prig.exe to run the test as follows: 
+```dos
+CMD x86>cd
+C:\Users\User\Prig\Test.program1\bin\Release(.NET 3.5)\x86
+
+CMD x86>"..\..\..\..\Release\x86\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" -arguments "Test.program1.dll /domain=None"
+NUnit-Console version 2.6.3.13283
+Copyright (C) 2002-2012 Charlie Poole.
+Copyright (C) 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.
+Copyright (C) 2000-2002 Philip Craig.
+All Rights Reserved.
+
+Runtime Environment -
+   OS Version: Microsoft Windows NT 6.2.9200.0
+  CLR Version: 2.0.50727.8000 ( Net 3.5 )
+
+ProcessModel: Default    DomainUsage: None
+Execution Runtime: net-3.5
+..........
+Tests run: 10, Errors: 0, Failures: 0, Inconclusive: 0, Time: 1.44990184322627 seconds
+  Not run: 0, Invalid: 0, Ignored: 0, Skipped: 0
+
+
+CMD x86>
+```
+If tests have been created, you can refactor illimitably! Prig helps the test that depends on an untestable library get trig. Enjoy your trip!!
 
 
 
@@ -231,35 +256,4 @@ CMD x86>
 ```
 
 
-
-## RUN
-Let's say the test class library that made in EXAMPLE is stored into Test.program1.dll. To enable Prig, you only have to set some environment variables ```COR_ENABLE_PROFILING``` and ```COR_PROFILER``` before running the test:
-```dos
-CMD x86>cd
-C:\Users\User\Prig\Test.program1\bin\Release(.NET 3.5)\x86
-
-CMD x86>SET COR_ENABLE_PROFILING=1
-
-CMD x86>SET COR_PROFILER={532C1F05-F8F3-4FBA-8724-699A31756ABD}
-
-CMD x86>"C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None
-NUnit-Console version 2.6.3.13283
-Copyright (C) 2002-2012 Charlie Poole.
-Copyright (C) 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.
-Copyright (C) 2000-2002 Philip Craig.
-All Rights Reserved.
-
-Runtime Environment -
-   OS Version: Microsoft Windows NT 6.2.9200.0
-  CLR Version: 2.0.50727.8000 ( Net 3.5 )
-
-ProcessModel: Default    DomainUsage: None
-Execution Runtime: net-3.5
-..........
-Tests run: 10, Errors: 0, Failures: 0, Inconclusive: 0, Time: 1.44990184322627 seconds
-  Not run: 0, Invalid: 0, Ignored: 0, Skipped: 0
-
-
-CMD x86>
-```
 
