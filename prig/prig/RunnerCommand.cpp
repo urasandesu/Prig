@@ -58,12 +58,9 @@ namespace prig {
             using Urasandesu::CppAnonym::Environment;
 
             auto enableProfiling = Environment::GetEnvironmentVariable(L"COR_ENABLE_PROFILING");
-            if (!enableProfiling.empty())
-                BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
-        
             auto profiler = Environment::GetEnvironmentVariable(L"COR_PROFILER");
-            if (!profiler.empty())
-                BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+            if (!enableProfiling.empty() && !profiler.empty())
+                Environment::SetEnvironmentVariable(L"URASANDESU_SWATHE_EXTERNAL_PROFILER", profiler);
             
             Environment::SetEnvironmentVariable(L"COR_ENABLE_PROFILING", L"1");
             Environment::SetEnvironmentVariable(L"COR_PROFILER", L"{532C1F05-F8F3-4FBA-8724-699A31756ABD}");

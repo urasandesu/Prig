@@ -162,6 +162,7 @@ namespace CWeaverDetail {
         pProcProf->SetEventMask(ProfilerEvents::PE_MONITOR_APPDOMAIN_LOADS | 
                                 ProfilerEvents::PE_MONITOR_MODULE_LOADS | 
                                 ProfilerEvents::PE_MONITOR_JIT_COMPILATION | 
+                                ProfilerEvents::PE_MONITOR_ENTERLEAVE | 
                                 ProfilerEvents::PE_DISABLE_INLINING | 
                                 ProfilerEvents::PE_DISABLE_OPTIMIZATIONS | 
                                 ProfilerEvents::PE_USE_PROFILE_IMAGES | 

@@ -677,5 +677,8 @@
     <ClCompile Include="prig\HelpCommand.cpp">
       <Filter>Source Files\prig</Filter>
     </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\CComClassFactorySlim.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

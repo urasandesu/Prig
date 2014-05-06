@@ -622,6 +622,9 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\BaseSwatheStorage.cpp">
       <Filter>Source Files\Urasandesu\Swathe</Filter>
     </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\CComClassFactorySlim.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

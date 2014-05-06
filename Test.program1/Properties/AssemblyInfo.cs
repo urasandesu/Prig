@@ -66,15 +66,18 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 
-// SET COR_ENABLE_PROFILING=1
-// SET COR_PROFILER={532C1F05-F8F3-4FBA-8724-699A31756ABD}
-// SET COMPLUS_ProfAPI_ProfilerCompatibilitySetting=EnableV2Profiler
-
 // SET URASANDESU_CPPANONYM_LOGGING_SEVERITY=0
 // SET URASANDESU_PRIG_DEBUGGING_BREAK=10000
 //  System.Environment.SetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK", "-1");
 
-// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None
-// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" Test.program1.dll /domain=None /framework=v4.0
-// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" Test.program1.dll /domain=None
-// "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" Test.program1.dll /domain=None /framework=v4.0
+// "..\..\..\..\Debug\x86\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" -arguments "Test.program1.dll /domain=None"
+// "..\..\..\..\Debug\x64\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "Test.program1.dll /domain=None"
+
+// "..\..\..\..\Release\x86\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" -arguments "Test.program1.dll /domain=None"
+// "..\..\..\..\Release\x64\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "Test.program1.dll /domain=None"
+
+// "..\..\..\..\Debug\x86\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" -arguments "Test.program1.dll /domain=None /framework=v4.0"
+// "..\..\..\..\Debug\x64\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "Test.program1.dll /domain=None /framework=v4.0"
+
+// "..\..\..\..\Release\x86\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" -arguments "Test.program1.dll /domain=None /framework=v4.0"
+// "..\..\..\..\Release\x64\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "Test.program1.dll /domain=None /framework=v4.0"

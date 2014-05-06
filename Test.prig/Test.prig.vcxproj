@@ -366,6 +366,7 @@
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\StackFrame.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\StackTrace.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\AutoPtr.cpp" />
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\CComClassFactorySlim.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\SemiAutoPtr.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\TypeInfo.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ControlFlow.cpp" />
