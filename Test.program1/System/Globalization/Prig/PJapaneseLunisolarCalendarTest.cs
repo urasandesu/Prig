@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PMemoryStream.cs
+ * File: PJapaneseLunisolarCalendarTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,41 +28,32 @@
  */
 
 
-using System.IO.Prig;
+using NUnit.Framework;
+using System;
+using System.Globalization;
+using System.Globalization.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(PMemoryStream.TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long)]
-
-namespace System.IO.Prig
+namespace Test.program1.System.Globalization.Prig
 {
-    public static class PMemoryStream
+    [TestFixture]
+    public class PJapaneseLunisolarCalendarTest
     {
-#if _NET_3_5
-#if _M_IX86
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x060035FF;
-#else
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x06003652;
-#endif
-#else
-#if _M_IX86
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x0600477F;
-#else
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x0600477C;
-#endif
-#endif
-
-        public static class Seek
+        [Test]
+        public void GetYearInfo_should_be_callable_indirectly()
         {
-            public static IndirectionFunc<MemoryStream, long, SeekOrigin, long> Body
+            using (new IndirectionsContext())
             {
-                set
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = typeof(MemoryStream).Assembly.FullName;
-                    info.Token = TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<MemoryStream, long, SeekOrigin, long>>>();
-                    holder.AddOrUpdate(info, value);
-                }
+                // Arrange
+                PJapaneseLunisolarCalendar.GetYearInfo.Body = (@this, lunarYear, index) => 41;
+
+                // Act
+                var calendar = new JapaneseLunisolarCalendar();
+                var actual = calendar.GetLeapMonth(26, calendar.Eras[0]);
+
+                // Assert
+                // Before setting indirection: 平成 26 年 閏 9
+                Assert.AreEqual(42, actual);
             }
         }
     }

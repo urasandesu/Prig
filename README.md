@@ -5,13 +5,13 @@ Prig is a lightweight framework for test indirections in .NET Framework.
 
 
 ## DESCRIPTION
-Prig(PRototyping jIG) is a framework that generates a Test Double like Microsoft Fakes/Typemock Isolator/Telerik JustMock based on Unmanaged Profiler APIs.
+Prig(PRototyping jIG) is a framework that generates a [Test Double](http://martinfowler.com/bliki/TestDouble.html) like [Microsoft Fakes](http://msdn.microsoft.com/en-us/library/hh549175.aspx)/[Typemock Isolator](http://www.typemock.com/isolator-product-page)/[Telerik JustMock](http://www.telerik.com/products/mocking.aspx) based on Unmanaged Profiler APIs.
 This framework enables that any methods are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.
 
 
 
 ## STATUS
-As of May 4, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of May 10, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
@@ -32,9 +32,9 @@ namespace program1.MyLibrary
     }
 }
 ```
-You probably can't test this code, because ```DateTime.Now``` returns the value that depends on an external environment. For to make be testable, you should replace ```DateTime.Now``` to the Test Double that returns the fake information. If you use Prig, it will enable you to generate a Test Double by the following operation without any editing the product code:
+You probably can't test this code, because `DateTime.Now` returns the value that depends on an external environment. To make be testable, you should replace `DateTime.Now` to the Test Double that returns the fake information. If you use Prig, it will enable you to generate a Test Double by the following operation without any editing the product code:
 
-First, you make the following stub into the assembly that named ```'dll name of the assembly that contains dependency' + '.' + 'runtime version string' + '.' + 'assembly version string' + '.' + 'processor architecture' + '.Prig.dll'```(e.g. DateTime.Now is in mscorlib.dll under .NET v2.0.50727 runtime, x86 processor architecture environment ==>> you should make the stub into mscorlib.v2.0.50727.v2.0.0.0.x86.Prig.dll).
+First, you make the following stub into the assembly that named `'dll name of the assembly that contains dependency' + '.' + 'runtime version string' + '.' + 'assembly version string' + '.' + 'processor architecture' + '.Prig.dll'`(e.g. DateTime.Now is in mscorlib.dll under .NET v2.0.50727 runtime, x86 processor architecture environment ==>> you should make the stub into mscorlib.v2.0.50727.v2.0.0.0.x86.Prig.dll).
 ```cs
 using Urasandesu.Prig.Framework;
 
@@ -88,6 +88,22 @@ namespace Test.program1.MyLibraryTest
     public class LifeInfoTest
     {
         [Test]
+        public void IsNowLunchBreak_should_return_false_when_11_oclock()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
+
+                // Act
+                var result = LifeInfo.IsNowLunchBreak();
+
+                // Assert
+                Assert.IsFalse(result);
+            }
+        }
+
+        [Test]
         public void IsNowLunchBreak_should_return_true_when_12_oclock()
         {
             using (new IndirectionsContext())
@@ -96,7 +112,7 @@ namespace Test.program1.MyLibraryTest
                 PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 12, 00, 00);
 
                 // Act
-                var result = LifeInfo.IsLunchBreak();
+                var result = LifeInfo.IsNowLunchBreak();
 
                 // Assert
                 Assert.IsTrue(result);
@@ -112,7 +128,7 @@ namespace Test.program1.MyLibraryTest
                 PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 13, 00, 00);
 
                 // Act
-                var result = LifeInfo.IsLunchBreak();
+                var result = LifeInfo.IsNowLunchBreak();
 
                 // Assert
                 Assert.IsFalse(result);
@@ -121,10 +137,10 @@ namespace Test.program1.MyLibraryTest
     }
 }
 ```
-To enable any profiler based mocking tool, you has to set the environment variables originally. Microsoft Fakes/Typemock Isolator/Telerik JustMock provides the small runner it required, it is true at Prig. So use prig.exe to run the test as follows: 
+To enable any profiler based mocking tool, you has to set the environment variables in fact. Microsoft Fakes/Typemock Isolator/Telerik JustMock provides the small runner it required, it is true at Prig. So use prig.exe to run the test as follows: 
 ```dos
 CMD x86>cd
-C:\Users\User\Prig\Test.program1\bin\Release(.NET 3.5)\x86
+C:\Prig\Test.program1\bin\Release(.NET 3.5)\x86
 
 CMD x86>"..\..\..\..\Release\x86\prig.exe" run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console-x86.exe" -arguments "Test.program1.dll /domain=None"
 NUnit-Console version 2.6.3.13283
@@ -150,7 +166,82 @@ If tests have been created, you can refactor illimitably! Prig helps the test th
 
 
 
-# INSTALLATION
+# INSTALLATION FROM BINARY
+## DEPENDENCY
+* [NUnit 2.6.3.13283](http://www.nunit.org/)  
+Install using with the installer(NUnit-2.6.3.msi).
+
+
+
+## REGISTRATION
+Run Developer Command Prompt for VS2013 as Administrator, and register dlls that were output to `$(SolutionDir)$(Configuration)\$(PlatformTarget)\` to registry and GAC as follows(these are the examples for x86/.NET 3.5, but also another environments are in the same manner): 
+```dos
+CMD x86>cd
+C:\Prig\Release\x86
+
+CMD x86>regsvr32 /i Urasandesu.Prig.dll
+
+CMD x86>cd "..\..\Release(.NET 3.5)\AnyCPU"
+
+CMD AnyCPU>cd
+C:\Prig\Release(.NET 3.5)\AnyCPU
+
+CMD AnyCPU>gacutil /i Urasandesu.NAnonym.dll
+Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Assembly successfully added to the cache
+
+CMD AnyCPU>gacutil /i Urasandesu.Prig.Framework.dll
+Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Assembly successfully added to the cache
+
+CMD AnyCPU>
+```
+
+
+
+## UNREGISTRATION
+Unregistration operation is similar in the registration. Run Developer Command Prompt for VS2013 as Administrator and execute the following commands: 
+```dos
+CMD x86>cd
+C:\Prig\Release\x86
+
+CMD x86>regsvr32 /u Urasandesu.Prig.dll
+
+CMD x86>cd "..\..\Release(.NET 3.5)\AnyCPU"
+
+CMD AnyCPU>cd
+C:\Prig\Release(.NET 3.5)\AnyCPU
+
+CMD AnyCPU>gacutil /u "Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL"
+Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+
+Assembly: Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL
+Uninstalled: Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL
+Number of items uninstalled = 1
+Number of failures = 0
+
+CMD AnyCPU>gacutil /u "Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL"
+Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+
+Assembly: Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL
+Uninstalled: Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL
+Number of items uninstalled = 1
+Number of failures = 0
+
+CMD AnyCPU>
+```
+
+
+
+# INSTALLATION FROM SOURCE CODE
 ## DEPENDENCY
 To build this project needs the following dependencies: 
 * [Visual Studio 2013(more than Professional Edition)](http://www.visualstudio.com/)
@@ -185,75 +276,20 @@ Building the Boost C++ Libraries.
 Performing configuration checks
 ...
 ```
-* [NUnit 2.6.3.13283](http://www.nunit.org/)  
-Install using with the installer(NUnit-2.6.3.msi).
 * [Google Test 1.6](https://code.google.com/p/googletest/)  
 Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the `Build` menu, and open `Configuration Manager...`. On `Configuration Manager` dialog box, in the `Active Solution Platform` drop-down list, select the `<New...>` option. After the `New Solution Platform` dialog box is opened, in the `Type or select the new platform` drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.
+* [NUnit 2.6.3.13283](http://www.nunit.org/)  
+If you haven't taken necessary steps for INSTALLATION FROM BINARY, install using with the installer(NUnit-2.6.3.msi).
 
 
 
 ## BUILD
+After preparing all dependencies, you can build this project in the following steps:
+
 1. Run Visual Studio as Administrator, and open Prig.sln(This sln contains some ATL projects, so the build process will modify registry).
 2. According to the version of the product to use, change the solution configuration and the solution platform and build.
-3. The results are outputted to ```$(SolutionDir)$(Configuration)\$(PlatformTarget)\```.
-
-
-
-## REGISTRATION
-Run Developer Command Prompt for VS2013 as Administrator, and register dlls that were outputted to ```$(SolutionDir)$(Configuration)\$(PlatformTarget)\``` to registry and GAC as follows(these are the examples for x86/.NET 3.5, but also another environments are in the same manner): 
-```dos
-CMD x86>cd
-C:\Users\User\Prig\Release(.NET 3.5)\x86
-
-CMD x86>regsvr32 /i Urasandesu.Prig.dll
-
-CMD x86>gacutil /i Urasandesu.NAnonym.dll
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Assembly successfully added to the cache
-
-CMD x86>gacutil /i Urasandesu.Prig.Framework.dll
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Assembly successfully added to the cache
-
-CMD x86>
-```
-
-
-
-## UNREGISTRATION
-Unregistration operation is similar in the registration. Run Developer Command Prompt for VS2013 as Administrator and execute the following commands: 
-```dos
-CMD x86>cd
-C:\Users\User\Prig\Release(.NET 3.5)\x86
-
-CMD x86>regsvr32 /u Urasandesu.Prig.dll
-
-CMD x86>gacutil /u "Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=x86"
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-
-Assembly: Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=x86
-Uninstalled: Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=x86
-Number of items uninstalled = 1
-Number of failures = 0
-
-CMD x86>gacutil /u "Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL"
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-
-Assembly: Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL
-Uninstalled: Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL
-Number of items uninstalled = 1
-Number of failures = 0
-
-CMD x86>
-```
+3. The results are output to `$(SolutionDir)$(Configuration)\$(PlatformTarget)\`.
+4. Proceed the steps of INSTALLATION FROM BINARY.
 
 
 

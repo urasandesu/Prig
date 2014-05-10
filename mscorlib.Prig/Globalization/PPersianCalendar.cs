@@ -45,9 +45,9 @@ namespace System.Globalization.Prig
 #endif
 #else
 #if _M_IX86
-        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x0600326B;
+        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x0600328D;
 #else
-        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x06003268;
+        internal const int TokenOfCheckTicksRange_Action_PersianCalendar_long = 0x0600328A;
 #endif
 #endif
 

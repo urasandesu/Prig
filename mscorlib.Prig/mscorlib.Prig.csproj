@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EHClass.cs" />
+    <Compile Include="Globalization\PJapaneseLunisolarCalendar.cs" />
     <Compile Include="Globalization\PPersianCalendar.cs" />
     <Compile Include="IO\PMemoryStream.cs" />
     <Compile Include="IO\PStream.cs" />

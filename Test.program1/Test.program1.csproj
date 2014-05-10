@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="MyLibraryTest\LifeInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\Globalization\Prig\PJapaneseLunisolarCalendarTest.cs" />
     <Compile Include="System\Globalization\Prig\PPersianCalendarTest.cs" />
     <Compile Include="System\IO\Prig\PMemoryStreamTest.cs" />
     <Compile Include="System\Prig\PConvertTest.cs" />

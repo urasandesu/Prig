@@ -42,6 +42,10 @@
 #include <Urasandesu/Swathe.h>
 #endif
 
+#ifndef URASANDESU_PRIG_PRIGDATAFWD_H
+#include <Urasandesu/Prig/PrigDataFwd.h>
+#endif
+
 namespace CWeaverDetail {
 
     using namespace Urasandesu::CppAnonym::Utilities;
@@ -54,8 +58,7 @@ namespace CWeaverDetail {
     using boost::unordered_set;
     using std::vector;
     using std::wstring;
-
-    struct PrigData;
+    using Urasandesu::Prig::PrigData;
 
     class CWeaverImpl : 
         public ICorProfilerCallback5Impl<ICorProfilerCallback5>

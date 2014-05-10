@@ -95,6 +95,18 @@
     <Filter Include="Source Files\Urasandesu\Swathe\AutoGen\StrongNaming\BaseClassPimpl">
       <UniqueIdentifier>{5f8e91e0-eb1a-4963-ac67-1dcec541b0a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\Profiling">
+      <UniqueIdentifier>{ee7e3a3d-aa65-469f-80ef-4ad2fa506329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Urasandesu">
+      <UniqueIdentifier>{9f3789e8-e50a-40b2-8d2f-67ad0f581f96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Urasandesu\Prig">
+      <UniqueIdentifier>{c8861823-3faf-4871-87ce-2fd0c8b18de6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Prig">
+      <UniqueIdentifier>{dccbfa8d-8673-4d60-8bb5-6e4575b8cb9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -625,6 +637,18 @@
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\CComClassFactorySlim.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Profiling\ProfilingSpecialValues.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Profiling</Filter>
+    </ClCompile>
+    <ClCompile Include="Urasandesu\Prig\IMethodSigHash.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="Urasandesu\Prig\PrigData.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="Urasandesu\Prig\IMethodSigEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -647,6 +671,24 @@
     </ClInclude>
     <ClInclude Include="InstanceGetters.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\IMethodSigHash.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\IMethodSigHashFwd.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\PrigData.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\PrigDataFwd.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\IMethodSigEqualTo.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\IMethodSigEqualToFwd.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

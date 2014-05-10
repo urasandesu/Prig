@@ -45,9 +45,9 @@ namespace System.IO.Prig
 #endif
 #else
 #if _M_IX86
-        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x06004488;
+        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x060044B2;
 #else
-        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x06004485;
+        internal const int TokenOfBeginRead_IndirectionFunc_Stream_ByteArray_int_int_AsyncCallback_object_IAsyncResult = 0x060044AF;
 #endif
 #endif
 

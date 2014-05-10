@@ -31,101 +31,19 @@
 #include "stdafx.h"
 #include "Weaver.h"
 
+#ifndef URASANDESU_PRIG_IMETHODSIGHASH_H
+#include <Urasandesu/Prig/IMethodSigHash.h>
+#endif
+
+#ifndef URASANDESU_PRIG_IMETHODSIGEQUALTO_H
+#include <Urasandesu/Prig/IMethodSigEqualTo.h>
+#endif
+
+#ifndef URASANDESU_PRIG_PRIGDATA_H
+#include <Urasandesu/Prig/PrigData.h>
+#endif
+
 namespace CWeaverDetail {
-
-    namespace IMethodSigHashDetail {
-        
-        using Urasandesu::CppAnonym::Traits::HashComputable;
-        using Urasandesu::CppAnonym::Collections::SequenceHashValue;
-
-        struct IMethodSigHashImpl : 
-            HashComputable<IMethod const *>
-        {
-            result_type operator()(param_type v) const
-            {
-                auto hash = [](IParameter const *pParam) { return HashValue(pParam); };
-                auto hasRet = static_cast<INT>(v->GetReturnType()->GetKind() != TypeKinds::TK_VOID);
-                auto isStatic = static_cast<INT>(v->IsStatic());
-                return hasRet ^ SequenceHashValue(v->GetParameters(), hash) ^ isStatic;
-            }
-
-            static result_type HashValue(IParameter const *pParam)
-            {
-                auto dwattr = pParam->GetAttribute().Value();
-                auto isByRef = static_cast<INT>(pParam->GetParameterType()->IsByRef());
-                return dwattr ^ isByRef;
-            }
-        };
-
-    }   // namespace IMethodSigHashDetail {
-
-    struct IMethodSigHash : 
-        IMethodSigHashDetail::IMethodSigHashImpl
-    {
-    };
-
-
-
-    namespace IMethodSigEqualToDetail {
-
-        using Urasandesu::CppAnonym::Traits::EqualityComparable;
-        using Urasandesu::CppAnonym::Collections::SequenceEqual;
-
-        struct IMethodSigEqualToImpl : 
-            EqualityComparable<IMethod const *>
-        {
-            result_type operator()(param_type x, param_type y) const
-            {
-                auto isStaticX = x->IsStatic();
-                auto isStaticY = y->IsStatic();
-                return isStaticX == isStaticY && ReturnTypeEqual(x->GetReturnType(), y->GetReturnType()) && ParametersEqual(x->GetParameters(), y->GetParameters());
-            }
-            
-            static result_type ReturnTypeEqual(IType const *pRetTypeX, IType const *pRetTypeY)
-            {
-                auto hasRetX = pRetTypeX->GetKind() != TypeKinds::TK_VOID;
-                auto hasRetY = pRetTypeY->GetKind() != TypeKinds::TK_VOID;
-                return hasRetX == hasRetY;
-            }
-            
-            static result_type ParametersEqual(vector<IParameter const *> const &paramsX, vector<IParameter const *> const &paramsY)
-            {
-                auto equalTo = [](IParameter const *pParamX, IParameter const *pParamY) { return ParameterEqual(pParamX, pParamY); };
-                return SequenceEqual(paramsX, paramsY, equalTo);
-            }
-            
-            static result_type ParameterEqual(IParameter const *pParamX, IParameter const *pParamY)
-            {
-                auto dwattrX = pParamX->GetAttribute().Value();
-                auto isByRefX = pParamX->GetParameterType()->IsByRef();
-                auto dwattrY = pParamY->GetAttribute().Value();
-                auto isByRefY = pParamY->GetParameterType()->IsByRef();
-                return dwattrX == dwattrY && isByRefX == isByRefY;
-            }
-        };
-
-    }   // namespace IMethodSigEqualToDetail {
-
-    struct IMethodSigEqualTo : 
-        IMethodSigEqualToDetail::IMethodSigEqualToImpl
-    {
-    };
-
-
-
-    struct PrigData
-    {
-        PrigData() : 
-            m_indirectablesInit(false)
-        { }
-
-        path m_indDllPath;
-        unordered_map<mdToken, ICustomAttribute const *> m_indirectables;
-        bool m_indirectablesInit;
-        unordered_map<IMethod const *, IType const *, IMethodSigHash, IMethodSigEqualTo> m_indDlgtCache;
-    };
-
-
 
     CWeaverImpl::CWeaverImpl() : 
         m_pProfInfo(nullptr)
@@ -292,55 +210,15 @@ namespace CWeaverDetail {
 
 
 
-    STDMETHODIMP CWeaverImpl::ModuleLoadFinishedCore( 
-        /* [in] */ ModuleID moduleId,
-        /* [in] */ HRESULT hrStatus)
+    wstring GetIndirectionDllName(wstring const &modName, RuntimeHost const *pRuntime, TempPtr<AppDomainProfiler> &pDomainProf, TempPtr<AssemblyProfiler> &pAsmProf)
     {
-        CPPANONYM_LOG_FUNCTION();
-
-        using boost::adaptors::filtered;
-        using boost::lexical_cast;
-        using boost::log::current_scope;
-        using boost::filesystem::current_path;
-        using boost::range::for_each;
         using std::wostringstream;
         using Urasandesu::CppAnonym::CppAnonymNotSupportedException;
-        using Urasandesu::CppAnonym::Utilities::AnyPtr;
 
-        CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
-
-        auto _ = guard_type(m_lock);
-
-        auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
-        auto pModProf = pProcProf->AttachToModule(moduleId);
-        CPPANONYM_D_LOGW1(L"Current Path: %|1$s|", current_path().native());
-        auto modPath = path(pModProf->GetName());
-        auto modName = modPath.stem().native();
-        
-        auto candidateIndDllPaths = unordered_set<path, Hash<path>, EqualTo<path> >();
-        auto isCandidate = [&](path const &p) { return p.native().find(modName) != wstring::npos; };
-        for_each(m_indDllPaths | filtered(isCandidate), [&](path const &p) { candidateIndDllPaths.insert(p); });
-        if (candidateIndDllPaths.empty())
-            return S_OK;
-        
-        
-        CPPANONYM_LOG_NAMED_SCOPE("if (!candidateIndDllPaths.empty())");
-        if (CPPANONYM_D_LOG_ENABLED())
-        {
-            auto oss = std::wostringstream();
-            oss << L"Candidate modules:";
-            BOOST_FOREACH (auto const &candidateIndDllPath, candidateIndDllPaths)
-                oss << boost::wformat(L" \"%|1$s|\"") % candidateIndDllPath.native();
-            CPPANONYM_D_LOGW(oss.str());
-        }
-
-        auto const *pRuntime = m_pProfInfo->GetRuntime();
-        auto pAsmProf = pModProf->AttachToAssembly();
-        auto pDomainProf = pAsmProf->AttachToAppDomain();
         auto *pDisp = pDomainProf->GetMetadataDispenser();
         auto const *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
         auto const &amd = pAsmGen->GetAssemblyMetadata();
-        auto procArch = pAsmGen->GetProcessorArchitectures()[0];    // TODO: んー、MSIL にならない・・・。
+        auto procArch = pAsmGen->GetProcessorArchitectures()[0];
         auto targetIndDllName = wostringstream();
         targetIndDllName << modName;
         targetIndDllName << L"." << pRuntime->GetCORVersion();
@@ -363,7 +241,54 @@ namespace CWeaverDetail {
         }
         targetIndDllName << L".Prig.dll";
         
-        auto targetIndDllPath = path(targetIndDllName.str());
+        return targetIndDllName.str();
+    }
+
+    STDMETHODIMP CWeaverImpl::ModuleLoadFinishedCore( 
+        /* [in] */ ModuleID moduleId,
+        /* [in] */ HRESULT hrStatus)
+    {
+        CPPANONYM_LOG_FUNCTION();
+
+        using boost::adaptors::filtered;
+        using boost::lexical_cast;
+        using boost::log::current_scope;
+        using boost::filesystem::current_path;
+        using boost::range::for_each;
+        using std::wostringstream;
+        using Urasandesu::CppAnonym::Utilities::AnyPtr;
+
+        CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
+
+        auto _ = guard_type(m_lock);
+
+        auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
+        auto pModProf = pProcProf->AttachToModule(moduleId);
+        CPPANONYM_D_LOGW1(L"Current Path: %|1$s|", current_path().native());
+        auto modPath = path(pModProf->GetName());
+        auto modName = modPath.stem().native();
+        
+        auto candidateIndDllPaths = unordered_set<path, Hash<path>, EqualTo<path> >();
+        auto isCandidate = [&](path const &p) { return p.native().find(modName) != wstring::npos; };
+        for_each(m_indDllPaths | filtered(isCandidate), [&](path const &p) { candidateIndDllPaths.insert(p); });
+        if (candidateIndDllPaths.empty())
+            return S_OK;
+        
+        
+        CPPANONYM_LOG_NAMED_SCOPE("if (!candidateIndDllPaths.empty())");
+        if (CPPANONYM_D_LOG_ENABLED())
+        {
+            auto oss = wostringstream();
+            oss << L"Candidate modules:";
+            BOOST_FOREACH (auto const &candidateIndDllPath, candidateIndDllPaths)
+                oss << boost::wformat(L" \"%|1$s|\"") % candidateIndDllPath.native();
+            CPPANONYM_D_LOGW(oss.str());
+        }
+
+        auto const *pRuntime = m_pProfInfo->GetRuntime();
+        auto pAsmProf = pModProf->AttachToAssembly();
+        auto pDomainProf = pAsmProf->AttachToAppDomain();
+        auto targetIndDllPath = path(GetIndirectionDllName(modName, pRuntime, pDomainProf, pAsmProf));
         if (candidateIndDllPaths.find(targetIndDllPath) == candidateIndDllPaths.end())
             return S_OK;
         
@@ -393,7 +318,7 @@ namespace CWeaverDetail {
         /* [in] */ ModuleID moduleId)
     {
         CPPANONYM_LOG_FUNCTION();
-        CPPANONYM_D_LOGW1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$X|)", reinterpret_cast<void *>(moduleId));   // TODO: この辺実装中。。。
+        CPPANONYM_D_LOGW1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$X|)", reinterpret_cast<void *>(moduleId));
 
         auto _ = guard_type(m_lock);
 
@@ -658,6 +583,8 @@ namespace CWeaverDetail {
 
         bool operator ()(IType const *pType) const
         {
+            using Urasandesu::Prig::IMethodSigEqualTo;
+
             auto pType_Invoke = pType->GetMethod(L"Invoke");
             _ASSERTE(pType_Invoke);
             auto params = vector<IParameter const *>();

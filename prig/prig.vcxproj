@@ -227,6 +227,7 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\OperandParam.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\Signature.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\StackBehaviour.cpp" />
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Profiling\ProfilingSpecialValues.cpp" />
     <ClCompile Include="prig.cpp" />
     <ClCompile Include="prig\CommandFactory.cpp" />
     <ClCompile Include="prig\HelpCommand.cpp" />

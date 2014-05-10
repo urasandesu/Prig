@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PMemoryStream.cs
+ * File: PJapaneseLunisolarCalendar.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,39 +28,39 @@
  */
 
 
-using System.IO.Prig;
+using System.Globalization.Prig;
 using Urasandesu.Prig.Framework;
 
-[assembly: Indirectable(PMemoryStream.TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long)]
+[assembly: Indirectable(PJapaneseLunisolarCalendar.TokenOfGetYearInfo_Func_JapaneseLunisolarCalendar_int_int_int)]
 
-namespace System.IO.Prig
+namespace System.Globalization.Prig
 {
-    public static class PMemoryStream
+    public static class PJapaneseLunisolarCalendar
     {
 #if _NET_3_5
 #if _M_IX86
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x060035FF;
+        internal const int TokenOfGetYearInfo_Func_JapaneseLunisolarCalendar_int_int_int = 0x06002615;
 #else
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x06003652;
+        internal const int TokenOfGetYearInfo_Func_JapaneseLunisolarCalendar_int_int_int = 0x06002668;
 #endif
 #else
 #if _M_IX86
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x0600477F;
+        internal const int TokenOfGetYearInfo_Func_JapaneseLunisolarCalendar_int_int_int = 0x0600324C;
 #else
-        internal const int TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long = 0x0600477C;
+        internal const int TokenOfGetYearInfo_Func_JapaneseLunisolarCalendar_int_int_int = 0x06003249;
 #endif
 #endif
 
-        public static class Seek
+        public static class GetYearInfo
         {
-            public static IndirectionFunc<MemoryStream, long, SeekOrigin, long> Body
+            public static IndirectionFunc<JapaneseLunisolarCalendar, int, int, int> Body
             {
                 set
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = typeof(MemoryStream).Assembly.FullName;
-                    info.Token = TokenOfSeek_Func_MemoryStream_long_SeekOrigin_long;
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<MemoryStream, long, SeekOrigin, long>>>();
+                    info.AssemblyName = typeof(JapaneseLunisolarCalendar).Assembly.FullName;
+                    info.Token = TokenOfGetYearInfo_Func_JapaneseLunisolarCalendar_int_int_int;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>();
                     holder.AddOrUpdate(info, value);
                 }
             }

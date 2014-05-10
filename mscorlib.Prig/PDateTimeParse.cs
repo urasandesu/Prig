@@ -46,9 +46,9 @@ namespace System.Prig
 #endif
 #else
 #if _M_IX86
-        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x06003021;
+        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x06003043;
 #else
-        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x0600301E;
+        internal const int TokenOfTryParse_OutFunc_string_DateTimeFormatInfo_DateTimeStyles_DateTime_bool = 0x06003040;
 #endif
 #endif
 

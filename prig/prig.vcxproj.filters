@@ -103,6 +103,9 @@
     <Filter Include="Header Files\prig">
       <UniqueIdentifier>{518bd84c-5bd4-413e-bf62-0a896bf0698e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Urasandesu\Swathe\Profiling">
+      <UniqueIdentifier>{0bfff1dd-e194-4f2e-b416-eb0a866933f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -679,6 +682,9 @@
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\CComClassFactorySlim.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Profiling\ProfilingSpecialValues.cpp">
+      <Filter>Source Files\Urasandesu\Swathe\Profiling</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

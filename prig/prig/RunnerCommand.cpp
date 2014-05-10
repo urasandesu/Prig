@@ -35,6 +35,10 @@
 #include <prig/RunnerCommand.h>
 #endif
 
+#ifndef URASANDESU_SWATHE_H
+#include <Urasandesu/Swathe.h>
+#endif
+
 namespace prig { 
 
     namespace RunnerCommandDetail {
@@ -56,14 +60,15 @@ namespace prig {
         void PrepareEnvironment()
         {
             using Urasandesu::CppAnonym::Environment;
+            using Urasandesu::Swathe::Profiling::ProfilingSpecialValues;
 
-            auto enableProfiling = Environment::GetEnvironmentVariable(L"COR_ENABLE_PROFILING");
-            auto profiler = Environment::GetEnvironmentVariable(L"COR_PROFILER");
+            auto enableProfiling = Environment::GetEnvironmentVariable(ProfilingSpecialValues::ENABLE_PROFILING_KEY);
+            auto profiler = Environment::GetEnvironmentVariable(ProfilingSpecialValues::PROFILER_KEY);
             if (!enableProfiling.empty() && !profiler.empty())
-                Environment::SetEnvironmentVariable(L"URASANDESU_SWATHE_EXTERNAL_PROFILER", profiler);
+                Environment::SetEnvironmentVariable(ProfilingSpecialValues::EXTERNAL_PROFILER_KEY, profiler);
             
-            Environment::SetEnvironmentVariable(L"COR_ENABLE_PROFILING", L"1");
-            Environment::SetEnvironmentVariable(L"COR_PROFILER", L"{532C1F05-F8F3-4FBA-8724-699A31756ABD}");
+            Environment::SetEnvironmentVariable(ProfilingSpecialValues::ENABLE_PROFILING_KEY, ProfilingSpecialValues::ENABLE_PROFILING_VALUE_ENABLED);
+            Environment::SetEnvironmentVariable(ProfilingSpecialValues::PROFILER_KEY, L"{532C1F05-F8F3-4FBA-8724-699A31756ABD}");
         }
 
 

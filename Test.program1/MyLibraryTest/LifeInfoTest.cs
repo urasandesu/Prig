@@ -40,6 +40,22 @@ namespace Test.program1.MyLibraryTest
     public class LifeInfoTest
     {
         [Test]
+        public void IsNowLunchBreak_should_return_false_when_11_oclock()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
+
+                // Act
+                var result = LifeInfo.IsNowLunchBreak();
+
+                // Assert
+                Assert.IsFalse(result);
+            }
+        }
+
+        [Test]
         public void IsNowLunchBreak_should_return_true_when_12_oclock()
         {
             using (new IndirectionsContext())
