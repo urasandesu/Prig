@@ -109,6 +109,38 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x86'">
+    <Reference Include="mscorlib.v2.0.50727.v2.0.0.0.x86.Prig" />
+    <Reference Include="UntestableLibrary.v2.0.50727.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x86'">
+    <Reference Include="mscorlib.v2.0.50727.v2.0.0.0.x86.Prig" />
+    <Reference Include="UntestableLibrary.v2.0.50727.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x64'">
+    <Reference Include="mscorlib.v2.0.50727.v2.0.0.0.AMD64.Prig" />
+    <Reference Include="UntestableLibrary.v2.0.50727.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x64'">
+    <Reference Include="mscorlib.v2.0.50727.v2.0.0.0.AMD64.Prig" />
+    <Reference Include="UntestableLibrary.v2.0.50727.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x86'">
+    <Reference Include="mscorlib.v4.0.30319.v4.0.0.0.x86.Prig" />
+    <Reference Include="UntestableLibrary.v4.0.30319.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x86'">
+    <Reference Include="mscorlib.v4.0.30319.v4.0.0.0.x86.Prig" />
+    <Reference Include="UntestableLibrary.v4.0.30319.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x64'">
+    <Reference Include="mscorlib.v4.0.30319.v4.0.0.0.AMD64.Prig" />
+    <Reference Include="UntestableLibrary.v4.0.30319.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x64'">
+    <Reference Include="mscorlib.v4.0.30319.v4.0.0.0.AMD64.Prig" />
+    <Reference Include="UntestableLibrary.v4.0.30319.v1.0.0.0.MSIL.Prig" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="MyLibraryTest\LifeInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,10 +160,6 @@
     <Compile Include="UntestableLibrary\Prig\PULNullableTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mscorlib.Prig\mscorlib.Prig.csproj">
-      <Project>{c7265716-797e-4358-8b93-7f60af0e4ff0}</Project>
-      <Name>mscorlib.Prig</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
       <Project>{c04a5e86-30e1-4c38-b916-324d000e240e}</Project>
       <Name>Urasandesu.NAnonym</Name>
@@ -139,10 +167,6 @@
     <ProjectReference Include="..\program1\program1.csproj">
       <Project>{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}</Project>
       <Name>program1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UntestableLibrary.Prig\UntestableLibrary.Prig.csproj">
-      <Project>{aabf8deb-7517-44d6-9c9c-c23b9a5f1dd5}</Project>
-      <Name>UntestableLibrary.Prig</Name>
     </ProjectReference>
     <ProjectReference Include="..\UntestableLibrary\UntestableLibrary.csproj">
       <Project>{23389061-145f-4cb1-86ed-64a9f35f52a6}</Project>
@@ -153,8 +177,44 @@
       <Name>Urasandesu.Prig.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="mscorlib.prig" />
+    <None Include="Test.program1.snk" />
+    <None Include="UntestableLibrary.prig" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x86'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig" "
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x86'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig" "
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x64'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig" "
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x64'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig" "
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x86'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig" "
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x86'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig" "
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x64'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig" "
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x64'">
+    <PreBuildEvent>cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.prig"
+cmd /k " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Invoke-PilotStubber.ps1" -ReferenceFrom "$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.prig" "</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

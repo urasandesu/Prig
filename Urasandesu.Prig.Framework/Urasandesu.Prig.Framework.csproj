@@ -60,13 +60,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\IndirectionStub.cs" />
+    <Compile Include="Configuration\PrigSection.cs" />
+    <Compile Include="Configuration\StubCollection.cs" />
+    <Compile Include="Configuration\StubElement.cs" />
     <Compile Include="GenericHolder.cs" />
     <Compile Include="IndirectableAttribute.cs" />
     <Compile Include="IndirectionDelegateAttribute.cs" />
@@ -80,6 +86,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Invoke-NetDataContractSerializer.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Invoke-PilotStubber.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="PilotStubber.prig.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Urasandesu.Prig.Framework.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +103,7 @@
       <Name>Urasandesu.NAnonym</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

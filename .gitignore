@@ -52,3 +52,11 @@
 *.dasm
 *.unsuccessfulbuild
 TemporaryGeneratedFile*
+*.g.cs
+*.g.csproj
+Debug/
+Debug(.NET 3.5)/
+Debug(.NET 4)/
+Release/
+Release(.NET 3.5)/
+Release(.NET 4)/

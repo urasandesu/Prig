@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  
+  <configSections>
+    <section name="prig" type="Urasandesu.Prig.Framework.Configuration.PrigSection, Urasandesu.Prig.Framework" />
+  </configSections>
+
+  <prig>
+
+    <stubs>
+      <add name="GetYearInfo_int_int" alias="GetYearInfo">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">GetYearInfo</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Globalization.JapaneseLunisolarCalendar</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int32 GetYearInfo(Int32, Int32)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int32 GetYearInfo(System.Int32, System.Int32)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="CheckTicksRange_long" alias="CheckTicksRange">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">CheckTicksRange</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Globalization.PersianCalendar</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Void CheckTicksRange(Int64)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Void CheckTicksRange(System.Int64)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="Seek_long_SeekOrigin" alias="Seek">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Seek</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.IO.MemoryStream</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int64 Seek(Int64, System.IO.SeekOrigin)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int64 Seek(System.Int64, System.IO.SeekOrigin)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="BeginRead_byteArray_int_int_AsyncCallback_Object" alias="BeginRead">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">BeginRead</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.IO.Stream</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.IAsyncResult BeginRead(Byte[], Int32, Int32, System.AsyncCallback, System.Object)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.IAsyncResult BeginRead(System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="Insert_int_string_int" alias="Insert">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Insert</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.StringBuilder</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.StringBuilder Insert(Int32, System.String, Int32)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.StringBuilder Insert(System.Int32, System.String, System.Int32)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="Replace_char_char_int_int" alias="Replace">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Replace</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.StringBuilder</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.StringBuilder Replace(Char, Char, Int32, Int32)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.StringBuilder Replace(System.Char, System.Char, System.Int32, System.Int32)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="Exchange_T_TRef_T" alias="Exchange">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Exchange</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Threading.Interlocked</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">T Exchange[T](T ByRef, T)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">!!T Exchange[T](!!T&amp;, !!T)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="CreateInstance_Type_intArray_intArray" alias="CreateInstance">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">CreateInstance</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Array</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Array CreateInstance(System.Type, Int32[], Int32[])</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Array CreateInstance(System.Type, System.Int32[], System.Int32[])</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="Exists_T_TArray_Predicate_T" alias="Exists">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Exists</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Array</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean Exists[T](T[], System.Predicate`1[T])</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean Exists[T](!!T[], System.Predicate`1[T])</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="BinarySearch_Array_int_int_object_IComparer" alias="BinarySearch">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">BinarySearch</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Array</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int32 BinarySearch(System.Array, Int32, Int32, System.Object, System.Collections.IComparer)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int32 BinarySearch(System.Array, System.Int32, System.Int32, System.Object, System.Collections.IComparer)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="ToInt32_double" alias="ToInt32">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">ToInt32</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Convert</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int32 ToInt32(Double)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int32 ToInt32(System.Double)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="ToSByte_char" alias="ToSByte">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">ToSByte</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Convert</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">SByte ToSByte(Char)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.SByte ToSByte(System.Char)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="ToInt16_char" alias="ToInt16">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">ToInt16</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Convert</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int16 ToInt16(Char)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int16 ToInt16(System.Char)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="ToInt64_double" alias="ToInt64">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">ToInt64</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Convert</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int64 ToInt64(Double)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int64 ToInt64(System.Double)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="ToBoolean_float" alias="ToBoolean">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">ToBoolean</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Convert</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean ToBoolean(Single)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean ToBoolean(System.Single)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+      
+      <add name="NowGet" alias="NowGet">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">get_Now</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime get_Now()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime get_Now()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="FromBinary_long" alias="FromBinary">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">FromBinary</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime FromBinary(Int64)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime FromBinary(System.Int64)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="DoubleDateToTicks_double" alias="DoubleDateToTicks">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">DoubleDateToTicks</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int64 DoubleDateToTicks(Double)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int64 DoubleDateToTicks(System.Double)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="CompareTo_object" alias="CompareTo">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">CompareTo</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int32 CompareTo(System.Object)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int32 CompareTo(System.Object)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="TryParse_string_DateTimeFormatInfo_DateTimeStyles_DateTimeRef" alias="TryParse">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">TryParse</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTimeParse</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean TryParse(System.String, System.Globalization.DateTimeFormatInfo, System.Globalization.DateTimeStyles, System.DateTime ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean TryParse(System.String, System.Globalization.DateTimeFormatInfo, System.Globalization.DateTimeStyles, System.DateTime&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="InternalToString" alias="InternalToString">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">InternalToString</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Exception</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.String InternalToString()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.String InternalToString()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="TryParse_string_intRef" alias="TryParse">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">TryParse</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Int32</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean TryParse(System.String, Int32 ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean TryParse(System.String, System.Int32&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+    </stubs>
+    
+  </prig>
+
+</configuration>
