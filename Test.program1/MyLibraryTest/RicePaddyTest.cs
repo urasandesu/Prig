@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULIntPtrTest.cs
+ * File: RicePaddyTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,45 +29,63 @@
 
 
 using NUnit.Framework;
+using program1.MyLibrary;
 using System;
-using UntestableLibrary;
-using UntestableLibrary.Prig;
+using System.Prig;
 using Urasandesu.Prig.Framework;
 
-namespace Test.program1.UntestableLibrary.Prig
+namespace Test.program1.MyLibraryTest
 {
     [TestFixture]
-    public class PULIntPtrTest
+    public class RicePaddyTest
     {
         [Test]
-        public void Constructor_should_be_callable_indirectly()
+        public void Constructor_should_be_initialized_by_null_if_number_that_is_divisible_by_10_is_passed()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIntPtr.Constructor.Body = (ref ULIntPtr @this, long value) => @this = new ULIntPtr(42);
+                var actualValue = 0;
+                PRandom.Next.Body = @this => 10;
+                PNullable<int>.Constructor.Body = (ref Nullable<int> @this, int value) =>
+                {
+                    actualValue = value;
+                    @this = IndirectionsContext.ExecuteOriginal(() => new Nullable<int>(value));
+                };
+
 
                 // Act
-                var actual = new ULIntPtr(2147483648L);
+                var paddy = new RicePaddy(1, new Random());
 
+                
                 // Assert
-                Assert.AreEqual(42, actual.ToInt32());
+                Assert.AreEqual(0, actualValue);
             }
         }
 
+
+
         [Test]
-        public void get_Size_should_be_callable_indirectly()
+        public void Constructor_should_be_initialized_by_non_null_if_number_that_is_not_divisible_by_10_is_passed()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIntPtr.SizeGet.Body = () => 42;
+                var actualValue = 0;
+                PRandom.Next.Body = @this => 9;
+                PNullable<int>.Constructor.Body = (ref Nullable<int> @this, int value) =>
+                {
+                    actualValue = value;
+                    @this = IndirectionsContext.ExecuteOriginal(() => new Nullable<int>(value));
+                };
 
+                
                 // Act
-                var actual = ULIntPtr.Size;
+                var paddy = new RicePaddy(1, new Random());
 
+                
                 // Assert
-                Assert.AreEqual(42, actual);
+                Assert.AreEqual(9000, actualValue);
             }
         }
     }

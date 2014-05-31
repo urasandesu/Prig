@@ -36,7 +36,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 
-namespace Urasandesu.Prig.Framework.Configuration
+namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
     public class StubElement : ConfigurationElement
     {

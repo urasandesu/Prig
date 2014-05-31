@@ -69,10 +69,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\IndirectionStub.cs" />
-    <Compile Include="Configuration\PrigSection.cs" />
-    <Compile Include="Configuration\StubCollection.cs" />
-    <Compile Include="Configuration\StubElement.cs" />
+    <Compile Include="PilotStubberConfiguration\IndirectionStub.cs" />
+    <Compile Include="PilotStubberConfiguration\PrigSection.cs" />
+    <Compile Include="PilotStubberConfiguration\StubCollection.cs" />
+    <Compile Include="PilotStubberConfiguration\StubElement.cs" />
     <Compile Include="GenericHolder.cs" />
     <Compile Include="IndirectableAttribute.cs" />
     <Compile Include="IndirectionDelegateAttribute.cs" />
@@ -94,6 +94,7 @@
     </None>
     <None Include="PilotStubber.prig.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Urasandesu.Prig.Framework.snk" />
   </ItemGroup>

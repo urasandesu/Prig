@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULNullableTest.cs
+ * File: StubCollection.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,30 +28,22 @@
  */
 
 
-using NUnit.Framework;
-using UntestableLibrary;
-using UntestableLibrary.Prig;
-using Urasandesu.Prig.Framework;
 
-namespace Test.program1.UntestableLibrary.Prig
+using System.Configuration;
+
+namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
-    [TestFixture]
-    public class PULNullableTest
+    [ConfigurationCollection(typeof(StubElement), CollectionType = ConfigurationElementCollectionType.AddRemoveClearMap)]
+    public class StubCollection : ConfigurationElementCollection
     {
-        [Test]
-        public void ToString_should_be_callable_indirectly()
+        protected override ConfigurationElement CreateNewElement()
         {
-            using (new IndirectionsContext())
-            {
-                // Arrange
-                PULNullable<int>.ToString.Body = (ref ULNullable<int> @this) => "42";
+            return new StubElement();
+        }
 
-                // Act
-                var actual = new ULNullable<int>(100).ToString();
-
-                // Assert
-                Assert.AreEqual("42", actual);
-            }
+        protected override object GetElementKey(ConfigurationElement element)
+        {
+            return ((StubElement)element).Name;
         }
     }
 }

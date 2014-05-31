@@ -19,6 +19,20 @@ namespace System.Prig
                 }
             }
         } 
+        public static class TodayGet
+        {
+            public static IndirectionFunc<System.DateTime> Body
+            {
+                set
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.Token = TokenOfTodayGet;
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.DateTime>>>();
+                    holder.AddOrUpdate(info, value);
+                }
+            }
+        } 
         public static class FromBinary
         {
             public static IndirectionFunc<System.Int64, System.DateTime> Body

@@ -35,7 +35,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System;
 
-namespace Urasandesu.Prig.Framework.Configuration
+namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
     public class PrigSection : ConfigurationSection
     {

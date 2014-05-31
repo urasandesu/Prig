@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULNullableTest.cs
+ * File: FarmRoad.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,30 +28,26 @@
  */
 
 
-using NUnit.Framework;
-using UntestableLibrary;
-using UntestableLibrary.Prig;
-using Urasandesu.Prig.Framework;
+using System;
 
-namespace Test.program1.UntestableLibrary.Prig
+namespace program1.MyLibrary
 {
-    [TestFixture]
-    public class PULNullableTest
+    public class FarmRoad
     {
-        [Test]
-        public void ToString_should_be_callable_indirectly()
+        public FarmRoad(RicePaddy a, RicePaddy b, int distance)
         {
-            using (new IndirectionsContext())
-            {
-                // Arrange
-                PULNullable<int>.ToString.Body = (ref ULNullable<int> @this) => "42";
+            A = a;
+            B = b;
+            Distance = distance;
+        }
 
-                // Act
-                var actual = new ULNullable<int>(100).ToString();
+        public RicePaddy A { get; private set; }
+        public RicePaddy B { get; private set; }
+        public int Distance { get; private set; }
 
-                // Assert
-                Assert.AreEqual("42", actual);
-            }
+        public override string ToString()
+        {
+            return string.Format("Farm Road [A: {0}, B: {1}, Distance: {2}]", A, B, Distance);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Test.program1.UntestableLibrary.Prig
     public class PULDictionaryTest
     {
         [Test]
-        public void IsCompatibleKey_ShouldBeCallableIndirectly()
+        public void IsCompatibleKey_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

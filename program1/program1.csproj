@@ -101,6 +101,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyLibrary\FarmRoad.cs" />
+    <Compile Include="MyLibrary\Route.cs" />
+    <Compile Include="MyLibrary\RicePaddy.cs" />
+    <Compile Include="MyLibrary\Village.cs" />
     <Compile Include="MyLibrary\LifeInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

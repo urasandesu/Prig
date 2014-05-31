@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PULNullableTest.cs
+ * File: RicePaddy.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,30 +28,38 @@
  */
 
 
-using NUnit.Framework;
-using UntestableLibrary;
-using UntestableLibrary.Prig;
-using Urasandesu.Prig.Framework;
+using System;
 
-namespace Test.program1.UntestableLibrary.Prig
+namespace program1.MyLibrary
 {
-    [TestFixture]
-    public class PULNullableTest
+    public class RicePaddy
     {
-        [Test]
-        public void ToString_should_be_callable_indirectly()
+        internal RicePaddy(int identifier, Random r)
         {
-            using (new IndirectionsContext())
+            Identifier = identifier;
+            var yield = r.Next();
+            m_yield = yield % 10 == 0 ? default(int?) : yield * 1000;
+        }
+
+        public int Identifier { get; private set; }
+
+        int? m_yield;
+        public void SimulateHarvest()
+        {
+            if (!m_yield.HasValue)
             {
-                // Arrange
-                PULNullable<int>.ToString.Body = (ref ULNullable<int> @this) => "42";
-
-                // Act
-                var actual = new ULNullable<int>(100).ToString();
-
-                // Assert
-                Assert.AreEqual("42", actual);
+                Console.WriteLine("decimate entire villages...");
+                return;
             }
+
+            var r = new Random();
+            for (int i = 0; i < 12; i++)
+                Console.WriteLine("{0}: {1}", new DateTime().AddMonths(i).ToString("MMMM"), r.Next(10) * m_yield.Value);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Rice Paddy: {0}", Identifier.ToString("D3"));
         }
     }
 }

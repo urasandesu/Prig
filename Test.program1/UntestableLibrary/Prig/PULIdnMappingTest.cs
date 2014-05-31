@@ -39,7 +39,7 @@ namespace Test.program1.UntestableLibrary.Prig
     public class PULIdnMappingTest
     {
         [Test]
-        public void basic_ShouldBeCallableIndirectly()
+        public void basic_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {

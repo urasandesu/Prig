@@ -36,7 +36,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using Urasandesu.NAnonym.Collections.Generic;
 
-namespace Urasandesu.Prig.Framework.Configuration
+namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
     public class IndirectionStub
     {

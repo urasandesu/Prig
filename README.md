@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of May 18, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of May 31, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
@@ -42,7 +42,7 @@ Make the following stub settings:
 <configuration>
   
   <configSections>
-    <section name="prig" type="Urasandesu.Prig.Framework.Configuration.PrigSection, Urasandesu.Prig.Framework" />
+    <section name="prig" type="Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework" />
   </configSections>
 
   <!-- 
@@ -86,7 +86,7 @@ Make the following stub settings:
 </configuration>
 ```
 NOTE: 
-* You can see full template in `Urasandesu.Prig.Framework\PilotStubber.prig.template`.
+* In the release package, you can see full template in `Urasandesu.Prig.Framework\PilotStubber.prig.template`.
 
 
 ### Step 2: Generate Stub
@@ -126,7 +126,7 @@ CMD Test.program1>
 
 ```
 NOTE: 
-* Actually, I recommend that you embed the script to the pre-build event on *.csproj. See also `Test.program1\Test.program1.csproj`.
+* Actually, I think that typing the command each time is troublesome. So, I recommend that you embed the script to the pre-build event on *.csproj. If you want to create configurations of each .NET Framework version or processor architecture, see also `Test.program1\Test.program1.csproj` in the release pachage.
 
 
 ### Step 3: Make Tests
@@ -225,7 +225,22 @@ CMD x86>
 
 
 ### Final Step: Refactoring and Get Trig!
-If tests have been created, you can refactor illimitably! Prig helps the test that depends on an untestable library get trig. Enjoy your development!!
+If tests have been created, you can refactor illimitably! For example, you probably can find the result of refactoring as follows: 
+```cs
+using System;
+
+namespace program1.MyLibrary
+{
+    public static class LifeInfo
+    {
+        public static bool IsNowLunchBreak()
+        {
+            return DateTime.Now.Hour == 12; // Better this way, isn't it?
+        }
+    }
+}
+```
+As just described, Prig helps the code that depends on an untestable library get trig. I guarantee you will enjoy your development again!!
 
 
 
