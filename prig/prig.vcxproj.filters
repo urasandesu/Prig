@@ -147,6 +147,12 @@
     <ClInclude Include="prig\HelpCommandFwd.h">
       <Filter>Header Files\prig</Filter>
     </ClInclude>
+    <ClInclude Include="prig\DisassemblerCommand.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\DisassemblerCommandFwd.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -581,12 +587,6 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ExceptionClause.cpp">
       <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyEqualTo.cpp">
-      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyHash.cpp">
-      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
-    </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeEqualTo.cpp">
       <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>
@@ -685,6 +685,12 @@
     </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Profiling\ProfilingSpecialValues.cpp">
       <Filter>Source Files\Urasandesu\Swathe\Profiling</Filter>
+    </ClCompile>
+    <ClCompile Include="prig\DisassemblerCommand.cpp">
+      <Filter>Source Files\prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Version.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

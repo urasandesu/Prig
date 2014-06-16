@@ -44,12 +44,17 @@
 #include <prig/StubberCommandFwd.h>
 #endif
 
+#ifndef PRIG_DISASSEMBLERCOMMANDFWD_H
+#include <prig/DisassemblerCommandFwd.h>
+#endif
+
 namespace prig { 
 
     typedef boost::variant<
         boost::shared_ptr<HelpCommand>, 
         boost::shared_ptr<RunnerCommand>, 
-        boost::shared_ptr<StubberCommand>
+        boost::shared_ptr<StubberCommand>, 
+        boost::shared_ptr<DisassemblerCommand>
     > Command;
 
     namespace ProgramOptionDetail {

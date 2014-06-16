@@ -43,6 +43,10 @@
 #include <prig/StubberCommand.h>
 #endif
 
+#ifndef PRIG_DISASSEMBLERCOMMAND_H
+#include <prig/DisassemblerCommand.h>
+#endif
+
 #ifndef PRIG_COMMANDFACTORY_H
 #include <prig/CommandFactory.h>
 #endif
@@ -69,6 +73,17 @@ namespace prig {
             auto pCommand = make_shared<RunnerCommand>();
             pCommand->SetProcess(process);
             pCommand->SetArguments(arguments);
+            return pCommand;
+        }
+        
+        
+        
+        shared_ptr<DisassemblerCommand> CommandFactoryImpl::MakeDisassemblerCommand(wstring const &asmFullName)
+        {
+            using boost::make_shared;
+
+            auto pCommand = make_shared<DisassemblerCommand>();
+            pCommand->SetAssembly(asmFullName);
             return pCommand;
         }
 

@@ -44,6 +44,10 @@
 #include <prig/StubberCommandFwd.h>
 #endif
 
+#ifndef PRIG_DISASSEMBLERCOMMANDFWD_H
+#include <prig/DisassemblerCommandFwd.h>
+#endif
+
 #ifndef PRIG_COMMANDFACTORYFWD_H
 #include <prig/CommandFactoryFwd.h>
 #endif
@@ -61,6 +65,7 @@ namespace prig {
         public:
             static shared_ptr<HelpCommand> MakeHelpCommand(options_description const &desc);
             static shared_ptr<RunnerCommand> MakeRunnerCommand(wstring const &process, wstring const &arguments);
+            static shared_ptr<DisassemblerCommand> MakeDisassemblerCommand(wstring const &asmFullName);
         };
 
     }   // namespace CommandFactoryDetail {

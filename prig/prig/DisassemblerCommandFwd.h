@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: DisassemblerCommandFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,59 +28,21 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
+#pragma once
+#ifndef PRIG_DISASSEMBLERCOMMANDFWD_H
+#define PRIG_DISASSEMBLERCOMMANDFWD_H
 
-#include "stdafx.h"
+namespace prig { 
 
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
+    namespace DisassemblerCommandDetail {
 
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
-#endif
+        class DisassemblerCommandImpl;
 
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
-#endif
+    }   // namespace DisassemblerCommandDetail {
 
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
-#endif
+    struct DisassemblerCommand;
+    
+}   // namespace prig { 
 
-#ifndef PRIG_DISASSEMBLERCOMMAND_H
-#include <prig/DisassemblerCommand.h>
-#endif
-
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
-
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
-
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
-
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+#endif  // PRIG_DISASSEMBLERCOMMANDFWD_H
 

@@ -479,12 +479,6 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ExceptionClause.cpp">
       <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyEqualTo.cpp">
-      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyHash.cpp">
-      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
-    </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeEqualTo.cpp">
       <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>

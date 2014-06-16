@@ -217,28 +217,11 @@ namespace CWeaverDetail {
 
         auto *pDisp = pDomainProf->GetMetadataDispenser();
         auto const *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
-        auto const &amd = pAsmGen->GetAssemblyMetadata();
-        auto procArch = pAsmGen->GetProcessorArchitectures()[0];
         auto targetIndDllName = wostringstream();
         targetIndDllName << modName;
         targetIndDllName << L"." << pRuntime->GetCORVersion();
-        targetIndDllName << L".v" << amd.usMajorVersion << L"." << amd.usMinorVersion << L"." << amd.usBuildNumber << L"." << amd.usRevisionNumber;
-        switch (procArch.Value())
-        {
-            case ProcessorArchitecture::PA_INTEL:
-                targetIndDllName << L".x86";
-                break;
-            case ProcessorArchitecture::PA_IA64:
-                BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
-            case ProcessorArchitecture::PA_AMD64:
-                targetIndDllName << L".AMD64";
-                break;
-            case ProcessorArchitecture::PA_MSIL:
-                targetIndDllName << L".MSIL";
-                break;
-            default:
-                BOOST_THROW_EXCEPTION(CppAnonymNotSupportedException());
-        }
+        targetIndDllName << L".v" << pAsmGen->GetVersion();
+        targetIndDllName << L"." << pAsmGen->GetProcessorArchitectures()[0];
         targetIndDllName << L".Prig.dll";
         
         return targetIndDllName.str();

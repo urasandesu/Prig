@@ -71,7 +71,7 @@ namespace prig {
                 "Specify options to start with Prig.\n"
                 "\n"
                 "==== EXAMPLE 1 ====\n"
-                "CMD C:\\> prig.exe run -process \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console-x86.exe\" -arguments \"Test.program1.dll /domain=None\"\n"
+                "CMD C:\\> prig run -process \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console-x86.exe\" -arguments \"Test.program1.dll /domain=None\"\n"
                 "\n"
                 "This command executes the process designated by -process option with the program options designated by -arguments option.\n"
                 "\n");
@@ -116,6 +116,49 @@ namespace prig {
         }
 
 
+        
+        Command ReparseToDisassemblerCommand(variables_map const &globalVm, wparsed_options const &globalParsed)
+        {
+            using boost::program_options::include_positional;
+
+            auto dasmlrDesc = options_description
+                (
+                "DISASSEMBLER OPTIONS\n"
+                "Specify options to start with Prig.\n"
+                "\n"
+                "==== EXAMPLE 1 ====\n"
+                "CMD C:\\> prig dasm -assembly \"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\"\n"
+                "\n"
+                "This command disassembles the assembly designated by -assembly option.\n"
+                "\n");
+            
+            dasmlrDesc.add_options()(
+                "help", 
+                "Display help message.\n"
+                "\n")
+                (
+                "assembly", 
+                wvalue<wstring>()->required(), 
+                "Assembly Display Name to disassemble. If its path contains any spaces, you shall surround with \"(double quotes).\n"
+                "This option is mandatory.\n"
+                "\n");
+
+            if (globalVm.count("help"))
+                return CommandFactory::MakeHelpCommand(dasmlrDesc);
+
+            auto opts = collect_unrecognized(globalParsed.options, include_positional);
+            opts.erase(opts.begin());
+
+            auto dasmlrVm = variables_map();
+            auto dasmlrParsed = wcommand_line_parser(opts).options(dasmlrDesc).style(STYLE).run();
+            store(dasmlrParsed, dasmlrVm);
+            notify(dasmlrVm);
+
+            auto asmFullName = dasmlrVm["assembly"].as<wstring>();
+            return CommandFactory::MakeDisassemblerCommand(asmFullName);
+        }
+        
+
 
         Command ProgramOptionImpl::Parse() const
         {
@@ -138,6 +181,7 @@ namespace prig {
                 "Command to execute. Currently supported commands are the followings:\n"
                 "\n"
                 "  * run\n"
+                "  * dasm\n"
                 "\n"
                 "About each command usage, see each command's help.\n"
                 "\n"
@@ -174,6 +218,8 @@ namespace prig {
                     return ReparseToRunnerCommand(globalVm, globalParsed);
                 else if (cmd == L"stub")
                     return ReparseToStubberCommand(globalVm, globalParsed);
+                else if (cmd == L"dasm")
+                    return ReparseToDisassemblerCommand(globalVm, globalParsed);
             }
 
             return CommandFactory::MakeHelpCommand(globalDesc);

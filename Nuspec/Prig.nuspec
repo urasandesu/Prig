@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Prig</id>
+    <version>0.0.0-alpha1</version>
+    <title>Prig: Open Source Alternative to Microsoft Fakes</title>
+    <authors>Akira Sugiura</authors>
+    <owners>Akira Sugiura</owners>
+    <licenseUrl>https://github.com/urasandesu/Prig/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/urasandesu/Prig</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>
+      Prig is a lightweight framework for test indirections in .NET Framework.
+    </summary>
+    <description>
+      Prig(PRototyping jIG) is a framework that generates a Test Double like Microsoft Fakes/Typemock Isolator/Telerik JustMock based on Unmanaged Profiler APIs. This framework enables that any methods are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.
+    </description>
+    <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
+    <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
+    <releaseNotes>Version 0.0.0-alpha.1
+* Pre-release 1.
+* Limited Support for NuGet.
+    </releaseNotes>
+  </metadata>
+  <files>
+    <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.NAnonym.dll" target="lib\net35\" />
+    <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Framework.dll" target="lib\net35\" />
+    <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.NAnonym.dll" target="lib\net40\" />
+    <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Framework.dll" target="lib\net40\" />
+    <file src="..\Release\x64\prig.exe" target="tools\x64\" />
+    <file src="..\Release\x64\Urasandesu.Prig.dll" target="tools\x64\" />
+    <file src="..\Release\x86\prig.exe" target="tools\x86\" />
+    <file src="..\Release\x86\Urasandesu.Prig.dll" target="tools\x86\" />
+    <file src="tools\**\*.*" target="tools" />
+  </files>
+</package>

@@ -168,6 +168,8 @@
   <ItemGroup>
     <ClInclude Include="prig\CommandFactory.h" />
     <ClInclude Include="prig\CommandFactoryFwd.h" />
+    <ClInclude Include="prig\DisassemblerCommand.h" />
+    <ClInclude Include="prig\DisassemblerCommandFwd.h" />
     <ClInclude Include="prig\HelpCommand.h" />
     <ClInclude Include="prig\HelpCommandFwd.h" />
     <ClInclude Include="prig\ProgramOption.h" />
@@ -197,11 +199,10 @@
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\CComClassFactorySlim.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\SemiAutoPtr.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\TypeInfo.cpp" />
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Version.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\BaseSwatheStorage.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ControlFlow.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ExceptionClause.cpp" />
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyEqualTo.cpp" />
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyHash.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeEqualTo.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeHash.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IFieldEqualTo.cpp" />
@@ -230,6 +231,7 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Profiling\ProfilingSpecialValues.cpp" />
     <ClCompile Include="prig.cpp" />
     <ClCompile Include="prig\CommandFactory.cpp" />
+    <ClCompile Include="prig\DisassemblerCommand.cpp" />
     <ClCompile Include="prig\HelpCommand.cpp" />
     <ClCompile Include="prig\ProgramOption.cpp" />
     <ClCompile Include="prig\RunnerCommand.cpp" />

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: DisassemblerCommand.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,59 +28,45 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
-
-#include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
-
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
-#endif
-
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
-#endif
-
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
-#endif
-
+#pragma once
 #ifndef PRIG_DISASSEMBLERCOMMAND_H
-#include <prig/DisassemblerCommand.h>
+#define PRIG_DISASSEMBLERCOMMAND_H
+
+#ifndef PRIG_COMMANDFACTORYFWD_H
+#include <prig/CommandFactoryFwd.h>
 #endif
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
+#ifndef PRIG_DISASSEMBLERCOMMANDFWD_H
+#include <prig/DisassemblerCommandFwd.h>
 #endif
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
+namespace prig { 
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
+    namespace DisassemblerCommandDetail {
 
-    try
+        using std::wstring;
+
+        class DisassemblerCommandImpl
+        {
+        public:
+            int Execute();
+
+        private:
+            friend class CommandFactoryDetail::CommandFactoryImpl;
+
+            void SetAssembly(wstring const &asmFullName);
+
+            wstring m_asmFullName;
+        };
+
+    }   // namespace DisassemblerCommandDetail {
+
+    struct DisassemblerCommand : 
+        DisassemblerCommandDetail::DisassemblerCommandImpl
     {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+    };
+    
+}   // namespace prig { 
+
+#endif  // PRIG_DISASSEMBLERCOMMAND_H
 

@@ -550,12 +550,6 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyNameIterator.cpp">
       <Filter>Source Files\Urasandesu\Swathe\AutoGen\Fusion\BaseClass</Filter>
     </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyEqualTo.cpp">
-      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\IAssemblyHash.cpp">
-      <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
-    </ClCompile>
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeEqualTo.cpp">
       <Filter>Source Files\Urasandesu\Swathe\Metadata</Filter>
     </ClCompile>
@@ -648,6 +642,9 @@
     </ClCompile>
     <ClCompile Include="Urasandesu\Prig\IMethodSigEqualTo.cpp">
       <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Version.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
