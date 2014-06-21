@@ -43,7 +43,8 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((StubElement)element).Name;
+            var internalStub = (StubElement)element;
+            return internalStub.Target.DeclaringType.AssemblyQualifiedName + "." + internalStub.Target.ToString();
         }
     }
 }

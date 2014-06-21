@@ -36,7 +36,7 @@ You probably can't test this code, because `DateTime.Now` returns the value that
 
 
 ### Step 1: Install From NuGet
-Add test project(e.g. `ConsoleApplicationTest`) and run the following command in the Package Manager Console: 
+Run Visual Studio 2013 as Administrator, add test project(e.g. `ConsoleApplicationTest`) and run the following command in the Package Manager Console: 
 ```powershell
 PM> Install-Package Prig -Pre
 ```

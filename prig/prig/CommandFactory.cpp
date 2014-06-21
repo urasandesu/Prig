@@ -78,12 +78,13 @@ namespace prig {
         
         
         
-        shared_ptr<DisassemblerCommand> CommandFactoryImpl::MakeDisassemblerCommand(wstring const &asmFullName)
+        shared_ptr<DisassemblerCommand> CommandFactoryImpl::MakeDisassemblerCommand(wstring const &asmFullName, wstring const &asmPath)
         {
             using boost::make_shared;
 
             auto pCommand = make_shared<DisassemblerCommand>();
             pCommand->SetAssembly(asmFullName);
+            pCommand->SetAssemblyFrom(asmPath);
             return pCommand;
         }
 

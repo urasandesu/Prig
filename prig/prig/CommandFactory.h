@@ -65,7 +65,7 @@ namespace prig {
         public:
             static shared_ptr<HelpCommand> MakeHelpCommand(options_description const &desc);
             static shared_ptr<RunnerCommand> MakeRunnerCommand(wstring const &process, wstring const &arguments);
-            static shared_ptr<DisassemblerCommand> MakeDisassemblerCommand(wstring const &asmFullName);
+            static shared_ptr<DisassemblerCommand> MakeDisassemblerCommand(wstring const &asmFullName, wstring const &asmPath);
         };
 
     }   // namespace CommandFactoryDetail {

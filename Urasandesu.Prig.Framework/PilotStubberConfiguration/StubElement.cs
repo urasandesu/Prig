@@ -40,13 +40,13 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
     public class StubElement : ConfigurationElement
     {
-        [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
+        [ConfigurationProperty("name", IsRequired = true)]
         public string Name
         {
             get { return (string)base["name"]; }
         }
 
-        [ConfigurationProperty("alias")]
+        [ConfigurationProperty("alias", IsRequired = true)]
         public string Alias
         {
             get { return (string)base["alias"]; }

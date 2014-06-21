@@ -124,12 +124,17 @@ namespace prig {
             auto dasmlrDesc = options_description
                 (
                 "DISASSEMBLER OPTIONS\n"
-                "Specify options to start with Prig.\n"
+                "Specify options to disassemble with Prig.\n"
                 "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig dasm -assembly \"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\"\n"
                 "\n"
                 "This command disassembles the assembly designated by -assembly option.\n"
+                "\n"
+                "==== EXAMPLE 2 ====\n"
+                "CMD C:\\> prig dasm -assemblyfrom \"C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\mscorlib.dll\"\n"
+                "\n"
+                "This command disassembles the assembly designated by -assemblyfrom option.\n"
                 "\n");
             
             dasmlrDesc.add_options()(
@@ -138,9 +143,15 @@ namespace prig {
                 "\n")
                 (
                 "assembly", 
-                wvalue<wstring>()->required(), 
-                "Assembly Display Name to disassemble. If its path contains any spaces, you shall surround with \"(double quotes).\n"
-                "This option is mandatory.\n"
+                wvalue<wstring>(), 
+                "Assembly Display Name to disassemble. If its name contains any spaces, you shall surround with \"(double quotes).\n"
+                "Either this option or 'assemblyfrom' is mandatory.\n"
+                "\n")
+                (
+                "assemblyfrom", 
+                wvalue<wstring>(), 
+                "Assembly Path to disassemble. If its path contains any spaces, you shall surround with \"(double quotes).\n"
+                "Either this option or 'assembly' is mandatory.\n"
                 "\n");
 
             if (globalVm.count("help"))
@@ -154,8 +165,12 @@ namespace prig {
             store(dasmlrParsed, dasmlrVm);
             notify(dasmlrVm);
 
-            auto asmFullName = dasmlrVm["assembly"].as<wstring>();
-            return CommandFactory::MakeDisassemblerCommand(asmFullName);
+            auto asmFullName = !dasmlrVm.count("assembly") ? wstring() : dasmlrVm["assembly"].as<wstring>();
+            auto asmPath = !dasmlrVm.count("assemblyfrom") ? wstring() : dasmlrVm["assemblyfrom"].as<wstring>();
+            if (asmFullName.empty() && asmPath.empty() || !asmFullName.empty() && !asmPath.empty())
+                return CommandFactory::MakeHelpCommand(dasmlrDesc);
+            
+            return CommandFactory::MakeDisassemblerCommand(asmFullName, asmPath);
         }
         
 

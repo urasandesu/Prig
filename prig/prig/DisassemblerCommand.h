@@ -44,6 +44,7 @@ namespace prig {
 
     namespace DisassemblerCommandDetail {
 
+        using boost::filesystem::path;
         using std::wstring;
 
         class DisassemblerCommandImpl
@@ -55,8 +56,10 @@ namespace prig {
             friend class CommandFactoryDetail::CommandFactoryImpl;
 
             void SetAssembly(wstring const &asmFullName);
+            void SetAssemblyFrom(path const &asmPath);
 
             wstring m_asmFullName;
+            path m_asmPath;
         };
 
     }   // namespace DisassemblerCommandDetail {

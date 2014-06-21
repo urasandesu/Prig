@@ -43,31 +43,45 @@ namespace prig {
 
     namespace DisassemblerCommandDetail {
         
-        namespace CsvAssemblyNameExDetail {
-            
-            using Urasandesu::CppAnonym::Utilities::AutoPtr;
-            using Urasandesu::Swathe::Fusion::AssemblyNameRange;
-            using Urasandesu::Swathe::Metadata::IAssembly;
-            using Urasandesu::Swathe::Metadata::MetadataDispenser;
+        namespace AbstractCsvAssemblyNameExDetail {
+
+            using namespace Urasandesu::Swathe::Hosting;
+            using namespace Urasandesu::Swathe::Metadata;
             using std::wostream;
 
-            class CsvAssemblyNameEx
+            class AbstractCsvAssemblyNameEx
             {
             public:
-                CsvAssemblyNameEx(AutoPtr<AssemblyNameRange> const &pAsmNames, MetadataDispenser const *pDisp) : 
-                    m_pAsmNames(pAsmNames), 
-                    m_pDisp(pDisp)
+                AbstractCsvAssemblyNameEx(RuntimeHost const *pRuntime) : 
+                    m_pRuntime(pRuntime), 
+                    m_pDisp(nullptr)
                 { }
             
+                MetadataDispenser const *GetMetadataDispenser() const
+                {
+                    if (!m_pDisp)
+                    {
+                        auto const *pMetaInfo = m_pRuntime->GetInfo<MetadataInfo>();
+                        m_pDisp = pMetaInfo->CreateDispenser();
+                    }
+                    _ASSERTE(m_pDisp);
+                    return m_pDisp;
+                }
+
+            protected: 
+                virtual IAssemblyPtrRange GetAssemblies() const = 0;
+
+                RuntimeHost const *m_pRuntime;
+
             private:
-                friend wostream &operator <<(wostream &os, CsvAssemblyNameEx &asmNameEx)
+                friend wostream &operator <<(wostream &os, AbstractCsvAssemblyNameEx const &asmNameEx)
                 {
                     using std::endl;
 
-                    os << L"Name,Version,Culture,PublicKeyToken,ProcessorArchitecture,FullName,ImageRuntimeVersion" << endl;
-                    BOOST_FOREACH (auto const &pAsmName, *asmNameEx.m_pAsmNames)
+                    os << L"Name,Version,Culture,PublicKeyToken,ProcessorArchitecture,FullName,ImageRuntimeVersion,Location" << endl;
+                    auto asms = asmNameEx.GetAssemblies();
+                    BOOST_FOREACH (auto const *pAsm, asms)
                     {
-                        auto const *pAsm = asmNameEx.m_pDisp->GetAssembly(pAsmName->GetFullName());
                         os << ToCsv(pAsm) << endl;
                     }
 
@@ -87,17 +101,98 @@ namespace prig {
                     csv << L"," << pAsm->GetProcessorArchitectures()[0];
                     csv << L",\"" << pAsm->GetFullName() << "\"";
                     csv << L"," << pAsm->GetImageRuntimeVersion();
+                    csv << L",\"" << pAsm->GetLocation().native() << "\"";
                     
                     return csv.str();
                 }
 
-                AutoPtr<AssemblyNameRange> m_pAsmNames;
-                MetadataDispenser const *m_pDisp;
+                mutable MetadataDispenser const *m_pDisp;
             };
 
-        }
+        }   // namespace AbstractCsvAssemblyNameExDetail {
+
+        using AbstractCsvAssemblyNameExDetail::AbstractCsvAssemblyNameEx;
+
+
+
+        namespace CsvAssemblyNameExDetail {
+            
+            using namespace Urasandesu::CppAnonym::Utilities;
+            using namespace Urasandesu::Swathe::Fusion;
+            using namespace Urasandesu::Swathe::Hosting;
+            using namespace Urasandesu::Swathe::Metadata;
+
+            class CsvAssemblyNameEx : 
+                public AbstractCsvAssemblyNameEx
+            {
+            public:
+                CsvAssemblyNameEx(RuntimeHost const *pRuntime, wstring const &asmFullName) : 
+                    AbstractCsvAssemblyNameEx(pRuntime), 
+                    m_asmFullName(asmFullName)
+                { }
+            
+            protected: 
+                IAssemblyPtrRange GetAssemblies() const
+                {
+                    using boost::adaptors::transformed;
+                    using std::function;
+
+                    _ASSERTE(!m_asmFullName.empty());
+
+                    auto const *pFuInfo = m_pRuntime->GetInfo<FusionInfo>();
+                    m_pCondition = pFuInfo->NewAssemblyName(m_asmFullName, NewAssemblyNameFlags::NANF_CANOF_PARSE_DISPLAY_NAME);
+                    m_pAsmNames = pFuInfo->EnumerateAssemblyName(m_pCondition, AssemblyCacheFlags::ACF_GAC);
+                    
+                    auto toAssembly = function<IAssembly const *(AutoPtr<AssemblyName const> const &)>();
+                    toAssembly = [this](AutoPtr<AssemblyName const> const &pAsmName) { return GetMetadataDispenser()->GetAssembly(pAsmName->GetFullName()); };
+                    return *m_pAsmNames | transformed(toAssembly);
+                }
+
+            private:
+                mutable AutoPtr<AssemblyName> m_pCondition;
+                mutable AutoPtr<AssemblyNameRange> m_pAsmNames;
+                wstring m_asmFullName;
+            };
+
+        }   // namespace CsvAssemblyNameExDetail {
 
         using CsvAssemblyNameExDetail::CsvAssemblyNameEx;
+
+
+
+        namespace CsvAssemblyNameExFromDetail {
+            
+            using namespace Urasandesu::Swathe::Hosting;
+            using namespace Urasandesu::Swathe::Metadata;
+            using std::vector;
+
+            class CsvAssemblyNameExFrom : 
+                public AbstractCsvAssemblyNameEx
+            {
+            public:
+                CsvAssemblyNameExFrom(RuntimeHost const *pRuntime, path const &asmPath) : 
+                    AbstractCsvAssemblyNameEx(pRuntime), 
+                    m_asmPath(asmPath)
+                { }
+            
+            protected: 
+                IAssemblyPtrRange GetAssemblies() const
+                {
+                    _ASSERTE(!m_asmPath.empty());
+
+                    m_asms = vector<IAssembly const *>();
+                    m_asms.push_back(GetMetadataDispenser()->GetAssemblyFrom(m_asmPath));
+                    return m_asms;
+                }
+
+            private:
+                mutable vector<IAssembly const *> m_asms;
+                path m_asmPath;
+            };
+
+        }   // namespace CsvAssemblyNameExFromDetail {
+
+        using CsvAssemblyNameExFromDetail::CsvAssemblyNameExFrom;
         
         
         
@@ -105,11 +200,11 @@ namespace prig {
         {
             using namespace Urasandesu::CppAnonym::Traits;
             using namespace Urasandesu::Swathe::Hosting;
-            using namespace Urasandesu::Swathe::Fusion;
-            using namespace Urasandesu::Swathe::Metadata;
             using boost::remove_reference;
             using std::wcout;
             using std::map;
+            
+            _ASSERTE(!m_asmFullName.empty() || !m_asmPath.empty());
             
             auto const *pHost = HostInfo::CreateHost();
             auto const &runtimes = pHost->GetRuntimes();
@@ -120,14 +215,10 @@ namespace prig {
             auto orderedRuntimes = map<Key, Mapped>(runtimes.begin(), runtimes.end());
             auto const *pLatestRuntime = (*orderedRuntimes.rbegin()).second;
             
-            auto const *pFuInfo = pLatestRuntime->GetInfo<FusionInfo>();
-            auto pCondition = pFuInfo->NewAssemblyName(m_asmFullName, NewAssemblyNameFlags::NANF_CANOF_PARSE_DISPLAY_NAME);
-            auto pAsmNames = pFuInfo->EnumerateAssemblyName(pCondition, AssemblyCacheFlags::ACF_GAC);
-            
-            auto const *pMetaInfo = pLatestRuntime->GetInfo<MetadataInfo>();
-            auto *pDisp = pMetaInfo->CreateDispenser();
-            
-            wcout << CsvAssemblyNameEx(pAsmNames, pDisp);
+            if (!m_asmFullName.empty())
+                wcout << CsvAssemblyNameEx(pLatestRuntime, m_asmFullName);
+            else
+                wcout << CsvAssemblyNameExFrom(pLatestRuntime, m_asmPath);
             
             return 0;
         }
@@ -137,8 +228,15 @@ namespace prig {
         void DisassemblerCommandImpl::SetAssembly(wstring const &asmFullName)
         {
             _ASSERTE(m_asmFullName.empty());
-            _ASSERTE(!asmFullName.empty());
             m_asmFullName = asmFullName;
+        }
+
+        
+        
+        void DisassemblerCommandImpl::SetAssemblyFrom(path const &asmPath)
+        {
+            _ASSERTE(m_asmPath.empty());
+            m_asmPath = asmPath;
         }
 
     } // namespace DisassemblerCommandDetail {

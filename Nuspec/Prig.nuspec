@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>0.0.0-alpha1</version>
+    <version>0.0.0-alpha2</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,7 +17,15 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 0.0.0-alpha.1
+    <releaseNotes>Version 0.0.0-alpha2
+* Pre-release 2.
+* In Add-PrigAssembly command, added the feature to enable that the full path to stubbing assembly is specified. This will allow that you can add Prig Assembly that is not registered to GAC.
+* Added support for generating constraints of generic parameters automatically.
+* Fixed Issue #1: BadImageFormatException occurred.
+* Fixed Issue #2: Shall the name attribute be unique in the Stub Setting?
+
+
+Version 0.0.0-alpha1
 * Pre-release 1.
 * Limited Support for NuGet.
     </releaseNotes>
