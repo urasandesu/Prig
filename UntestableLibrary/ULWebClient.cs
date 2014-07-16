@@ -1,5 +1,5 @@
 ﻿/* 
- * File: Program.cs
+ * File: ULWebClient.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,27 +29,45 @@
 
 
 
-using program1.MyLibrary;
 using System;
 using System.ComponentModel;
-using UntestableLibrary;
+using System.IO;
+using System.Threading;
 
-namespace program1
+namespace UntestableLibrary
 {
-    class Program
+    public class ULWebClient
     {
-        static void Main(string[] args)
+        public event AsyncCompletedEventHandler DownloadFileCompleted;
+
+        public void DownloadFileAsync(Uri address)
         {
-            //Console.WriteLine(LifeInfo.IsNowLunchBreak() ? "お昼休みなう！" : "お仕事なう・・・");
-            var client = new ULWebClient();
-            client.DownloadFileCompleted += client_DownloadFileCompleted;
-            client.DownloadFileAsync(new Uri("http://google.co.jp/"));
-            Console.ReadLine();
+            var thread = new Thread(() =>
+            {
+                try
+                {
+                    Thread.Sleep(5000); // simulate heavy network traffic
+
+                    var fileName = Path.GetTempFileName();
+                    using (var sw = new StreamWriter(fileName))
+                        sw.WriteLine(Guid.NewGuid());
+                    OnDownloadFileCompleted(null, false, fileName);
+                }
+                catch (Exception e)
+                {
+                    OnDownloadFileCompleted(e, true, null);
+                }
+            });
+            thread.Start();
         }
 
-        static void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        void OnDownloadFileCompleted(Exception error, bool cancelled, params object[] userState)
         {
-            Console.WriteLine("書き込み完了！: {0}", ((object[])e.UserState)[0]);
+            var handler = DownloadFileCompleted;
+            if (handler == null)
+                return;
+
+            handler(this, new AsyncCompletedEventArgs(error, cancelled, userState));
         }
     }
 }

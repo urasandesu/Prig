@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>0.0.0-alpha2</version>
+    <version>0.0.0-alpha3</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,7 +17,14 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 0.0.0-alpha2
+    <releaseNotes>Version 0.0.0-alpha3
+* Pre-release 3.
+* Fixed Issue #3: Test is freezed when hijacking the method to add an event handler.
+* Fixed Issue #4: Multiple Prig assemblies can't be added.
+* Fixed Issue #5: Build was failed when adding Prig assembly for 3rd party library.
+
+
+Version 0.0.0-alpha2
 * Pre-release 2.
 * In Add-PrigAssembly command, added the feature to enable that the full path to stubbing assembly is specified. This will allow that you can add Prig Assembly that is not registered to GAC.
 * Added support for generating constraints of generic parameters automatically.

@@ -156,6 +156,7 @@
     <Compile Include="System\Prig\PDateTimeTest.cs" />
     <Compile Include="System\Text\Prig\PStringBuilderTest.cs" />
     <Compile Include="System\Threading\Prig\PInterlockedTest.cs" />
+    <Compile Include="UntestableLibrary\Prig\ULWebClientTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULIntPtrTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULIdnMappingTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULDictionaryTest.cs" />
