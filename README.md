@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of July 16, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of July 27, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
@@ -127,7 +127,7 @@ namespace ConsoleApplicationTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
+                PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
@@ -143,7 +143,7 @@ namespace ConsoleApplicationTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 12, 00, 00);
+                PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 12, 00, 00);
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
@@ -159,7 +159,7 @@ namespace ConsoleApplicationTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 13, 00, 00);
+                PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 13, 00, 00);
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
@@ -174,7 +174,7 @@ namespace ConsoleApplicationTest
 
 
 ### Step 5: Run Tests
-In fact, to enable any profiler based mocking tool, you has to set the environment variables. Microsoft Fakes/Typemock Isolator/Telerik JustMock provides the small runner it required, it is true at Prig. So use `prig.exe` to run the test as follows(continue in the Package Manager Console): 
+In fact, to enable any profiler based mocking tool, you have to set the environment variables. Microsoft Fakes/Typemock Isolator/Telerik JustMock provides the small runner it required, it is true at Prig. So use `prig.exe` to run the test as follows(continue in the Package Manager Console): 
 ```powershell
 PM> cd <Your Test Project's Output Directory(e.g. cd .\ConsoleApplicationTest\bin\Debug)>
 PM> prig run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "ConsoleApplicationTest.dll /domain=None /framework=v4.0"
@@ -267,6 +267,10 @@ Performing configuration checks
 Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the `Build` menu, and open `Configuration Manager...`. On `Configuration Manager` dialog box, in the `Active Solution Platform` drop-down list, select the `<New...>` option. After the `New Solution Platform` dialog box is opened, in the `Type or select the new platform` drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.
 * [NUnit 2.6.3.13283](http://www.nunit.org/)  
 Install using with the installer(NUnit-2.6.3.msi).
+* [Modeling SDK for Microsoft Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40754)  
+Install using with the installer(VS_VmSdk.exe).
+* [NuGet Command-Line Utility](http://docs.nuget.org/docs/start-here/installing-nuget)  
+Download command line utility `nuget.exe`, then append its path to the environment variable `path`.
 
 
 

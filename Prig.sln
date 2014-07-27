@@ -6,13 +6,13 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Urasandesu.Prig", "Urasandesu.Prig\Urasandesu.Prig.vcxproj", "{3CCF69E5-3F2E-42FE-ACC4-085B2EA0099A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Urasandesu.PrigPS", "Urasandesu.Prig\Urasandesu.PrigPS.vcxproj", "{5EA828FC-CC28-4622-A260-5398F5962212}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3CCF69E5-3F2E-42FE-ACC4-085B2EA0099A} = {3CCF69E5-3F2E-42FE-ACC4-085B2EA0099A}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test.Urasandesu.Prig", "Test.Urasandesu.Prig\Test.Urasandesu.Prig.vcxproj", "{5A736966-D606-45DA-A6FB-796931F5053E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.Prig.Framework", "Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj", "{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}"
+	ProjectSection(ProjectDependencies) = preProject
+		{C04A5E86-30E1-4C38-B916-324D000E240E} = {C04A5E86-30E1-4C38-B916-324D000E240E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.Prig.Framework", "Test.Urasandesu.Prig.Framework\Test.Urasandesu.Prig.Framework.csproj", "{97CDD0F8-724B-48A1-8925-8500117EAEE9}"
 EndProject
@@ -33,13 +33,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NAnonym", "NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj", "{C04A5E86-30E1-4C38-B916-324D000E240E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test.prig", "Test.prig\Test.prig.vcxproj", "{5EEE8D5F-2F36-4319-91E1-0E547CD9E5FB}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A} = {B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "program1", "program1\program1.csproj", "{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}"
+	ProjectSection(ProjectDependencies) = preProject
+		{23389061-145F-4CB1-86ED-64A9F35F52A6} = {23389061-145F-4CB1-86ED-64A9F35F52A6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.program1", "Test.program1\Test.program1.csproj", "{95E1F039-6E0F-4276-934B-1DB270CF6334}"
+	ProjectSection(ProjectDependencies) = preProject
+		{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A} = {B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}
+		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0} = {68A62EF4-B2AD-4634-8961-F66C2D60CBB0}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Swathe", "Swathe", "{C7F1C2D7-3363-499C-89A6-12C3F63E86DE}"
 EndProject

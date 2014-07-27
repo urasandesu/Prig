@@ -44,7 +44,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULNullable<int>.ToString.Body = (ref ULNullable<int> @this) => "42";
+                PULNullable<int>.ToString().Body = (ref ULNullable<int> @this) => "42";
 
                 // Act
                 var actual = new ULNullable<int>(100).ToString();

@@ -48,7 +48,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.NowGet.Body = () => new DateTime(2014, 02, 14, 11, 30, 55, 00);
+                PDateTime.NowGet().Body = () => new DateTime(2014, 02, 14, 11, 30, 55, 00);
 
                 // Act
                 var actual = DateTime.Now;
@@ -65,7 +65,7 @@ namespace Test.program1.System.Prig
             {
                 // Arrange
                 var count = 0;
-                PDateTime.NowGet.Body = () =>
+                PDateTime.NowGet().Body = () =>
                 {
                     if (5 <= ++count)
                         return new DateTime(2013, 12, 23, 11, 22, 33, 44);
@@ -99,7 +99,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.FromBinary.Body = _ => new DateTime(2014, 12, 23, 01, 02, 03, 00);
+                PDateTime.FromBinary().Body = _ => new DateTime(2014, 12, 23, 01, 02, 03, 00);
 
                 // Act
                 var dateData = DateTime.Now.ToBinary();
@@ -116,7 +116,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.DoubleDateToTicks.Body = value => 635233945530440000L;
+                PDateTime.DoubleDateToTicks().Body = value => 635233945530440000L;
 
                 // Act
                 var oaDate = DateTime.Now.ToOADate();
@@ -133,7 +133,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTimeParse.TryParse.Body = (string s, DateTimeFormatInfo dtfi, DateTimeStyles styles, out DateTime result) =>
+                PDateTimeParse.TryParse().Body = (string s, DateTimeFormatInfo dtfi, DateTimeStyles styles, out DateTime result) =>
                 {
                     result = new DateTime(2014, 02, 14, 11, 30, 55, 00);
                     return true;
@@ -155,7 +155,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.CompareTo.Body = (ref DateTime @this, object value) => ((DateTime)value).CompareTo(new DateTime(2013, 12, 23));
+                PDateTime.CompareTo().Body = (ref DateTime @this, object value) => ((DateTime)value).CompareTo(new DateTime(2013, 12, 23));
 
                 // Act
                 var actual = DateTime.Now.CompareTo((object)new DateTime(2013, 12, 23));

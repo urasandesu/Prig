@@ -46,8 +46,8 @@ namespace Test.program1.MyLibraryTest
             {
                 // Arrange
                 var actualValue = 0;
-                PRandom.Next.Body = @this => 10;
-                PNullable<int>.Constructor.Body = (ref Nullable<int> @this, int value) =>
+                PRandom.Next().Body = @this => 10;
+                PNullable<int>.Constructor().Body = (ref Nullable<int> @this, int value) =>
                 {
                     actualValue = value;
                     @this = IndirectionsContext.ExecuteOriginal(() => new Nullable<int>(value));
@@ -72,8 +72,8 @@ namespace Test.program1.MyLibraryTest
             {
                 // Arrange
                 var actualValue = 0;
-                PRandom.Next.Body = @this => 9;
-                PNullable<int>.Constructor.Body = (ref Nullable<int> @this, int value) =>
+                PRandom.Next().Body = @this => 9;
+                PNullable<int>.Constructor().Body = (ref Nullable<int> @this, int value) =>
                 {
                     actualValue = value;
                     @this = IndirectionsContext.ExecuteOriginal(() => new Nullable<int>(value));

@@ -45,7 +45,7 @@ namespace Test.program1.System.Globalization.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PJapaneseLunisolarCalendar.GetYearInfo.Body = (@this, lunarYear, index) => 41;
+                PJapaneseLunisolarCalendar.GetYearInfo().Body = (@this, lunarYear, index) => 41;
 
                 // Act
                 var calendar = new JapaneseLunisolarCalendar();
@@ -54,6 +54,31 @@ namespace Test.program1.System.Globalization.Prig
                 // Assert
                 // Before setting indirection: 平成 26 年 閏 9
                 Assert.AreEqual(42, actual);
+            }
+        }
+
+
+
+        [Test]
+        public void GetYearInfo_should_be_callable_indirectly_against_only_specified_instance()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                var calendar = new JapaneseLunisolarCalendar();
+
+                var calendarProxy = new PProxyJapaneseLunisolarCalendar();
+                calendarProxy.GetEra().Body = (@this, time) => calendar.Eras[0];
+                calendarProxy.GetGregorianYear().Body = (@this, year, era) => 2000;
+                calendarProxy.GetYearInfo().Body = (@this, lunarYear, index) => 41;
+                var calendar_sut = (JapaneseLunisolarCalendar)calendarProxy;
+
+                // Act
+                var actual = calendar_sut.GetLeapMonth(26, calendar.Eras[0]);
+
+                // Assert
+                Assert.AreEqual(42, actual);
+                Assert.AreNotEqual(calendar.GetLeapMonth(26, calendar.Eras[0]), actual);
             }
         }
     }

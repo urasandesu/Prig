@@ -1,0 +1,717 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".g.cs" #>
+<#
+/* 
+ * File: IndirectionDelegates.tt
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+var templates = new[] 
+{ 
+    new GenericDelegateTemplate("IndirectionAction",              0, 0, 17, 0, 0, false), 
+    new GenericDelegateTemplate("IndirectionOutAction",           0, 0, 17, 1, 0, false), 
+    new GenericDelegateTemplate("IndirectionOutOutAction",        0, 0, 17, 2, 0, false), 
+    new GenericDelegateTemplate("IndirectionRefAction",           0, 0, 17, 0, 1, false), 
+    new GenericDelegateTemplate("IndirectionRefRefAction",        0, 0, 17, 0, 2, false), 
+    new GenericDelegateTemplate("IndirectionRefThisAction",       1, 1, 16, 0, 0, false), 
+    new GenericDelegateTemplate("IndirectionRefThisOutAction",    1, 0, 17, 1, 0, false), 
+    new GenericDelegateTemplate("IndirectionRefThisOutOutAction", 1, 0, 17, 2, 0, false), 
+    new GenericDelegateTemplate("IndirectionRefThisRefAction",    1, 0, 17, 0, 1, false), 
+    new GenericDelegateTemplate("IndirectionRefThisRefRefAction", 1, 0, 17, 0, 2, false), 
+    new GenericDelegateTemplate("IndirectionFunc",                0, 0, 17, 0, 0, true), 
+    new GenericDelegateTemplate("IndirectionOutFunc",             0, 0, 17, 1, 0, true), 
+    new GenericDelegateTemplate("IndirectionOutOutFunc",          0, 0, 17, 2, 0, true), 
+    new GenericDelegateTemplate("IndirectionRefFunc",             0, 0, 17, 0, 1, true), 
+    new GenericDelegateTemplate("IndirectionRefRefFunc",          0, 0, 17, 0, 2, true), 
+    new GenericDelegateTemplate("IndirectionRefThisFunc",         1, 1, 16, 0, 0, true), 
+    new GenericDelegateTemplate("IndirectionRefThisOutFunc",      1, 0, 17, 1, 0, true), 
+    new GenericDelegateTemplate("IndirectionRefThisOutOutFunc",   1, 0, 17, 2, 0, true), 
+    new GenericDelegateTemplate("IndirectionRefThisRefFunc",      1, 0, 17, 0, 1, true), 
+    new GenericDelegateTemplate("IndirectionRefThisRefRefFunc",   1, 0, 17, 0, 2, true), 
+};
+#>
+/* 
+ * File: IndirectionDelegates.g.cs
+ * 
+ * Author: Akira Sugiura (urasandesu@gmail.com)
+ * 
+ * 
+ * Copyright (c) 2014 Akira Sugiura
+ *  
+ *  This software is MIT License.
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+
+
+using System;
+using Urasandesu.NAnonym;
+using Urasandesu.NAnonym.Mixins.System;
+
+namespace Urasandesu.Prig.Framework
+{
+<#
+foreach (var template in templates)
+{
+#>
+<#
+    foreach (var dlgtDef in template.DelegateDefinitions)
+    {
+#>
+    [IndirectionDelegate]
+    public delegate <#= dlgtDef.DefineReturnType() #> <#= dlgtDef.Name #><#= dlgtDef.DefineGenericArguments() #>(<#= dlgtDef.DefineParameters() #>);
+
+<#
+    }
+#>
+
+
+<#
+    foreach (var methodDef in template.MethodDefinitions)
+    {
+#>
+    public static partial class IndirectionDelegates
+    {
+        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfStatic<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(ref <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> cache, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
+        {
+            if (cache == null)
+            {
+                var dlgt = type.GetMethodDelegate(name, new Type[] { <#= methodDef.LoadParameterTypes() #> });
+                if (dlgt == null)
+                    throw new ArgumentException(string.Format("The method '{0}' is not found in the type '{1}'.", name, type));
+                cache = ToStatic<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+            }
+            var _cache = cache; <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
+            <#= methodDef.StoreExecutedResult() #>IndirectionsContext.ExecuteOriginal(() => _cache(<#= methodDef.LoadParametersWithAttributes() #>)); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
+            return <#= methodDef.LoadExecutedResult() #>;
+        }
+
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> ToStatic<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Exec exec)
+        {
+            return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
+            {
+                <#= methodDef.StoreDefaultValueToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreDefaultValueToResultParameters()) ? "" : ";" #>
+                var args = new object[] { <#= methodDef.LoadParameters() #> };
+                <#= methodDef.StoreExecutedResult() #>exec(null, args);
+                <#= methodDef.StoreArgumentsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreArgumentsToResultParameters()) ? "" : ";" #>
+                return <#= methodDef.LoadExecutedResult() #>;
+            });
+        }
+
+<#
+        if (!methodDef.FirstRefParameterDefinitions.Any())
+        {
+#>
+        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfInstance<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(ref <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> cache, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
+        {
+            if (cache == null)
+            {
+                var dlgt = type.GetMethodDelegate(name, new Type[] { <#= methodDef.LoadParameterTypes(2) #> });
+                if (dlgt == null)
+                    throw new ArgumentException(string.Format("The method '{0}' is not found in the type '{1}'.", name, type));
+                cache = ToInstance<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+            }
+            var _cache = cache; <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
+            <#= methodDef.StoreExecutedResult() #>IndirectionsContext.ExecuteOriginal(() => _cache(<#= methodDef.LoadParametersWithAttributes() #>)); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
+            return <#= methodDef.LoadExecutedResult() #>;
+        }
+
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> ToInstance<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Exec exec)
+        {
+            return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
+            {
+                <#= methodDef.StoreDefaultValueToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreDefaultValueToResultParameters()) ? "" : ";" #>
+                var args = new object[] { <#= methodDef.LoadParameters(2) #> };
+                <#= methodDef.StoreExecutedResult() #>exec(<#= string.IsNullOrEmpty(methodDef.LoadParameters(1, 1)) ? "null" : methodDef.LoadParameters(1, 1) #>, args);
+                <#= methodDef.StoreArgumentsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreArgumentsToResultParameters()) ? "" : ";" #>
+                return <#= methodDef.LoadExecutedResult() #>;
+            });
+        }
+<#
+        }
+#>
+    }
+
+<#
+    }
+#>
+<#
+}
+#>
+}
+
+<#+
+class GenericDelegateTemplate
+{
+    readonly string m_name;
+    readonly int m_firstRefParamCount;
+    readonly int m_middleParamStartIndex;
+    readonly int m_middleParamCount;
+    readonly int m_lastOutParamCount;
+    readonly int m_lastRefParamCount;
+    readonly bool m_hasReturn;
+    public GenericDelegateTemplate(string name, int firstRefParamCount, int middleParamStartIndex, int middleParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn)
+    {
+        m_name = name;
+        m_firstRefParamCount = firstRefParamCount;
+        m_middleParamStartIndex = middleParamStartIndex;
+        m_middleParamCount = middleParamCount;
+        m_lastOutParamCount = lastOutParamCount;
+        m_lastRefParamCount = lastRefParamCount;
+        m_hasReturn = hasReturn;
+    }
+
+    IEnumerable<GenericInvokerDefinition> m_dlgtDefs;
+    public IEnumerable<GenericInvokerDefinition> DelegateDefinitions
+    {
+        get
+        {
+            if (m_dlgtDefs == null)
+                m_dlgtDefs = MakeDelegateDefinitions(m_name, m_firstRefParamCount, m_middleParamStartIndex, m_middleParamCount, m_lastOutParamCount, m_lastRefParamCount, m_hasReturn);
+            return m_dlgtDefs;
+        }
+    }
+
+    IEnumerable<GenericInvokerDefinition> m_methodDefs;
+    public IEnumerable<GenericInvokerDefinition> MethodDefinitions
+    {
+        get
+        {
+            if (m_methodDefs == null)
+                m_methodDefs = MakeMethodDefinitions(m_name, m_firstRefParamCount, m_middleParamStartIndex, m_middleParamCount, m_lastOutParamCount, m_lastRefParamCount, m_hasReturn);
+            return m_methodDefs;
+        }
+    }
+
+    static IEnumerable<GenericInvokerDefinition> MakeDelegateDefinitions(string name, int firstRefParamCount, int middleParamStartIndex, int middleParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn)
+    {
+        var firstRefParamDefs = default(IEnumerable<GenericResultParameterDefinition>);
+        var lastOutParamDefs = default(IEnumerable<GenericResultParameterDefinition>);
+        var lastRefParamDefs = default(IEnumerable<GenericResultParameterDefinition>);
+        var retDef = default(GenericReturnDefinition);
+        FillCommonSignatureDefinitions(firstRefParamCount, lastOutParamCount, lastRefParamCount, hasReturn, ref firstRefParamDefs, ref lastOutParamDefs, ref lastRefParamDefs, ref retDef);
+        for (int i = middleParamStartIndex; i < middleParamCount + middleParamStartIndex; i++)
+        {
+            var middleParamDefs = MakeInParameterDefinitions(i);
+            yield return new GenericInvokerDefinition(name, firstRefParamDefs, middleParamDefs, lastOutParamDefs, lastRefParamDefs, retDef);
+        }
+    }
+
+    static IEnumerable<GenericInvokerDefinition> MakeMethodDefinitions(string name, int firstRefParamCount, int middleParamStartIndex, int middleParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn)
+    {
+        var firstRefParamDefs = default(IEnumerable<GenericResultParameterDefinition>);
+        var lastOutParamDefs = default(IEnumerable<GenericResultParameterDefinition>);
+        var lastRefParamDefs = default(IEnumerable<GenericResultParameterDefinition>);
+        var retDef = default(GenericReturnDefinition);
+        FillCommonSignatureDefinitions(firstRefParamCount, lastOutParamCount, lastRefParamCount, hasReturn, ref firstRefParamDefs, ref lastOutParamDefs, ref lastRefParamDefs, ref retDef);
+        for (int i = middleParamStartIndex; i < middleParamCount + middleParamStartIndex; i++)
+        {
+            var middleParamDefs = MakeParameterDefinitions(i);
+            yield return new GenericInvokerDefinition(name, firstRefParamDefs, middleParamDefs, lastOutParamDefs, lastRefParamDefs, retDef);
+        }
+    }
+
+    private static void FillCommonSignatureDefinitions(int firstRefParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn, ref IEnumerable<GenericResultParameterDefinition> firstRefParamDefs, ref IEnumerable<GenericResultParameterDefinition> lastOutParamDefs, ref IEnumerable<GenericResultParameterDefinition> lastRefParamDefs, ref GenericReturnDefinition retDef)
+    {
+        firstRefParamDefs = MakeFirstRefParameterDefinitions(1, firstRefParamCount);
+        lastOutParamDefs = MakeOutParameterDefinitions(lastOutParamCount);
+        lastRefParamDefs = MakeRefParameterDefinitions(firstRefParamCount + 1, lastRefParamCount);
+        retDef = MakeReturnDefinitions(hasReturn);
+    }
+
+    static IEnumerable<GenericParameterDefinition> MakeParameterDefinitions(int count)
+    {
+        for (int i = 0; i < count; i++)
+            yield return GenericSignatureDefinitionFactory.MakeParameter(i + 1);
+    }
+
+    static IEnumerable<GenericParameterDefinition> MakeInParameterDefinitions(int count)
+    {
+        for (int i = 0; i < count; i++)
+            yield return GenericSignatureDefinitionFactory.MakeInParameter(i + 1);
+    }
+
+    static IEnumerable<GenericResultParameterDefinition> MakeFirstRefParameterDefinitions(int startId, int count)
+    {
+        for (int i = startId - 1; i < count; i++)
+            yield return GenericSignatureDefinitionFactory.MakeFirstRefParameter(i + 1, count);
+    }
+
+    static IEnumerable<GenericResultParameterDefinition> MakeRefParameterDefinitions(int startId, int count)
+    {
+        for (int i = startId - 1; i < count; i++)
+            yield return GenericSignatureDefinitionFactory.MakeRefParameter(i + 1, count);
+    }
+
+    static IEnumerable<GenericResultParameterDefinition> MakeOutParameterDefinitions(int count)
+    {
+        for (int i = 0; i < count; i++)
+            yield return GenericSignatureDefinitionFactory.MakeOutParameter(i + 1, count);
+    }
+
+    static GenericReturnDefinition MakeReturnDefinitions(bool hasReturn)
+    {
+        return GenericSignatureDefinitionFactory.MakeReturn(!hasReturn ? 0 : 1);
+    }
+
+    static GenericReturnDefinition MakeOutReturnDefinitions(bool hasReturn)
+    {
+        return GenericSignatureDefinitionFactory.MakeOutReturn(!hasReturn ? 0 : 1);
+    }
+}
+
+class GenericInvokerDefinition
+{
+    readonly IEnumerable<GenericResultParameterDefinition> m_firstRefParamDefs;
+    readonly IEnumerable<GenericParameterDefinition> m_middleParamDefs;
+    readonly IEnumerable<GenericResultParameterDefinition> m_lastOutParamDefs;
+    readonly IEnumerable<GenericResultParameterDefinition> m_lastRefParamDefs;
+    readonly GenericReturnDefinition m_retDef;
+
+    public GenericInvokerDefinition(string name, IEnumerable<GenericResultParameterDefinition> firstRefParamDefs, IEnumerable<GenericParameterDefinition> middleParamDefs, IEnumerable<GenericResultParameterDefinition> lastOutParamDefs, IEnumerable<GenericResultParameterDefinition> lastRefParamDefs, GenericReturnDefinition retDef)
+    {
+        Name = name;
+        m_firstRefParamDefs = firstRefParamDefs;
+        m_middleParamDefs = middleParamDefs;
+        m_lastOutParamDefs = lastOutParamDefs;
+        m_lastRefParamDefs = lastRefParamDefs;
+        m_retDef = retDef;
+    }
+
+    public string Name { get; private set; }
+    public IEnumerable<GenericResultParameterDefinition> FirstRefParameterDefinitions { get { return m_firstRefParamDefs; } }
+
+    public string DefineReturnType()
+    {
+        return m_retDef.DefineReturnType();
+    }
+
+    public string DefineGenericArguments()
+    {
+        var sigDefs = m_firstRefParamDefs.Concat(m_middleParamDefs).
+                                          Concat(m_lastOutParamDefs).
+                                          Concat(m_lastRefParamDefs).
+                                          OfType<GenericSignatureDefinition>().
+                                          Concat(new[] { m_retDef });
+        var genericArgs = sigDefs.Select(_ => _.DefineGenericArgument()).Where(_ => !string.IsNullOrEmpty(_)).ToArray();
+        return genericArgs.Length == 0 ? "" : string.Format("<{0}>", string.Join(", ", genericArgs));
+    }
+
+    public string DefineParameters()
+    {
+        var paramDefs = m_firstRefParamDefs.Concat(m_middleParamDefs).Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs);
+        return string.Join(", ", paramDefs.Select(_ => _.DefineParameter()).ToArray());
+    }
+
+    public string LoadGenericArguments()
+    {
+        var sigDefs = m_firstRefParamDefs.Concat(m_middleParamDefs).
+                                          Concat(m_lastOutParamDefs).
+                                          Concat(m_lastRefParamDefs).
+                                          OfType<GenericSignatureDefinition>().
+                                          Concat(new[] { m_retDef });
+        var genericArgs = sigDefs.Select(_ => _.LoadGenericArgument()).Where(_ => !string.IsNullOrEmpty(_)).ToArray();
+        return genericArgs.Length == 0 ? "" : string.Format("<{0}>", string.Join(", ", genericArgs));
+    }
+
+    public string LoadParameterTypes()
+    {
+        return LoadParameterTypes(1);
+    }
+
+    public string LoadParameterTypes(int startId)
+    {
+        return LoadParameterTypes(startId, int.MaxValue);
+    }
+
+    public string LoadParameterTypes(int startId, int count)
+    {
+        var paramDefs = m_firstRefParamDefs.Concat(m_middleParamDefs).Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs).Skip(startId - 1).Take(count);
+        return string.Join(", ", paramDefs.Select(_ => _.LoadParameterType()).ToArray());
+    }
+
+    public string LoadParametersWithAttributes()
+    {
+        var paramDefs = m_firstRefParamDefs.Concat(m_middleParamDefs).Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs);
+        return string.Join(", ", paramDefs.Select(_ => _.LoadParametersWithAttribute()).ToArray());
+    }
+
+    public string LoadParameters()
+    {
+        return LoadParameters(1);
+    }
+
+    public string LoadParameters(int startId)
+    {
+        return LoadParameters(startId, int.MaxValue);
+    }
+
+    public string LoadParameters(int startId, int count)
+    {
+        var paramDefs = m_firstRefParamDefs.Concat(m_middleParamDefs).Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs).Skip(startId - 1).Take(count);
+        return string.Join(", ", paramDefs.Select(_ => _.LoadParameter()).ToArray());
+    }
+
+    public string DefineTempLocalForResultParameters()
+    {
+        var resultParamDefs = m_firstRefParamDefs.Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs);
+        return string.Join("; ", resultParamDefs.Select(_ => _.DefineTempLocalForResultParameter()).ToArray());
+    }
+
+    public string StoreTempLocalsToResultParameters()
+    {
+        var resultParamDefs = m_firstRefParamDefs.Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs);
+        return string.Join("; ", resultParamDefs.Select(_ => _.StoreTempLocalsToResultParameter()).ToArray());
+    }
+
+    public string StoreDefaultValueToResultParameters()
+    {
+        var resultParamDefs = m_firstRefParamDefs.Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs);
+        return string.Join("; ", resultParamDefs.Select(_ => _.StoreDefaultValueToResultParameter()).ToArray());
+    }
+
+    public string StoreArgumentsToResultParameters()
+    {
+        var resultParamDefs = m_firstRefParamDefs.Concat(m_lastOutParamDefs).Concat(m_lastRefParamDefs);
+        return string.Join("; ", resultParamDefs.Select(_ => _.StoreArgumentsToResultParameter()).ToArray());
+    }
+
+    public string StoreExecutedResult()
+    {
+        return m_retDef.StoreExecutedResult();
+    }
+
+    public string LoadExecutedResult()
+    {
+        return m_retDef.LoadExecutedResult();
+    }
+}
+
+class GenericSignatureDefinitionFactory
+{
+    public static GenericParameterDefinition MakeParameter(int id)
+    {
+        return new GenericParameterDefinition(id);
+    }
+
+    public static GenericInParameterDefinition MakeInParameter(int id)
+    {
+        return new GenericInParameterDefinition(id);
+    }
+
+    public static GenericRefParameterDefinition MakeRefParameter(int id, int count)
+    {
+        return new GenericRefParameterDefinition(id, count);
+    }
+
+    public static GenericFirstRefParameterDefinition MakeFirstRefParameter(int id, int count)
+    {
+        return new GenericFirstRefParameterDefinition(id, count);
+    }
+
+    public static GenericOutParameterDefinition MakeOutParameter(int id, int count)
+    {
+        return new GenericOutParameterDefinition(id, count);
+    }
+
+    public static GenericReturnDefinition MakeReturn(int id)
+    {
+        return new GenericReturnDefinition(id);
+    }
+
+    public static GenericOutReturnDefinition MakeOutReturn(int id)
+    {
+        return new GenericOutReturnDefinition(id);
+    }
+}
+
+abstract class GenericSignatureDefinition
+{
+    protected readonly int m_id;
+    public GenericSignatureDefinition(int id)
+    {
+        m_id = id;
+    }
+
+    public abstract string DefineGenericArgument();
+    public abstract string LoadGenericArgument();
+}
+
+class GenericParameterDefinition : GenericSignatureDefinition
+{
+    public GenericParameterDefinition(int id)
+        : base(id)
+    { }
+
+    public override string DefineGenericArgument()
+    {
+        return string.Format("T{0}", m_id);
+    }
+
+    public override string LoadGenericArgument()
+    {
+        return string.Format("T{0}", m_id);
+    }
+
+    public virtual string DefineParameter()
+    {
+        return string.Format("T{0} arg{0}", m_id);
+    }
+
+    public virtual string LoadParameterType()
+    {
+        return string.Format("typeof(T{0})", m_id);
+    }
+
+    public virtual string LoadParametersWithAttribute()
+    {
+        return string.Format("arg{0}", m_id);
+    }
+
+    public virtual string LoadParameter()
+    {
+        return string.Format("arg{0}", m_id);
+    }
+}
+
+class GenericInParameterDefinition : GenericParameterDefinition
+{
+    public GenericInParameterDefinition(int id)
+        : base(id)
+    { }
+
+    public override string DefineGenericArgument()
+    {
+        return string.Format("in T{0}", m_id);
+    }
+}
+
+abstract class GenericResultParameterDefinition : GenericParameterDefinition
+{
+    protected readonly int m_count;
+    public GenericResultParameterDefinition(int id, int count)
+        : base(id)
+    {
+        m_count = count;
+    }
+
+    public abstract string DefineTempLocalForResultParameter();
+    public abstract string StoreTempLocalsToResultParameter();
+    public abstract string StoreDefaultValueToResultParameter();
+    public abstract string StoreArgumentsToResultParameter();
+}
+
+class GenericRefParameterDefinition : GenericResultParameterDefinition
+{
+    public GenericRefParameterDefinition(int id, int count)
+        : base(id, count)
+    { }
+
+    public override string DefineGenericArgument()
+    {
+        return string.Format("TRef{0}", m_id);
+    }
+
+    public override string LoadGenericArgument()
+    {
+        return string.Format("TRef{0}", m_id);
+    }
+
+    public override string DefineParameter()
+    {
+        return string.Format("ref TRef{0} ref{0}", m_id);
+    }
+
+    public override string LoadParameterType()
+    {
+        return string.Format("typeof(TRef{0}).MakeByRefType()", m_id);
+    }
+
+    public override string LoadParametersWithAttribute()
+    {
+        return string.Format("ref _ref{0}", m_id);
+    }
+
+    public override string LoadParameter()
+    {
+        return string.Format("ref{0}", m_id);
+    }
+
+    public override string DefineTempLocalForResultParameter()
+    {
+        return string.Format("var _ref{0} = ref{0}", m_id);
+    }
+
+    public override string StoreTempLocalsToResultParameter()
+    {
+        return string.Format("ref{0} = _ref{0}", m_id);
+    }
+
+    public override string StoreDefaultValueToResultParameter()
+    {
+        return "";
+    }
+
+    public override string StoreArgumentsToResultParameter()
+    {
+        return string.Format("ref{0} = (TRef{0})args[args.Length - {1}]", m_id, m_count - m_id + 1);
+    }
+}
+
+class GenericFirstRefParameterDefinition : GenericRefParameterDefinition
+{
+    public GenericFirstRefParameterDefinition(int id, int count)
+        : base(id, count)
+    { }
+
+    public override string StoreArgumentsToResultParameter()
+    {
+        return string.Format("ref{0} = (TRef{0})args[{1}]", m_id, m_id - 1);
+    }
+}
+
+class GenericOutParameterDefinition : GenericResultParameterDefinition
+{
+    public GenericOutParameterDefinition(int id, int count)
+        : base(id, count)
+    { }
+
+    public override string DefineGenericArgument()
+    {
+        return string.Format("TOut{0}", m_id);
+    }
+
+    public override string LoadGenericArgument()
+    {
+        return string.Format("TOut{0}", m_id);
+    }
+
+    public override string DefineParameter()
+    {
+        return string.Format("out TOut{0} out{0}", m_id);
+    }
+
+    public override string LoadParameterType()
+    {
+        return string.Format("typeof(TOut{0}).MakeByRefType()", m_id);
+    }
+
+    public override string LoadParametersWithAttribute()
+    {
+        return string.Format("out _out{0}", m_id);
+    }
+
+    public override string LoadParameter()
+    {
+        return string.Format("out{0}", m_id);
+    }
+
+    public override string DefineTempLocalForResultParameter()
+    {
+        return string.Format("var _out{0} = default(TOut{0})", m_id);
+    }
+
+    public override string StoreTempLocalsToResultParameter()
+    {
+        return string.Format("out{0} = _out{0}", m_id);
+    }
+
+    public override string StoreDefaultValueToResultParameter()
+    {
+        return string.Format("out{0} = default(TOut{0})", m_id);
+    }
+
+    public override string StoreArgumentsToResultParameter()
+    {
+        return string.Format("out{0} = (TOut{0})args[args.Length - {1}]", m_id, m_count - m_id + 1);
+    }
+}
+
+class GenericReturnDefinition : GenericSignatureDefinition
+{
+    public GenericReturnDefinition(int id)
+        : base(id)
+    { }
+
+    public override string DefineGenericArgument()
+    {
+        return m_id == 0 ? "" : "TResult";
+    }
+
+    public override string LoadGenericArgument()
+    {
+        return m_id == 0 ? "" : "TResult";
+    }
+
+    public virtual string DefineReturnType()
+    {
+        return m_id == 0 ? "void" : "TResult";
+    }
+
+    public virtual string StoreExecutedResult()
+    {
+        return m_id == 0 ? "" : "var result = (TResult)";
+    }
+
+    public virtual string LoadExecutedResult()
+    {
+        return m_id == 0 ? "" : "result";
+    }
+}
+
+class GenericOutReturnDefinition : GenericReturnDefinition
+{
+    public GenericOutReturnDefinition(int id)
+        : base(id)
+    { }
+
+    public override string DefineGenericArgument()
+    {
+        return m_id == 0 ? "" : "out TResult";
+    }
+}
+#>

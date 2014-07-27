@@ -45,7 +45,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.CreateInstance.Body = (elementType, lengths, lowerBounds) => new int[5, 5];
+                PArray.CreateInstance().Body = (elementType, lengths, lowerBounds) => new int[5, 5];
 
                 // Act
                 var actual = (int[,])Array.CreateInstance(typeof(int), new int[] { 3, 3 }, new int[] { 0, 0 });
@@ -62,7 +62,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.Exists<int>.Body = (array, match) => true;
+                PArray.Exists<int>().Body = (array, match) => true;
 
                 // Act
                 var actual = Array.Exists(new int[] { 1, 2, 3 }, x => x == 42);
@@ -78,7 +78,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.BinarySearch.Body = (array, index, length, value, comparer) => 42;
+                PArray.BinarySearch().Body = (array, index, length, value, comparer) => 42;
 
                 // Act
                 var actual = Array.BinarySearch(new int[] { 1, 2, 3 }, 0, 3, (object)2, new LambdaComparer<int>((_1, _2) => _1 - _2));

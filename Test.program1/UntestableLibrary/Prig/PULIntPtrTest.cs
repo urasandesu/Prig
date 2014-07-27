@@ -45,7 +45,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIntPtr.Constructor.Body = (ref ULIntPtr @this, long value) => @this = new ULIntPtr(42);
+                PULIntPtr.Constructor().Body = (ref ULIntPtr @this, long value) => @this = new ULIntPtr(42);
 
                 // Act
                 var actual = new ULIntPtr(2147483648L);
@@ -61,7 +61,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIntPtr.SizeGet.Body = () => 42;
+                PULIntPtr.SizeGet().Body = () => 42;
 
                 // Act
                 var actual = ULIntPtr.Size;

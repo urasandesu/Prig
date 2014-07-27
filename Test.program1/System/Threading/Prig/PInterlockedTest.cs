@@ -48,7 +48,7 @@ namespace Test.program1.System.Threading.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PInterlocked.Exchange<MyData>.Body = (ref MyData location1, MyData value) =>
+                PInterlocked.Exchange<MyData>().Body = (ref MyData location1, MyData value) =>
                 {
                     location1 = value;
                     return new MyData(42);

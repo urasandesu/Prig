@@ -58,8 +58,28 @@ namespace CWeaverDetail {
         using boost::filesystem::current_path;
         using boost::filesystem::directory_iterator;
         using boost::filesystem::is_regular_file;
+        using boost::lexical_cast;
+        using boost::bad_lexical_cast;
         using std::regex_search;
         using std::wregex;
+        using Urasandesu::CppAnonym::Environment;
+
+#ifdef _DEBUG
+        auto dbgBreak = 0ul;
+        try
+        {
+            auto strDbgBreak = Environment::GetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK");
+            dbgBreak = lexical_cast<DWORD>(strDbgBreak);
+        }
+        catch(bad_lexical_cast const &)
+        {
+            dbgBreak = -1;
+        }
+        if (dbgBreak == 0)
+            ::_CrtDbgBreak();
+        else if (dbgBreak != -1)
+            ::Sleep(dbgBreak);
+#endif
 
         CPPANONYM_LOG_FUNCTION();
         CPPANONYM_D_LOGW1(L"InitializeCore(IUnknown *: 0x%|1$X|)", reinterpret_cast<void *>(pICorProfilerInfoUnk));
@@ -662,29 +682,8 @@ namespace CWeaverDetail {
 
 HRESULT CWeaver::FinalConstruct()
 {
-    using boost::lexical_cast;
-    using boost::bad_lexical_cast;
-    using Urasandesu::CppAnonym::Environment;
-
     CPPANONYM_D_LOGW(L"CWeaver::FinalConstruct()");
 
-#ifdef _DEBUG
-    auto dbgBreak = 0ul;
-    try
-    {
-        auto strDbgBreak = Environment::GetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK");
-        dbgBreak = lexical_cast<DWORD>(strDbgBreak);
-    }
-    catch(bad_lexical_cast const &)
-    {
-        dbgBreak = -1;
-    }
-    if (dbgBreak == 0)
-        ::_CrtDbgBreak();
-    else if (dbgBreak != -1)
-        ::Sleep(dbgBreak);
-#endif
-    
     return S_OK;
 }
 

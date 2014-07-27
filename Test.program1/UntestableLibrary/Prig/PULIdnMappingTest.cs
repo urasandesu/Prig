@@ -44,7 +44,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULIdnMapping.basic.Body = cp => true;
+                PULIdnMapping.basic().Body = cp => true;
 
                 // Act
                 var actual = ULIdnMapping.basic(128u);

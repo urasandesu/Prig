@@ -44,7 +44,7 @@ namespace Test.program1.System.IO.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PMemoryStream.Seek.Body = (@this, offset, loc) => 42L;
+                PMemoryStream.Seek().Body = (@this, offset, loc) => 42L;
 
                 var buffer = new byte[256];
                 for (int i = 0; i < buffer.Length; i++)
@@ -62,13 +62,44 @@ namespace Test.program1.System.IO.Prig
             }
         }
 
+
+
+        [Test]
+        public void Seek_should_be_callable_indirectly_against_only_specified_instance()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                var msProxy = new PProxyMemoryStream();
+                msProxy.Seek().Body = (@this, offset, loc) => 42L;
+                var ms_sut = (MemoryStream)msProxy;
+
+                var buffer = new byte[256];
+                for (int i = 0; i < buffer.Length; i++)
+                    buffer[i] = (byte)i;
+
+
+                using (var ms = new MemoryStream(buffer))
+                {
+                    // Act
+                    var actual = ms_sut.Seek(128, SeekOrigin.Begin);
+
+                    // Assert
+                    Assert.AreEqual(42L, actual);
+                    Assert.AreNotEqual(ms.Seek(128, SeekOrigin.Begin), actual);
+                }
+            }
+        }
+
+        
+        
         [Test]
         public void BeginRead_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PStream.BeginRead.Body = (@this, _buffer, offset, count, callback, state) => 
+                PStream.BeginRead().Body = (@this, _buffer, offset, count, callback, state) => 
                     IndirectionsContext.ExecuteOriginal(() => @this.BeginRead(_buffer, offset, 42, callback, state));
 
                 var buffer = new byte[256];

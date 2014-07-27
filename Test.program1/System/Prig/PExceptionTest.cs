@@ -45,7 +45,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PException.InternalToString.Body = _ => "にゃんぱすー";
+                PException.InternalToString().Body = _ => "にゃんぱすー";
 
                 // Act
                 var actual = new NotImplementedException().InternalToString();

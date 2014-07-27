@@ -43,7 +43,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PInt32.TryParse.Body = (string s, out int result) => { result = 42; return false; };
+                PInt32.TryParse().Body = (string s, out int result) => { result = 42; return false; };
 
                 // Act
                 var actualResult = default(int);

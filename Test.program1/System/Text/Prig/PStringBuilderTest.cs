@@ -45,7 +45,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PStringBuilder.Insert.Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
+                PStringBuilder.Insert().Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
 
                 // Act
                 var sb = new StringBuilder();
@@ -56,6 +56,30 @@ namespace Test.program1.System.Prig
                 Assert.AreEqual("にゃんぱすー", actual.ToString());
             }
         }
+
+
+
+        [Test]
+        public void Insert_should_be_callable_indirectly_against_only_specified_instance()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                var sbProxy = new PProxyStringBuilder();
+                sbProxy.Insert().Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
+                var sb_sut = (StringBuilder)sbProxy;
+                var sb = new StringBuilder();
+
+                // Act
+                var actual = sb_sut.Insert(0, "c", 3);
+
+                // Assert
+                Assert.AreEqual("にゃんぱすー", actual.ToString());
+                Assert.AreNotEqual(sb.Insert(0, "c", 3).ToString(), actual.ToString());
+            }
+        }
+        
+        
         
         [Test]
         public void Replace_should_be_callable_indirectly()
@@ -63,7 +87,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PStringBuilder.Replace.Body = (_, oldChar, newChar, startIndex, count) => { return new StringBuilder("おはもに！"); };
+                PStringBuilder.Replace().Body = (_, oldChar, newChar, startIndex, count) => { return new StringBuilder("おはもに！"); };
 
                 // Act
                 var sb = new StringBuilder("aaaa");

@@ -47,7 +47,7 @@ namespace Test.program1.MyLibraryTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
+                PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
@@ -63,7 +63,7 @@ namespace Test.program1.MyLibraryTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 12, 00, 00);
+                PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 12, 00, 00);
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
@@ -79,7 +79,7 @@ namespace Test.program1.MyLibraryTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.NowGet.Body = () => new DateTime(2013, 12, 13, 13, 00, 00);
+                PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 13, 00, 00);
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
@@ -98,8 +98,8 @@ namespace Test.program1.MyLibraryTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                PDateTime.TodayGet.Body = () => today;
-                PULConfigurationManager.GetProperty<DayOfWeek>.Body = (key, defaultValue) => holiday;
+                PDateTime.TodayGet().Body = () => today;
+                PULConfigurationManager.GetProperty<DayOfWeek>().Body = (key, defaultValue) => holiday;
 
                 // Act, Assert
                 return LifeInfo.IsTodayHoliday();
