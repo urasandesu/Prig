@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>0.0.0-alpha4</version>
+    <version>0.0.0-alpha5</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,7 +17,14 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 0.0.0-alpha4
+    <releaseNotes>Version 0.0.0-alpha5
+* Pre-release 5.
+* Fixed Issue #9: `Add-PrigAssembly -AssemblyFrom` went dead.
+* Fixed Issue #10: `prig -p ConsoleApplication1.exe` went dead.
+* Fixed Issue #11: In .NET 3.5, the assembly containing dynamic methods can't be called indirectly.
+
+
+Version 0.0.0-alpha4
 * Pre-release 4.
 * Supported the feature to generate the stub for one runtime instance.
 * [NOTICE] Changed the generated stub's API. It became a static method from a nested type. For example, until previous, the stub against `System.DateTime.Now` was `System.Prig.PDateTime.NowGet.Body`. From now, the stub becomes `System.Prig.PDateTime.NowGet().Body`. Because the previous version can't propagate an instance.

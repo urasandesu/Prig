@@ -270,7 +270,12 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW1(L"Current Path: %|1$s|", current_path().native());
         auto modPath = path(pModProf->GetName());
         auto modName = modPath.stem().native();
+        CPPANONYM_D_LOGW1(L"Loading Module: %|1$s|", modName);
+        if (modName.empty())
+            return S_OK;
         
+        
+        CPPANONYM_LOG_NAMED_SCOPE("if (!modName.empty())");
         auto candidateIndDllPaths = unordered_set<path, Hash<path>, EqualTo<path> >();
         auto isCandidate = [&](path const &p) { return p.native().find(modName) != wstring::npos; };
         for_each(m_indDllPaths | filtered(isCandidate), [&](path const &p) { candidateIndDllPaths.insert(p); });
