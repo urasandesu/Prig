@@ -359,6 +359,8 @@ namespace CWeaverDetail {
         CPPANONYM_LOG_FUNCTION();
 
         using boost::lexical_cast;
+        using boost::timer::cpu_timer;
+        using boost::timer::default_places;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
         
         CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$X|, BOOL: 0x%|2$08X|)", reinterpret_cast<void *>(functionId), fIsSafeToBlock);
@@ -417,24 +419,44 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW(L"This method is marked by IndirectableAttribute.");
         pFuncProf.Persist();
         
-        auto pNewBodyProf = pFuncProf->NewFunctionBody();
-        auto *pNewBodyGen = pNewBodyProf->GetMethodBodyGenerator(pMethodGen);
-        
-        auto const *pBody = pMethodGen->GetMethodBody();
-        BOOST_FOREACH (auto const *pLocal, pBody->GetLocals())
-            pNewBodyGen->DefineLocal(pLocal->GetLocalType());
+        auto timer = cpu_timer();
+        {
+            CPPANONYM_LOG_NAMED_SCOPE("Modifying method");
 
-        auto offset = EmitIndirectMethodBody(pNewBodyGen, pDisp, pMethodGen, prigData);
+            auto subTimer = cpu_timer();
         
-        BOOST_FOREACH (auto const *pInst, pBody->GetInstructions())
-            pNewBodyGen->Emit(pInst);
+            auto pNewBodyProf = pFuncProf->NewFunctionBody();
+            auto *pNewBodyGen = pNewBodyProf->GetMethodBodyGenerator(pMethodGen);
         
-        BOOST_FOREACH (auto const &exClause, pBody->GetExceptionClauses())
-            pNewBodyGen->DefineExceptionClause(exClause, offset);
+            auto const *pBody = pMethodGen->GetMethodBody();
+            BOOST_FOREACH (auto const *pLocal, pBody->GetLocals())
+                pNewBodyGen->DefineLocal(pLocal->GetLocalType());
 
-        pFuncProf->SetFunctionBody(pNewBodyProf);
+            CPPANONYM_V_LOG2("Processing time to define locals of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            subTimer = cpu_timer();
+
+            auto offset = EmitIndirectMethodBody(pNewBodyGen, pDisp, pMethodGen, prigData);
+
+            CPPANONYM_V_LOG2("Processing time to emit indirect method body of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            subTimer = cpu_timer();
         
-        pProcProf->DetachFromFunction(functionId);
+            BOOST_FOREACH (auto const *pInst, pBody->GetInstructions())
+                pNewBodyGen->Emit(pInst);
+
+            CPPANONYM_V_LOG2("Processing time to emit original method body of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            subTimer = cpu_timer();
+        
+            BOOST_FOREACH (auto const &exClause, pBody->GetExceptionClauses())
+                pNewBodyGen->DefineExceptionClause(exClause, offset);
+
+            CPPANONYM_V_LOG2("Processing time to define exception clauses of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+
+            pFuncProf->SetFunctionBody(pNewBodyProf);
+        
+            pProcProf->DetachFromFunction(functionId);
+        }
+
+        CPPANONYM_V_LOG2("Processing time to modify the method(Token: 0x%|1$08X|): %|2$s|.", mdt, timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
 
         return S_OK;
     }
@@ -443,23 +465,41 @@ namespace CWeaverDetail {
 
     SIZE_T CWeaverImpl::EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData)
     {
+        using boost::timer::cpu_timer;
+        using boost::timer::default_places;
+
         CPPANONYM_LOG_FUNCTION();
+
+        auto timer = cpu_timer();
 
         auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
         auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
+
+        CPPANONYM_V_LOG1("Processing time to find Urasandesu.Prig.Framework: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
 
         auto const *pIndInfo = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionInfo");
         auto const *pIndHolder1 = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionHolder`1");
         auto const *pIndDlgtAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionDelegateAttribute");
         auto const *pLooseCrossDomainAccessor = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.LooseCrossDomainAccessor");
 
+        CPPANONYM_V_LOG1("Processing time to get indirection definitions 1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
         auto const *pIndDlgtInst = GetIndirectionDelegateInstance(pMethodGen, pPrigFrmwrkDll, pIndDlgtAttrType, prigData);
+
+        CPPANONYM_V_LOG1("Processing time to get indirection delegate instance 1-1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
         auto const *pIndHolder1IndDlgtInst = static_cast<IType *>(nullptr);
         {
             auto genericArgs = vector<IType const *>();
             genericArgs.push_back(pIndDlgtInst);
             pIndHolder1IndDlgtInst = pIndHolder1->MakeGenericType(genericArgs);
         }
+
+        CPPANONYM_V_LOG1("Processing time to get indirection delegate instance 1-2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
 
         auto const *pIndInfo_set_AssemblyName = pIndInfo->GetMethod(L"set_AssemblyName");
         _ASSERTE(pIndInfo_set_AssemblyName);
@@ -472,12 +512,18 @@ namespace CWeaverDetail {
         auto const *pIndHolder1IndDlgtInst_TryGet = pIndHolder1IndDlgtInst->GetMethod(L"TryGet");
         _ASSERTE(pIndHolder1IndDlgtInst_TryGet);
 
+        CPPANONYM_V_LOG1("Processing time to get indirection definitions 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
         auto const *pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst = static_cast<IMethod *>(nullptr);
         {
             auto genericArgs = vector<IType const *>();
             genericArgs.push_back(pIndHolder1IndDlgtInst);
             pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst = pLooseCrossDomainAccessor_TryGet->MakeGenericMethod(genericArgs);
         }
+
+        CPPANONYM_V_LOG1("Processing time to get indirection delegate instance 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
 
         auto *pLocal0_holder = pNewBodyGen->DefineLocal(pIndHolder1IndDlgtInst);
         auto *pLocal1_info = pNewBodyGen->DefineLocal(pIndInfo);
@@ -513,8 +559,12 @@ namespace CWeaverDetail {
         pNewBodyGen->Emit(OpCodes::Ret);
 
         pNewBodyGen->MarkLabel(label0);
+
+        auto size = pNewBodyGen->GetInstructions().size();
+
+        CPPANONYM_V_LOG1("Processing time to emit indirect method body details: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
         
-        return pNewBodyGen->GetInstructions().size();
+        return size;
     }
 
 
@@ -621,9 +671,17 @@ namespace CWeaverDetail {
 
     IType const *CWeaverImpl::GetIndirectionDelegateInstance(IMethod const *pTarget, IModule const *pIndDll, IType const *pIndDlgtAttrType, PrigData &prigData) const
     {
+        CPPANONYM_LOG_FUNCTION();
+
         using boost::adaptors::filtered;
+        using boost::timer::cpu_timer;
+        using boost::timer::default_places;
+        using boost::copy;
+        using std::back_inserter;
         using Urasandesu::CppAnonym::Collections::FindIf;
         using Urasandesu::CppAnonym::CppAnonymCOMException;
+
+        auto timer = cpu_timer();
         
         auto const *pIndDlgt = static_cast<IType *>(nullptr);
         // check whether the delegate is cached.
@@ -632,18 +690,46 @@ namespace CWeaverDetail {
             if (result != prigData.m_indDlgtCache.end())
                 pIndDlgt = (*result).second;
         }
+
+        CPPANONYM_V_LOG1("Processing time to check whether the delegate is cached: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
+        // enumerate IndirectionDelegate and cache them.
+        if (!prigData.m_indirectionDelegatesInit)
+        {
+            CPPANONYM_LOG_NAMED_SCOPE("!prigData.m_indirectionDelegatesInit");
+            auto types = pIndDll->GetAssembly()->GetTypes();
+
+            CPPANONYM_V_LOG1("Processing time to enumerate IndirectionDelegate and cache them 1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            timer = cpu_timer();
+
+            auto isIndDlgt = [pIndDlgtAttrType](IType const *pType) { return pType->IsDefined(pIndDlgtAttrType); };
+            auto indDlgts = types | filtered(isIndDlgt);
+            copy(indDlgts, back_inserter(prigData.m_indirectionDelegates));
+
+            if (CPPANONYM_D_LOG_ENABLED())
+            {
+                BOOST_FOREACH (auto const &pIndDlgt, prigData.m_indirectionDelegates)
+                    CPPANONYM_D_LOGW1(L"IndirectionDelegate Token: 0x%|1$08X|", pIndDlgt->GetToken());
+            }
+
+            prigData.m_indirectionDelegatesInit = true;
+
+            CPPANONYM_V_LOG1("Processing time to enumerate IndirectionDelegate and cache them 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            timer = cpu_timer();
+        }
         
         // find IndirectionDelegate which has same signature with the target method and cache it.
         {
-            auto types = pIndDll->GetTypes();
-            auto isIndDlgt = [pIndDlgtAttrType](IType const *pType) { return pType->IsDefined(pIndDlgtAttrType); };
-            auto indDlgts = types | filtered(isIndDlgt);
-            auto result = FindIf(indDlgts, IndirectionDelegateFinder(pTarget));
+            auto result = FindIf(prigData.m_indirectionDelegates, IndirectionDelegateFinder(pTarget));
             if (!result)
                 BOOST_THROW_EXCEPTION(CppAnonymCOMException(CLDB_E_RECORD_NOTFOUND));
             
             pIndDlgt = *result;
             prigData.m_indDlgtCache[pTarget] = pIndDlgt;
+
+            CPPANONYM_V_LOG1("Processing time to find IndirectionDelegate which has same signature with the target method and cache it: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            timer = cpu_timer();
         }
 
         // make Generic Type Instance of IndirectionDelegate.
@@ -664,6 +750,10 @@ namespace CWeaverDetail {
         if (pTarget->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
             genericArgs.push_back(pTarget->GetReturnType());
         auto const *pIndDlgtInst = pIndDlgt->MakeGenericType(genericArgs);
+
+        CPPANONYM_V_LOG1("Processing time to make Generic Type Instance of IndirectionDelegate: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
         return pIndDlgtInst;
     }
 

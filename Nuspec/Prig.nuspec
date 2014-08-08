@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>0.0.0-alpha5</version>
+    <version>0.0.0-alpha6</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,7 +17,12 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 0.0.0-alpha5
+    <releaseNotes>Version 0.0.0-alpha6
+* Pre-release 6.
+* Improved performance replacing original methods to indirect methods. Due to change to cache IndirectionDelegates and to import infrastructure's improvements, this version is x1.5 - x2.0 faster than previous version.
+
+
+Version 0.0.0-alpha5
 * Pre-release 5.
 * Fixed Issue #9: `Add-PrigAssembly -AssemblyFrom` went dead.
 * Fixed Issue #10: `prig -p ConsoleApplication1.exe` went dead.

@@ -54,6 +54,7 @@ namespace Urasandesu { namespace Prig {
 
         using boost::filesystem::path;
         using boost::unordered_map;
+        using std::vector;
         using Urasandesu::Swathe::Metadata::ICustomAttribute;
         using Urasandesu::Swathe::Metadata::IMethod;
         using Urasandesu::Swathe::Metadata::IType;
@@ -61,12 +62,15 @@ namespace Urasandesu { namespace Prig {
         struct PrigData
         {
             PrigData() : 
-                m_indirectablesInit(false)
+                m_indirectablesInit(false), 
+                m_indirectionDelegatesInit(false)
             { }
 
             path m_indDllPath;
             unordered_map<mdToken, ICustomAttribute const *> m_indirectables;
             bool m_indirectablesInit;
+            vector<IType const *> m_indirectionDelegates;
+            bool m_indirectionDelegatesInit;
             unordered_map<IMethod const *, IType const *, IMethodSigHash, IMethodSigEqualTo> m_indDlgtCache;
         };
 

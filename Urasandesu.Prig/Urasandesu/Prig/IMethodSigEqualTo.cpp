@@ -71,11 +71,14 @@ namespace Urasandesu { namespace Prig {
 
         IMethodSigEqualToImpl::result_type IMethodSigEqualToImpl::ParameterEqual(IParameter const *pParamX, IParameter const *pParamY)
         {
-            auto dwattrX = pParamX->GetAttribute().Value();
-            auto isByRefX = pParamX->GetParameterType()->IsByRef();
-            auto dwattrY = pParamY->GetAttribute().Value();
-            auto isByRefY = pParamY->GetParameterType()->IsByRef();
-            return dwattrX == dwattrY && isByRefX == isByRefY;
+            auto isEqual = true;
+            if (isEqual)
+                isEqual &= pParamX->GetAttribute().Value() == pParamY->GetAttribute().Value();
+            
+            if (isEqual)
+                isEqual &= pParamX->GetParameterType()->IsByRef() == pParamY->GetParameterType()->IsByRef();
+            
+            return isEqual;
         }
 
     }   // namespace IMethodSigEqualToDetail {
