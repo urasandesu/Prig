@@ -732,29 +732,38 @@ namespace CWeaverDetail {
             timer = cpu_timer();
         }
 
-        // make Generic Type Instance of IndirectionDelegate.
-        auto genericArgs = vector<IType const *>();
-        if (!pTarget->IsStatic())
+        // if the delegate is a generic type, make Generic Type Instance of IndirectionDelegate.
+        if (!pIndDlgt->IsGenericType())
         {
-            auto const *pDeclaringType = pTarget->GetDeclaringType();
-            if (pDeclaringType->IsGenericType())
-                pDeclaringType = MakeGenericExplicitThisType(pDeclaringType);
-            genericArgs.push_back(pDeclaringType);
+            CPPANONYM_LOG_NAMED_SCOPE("!pIndDlgt->IsGenericType()");
+            return pIndDlgt;
         }
-        auto const &params = pTarget->GetParameters();
-        BOOST_FOREACH (auto const &pParam, params)
+        else
         {
-            auto const *pParamType = pParam->GetParameterType();
-            genericArgs.push_back(pParamType->IsByRef() ? pParamType->GetDeclaringType() : pParamType);
+            CPPANONYM_LOG_NAMED_SCOPE("pIndDlgt->IsGenericType()");
+            auto genericArgs = vector<IType const *>();
+            if (!pTarget->IsStatic())
+            {
+                auto const *pDeclaringType = pTarget->GetDeclaringType();
+                if (pDeclaringType->IsGenericType())
+                    pDeclaringType = MakeGenericExplicitThisType(pDeclaringType);
+                genericArgs.push_back(pDeclaringType);
+            }
+            auto const &params = pTarget->GetParameters();
+            BOOST_FOREACH (auto const &pParam, params)
+            {
+                auto const *pParamType = pParam->GetParameterType();
+                genericArgs.push_back(pParamType->IsByRef() ? pParamType->GetDeclaringType() : pParamType);
+            }
+            if (pTarget->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
+                genericArgs.push_back(pTarget->GetReturnType());
+            auto const *pIndDlgtInst = pIndDlgt->MakeGenericType(genericArgs);
+
+            CPPANONYM_V_LOG1("Processing time to make Generic Type Instance of IndirectionDelegate: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            timer = cpu_timer();
+
+            return pIndDlgtInst;
         }
-        if (pTarget->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
-            genericArgs.push_back(pTarget->GetReturnType());
-        auto const *pIndDlgtInst = pIndDlgt->MakeGenericType(genericArgs);
-
-        CPPANONYM_V_LOG1("Processing time to make Generic Type Instance of IndirectionDelegate: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        return pIndDlgtInst;
     }
 
 

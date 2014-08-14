@@ -168,25 +168,32 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             if (indDlgt == null)
                 throw new KeyNotFoundException(""); // TODO: 
 
-            var genericArgs = new List<Type>();
-            if (!target.IsStatic)
+            if (!indDlgt.IsGenericType)
             {
-                var declaringType = target.DeclaringType;
-                if (declaringType.IsGenericType)
-                    declaringType = MakeGenericExplicitThisType(declaringType);
-                genericArgs.Add(declaringType);
+                return indDlgt;
             }
-            var @params = target.GetParameters();
-            foreach (var param in @params)
+            else
             {
-                var paramType = param.ParameterType;
-                genericArgs.Add(paramType.IsByRef ? paramType.GetElementType() : paramType);
+                var genericArgs = new List<Type>();
+                if (!target.IsStatic)
+                {
+                    var declaringType = target.DeclaringType;
+                    if (declaringType.IsGenericType)
+                        declaringType = MakeGenericExplicitThisType(declaringType);
+                    genericArgs.Add(declaringType);
+                }
+                var @params = target.GetParameters();
+                foreach (var param in @params)
+                {
+                    var paramType = param.ParameterType;
+                    genericArgs.Add(paramType.IsByRef ? paramType.GetElementType() : paramType);
+                }
+                var _target = default(MethodInfo);
+                if ((_target = target as MethodInfo) != null && _target.ReturnType != typeof(void))
+                    genericArgs.Add(_target.ReturnType);
+                var indDlgtInst = indDlgt.MakeGenericType(genericArgs.ToArray());
+                return indDlgtInst;
             }
-            var _target = default(MethodInfo);
-            if ((_target = target as MethodInfo) != null && _target.ReturnType != typeof(void))
-                genericArgs.Add(_target.ReturnType);
-            var indDlgtInst = indDlgt.MakeGenericType(genericArgs.ToArray());
-            return indDlgtInst;
         }
 
         static Type MakeGenericExplicitThisType(Type target)
