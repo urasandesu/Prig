@@ -29,15 +29,65 @@
 
 
 
+using System;
+using System.Runtime.Serialization;
+
 namespace Urasandesu.Prig.Framework
 {
-    public struct IndirectionInfo
+    [Serializable]
+    public struct IndirectionInfo : ISerializable, IEquatable<IndirectionInfo>
     {
+        public static readonly IndirectionInfo Default = new IndirectionInfo() { AssemblyName = "DefaultIndirectionAssembly", Token = 0x06FFFFFF };
+        public static readonly IndirectionInfo Empty = new IndirectionInfo() { AssemblyName = "EmptyIndirectionAssembly", Token = 0x06000000 };
+
+        IndirectionInfo(SerializationInfo info, StreamingContext context)
+            : this()
+        {
+            AssemblyName = (string)info.GetValue("AssemblyName", typeof(string));
+            Token = (uint)info.GetValue("Token", typeof(uint));
+        }
+
+
         public string AssemblyName { get; set; }
         public uint Token { get; set; }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("AssemblyName", AssemblyName, typeof(string));
+            info.AddValue("Token", Token, typeof(uint));
+        }
+
         public override string ToString()
         {
             return "IndirectionInfo [AssemblyName=" + AssemblyName + ", Token=" + Token + "]";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ((IEquatable<IndirectionInfo>)this).Equals(obj as IndirectionInfo?);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 0;
+            hashCode ^= AssemblyName == null ? 0 : AssemblyName.GetHashCode();
+            hashCode ^= Token.GetHashCode();
+            return hashCode;
+        }
+
+        public bool Equals(IndirectionInfo other)
+        {
+            return AssemblyName == other.AssemblyName && Token == other.Token;
+        }
+
+        public static bool operator ==(IndirectionInfo lhs, IndirectionInfo rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(IndirectionInfo lhs, IndirectionInfo rhs)
+        {
+            return !(lhs == rhs);
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿
+using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Urasandesu.Prig.Framework;
 
@@ -14,13 +17,15 @@ namespace UntestableLibrary.Prig
             m_target = (UntestableLibrary.ULSharedMemory)FormatterServices.GetUninitializedObject(typeof(UntestableLibrary.ULSharedMemory));
         }
 
+        public IndirectionBehaviors DefaultBehavior { get; internal set; }
+
         public zzGetMemory GetMemory() 
         {
             return new zzGetMemory(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzGetMemory 
+        public class zzGetMemory : IBehaviorPreparable 
         {
             UntestableLibrary.ULSharedMemory m_target;
 
@@ -29,25 +34,30 @@ namespace UntestableLibrary.Prig
                 m_target = target;
             }
 
-            class OriginalGetMemory
-            {
-                public static IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean> Body;
-            }
-
-            IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean> m_body;
             public IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean> Body
             {
+                get
+                {
+                    return PULSharedMemory.GetMemory().Body;
+                }
                 set
                 {
-                    PULSharedMemory.GetMemory().Body = (UntestableLibrary.ULSharedMemory arg1, System.Int32 arg2, out System.Byte[] out1) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            return m_body(arg1, arg2, out out1);
-                        else
-                            return IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>(ref OriginalGetMemory.Body, typeof(UntestableLibrary.ULSharedMemory), "GetMemory", arg1, arg2, out out1);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PULSharedMemory.GetMemory().RemoveTargetInstanceBody(m_target);
+                    else
+                        PULSharedMemory.GetMemory().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PULSharedMemory.GetMemory().Info; }
             }
         } 
         public zzDispose Dispose() 
@@ -56,7 +66,7 @@ namespace UntestableLibrary.Prig
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzDispose 
+        public class zzDispose : IBehaviorPreparable 
         {
             UntestableLibrary.ULSharedMemory m_target;
 
@@ -65,25 +75,30 @@ namespace UntestableLibrary.Prig
                 m_target = target;
             }
 
-            class OriginalDispose
-            {
-                public static IndirectionAction<UntestableLibrary.ULSharedMemory> Body;
-            }
-
-            IndirectionAction<UntestableLibrary.ULSharedMemory> m_body;
             public IndirectionAction<UntestableLibrary.ULSharedMemory> Body
             {
+                get
+                {
+                    return PULSharedMemory.Dispose().Body;
+                }
                 set
                 {
-                    PULSharedMemory.Dispose().Body = (UntestableLibrary.ULSharedMemory arg1) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            m_body(arg1);
-                        else
-                            IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionAction<UntestableLibrary.ULSharedMemory>(ref OriginalDispose.Body, typeof(UntestableLibrary.ULSharedMemory), "Dispose", arg1);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PULSharedMemory.Dispose().RemoveTargetInstanceBody(m_target);
+                    else
+                        PULSharedMemory.Dispose().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<UntestableLibrary.ULSharedMemory>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PULSharedMemory.Dispose().Info; }
             }
         } 
         public zzAddOnDisposed AddOnDisposed() 
@@ -92,7 +107,7 @@ namespace UntestableLibrary.Prig
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAddOnDisposed 
+        public class zzAddOnDisposed : IBehaviorPreparable 
         {
             UntestableLibrary.ULSharedMemory m_target;
 
@@ -101,31 +116,68 @@ namespace UntestableLibrary.Prig
                 m_target = target;
             }
 
-            class OriginalAddOnDisposed
-            {
-                public static IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler> Body;
-            }
-
-            IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler> m_body;
             public IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler> Body
             {
+                get
+                {
+                    return PULSharedMemory.AddOnDisposed().Body;
+                }
                 set
                 {
-                    PULSharedMemory.AddOnDisposed().Body = (UntestableLibrary.ULSharedMemory arg1, UntestableLibrary.ULSharedMemory.DisposedEventHandler arg2) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            m_body(arg1, arg2);
-                        else
-                            IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>(ref OriginalAddOnDisposed.Body, typeof(UntestableLibrary.ULSharedMemory), "add_OnDisposed", arg1, arg2);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PULSharedMemory.AddOnDisposed().RemoveTargetInstanceBody(m_target);
+                    else
+                        PULSharedMemory.AddOnDisposed().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PULSharedMemory.AddOnDisposed().Info; }
             }
         }
 
         public static implicit operator UntestableLibrary.ULSharedMemory(PProxyULSharedMemory @this)
         {
             return @this.m_target;
+        }
+
+        public InstanceBehaviorSetting ExcludeGeneric()
+        {
+            var preparables = typeof(PProxyULSharedMemory).GetNestedTypes().
+                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
+                                          Where(_ => !_.IsGenericType).
+                                          Select(_ => Activator.CreateInstance(_, new object[] { m_target })).
+                                          Cast<IBehaviorPreparable>();
+            var setting = new InstanceBehaviorSetting(this);
+            foreach (var preparable in preparables)
+                setting.Include(preparable);
+            return setting;
+        }
+
+        public class InstanceBehaviorSetting : BehaviorSetting
+        {
+            private PProxyULSharedMemory m_this;
+
+            public InstanceBehaviorSetting(PProxyULSharedMemory @this)
+            {
+                m_this = @this;
+            }
+            public override IndirectionBehaviors DefaultBehavior
+            {
+                set
+                {
+                    m_this.DefaultBehavior = value;
+                    foreach (var preparable in Preparables)
+                        preparable.Prepare(m_this.DefaultBehavior);
+                }
+            }
         }
     }
 }

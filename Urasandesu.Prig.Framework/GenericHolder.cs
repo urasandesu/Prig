@@ -35,5 +35,18 @@ namespace Urasandesu.Prig.Framework
     {
         GenericHolder() { }
         public T Source { get; set; }
+
+        protected internal override void Prepare()
+        {
+            Source = Source;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Source = default(T);
+            }
+        }
     }
 }

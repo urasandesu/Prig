@@ -74,21 +74,31 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear()
     ing.Clear();
 }
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsEnabled()
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersEnterDisabledProcessing()
+{
+    CPPANONYM_LOG_FUNCTION();
+
+    CPPANONYM_D_LOGW(L"InstanceGettersEnterDisabledProcessing()");
+    auto &ing = InstanceGetters::GetInstance();
+    ing.EnterDisabledProcessing();
+}
+
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProcessing()
 {
     CPPANONYM_LOG_FUNCTION();
 
     auto &ing = InstanceGetters::GetInstance();
-    auto result = ing.IsEnabled();
-    CPPANONYM_D_LOGW1(L"InstanceGettersIsEnabled(): %|1$d|", result);
+    auto result = ing.ExitDisabledProcessing();
+    CPPANONYM_D_LOGW1(L"InstanceGettersExitDisabledProcessing(): %|1$d|", result);
     return result;
 }
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersSetIsEnabled(BOOL value)
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing()
 {
     CPPANONYM_LOG_FUNCTION();
 
     auto &ing = InstanceGetters::GetInstance();
-    ing.SetIsEnabled(value);
-    CPPANONYM_D_LOGW1(L"InstanceGettersSetIsEnabled(value: %|1$s|)", value);
+    auto result = ing.IsDisabledProcessing();
+    CPPANONYM_D_LOGW1(L"InstanceGettersIsDisabledProcessing(): %|1$d|", result);
+    return result;
 }

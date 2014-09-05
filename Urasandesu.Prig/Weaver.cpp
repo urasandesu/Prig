@@ -313,6 +313,7 @@ namespace CWeaverDetail {
         {
             auto *pPrigData = new PrigData();
             pData = AnyPtr(pPrigData);
+            pPrigData->m_corVersion = pRuntime->GetCORVersion();
             pPrigData->m_indDllPath = targetIndDllPath;
             pDomainProf->SetData(asmId, pData);
         }
@@ -472,6 +473,30 @@ namespace CWeaverDetail {
 
         auto timer = cpu_timer();
 
+        auto mscorlibFullName = wstring();
+        if (prigData.m_corVersion == L"v2.0.50727")
+            mscorlibFullName = L"mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+        else if (prigData.m_corVersion == L"v4.0.30319")
+            mscorlibFullName = L"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+        _ASSERTE(!mscorlibFullName.empty());
+        
+        auto const *pMSCorLib = pDisp->GetAssembly(mscorlibFullName);
+        auto const *pMSCorLibDll = pMSCorLib->GetMainModule();
+
+        CPPANONYM_V_LOG1("Processing time to find mscorlib: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
+        auto const *pException = pMSCorLibDll->GetType(L"System.Exception");
+        auto const *pType = pMSCorLibDll->GetType(L"System.Type");
+
+        CPPANONYM_V_LOG1("Processing time to get BCL definitions 1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
+        auto const *pType_GetTypeFromHandle = pType->GetMethod(L"GetTypeFromHandle");
+
+        CPPANONYM_V_LOG1("Processing time to get BCL definitions 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        timer = cpu_timer();
+
         auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
         auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
 
@@ -482,6 +507,7 @@ namespace CWeaverDetail {
         auto const *pIndHolder1 = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionHolder`1");
         auto const *pIndDlgtAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionDelegateAttribute");
         auto const *pLooseCrossDomainAccessor = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.LooseCrossDomainAccessor");
+        auto const *pFlowControlException = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.FlowControlException");
 
         CPPANONYM_V_LOG1("Processing time to get indirection definitions 1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
         timer = cpu_timer();
@@ -502,15 +528,11 @@ namespace CWeaverDetail {
         timer = cpu_timer();
 
         auto const *pIndInfo_set_AssemblyName = pIndInfo->GetMethod(L"set_AssemblyName");
-        _ASSERTE(pIndInfo_set_AssemblyName);
         auto const *pIndInfo_set_Token = pIndInfo->GetMethod(L"set_Token");
-        _ASSERTE(pIndInfo_set_Token);
         auto const *pIndDlgtInst_Invoke = pIndDlgtInst->GetMethod(L"Invoke");
-        _ASSERTE(pIndDlgtInst_Invoke);
         auto const *pLooseCrossDomainAccessor_TryGet = pLooseCrossDomainAccessor->GetMethod(L"TryGet");
-        _ASSERTE(pLooseCrossDomainAccessor_TryGet);
+        auto const *pLooseCrossDomainAccessor_IsInstanceOfIdentity = pLooseCrossDomainAccessor->GetMethod(L"IsInstanceOfIdentity");
         auto const *pIndHolder1IndDlgtInst_TryGet = pIndHolder1IndDlgtInst->GetMethod(L"TryGet");
-        _ASSERTE(pIndHolder1IndDlgtInst_TryGet);
 
         CPPANONYM_V_LOG1("Processing time to get indirection definitions 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
         timer = cpu_timer();
@@ -528,37 +550,69 @@ namespace CWeaverDetail {
         auto *pLocal0_holder = pNewBodyGen->DefineLocal(pIndHolder1IndDlgtInst);
         auto *pLocal1_info = pNewBodyGen->DefineLocal(pIndInfo);
         auto *pLocal2_ind = pNewBodyGen->DefineLocal(pIndDlgtInst);
+        auto *pLocal3_e = pNewBodyGen->DefineLocal(pException);
+        auto *pLocal4 = static_cast<LocalGenerator *>(nullptr);
+        if (pMethodGen->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
+            pLocal4 = pNewBodyGen->DefineLocal(pMethodGen->GetReturnType());
 
         auto label0 = pNewBodyGen->DefineLabel();
+        auto label1 = pNewBodyGen->DefineLabel();
+        auto label2 = pNewBodyGen->DefineLabel();
+        auto label3 = pNewBodyGen->DefineLabel();
 
-        pNewBodyGen->Emit(OpCodes::Ldnull);
-        pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal0_holder);
-        pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal0_holder);
-        pNewBodyGen->Emit(OpCodes::Call, pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst);
-        pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
+        pNewBodyGen->BeginExceptionBlock();
+        {
+            pNewBodyGen->Emit(OpCodes::Ldnull);
+            pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal0_holder);
+            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal0_holder);
+            pNewBodyGen->Emit(OpCodes::Call, pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst);
+            pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
 
-        pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
-        pNewBodyGen->Emit(OpCodes::Initobj, pIndInfo);
-        pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
-        pNewBodyGen->Emit(OpCodes::Ldstr, pMethodGen->GetAssembly()->GetFullName());
-        pNewBodyGen->Emit(OpCodes::Call, pIndInfo_set_AssemblyName);
-        pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
-        pNewBodyGen->Emit(OpCodes::Ldc_I4, static_cast<INT>(pMethodGen->GetToken()));
-        pNewBodyGen->Emit(OpCodes::Call, pIndInfo_set_Token);
-        pNewBodyGen->Emit(OpCodes::Ldnull);
-        pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal2_ind);
-        pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal0_holder);
-        pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal1_info);
-        pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal2_ind);
-        pNewBodyGen->Emit(OpCodes::Callvirt, pIndHolder1IndDlgtInst_TryGet);
-        pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
+            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
+            pNewBodyGen->Emit(OpCodes::Initobj, pIndInfo);
+            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
+            pNewBodyGen->Emit(OpCodes::Ldstr, pMethodGen->GetAssembly()->GetFullName());
+            pNewBodyGen->Emit(OpCodes::Call, pIndInfo_set_AssemblyName);
+            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
+            pNewBodyGen->Emit(OpCodes::Ldc_I4, static_cast<INT>(pMethodGen->GetToken()));
+            pNewBodyGen->Emit(OpCodes::Call, pIndInfo_set_Token);
+            pNewBodyGen->Emit(OpCodes::Ldnull);
+            pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal2_ind);
+            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal0_holder);
+            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal1_info);
+            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal2_ind);
+            pNewBodyGen->Emit(OpCodes::Callvirt, pIndHolder1IndDlgtInst_TryGet);
+            pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
 
-        pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal2_ind);
-        EmitIndirectParameters(pNewBodyGen, pMethodGen);
-        pNewBodyGen->Emit(OpCodes::Callvirt, pIndDlgtInst_Invoke);
+            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal2_ind);
+            EmitIndirectParameters(pNewBodyGen, pMethodGen);
+            pNewBodyGen->Emit(OpCodes::Callvirt, pIndDlgtInst_Invoke);
+            if (pLocal4)
+                pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal4);
+            pNewBodyGen->Emit(OpCodes::Leave_S, label1);
+
+            pNewBodyGen->MarkLabel(label0);
+        }
+        pNewBodyGen->BeginCatchBlock(pException);
+        {
+            pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal3_e);
+            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal3_e);
+            pNewBodyGen->Emit(OpCodes::Ldstr, L"Urasandesu.Prig.Framework.FlowControlException");
+            pNewBodyGen->Emit(OpCodes::Call, pLooseCrossDomainAccessor_IsInstanceOfIdentity);
+            pNewBodyGen->Emit(OpCodes::Brtrue_S, label2);
+            
+            pNewBodyGen->Emit(OpCodes::Rethrow);
+            
+            pNewBodyGen->MarkLabel(label2);
+        }
+        pNewBodyGen->EndExceptionBlock();
+        
+        pNewBodyGen->Emit(OpCodes::Br_S, label3);
+        pNewBodyGen->MarkLabel(label1);
+        if (pLocal4)
+            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal4);
         pNewBodyGen->Emit(OpCodes::Ret);
-
-        pNewBodyGen->MarkLabel(label0);
+        pNewBodyGen->MarkLabel(label3);
 
         auto size = pNewBodyGen->GetInstructions().size();
 

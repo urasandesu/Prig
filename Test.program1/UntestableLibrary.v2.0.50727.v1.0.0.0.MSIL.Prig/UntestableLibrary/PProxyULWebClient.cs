@@ -1,5 +1,8 @@
 ﻿
+using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Urasandesu.Prig.Framework;
 
@@ -14,13 +17,15 @@ namespace UntestableLibrary.Prig
             m_target = (UntestableLibrary.ULWebClient)FormatterServices.GetUninitializedObject(typeof(UntestableLibrary.ULWebClient));
         }
 
+        public IndirectionBehaviors DefaultBehavior { get; internal set; }
+
         public zzAddDownloadFileCompleted AddDownloadFileCompleted() 
         {
             return new zzAddDownloadFileCompleted(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAddDownloadFileCompleted 
+        public class zzAddDownloadFileCompleted : IBehaviorPreparable 
         {
             UntestableLibrary.ULWebClient m_target;
 
@@ -29,25 +34,30 @@ namespace UntestableLibrary.Prig
                 m_target = target;
             }
 
-            class OriginalAddDownloadFileCompleted
-            {
-                public static IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> Body;
-            }
-
-            IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> m_body;
             public IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> Body
             {
+                get
+                {
+                    return PULWebClient.AddDownloadFileCompleted().Body;
+                }
                 set
                 {
-                    PULWebClient.AddDownloadFileCompleted().Body = (UntestableLibrary.ULWebClient arg1, System.ComponentModel.AsyncCompletedEventHandler arg2) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            m_body(arg1, arg2);
-                        else
-                            IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>(ref OriginalAddDownloadFileCompleted.Body, typeof(UntestableLibrary.ULWebClient), "add_DownloadFileCompleted", arg1, arg2);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PULWebClient.AddDownloadFileCompleted().RemoveTargetInstanceBody(m_target);
+                    else
+                        PULWebClient.AddDownloadFileCompleted().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PULWebClient.AddDownloadFileCompleted().Info; }
             }
         } 
         public zzRemoveDownloadFileCompleted RemoveDownloadFileCompleted() 
@@ -56,7 +66,7 @@ namespace UntestableLibrary.Prig
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzRemoveDownloadFileCompleted 
+        public class zzRemoveDownloadFileCompleted : IBehaviorPreparable 
         {
             UntestableLibrary.ULWebClient m_target;
 
@@ -65,25 +75,30 @@ namespace UntestableLibrary.Prig
                 m_target = target;
             }
 
-            class OriginalRemoveDownloadFileCompleted
-            {
-                public static IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> Body;
-            }
-
-            IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> m_body;
             public IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> Body
             {
+                get
+                {
+                    return PULWebClient.RemoveDownloadFileCompleted().Body;
+                }
                 set
                 {
-                    PULWebClient.RemoveDownloadFileCompleted().Body = (UntestableLibrary.ULWebClient arg1, System.ComponentModel.AsyncCompletedEventHandler arg2) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            m_body(arg1, arg2);
-                        else
-                            IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>(ref OriginalRemoveDownloadFileCompleted.Body, typeof(UntestableLibrary.ULWebClient), "remove_DownloadFileCompleted", arg1, arg2);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PULWebClient.RemoveDownloadFileCompleted().RemoveTargetInstanceBody(m_target);
+                    else
+                        PULWebClient.RemoveDownloadFileCompleted().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PULWebClient.RemoveDownloadFileCompleted().Info; }
             }
         } 
         public zzDownloadFileAsync DownloadFileAsync() 
@@ -92,7 +107,7 @@ namespace UntestableLibrary.Prig
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzDownloadFileAsync 
+        public class zzDownloadFileAsync : IBehaviorPreparable 
         {
             UntestableLibrary.ULWebClient m_target;
 
@@ -101,31 +116,68 @@ namespace UntestableLibrary.Prig
                 m_target = target;
             }
 
-            class OriginalDownloadFileAsync
-            {
-                public static IndirectionAction<UntestableLibrary.ULWebClient, System.Uri> Body;
-            }
-
-            IndirectionAction<UntestableLibrary.ULWebClient, System.Uri> m_body;
             public IndirectionAction<UntestableLibrary.ULWebClient, System.Uri> Body
             {
+                get
+                {
+                    return PULWebClient.DownloadFileAsync().Body;
+                }
                 set
                 {
-                    PULWebClient.DownloadFileAsync().Body = (UntestableLibrary.ULWebClient arg1, System.Uri arg2) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            m_body(arg1, arg2);
-                        else
-                            IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionAction<UntestableLibrary.ULWebClient, System.Uri>(ref OriginalDownloadFileAsync.Body, typeof(UntestableLibrary.ULWebClient), "DownloadFileAsync", arg1, arg2);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PULWebClient.DownloadFileAsync().RemoveTargetInstanceBody(m_target);
+                    else
+                        PULWebClient.DownloadFileAsync().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<UntestableLibrary.ULWebClient, System.Uri>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PULWebClient.DownloadFileAsync().Info; }
             }
         }
 
         public static implicit operator UntestableLibrary.ULWebClient(PProxyULWebClient @this)
         {
             return @this.m_target;
+        }
+
+        public InstanceBehaviorSetting ExcludeGeneric()
+        {
+            var preparables = typeof(PProxyULWebClient).GetNestedTypes().
+                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
+                                          Where(_ => !_.IsGenericType).
+                                          Select(_ => Activator.CreateInstance(_, new object[] { m_target })).
+                                          Cast<IBehaviorPreparable>();
+            var setting = new InstanceBehaviorSetting(this);
+            foreach (var preparable in preparables)
+                setting.Include(preparable);
+            return setting;
+        }
+
+        public class InstanceBehaviorSetting : BehaviorSetting
+        {
+            private PProxyULWebClient m_this;
+
+            public InstanceBehaviorSetting(PProxyULWebClient @this)
+            {
+                m_this = @this;
+            }
+            public override IndirectionBehaviors DefaultBehavior
+            {
+                set
+                {
+                    m_this.DefaultBehavior = value;
+                    foreach (var preparable in Preparables)
+                        preparable.Prepare(m_this.DefaultBehavior);
+                }
+            }
         }
     }
 }

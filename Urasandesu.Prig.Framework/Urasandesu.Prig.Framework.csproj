@@ -70,11 +70,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FallthroughException.cs" />
+    <Compile Include="FlowControlException.cs" />
+    <Compile Include="BehaviorSetting.cs" />
+    <Compile Include="IndirectionBehaviors.cs" />
     <Compile Include="IndirectionDelegates.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IndirectionDelegates.tt</DependentUpon>
     </Compile>
+    <Compile Include="IndirectionAssemblyRepository.cs" />
+    <Compile Include="TaggedBagFactory.cs" />
+    <Compile Include="TaggedBag.cs" />
+    <Compile Include="TargetSettingValue.cs" />
+    <Compile Include="IBehaviorPreparable.cs" />
     <Compile Include="PilotStubberConfiguration\IndirectionStub.cs" />
     <Compile Include="PilotStubberConfiguration\PrigSection.cs" />
     <Compile Include="PilotStubberConfiguration\StubCollection.cs" />

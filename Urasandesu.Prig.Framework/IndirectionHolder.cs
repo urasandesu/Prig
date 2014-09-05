@@ -28,86 +28,116 @@
  */
 
 
-using System;
+
 using System.Collections.Generic;
+using System.Diagnostics;
+using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Prig.Framework
 {
-    public class IndirectionHolder<TDelegate> : InstanceHolder<IndirectionHolder<TDelegate>>, IDisposable
+    public class IndirectionHolder<TDelegate> : InstanceHolder<IndirectionHolder<TDelegate>> where TDelegate : class
     {
         IndirectionHolder() { }
 
-        Dictionary<string, TDelegate> m_dict = new Dictionary<string, TDelegate>();
+        Dictionary<string, TDelegate> m_dict = InstanceGetters.DisableProcessing().EnsureDisposalThen(_ => new Dictionary<string, TDelegate>());
 
         public bool TryGet(IndirectionInfo info, out TDelegate method)
         {
             method = default(TDelegate);
-            if (!InstanceGetters.IsEnabled())
+            if (InstanceGetters.IsDisabledProcessing())
                 return false;
 
             lock (m_dict)
             {
-                var key = info + "";
-                if (!m_dict.ContainsKey(key))
-                    return false;
+                using (InstanceGetters.DisableProcessing())
+                {
+                    var key = info + "";
+                    if (!m_dict.ContainsKey(key))
+                        return false;
 
-                method = m_dict[key];
-                return true;
+                    method = m_dict[key];
+                    return true;
+                }
             }
+        }
+
+        public TDelegate GetOrDefault(IndirectionInfo info)
+        {
+            var method = default(TDelegate);
+            TryGet(info, out method);
+            return method;
+        }
+
+        public bool Remove(IndirectionInfo info)
+        {
+            var method = default(TDelegate);
+            return TryRemove(info, out method);
         }
 
         public bool TryRemove(IndirectionInfo info, out TDelegate method)
         {
             method = default(TDelegate);
-            if (!InstanceGetters.IsEnabled())
-                return false;
 
             lock (m_dict)
             {
-                var key = info + "";
-                if (!m_dict.ContainsKey(key))
-                    return false;
+                using (InstanceGetters.DisableProcessing())
+                {
+                    var key = info + "";
+                    if (!m_dict.ContainsKey(key))
+                        return false;
 
-                method = m_dict[key];
-                m_dict.Remove(key);
-                return true;
+                    method = m_dict[key];
+                    m_dict.Remove(key);
+                    return true;
+                }
             }
         }
 
         public TDelegate AddOrUpdate(IndirectionInfo info, TDelegate method)
         {
-            if (!InstanceGetters.IsEnabled())
-                return method;
-
             lock (m_dict)
             {
-                var key = info + "";
-                m_dict[key] = method;
-                return method;
+                using (InstanceGetters.DisableProcessing())
+                {
+                    var key = info + "";
+                    m_dict[key] = method;
+                    return method;
+                }
             }
         }
 
-        public void Dispose()
+        protected internal override void Prepare()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            {
+                var method = default(TDelegate);
+                AddOrUpdate(IndirectionInfo.Empty, method);
+            }
+            {
+                var method = default(TDelegate);
+                var result = TryGet(IndirectionInfo.Empty, out method);
+                Debug.Assert(result);
+            }
+            {
+                var method = default(TDelegate);
+                var result = TryRemove(IndirectionInfo.Empty, out method);
+                Debug.Assert(result);
+            }
+            {
+                var result = GetOrDefault(IndirectionInfo.Empty);
+                Debug.Assert(result == null);
+            }
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             lock (m_dict)
             {
                 if (disposing)
                 {
-                    m_dict.Clear(); // You must not set m_dict null, because this instance will be reused usually. 
-                    // Also the normal disposable pattern is not available.
+                    using (InstanceGetters.DisableProcessing())
+                        m_dict.Clear();
                 }
             }
-        }
-
-        ~IndirectionHolder()
-        {
-            Dispose(false);
         }
     }
 }

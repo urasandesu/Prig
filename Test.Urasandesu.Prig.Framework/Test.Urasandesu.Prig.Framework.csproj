@@ -69,11 +69,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleTest.cs" />
+    <Compile Include="IndirectionHolderTest.cs" />
     <Compile Include="DelegateTest.cs" />
     <Compile Include="IndirectionDelegatesTest.cs" />
     <Compile Include="InstanceGettersTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StopwatchTest.cs" />
+    <Compile Include="TestUtilities\LooseCrossDomainAssert.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">

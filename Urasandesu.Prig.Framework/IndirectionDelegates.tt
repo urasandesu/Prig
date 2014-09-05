@@ -89,6 +89,7 @@ var templates = new[]
 
 
 using System;
+using System.Collections.Generic;
 using Urasandesu.NAnonym;
 using Urasandesu.NAnonym.Mixins.System;
 
@@ -116,17 +117,19 @@ foreach (var template in templates)
 #>
     public static partial class IndirectionDelegates
     {
-        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfStatic<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(ref <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> cache, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
+        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfStatic<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Func<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheGetter, Action<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheSetter, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
         {
-            if (cache == null)
+            if (cacheGetter() == null)
             {
                 var dlgt = type.GetMethodDelegate(name, new Type[] { <#= methodDef.LoadParameterTypes() #> });
                 if (dlgt == null)
                     throw new ArgumentException(string.Format("The method '{0}' is not found in the type '{1}'.", name, type));
-                cache = ToStatic<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+                var original = ToStatic<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+                cacheSetter(original);
+                System.Diagnostics.Debug.Assert(object.ReferenceEquals(cacheGetter(), original));
             }
-            var _cache = cache; <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
-            <#= methodDef.StoreExecutedResult() #>IndirectionsContext.ExecuteOriginal(() => _cache(<#= methodDef.LoadParametersWithAttributes() #>)); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
+            <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
+            <#= methodDef.StoreExecutedResult() #>IndirectionsContext.ExecuteOriginal(() => cacheGetter()(<#= methodDef.LoadParametersWithAttributes() #>)); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
             return <#= methodDef.LoadExecutedResult() #>;
         }
 
@@ -142,21 +145,71 @@ foreach (var template in templates)
             });
         }
 
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> CreateDelegateOfDefaultBehavior<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(IndirectionBehaviors defaultBehavior)
+        {
+            return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
+            {
+                if (defaultBehavior == IndirectionBehaviors.DefaultValue)
+                {
+                    <#= methodDef.StoreDefaultResult() #><#= string.IsNullOrEmpty(methodDef.StoreDefaultResult()) ? "" : ";" #>
+                    <#= methodDef.StoreDefaultValueToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreDefaultValueToResultParameters()) ? "" : ";" #>
+                    return <#= methodDef.LoadExecutedResult() #>;
+                }
+
+                if (defaultBehavior == IndirectionBehaviors.Fallthrough)
+                {
+                    using (InstanceGetters.DisableProcessing())
+                        throw new FallthroughException();
+                }
+                
+                using (InstanceGetters.DisableProcessing())
+                    throw new NotImplementedException();
+            });
+        }
+
 <#
         if (!methodDef.FirstRefParameterDefinitions.Any())
         {
 #>
-        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfInstance<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(ref <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> cache, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
+<#
+            if (methodDef.MiddleParameterDefinitions.Any())
+            {
+#>
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> CreateDelegateExecutingDefaultOr<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> defaultBehavior, Dictionary<T1, TargetSettingValue<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>>> indirections)
         {
-            if (cache == null)
+            return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
+            {
+                if (EqualityComparer<T1>.Default.Equals(arg1, default(T1)) || !indirections.ContainsKey(arg1))
+                {
+                    <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
+                    <#= methodDef.StoreExecutedResult() #>defaultBehavior(<#= methodDef.LoadParametersWithAttributes() #>); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
+                    return <#= methodDef.LoadExecutedResult() #>;
+                }
+                else
+                {
+                    <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
+                    <#= methodDef.StoreExecutedResult() #>indirections[arg1].Indirection(<#= methodDef.LoadParametersWithAttributes() #>); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
+                    return <#= methodDef.LoadExecutedResult() #>;
+                }
+            });
+        }
+<#
+            }
+#>
+
+        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfInstance<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Func<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheGetter, Action<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheSetter, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
+        {
+            if (cacheGetter() == null)
             {
                 var dlgt = type.GetMethodDelegate(name, new Type[] { <#= methodDef.LoadParameterTypes(2) #> });
                 if (dlgt == null)
                     throw new ArgumentException(string.Format("The method '{0}' is not found in the type '{1}'.", name, type));
-                cache = ToInstance<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+                var original = ToInstance<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+                cacheSetter(original);
+                System.Diagnostics.Debug.Assert(object.ReferenceEquals(cacheGetter(), original));
             }
-            var _cache = cache; <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
-            <#= methodDef.StoreExecutedResult() #>IndirectionsContext.ExecuteOriginal(() => _cache(<#= methodDef.LoadParametersWithAttributes() #>)); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
+            <#= methodDef.DefineTempLocalForResultParameters() #><#= string.IsNullOrEmpty(methodDef.DefineTempLocalForResultParameters()) ? "" : ";" #>
+            <#= methodDef.StoreExecutedResult() #>IndirectionsContext.ExecuteOriginal(() => cacheGetter()(<#= methodDef.LoadParametersWithAttributes() #>)); <#= methodDef.StoreTempLocalsToResultParameters() #><#= string.IsNullOrEmpty(methodDef.StoreTempLocalsToResultParameters()) ? "" : ";" #>
             return <#= methodDef.LoadExecutedResult() #>;
         }
 
@@ -324,6 +377,7 @@ class GenericInvokerDefinition
 
     public string Name { get; private set; }
     public IEnumerable<GenericResultParameterDefinition> FirstRefParameterDefinitions { get { return m_firstRefParamDefs; } }
+    public IEnumerable<GenericParameterDefinition> MiddleParameterDefinitions { get { return m_middleParamDefs; } }
 
     public string DefineReturnType()
     {
@@ -423,6 +477,11 @@ class GenericInvokerDefinition
     public string StoreExecutedResult()
     {
         return m_retDef.StoreExecutedResult();
+    }
+
+    public string StoreDefaultResult()
+    {
+        return m_retDef.StoreDefaultResult();
     }
 
     public string LoadExecutedResult()
@@ -695,6 +754,11 @@ class GenericReturnDefinition : GenericSignatureDefinition
     public virtual string StoreExecutedResult()
     {
         return m_id == 0 ? "" : "var result = (TResult)";
+    }
+
+    public virtual string StoreDefaultResult()
+    {
+        return m_id == 0 ? "" : "var result = default(TResult)";
     }
 
     public virtual string LoadExecutedResult()

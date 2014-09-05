@@ -29,8 +29,8 @@
 
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
@@ -48,7 +48,8 @@ namespace Urasandesu.Prig.Framework
         {
             LooseCrossDomainAccessor<T>.Register();
             lock (ms_registrations)
-                ms_registrations.Add(typeof(T));
+                using (InstanceGetters.DisableProcessing())
+                    ms_registrations.Add(typeof(T));
         }
 
         public static void Unload<T>() where T : InstanceHolder<T>
@@ -75,6 +76,8 @@ namespace Urasandesu.Prig.Framework
         public static bool TryGet<T>(out T holder) where T : InstanceHolder<T>
         {
             holder = LooseCrossDomainAccessor<T>.HolderOrDefault;
+            if (holder == null && !InstanceGetters.IsDisabledProcessing())
+                holder = GetOrRegister<T>();
             return holder != null;
         }
 
@@ -82,11 +85,55 @@ namespace Urasandesu.Prig.Framework
         {
             lock (ms_registrations)
             {
-                foreach (var unloadMethod in ms_registrations.Select(_ => typeof(LooseCrossDomainAccessor<>).MakeGenericType(_)).
-                                                              Select(_ => _.GetMethod("Unload")))
-                    unloadMethod.Invoke(null, new object[0]);
+                using (InstanceGetters.DisableProcessing())
+                {
+                    var unloadMethods = ms_registrations.Select(_ => typeof(LooseCrossDomainAccessor<>).MakeGenericType(_)).
+                                                         Select(_ => _.GetMethod("Unload")).
+                                                         ToArray();
+                    for (int i = 0; i < unloadMethods.Length; i++)
+                        unloadMethods[i].Invoke(null, new object[0]);
+                    InstanceGetters.Clear();
+                }
             }
-            InstanceGetters.Clear();
+        }
+
+        public static bool IsTypeOf(object obj, Type type)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            return ToLooseDomainIdentity(obj.GetType()) == ToLooseDomainIdentity(type);
+        }
+
+        public static bool IsInstanceOfType(object obj, Type type)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+
+            var id = ToLooseDomainIdentity(type);
+            return IsInstanceOfIdentity(obj, id);
+        }
+
+        public static bool IsInstanceOfIdentity(object obj, string id)
+        {
+            if (obj == null)
+                return false;
+
+            for (var _type = obj.GetType(); _type != null; _type = _type.BaseType)
+                if (id == ToLooseDomainIdentity(_type))
+                    return true;
+
+            return false;
+        }
+
+        static string ToLooseDomainIdentity(Type type)
+        {
+            // Don't use AssemblyQualifiedName because the AppDomain may have different permission set from current AppDomain.
+            // The property AssemblyQualifiedName tries load its assembly again, so FileLoadException will be thrown in this case.
+            return type.FullName;
         }
     }
 
@@ -102,23 +149,14 @@ namespace Urasandesu.Prig.Framework
 
         public static void Register()
         {
-            var instance = ms_t.GetProperty("Instance", BindingFlags.Public |
-                                                        BindingFlags.Static |
-                                                        BindingFlags.FlattenHierarchy);
-            var instanceGetter = instance.GetGetMethod();
-            RuntimeHelpers.PrepareMethod(instanceGetter.MethodHandle);
-            var funcPtr = instanceGetter.MethodHandle.GetFunctionPointer();
-            InstanceGetters.TryAdd(ms_key, funcPtr);
-        }
-
-        static T GetHolder()
-        {
-            var funcPtr = default(IntPtr);
-            if (!InstanceGetters.TryGet(ms_key, out funcPtr))
-                throw new InvalidOperationException("T has not been registered yet. " +
-                                                    "Please call Register method.");
-
-            return GetHolderCore(funcPtr);
+            using (InstanceGetters.DisableProcessing())
+            {
+                var instance = ms_t.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+                var instanceGetter = instance.GetGetMethod();
+                RuntimeHelpers.PrepareMethod(instanceGetter.MethodHandle);
+                var funcPtr = instanceGetter.MethodHandle.GetFunctionPointer();
+                InstanceGetters.TryAdd(ms_key, funcPtr);
+            }
         }
 
         static bool TryGetHolder(out T holder)
@@ -131,30 +169,29 @@ namespace Urasandesu.Prig.Framework
             }
             else
             {
-                holder = GetHolderCore(funcPtr);
+                using (InstanceGetters.DisableProcessing())
+                {
+                    var extractor = new DynamicMethod("Extractor", ms_t, null, ms_t.Module);
+                    var gen = extractor.GetILGenerator();
+                    if (IntPtr.Size == 4)
+                    {
+                        gen.Emit(OpCodes.Ldc_I4, funcPtr.ToInt32());
+                    }
+                    else if (IntPtr.Size == 8)
+                    {
+                        gen.Emit(OpCodes.Ldc_I8, funcPtr.ToInt64());
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+                    gen.EmitCalli(OpCodes.Calli, CallingConventions.Standard, ms_t, null, null);
+                    gen.Emit(OpCodes.Ret);
+                    holder = ((Func<T>)extractor.CreateDelegate(typeof(Func<T>)))();
+                }
+                holder.Prepare();
                 return true;
             }
-        }
-
-        static T GetHolderCore(IntPtr funcPtr)
-        {
-            var extractor = new DynamicMethod("Extractor", ms_t, null, ms_t.Module);
-            var gen = extractor.GetILGenerator();
-            if (IntPtr.Size == 4)
-            {
-                gen.Emit(OpCodes.Ldc_I4, funcPtr.ToInt32());
-            }
-            else if (IntPtr.Size == 8)
-            {
-                gen.Emit(OpCodes.Ldc_I8, funcPtr.ToInt64());
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-            gen.EmitCalli(OpCodes.Calli, CallingConventions.Standard, ms_t, null, null);
-            gen.Emit(OpCodes.Ret);
-            return ((Func<T>)extractor.CreateDelegate(typeof(Func<T>)))();
         }
 
         public static T Holder
@@ -167,8 +204,13 @@ namespace Urasandesu.Prig.Framework
                     {
                         if (!ms_ready)
                         {
-                            ms_holder = GetHolder();
-                            Thread.MemoryBarrier();
+                            var holder = default(T);
+                            if (!TryGetHolder(out holder))
+                                using (InstanceGetters.DisableProcessing())
+                                    throw new InvalidOperationException(string.Format("T({0}) has not been registered yet. Please call Register method.", typeof(T)));
+                            ms_holder = holder;
+                            using (InstanceGetters.DisableProcessing())
+                                Thread.MemoryBarrier();
                             ms_ready = true;
                         }
                     }
@@ -191,7 +233,8 @@ namespace Urasandesu.Prig.Framework
                             if (TryGetHolder(out holder))
                             {
                                 ms_holder = holder;
-                                Thread.MemoryBarrier();
+                                using (InstanceGetters.DisableProcessing())
+                                    Thread.MemoryBarrier();
                                 ms_ready = true;
                             }
                         }
@@ -213,15 +256,11 @@ namespace Urasandesu.Prig.Framework
                         InstanceGetters.TryRemove(ms_key, out funcPtr);
                         if (ms_holder != null)
                         {
-                            var disposable = ms_holder as IDisposable;
-                            if (disposable != null)
-                            {
-                                disposable.Dispose();
-                                disposable = null;
-                            }
+                            ms_holder.Dispose();
                             ms_holder = null;
                         }
-                        Thread.MemoryBarrier();
+                        using (InstanceGetters.DisableProcessing())
+                            Thread.MemoryBarrier();
                         ms_ready = false;
                     }
                 }

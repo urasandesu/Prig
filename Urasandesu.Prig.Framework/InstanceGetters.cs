@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 
 namespace Urasandesu.Prig.Framework
 {
-    static class InstanceGetters
+    public static class InstanceGetters
     {
         static InstanceGetters()
         {
@@ -56,37 +56,41 @@ namespace Urasandesu.Prig.Framework
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryAdd")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool TryAdd([MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr);
+        internal static extern bool TryAdd([MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr);
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryGet")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool TryGet([MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
+        internal static extern bool TryGet([MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryRemove")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool TryRemove([MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
+        internal static extern bool TryRemove([MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersClear")]
-        public static extern void Clear();
+        internal static extern void Clear();
 
-        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersIsEnabled")]
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersEnterDisabledProcessing")]
+        static extern void EnterDisabledProcessing();
+
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersExitDisabledProcessing")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool IsEnabled();
+        static extern bool ExitDisabledProcessing();
 
-        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersSetIsEnabled")]
-        static extern void SetIsEnabled([MarshalAs(UnmanagedType.Bool)] bool value);
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersIsDisabledProcessing")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsDisabledProcessing();
 
         public struct InstanceGettersProcessingDisabled : IDisposable
         {
             public void Dispose()
             {
-                SetIsEnabled(true);
+                ExitDisabledProcessing();
             }
         }
 
         public static InstanceGettersProcessingDisabled DisableProcessing()
         {
-            SetIsEnabled(false);
+            EnterDisabledProcessing();
             return new InstanceGettersProcessingDisabled();
         }
     }

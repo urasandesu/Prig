@@ -1,5 +1,8 @@
 ﻿
+using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Urasandesu.Prig.Framework;
 
@@ -14,13 +17,15 @@ namespace System.Text.Prig
             m_target = (System.Text.StringBuilder)FormatterServices.GetUninitializedObject(typeof(System.Text.StringBuilder));
         }
 
+        public IndirectionBehaviors DefaultBehavior { get; internal set; }
+
         public zzInsert Insert() 
         {
             return new zzInsert(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzInsert 
+        public class zzInsert : IBehaviorPreparable 
         {
             System.Text.StringBuilder m_target;
 
@@ -29,25 +34,30 @@ namespace System.Text.Prig
                 m_target = target;
             }
 
-            class OriginalInsert
-            {
-                public static IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder> Body;
-            }
-
-            IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder> m_body;
             public IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder> Body
             {
+                get
+                {
+                    return PStringBuilder.Insert().Body;
+                }
                 set
                 {
-                    PStringBuilder.Insert().Body = (System.Text.StringBuilder arg1, System.Int32 arg2, System.String arg3, System.Int32 arg4) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            return m_body(arg1, arg2, arg3, arg4);
-                        else
-                            return IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>(ref OriginalInsert.Body, typeof(System.Text.StringBuilder), "Insert", arg1, arg2, arg3, arg4);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PStringBuilder.Insert().RemoveTargetInstanceBody(m_target);
+                    else
+                        PStringBuilder.Insert().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PStringBuilder.Insert().Info; }
             }
         } 
         public zzReplace Replace() 
@@ -56,7 +66,7 @@ namespace System.Text.Prig
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzReplace 
+        public class zzReplace : IBehaviorPreparable 
         {
             System.Text.StringBuilder m_target;
 
@@ -65,31 +75,68 @@ namespace System.Text.Prig
                 m_target = target;
             }
 
-            class OriginalReplace
-            {
-                public static IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder> Body;
-            }
-
-            IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder> m_body;
             public IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder> Body
             {
+                get
+                {
+                    return PStringBuilder.Replace().Body;
+                }
                 set
                 {
-                    PStringBuilder.Replace().Body = (System.Text.StringBuilder arg1, System.Char arg2, System.Char arg3, System.Int32 arg4, System.Int32 arg5) =>
-                    {
-                        if (object.ReferenceEquals(arg1, m_target))
-                            return m_body(arg1, arg2, arg3, arg4, arg5);
-                        else
-                            return IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>(ref OriginalReplace.Body, typeof(System.Text.StringBuilder), "Replace", arg1, arg2, arg3, arg4, arg5);
-                    };
-                    m_body = value;
+                    if (value == null)
+                        PStringBuilder.Replace().RemoveTargetInstanceBody(m_target);
+                    else
+                        PStringBuilder.Replace().SetTargetInstanceBody(m_target, value);
                 }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PStringBuilder.Replace().Info; }
             }
         }
 
         public static implicit operator System.Text.StringBuilder(PProxyStringBuilder @this)
         {
             return @this.m_target;
+        }
+
+        public InstanceBehaviorSetting ExcludeGeneric()
+        {
+            var preparables = typeof(PProxyStringBuilder).GetNestedTypes().
+                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
+                                          Where(_ => !_.IsGenericType).
+                                          Select(_ => Activator.CreateInstance(_, new object[] { m_target })).
+                                          Cast<IBehaviorPreparable>();
+            var setting = new InstanceBehaviorSetting(this);
+            foreach (var preparable in preparables)
+                setting.Include(preparable);
+            return setting;
+        }
+
+        public class InstanceBehaviorSetting : BehaviorSetting
+        {
+            private PProxyStringBuilder m_this;
+
+            public InstanceBehaviorSetting(PProxyStringBuilder @this)
+            {
+                m_this = @this;
+            }
+            public override IndirectionBehaviors DefaultBehavior
+            {
+                set
+                {
+                    m_this.DefaultBehavior = value;
+                    foreach (var preparable in Preparables)
+                        preparable.Prepare(m_this.DefaultBehavior);
+                }
+            }
         }
     }
 }

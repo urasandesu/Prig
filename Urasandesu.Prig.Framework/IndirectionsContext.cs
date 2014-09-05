@@ -28,12 +28,19 @@
  */
 
 
+
 using System;
+using System.Linq;
 
 namespace Urasandesu.Prig.Framework
 {
     public class IndirectionsContext : IDisposable
     {
+        public IndirectionsContext()
+        {
+            DefaultBehavior = IndirectionBehaviors.Fallthrough;
+        }
+
         bool m_disposed;
 
         public static void ExecuteOriginal(IndirectionAction action)
@@ -54,6 +61,24 @@ namespace Urasandesu.Prig.Framework
                 return func();
         }
 
+        public static IndirectionBehaviors DefaultBehavior { get; internal set; }
+
+        public static BehaviorSetting ExcludeGeneric()
+        {
+            var repository = new IndirectionAssemblyRepository();
+            var indAsmInfos = repository.FindAll();
+            var preparables = indAsmInfos.SelectMany(_ => _.GetTypes()).
+                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
+                                          Where(_ => !_.IsGenericType).
+                                          Where(_ => _.GetConstructor(Type.EmptyTypes) != null).
+                                          Select(_ => Activator.CreateInstance(_)).
+                                          Cast<IBehaviorPreparable>(); ;
+            var setting = new BehaviorSetting();
+            foreach (var preparable in preparables)
+                setting.Include(preparable);
+            return setting;
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -66,6 +91,7 @@ namespace Urasandesu.Prig.Framework
             {
                 if (disposing)
                 {
+                    DefaultBehavior = IndirectionBehaviors.Fallthrough;
                     LooseCrossDomainAccessor.Clear();
                 }
             }

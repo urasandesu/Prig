@@ -132,7 +132,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             {
                 m_target = target;
             }
-            
+
             public bool Predicate(Type type)
             {
                 Debug.Assert(type != null);
@@ -153,7 +153,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
                     @params.Add(explicitThis);
                     @params.AddRange(m_target.GetParameters());
                 }
-                return MethodSigEqualityComparer.ReturnTypeEquals(type_Invoke, m_target) && 
+                return MethodSigEqualityComparer.ReturnTypeEquals(type_Invoke, m_target) &&
                        MethodSigEqualityComparer.ParametersEquals(type_Invoke.GetParameters(), @params);
             }
         }
