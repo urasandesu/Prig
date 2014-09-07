@@ -267,6 +267,7 @@ namespace System.Prig
             return setting;
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
             public override IndirectionBehaviors DefaultBehavior

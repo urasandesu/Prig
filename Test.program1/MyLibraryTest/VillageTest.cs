@@ -112,5 +112,62 @@ namespace Test.program1.MyLibraryTest
                 Assert.AreEqual(3, considerations[3].Identifier);
             }
         }
+
+
+
+        [Test]
+        public void Constructor_should_rethrow_any_exception_if_an_exception_is_thrown_internally()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PList<RicePaddy>.
+                    ExcludeGeneric().
+                    IncludeAdd().
+                    DefaultBehavior = IndirectionBehaviors.NotImplemented;
+
+                // Act, Assert
+                Assert.Throws<NotImplementedException>(() => new Village());
+            }
+        }
+
+        [Test]
+        public void Constructor_should_not_initialize_member_Roads_if_default_value_is_returned_internally()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PList<FarmRoad>.
+                    ExcludeGeneric().
+                    IncludeAdd().
+                    DefaultBehavior = IndirectionBehaviors.DefaultValue;
+
+                // Act
+                var vil = new Village();
+
+                // Assert
+                CollectionAssert.IsEmpty(vil.Roads);
+            }
+        }
+
+        [Test]
+        public void Constructor_should_initialize_members_indeterminately_if_original_behavior_is_performed_internally()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PList<RicePaddy>.
+                    ExcludeGeneric().
+                    IncludeAdd().
+                    DefaultBehavior = IndirectionBehaviors.Fallthrough;
+                PList<FarmRoad>.
+                    ExcludeGeneric().
+                    IncludeAdd().
+                    DefaultBehavior = IndirectionBehaviors.Fallthrough;
+
+                // Act, Assert
+                Assert.DoesNotThrow(() => new Village());
+            }
+        }
     }
 }

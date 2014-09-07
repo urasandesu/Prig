@@ -119,6 +119,7 @@ namespace System.Collections.Generic.Prig
             return setting;
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
             public TypeBehaviorSetting IncludeAdd() 

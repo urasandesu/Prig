@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Urasandesu.NAnonym.Mixins.System;
@@ -45,27 +46,17 @@ namespace Test.Urasandesu.Prig.Framework
     [TestFixture]
     public class IndirectionHolderTest
     {
-        [TestFixtureSetUp]
-        public void FixtureSetUp()
-        {
-            LooseCrossDomainAccessor.Clear();
-        }
-
-        [TestFixtureTearDown]
-        public void FixtureTearDown()
-        {
-            LooseCrossDomainAccessor.Clear();
-        }
-
         [SetUp]
         public void SetUp()
         {
             LooseCrossDomainAccessor.Clear();
+            IndirectionsContext.NewAssemblyRepository = () => new MockIndirectionAssemblyRepository();
         }
 
         [TearDown]
         public void TearDown()
         {
+            IndirectionsContext.NewAssemblyRepository = null;
             LooseCrossDomainAccessor.Clear();
         }
 
@@ -379,6 +370,14 @@ namespace Test.Urasandesu.Prig.Framework
                 Assert.Throws<NotImplementedException>(() => getYearInfoTarget(target, 0, 0));
                 Assert.Throws<FallthroughException>(() => getYearInfoTarget(new JapaneseLunisolarCalendar(), 0, 0));
             });
+        }
+
+        class MockIndirectionAssemblyRepository : IndirectionAssemblyRepository
+        {
+            public override IEnumerable<Assembly> FindAll()
+            {
+                yield return Assembly.Load("Test.Urasandesu.Prig.Framework");
+            }
         }
     }
 

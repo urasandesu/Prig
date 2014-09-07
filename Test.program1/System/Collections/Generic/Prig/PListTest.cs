@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PArrayTest.cs
+ * File: PListTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -30,58 +30,50 @@
 
 using NUnit.Framework;
 using System;
-using System.Prig;
-using Urasandesu.NAnonym.Collections.Generic;
+using System.Collections.Generic;
+using System.Collections.Generic.Prig;
 using Urasandesu.Prig.Framework;
 
-namespace Test.program1.System.Prig
+namespace Test.program1.System.Collections.Generic.Prig
 {
     [TestFixture]
-    public class PArrayTest
+    public class PListTest
     {
         [Test]
-        public void CreateInstance_should_be_callable_indirectly()
+        public void Add_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.CreateInstance().Body = (elementType, lengths, lowerBounds) => new int[5, 5];
+                var actual = default(int);
+                PList<int>.Add().Body = (@this, item) => actual = item;
 
                 // Act
-                var actual = (int[,])Array.CreateInstance(typeof(int), new int[] { 3, 3 }, new int[] { 0, 0 });
+                var list = new List<int>();
+                list.Add(42);
 
                 // Assert
-                Assert.AreEqual(5, actual.GetLength(0));
-                Assert.AreEqual(5, actual.GetLength(1));
+                Assert.AreEqual(0, list.Count);
+                Assert.AreEqual(42, actual);
             }
         }
 
         [Test]
-        public void ExistsT_should_be_callable_indirectly()
+        public void Add_should_be_callable_indirectly_against_only_specified_instance()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.Exists<int>().Body = (array, match) => true;
+                var actual = default(int);
+                var listProxy = new PProxyList<int>();
+                listProxy.Add().Body = (@this, item) => actual = item;
+                var list_sut = (List<int>)listProxy;
+
+                var list = new List<int>();
 
                 // Act
-                var actual = Array.Exists(new int[] { 1, 2, 3 }, x => x == 42);
-
-                // Assert
-                Assert.IsTrue(actual);
-            }
-        }
-
-        [Test]
-        public void BinarySearch_should_be_callable_indirectly()
-        {
-            using (new IndirectionsContext())
-            {
-                // Arrange
-                PArray.BinarySearch().Body = (array, index, length, value, comparer) => 42;
-
-                // Act
-                var actual = Array.BinarySearch(new int[] { 1, 2, 3 }, 0, 3, (object)2, new LambdaComparer<int>((_1, _2) => _1 - _2));
+                list_sut.Add(42);
+                list.Add(10);
 
                 // Assert
                 Assert.AreEqual(42, actual);
@@ -91,56 +83,76 @@ namespace Test.program1.System.Prig
 
 
         [Test]
-        public void ExistsT_should_throw_NotImplementedException_if_the_behavior_is_set_that()
+        public void Add_should_throw_NotImplementedException_if_the_instance_behavior_is_set_that()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.
+                var listProxy = new PProxyList<int>();
+                listProxy.
                     ExcludeGeneric().
-                    IncludeExists<int>().
+                    IncludeAdd().
                     DefaultBehavior = IndirectionBehaviors.NotImplemented;
+                var list_sut = (List<int>)listProxy;
+
+                var list = new List<int>();
 
                 // Act, Assert
-                Assert.Throws<NotImplementedException>(() => Array.Exists(new int[] { 1, 2, 3 }, x => x == 42));
+                Assert.Throws<NotImplementedException>(() => list_sut.Add(42));
+                Assert.DoesNotThrow(() => list.Add(10));
             }
         }
 
         [Test]
-        public void ExistsT_should_return_default_value_if_the_behavior_is_set_that()
+        public void Add_should_do_nothing_if_the_instance_behavior_is_set_that()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.
+                var listProxy = new PProxyList<int>();
+                listProxy.
                     ExcludeGeneric().
-                    IncludeExists<int>().
+                    IncludeAdd().
                     DefaultBehavior = IndirectionBehaviors.DefaultValue;
+                var list_sut = (List<int>)listProxy;
+
+                var list = new List<int>();
 
                 // Act
-                var result = Array.Exists(new int[] { 1, 2, 3 }, x => x == 2);
+                list_sut.Add(42);
+                list.Add(10);
 
                 // Assert
-                Assert.IsFalse(result);
+                CollectionAssert.IsEmpty(list_sut);
+                CollectionAssert.AreEqual(new[] { 10 }, list);
             }
         }
 
         [Test]
-        public void ExistsT_should_behave_as_same_as_original_if_the_behavior_is_set_that()
+        public void Add_should_behave_as_same_as_original_if_the_instance_behavior_is_set_that()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PArray.
+                var listProxy = new PProxyList<int>();
+                listProxy.
                     ExcludeGeneric().
-                    IncludeExists<int>().
+                    IncludeAdd().
                     DefaultBehavior = IndirectionBehaviors.Fallthrough;
+                var list_sut = (List<int>)listProxy;
+                // You have to call the constructor of the type that is original for a proxy.
+                // This isn't easy usage, but I believe that proxy is usually set indirection settings explicitly.
+                typeof(List<int>).GetConstructor(Type.EmptyTypes).Invoke(list_sut, new object[0]);
+
+                var list = new List<int>();
 
                 // Act
-                var result = Array.Exists(new int[] { 1, 2, 3 }, x => x == 2);
+                list_sut.Add(42);
+                list.Add(10);
 
                 // Assert
-                Assert.IsTrue(result);
+                CollectionAssert.AreEqual(new[] { 42 }, list_sut);
+                CollectionAssert.AreEqual(new[] { 10 }, list);
             }
         }
     }

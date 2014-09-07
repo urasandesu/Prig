@@ -63,9 +63,21 @@ namespace Urasandesu.Prig.Framework
 
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
+        static Func<IndirectionAssemblyRepository> ms_newAssemblyRepository;
+        internal static Func<IndirectionAssemblyRepository> NewAssemblyRepository
+        {
+            get
+            {
+                if (ms_newAssemblyRepository == null)
+                    ms_newAssemblyRepository = () => new IndirectionAssemblyRepository();
+                return ms_newAssemblyRepository;
+            }
+            set { ms_newAssemblyRepository = value; }
+        }
+
         public static BehaviorSetting ExcludeGeneric()
         {
-            var repository = new IndirectionAssemblyRepository();
+            var repository = NewAssemblyRepository();
             var indAsmInfos = repository.FindAll();
             var preparables = indAsmInfos.SelectMany(_ => _.GetTypes()).
                                           Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).

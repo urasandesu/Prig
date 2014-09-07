@@ -90,7 +90,7 @@ namespace Test.program1.MyLibraryTest
         }
 
 
-        
+
         [Test]
         [TestCaseSource(typeof(IsTodayHolidayTestSource), "TestCases")]
         public bool IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(DateTime today, DayOfWeek holiday)
@@ -144,6 +144,56 @@ namespace Test.program1.MyLibraryTest
                     yield return new TestCaseData(new DateTime(2013, 11, 24), (DayOfWeek)99).Returns(true);
                     yield return new TestCaseData(new DateTime(2013, 11, 25), (DayOfWeek)99).Returns(false);
                 }
+            }
+        }
+
+
+
+        [Test]
+        public void IsNowLunchBreak_should_rethrow_any_exception_if_an_exception_is_thrown_internally()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                IndirectionsContext.
+                    ExcludeGeneric().
+                    DefaultBehavior = IndirectionBehaviors.NotImplemented;
+
+                // Act, Assert
+                Assert.Throws<NotImplementedException>(() => LifeInfo.IsNowLunchBreak());
+            }
+        }
+
+        [Test]
+        public void IsNowLunchBreak_should_return_false_if_default_value_is_returned_internally()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                IndirectionsContext.
+                    ExcludeGeneric().
+                    DefaultBehavior = IndirectionBehaviors.DefaultValue;
+
+                // Act
+                var result = LifeInfo.IsNowLunchBreak();
+
+                // Assert
+                Assert.IsFalse(result);
+            }
+        }
+
+        [Test]
+        public void IsNowLunchBreak_should_return_indeterminate_result_if_original_behavior_is_performed_internally()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                IndirectionsContext.
+                    ExcludeGeneric().
+                    DefaultBehavior = IndirectionBehaviors.Fallthrough;
+
+                // Act, Assert
+                Assert.DoesNotThrow(() => LifeInfo.IsNowLunchBreak());
             }
         }
     }

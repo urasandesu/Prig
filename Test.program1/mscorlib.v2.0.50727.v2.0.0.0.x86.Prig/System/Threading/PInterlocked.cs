@@ -75,6 +75,7 @@ namespace System.Threading.Prig
             return setting;
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
             public TypeBehaviorSetting IncludeExchange<T>() where T : class

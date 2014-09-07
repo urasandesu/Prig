@@ -29,20 +29,27 @@
 
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
-using Urasandesu.NAnonym.Collections.Generic;
-using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace Urasandesu.Prig.Framework
 {
     public class IndirectionAssemblyRepository
     {
-        public IEnumerable<Assembly> FindAll()
+        public virtual IEnumerable<Assembly> FindAll()
         {
-            // TODO: mscorlib.v2.0.50727.v2.0.0.0.AMD64.Prig みたいな名前で Assembly 収集して全部取り込み！
-            yield return Assembly.LoadFrom(@"C:\Users\Akira\Prig\Test.Urasandesu.Prig.Framework\bin\Debug(.NET 3.5)\AnyCPU\Test.Urasandesu.Prig.Framework.dll");
+            var runtimeVer = Regex.Escape(typeof(object).Assembly.ImageRuntimeVersion);
+            var platform = IntPtr.Size == 4 ? "((x86)|(MSIL))" : "((AMD64)|(MSIL))";
+            var pattern = string.Format(@".*\.{0}\.v.*\.{1}\.Prig\.((exe)|(dll))$", runtimeVer, platform);
+
+            var dirInfo = new DirectoryInfo(Environment.CurrentDirectory);
+            foreach (var fileInfo in dirInfo.GetFiles())
+            {
+                if (Regex.IsMatch(fileInfo.Name, pattern))
+                    yield return Assembly.LoadFrom(fileInfo.FullName);
+            }
         }
     }
 }

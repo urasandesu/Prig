@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>0.0.0-alpha7</version>
+    <version>0.0.0-alpha8</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,7 +17,13 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 0.0.0-alpha7
+    <releaseNotes>Version 0.0.0-alpha8
+* Pre-release 8.
+* Supported the feature to set default behavior.
+* Modifying stub settings became a bit easier. The PowerShell command `Get-IndirectionStubSetting` supports generating unique name at the same time.
+
+
+Version 0.0.0-alpha7
 * Pre-release 7.
 * Fixed #12: `.cctor()` can't replace with indirection stub.
 * Fixed #13: TypeLoadException is occurred when trying to detour multiple assemblies.
