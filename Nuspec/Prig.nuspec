@@ -21,6 +21,7 @@
 * Pre-release 8.
 * Supported the feature to set default behavior.
 * Modifying stub settings became a bit easier. The PowerShell command `Get-IndirectionStubSetting` supports generating unique name at the same time.
+* Fixed #14: `Environment.GetFolderPath(SpecialFolder)` can't call indirectly.
 
 
 Version 0.0.0-alpha7

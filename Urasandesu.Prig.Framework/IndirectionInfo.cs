@@ -64,7 +64,7 @@ namespace Urasandesu.Prig.Framework
 
         public override bool Equals(object obj)
         {
-            return ((IEquatable<IndirectionInfo>)this).Equals(obj as IndirectionInfo?);
+            return ((IEquatable<IndirectionInfo>)this).Equals(obj as IndirectionInfo? ?? IndirectionInfo.Empty);
         }
 
         public override int GetHashCode()

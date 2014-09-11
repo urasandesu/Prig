@@ -150,6 +150,7 @@
     <Compile Include="System\Globalization\Prig\PJapaneseLunisolarCalendarTest.cs" />
     <Compile Include="System\Globalization\Prig\PPersianCalendarTest.cs" />
     <Compile Include="System\IO\Prig\PMemoryStreamTest.cs" />
+    <Compile Include="System\Prig\PEnvironmentTest.cs" />
     <Compile Include="System\Prig\PConvertTest.cs" />
     <Compile Include="System\Prig\PArrayTest.cs" />
     <Compile Include="System\Prig\PInt32Test.cs" />
