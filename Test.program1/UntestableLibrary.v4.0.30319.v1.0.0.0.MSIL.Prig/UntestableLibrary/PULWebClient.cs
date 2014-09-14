@@ -13,13 +13,13 @@ namespace UntestableLibrary.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzAddDownloadFileCompleted AddDownloadFileCompleted() 
+        public static zzAddDownloadFileCompletedAsyncCompletedEventHandler AddDownloadFileCompletedAsyncCompletedEventHandler() 
         {
-            return new zzAddDownloadFileCompleted();
+            return new zzAddDownloadFileCompletedAsyncCompletedEventHandler();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAddDownloadFileCompleted : IBehaviorPreparable 
+        public class zzAddDownloadFileCompletedAsyncCompletedEventHandler : IBehaviorPreparable 
         {
             public IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> Body
             {
@@ -55,7 +55,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfAddDownloadFileCompleted;
+                    info.Token = TokenOfAddDownloadFileCompletedAsyncCompletedEventHandler;
                     return info;
                 }
             }
@@ -63,9 +63,9 @@ namespace UntestableLibrary.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddDownloadFileCompleted, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddDownloadFileCompletedAsyncCompletedEventHandler, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzAddDownloadFileCompleted>.Make(new Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>());
+                    holder.Source = TaggedBagFactory<zzAddDownloadFileCompletedAsyncCompletedEventHandler>.Make(new Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -89,7 +89,7 @@ namespace UntestableLibrary.Prig
 
             internal void RemoveTargetInstanceBody(ULWebClient target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddDownloadFileCompleted, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddDownloadFileCompletedAsyncCompletedEventHandler, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -105,13 +105,13 @@ namespace UntestableLibrary.Prig
             }
         }
  
-        public static zzRemoveDownloadFileCompleted RemoveDownloadFileCompleted() 
+        public static zzRemoveDownloadFileCompletedAsyncCompletedEventHandler RemoveDownloadFileCompletedAsyncCompletedEventHandler() 
         {
-            return new zzRemoveDownloadFileCompleted();
+            return new zzRemoveDownloadFileCompletedAsyncCompletedEventHandler();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzRemoveDownloadFileCompleted : IBehaviorPreparable 
+        public class zzRemoveDownloadFileCompletedAsyncCompletedEventHandler : IBehaviorPreparable 
         {
             public IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler> Body
             {
@@ -147,7 +147,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfRemoveDownloadFileCompleted;
+                    info.Token = TokenOfRemoveDownloadFileCompletedAsyncCompletedEventHandler;
                     return info;
                 }
             }
@@ -155,9 +155,9 @@ namespace UntestableLibrary.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzRemoveDownloadFileCompleted, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzRemoveDownloadFileCompletedAsyncCompletedEventHandler, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzRemoveDownloadFileCompleted>.Make(new Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>());
+                    holder.Source = TaggedBagFactory<zzRemoveDownloadFileCompletedAsyncCompletedEventHandler>.Make(new Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -181,7 +181,7 @@ namespace UntestableLibrary.Prig
 
             internal void RemoveTargetInstanceBody(ULWebClient target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzRemoveDownloadFileCompleted, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzRemoveDownloadFileCompletedAsyncCompletedEventHandler, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.ComponentModel.AsyncCompletedEventHandler>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -197,13 +197,13 @@ namespace UntestableLibrary.Prig
             }
         }
  
-        public static zzDownloadFileAsync DownloadFileAsync() 
+        public static zzDownloadFileAsyncUri DownloadFileAsyncUri() 
         {
-            return new zzDownloadFileAsync();
+            return new zzDownloadFileAsyncUri();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzDownloadFileAsync : IBehaviorPreparable 
+        public class zzDownloadFileAsyncUri : IBehaviorPreparable 
         {
             public IndirectionAction<UntestableLibrary.ULWebClient, System.Uri> Body
             {
@@ -239,7 +239,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfDownloadFileAsync;
+                    info.Token = TokenOfDownloadFileAsyncUri;
                     return info;
                 }
             }
@@ -247,9 +247,9 @@ namespace UntestableLibrary.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzDownloadFileAsync, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.Uri>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzDownloadFileAsyncUri, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.Uri>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzDownloadFileAsync>.Make(new Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.Uri>>>());
+                    holder.Source = TaggedBagFactory<zzDownloadFileAsyncUri>.Make(new Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.Uri>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -273,7 +273,7 @@ namespace UntestableLibrary.Prig
 
             internal void RemoveTargetInstanceBody(ULWebClient target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzDownloadFileAsync, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.Uri>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzDownloadFileAsyncUri, Dictionary<ULWebClient, TargetSettingValue<IndirectionAction<UntestableLibrary.ULWebClient, System.Uri>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

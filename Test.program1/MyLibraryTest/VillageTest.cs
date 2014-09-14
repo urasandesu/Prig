@@ -50,7 +50,7 @@ namespace Test.program1.MyLibraryTest
             {
                 // Arrange
                 var seeds = new HashSet<int>();
-                PRandom.Constructor().Body = (@this, seed) =>
+                PRandom.ConstructorInt32().Body = (@this, seed) =>
                 {
                     IndirectionsContext.ExecuteOriginal(() =>
                     {
@@ -84,12 +84,12 @@ namespace Test.program1.MyLibraryTest
                 // Arrange
                 var slot = 0;
                 var numAndDistances = new[] { 4, 2, 4, 3, 1, 6, 7 };
-                PRandom.Next_int().Body = (@this, maxValue) => numAndDistances[slot++];
+                PRandom.NextInt32().Body = (@this, maxValue) => numAndDistances[slot++];
 
                 var vil = new Village();
 
                 var considerations = new List<RicePaddy>();
-                PList<RicePaddy>.Add().Body = (@this, item) => 
+                PList<RicePaddy>.AddT().Body = (@this, item) => 
                 {
                     IndirectionsContext.ExecuteOriginal(() =>
                     {
@@ -123,7 +123,7 @@ namespace Test.program1.MyLibraryTest
                 // Arrange
                 PList<RicePaddy>.
                     ExcludeGeneric().
-                    IncludeAdd().
+                    IncludeAddT().
                     DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
                 // Act, Assert
@@ -139,7 +139,7 @@ namespace Test.program1.MyLibraryTest
                 // Arrange
                 PList<FarmRoad>.
                     ExcludeGeneric().
-                    IncludeAdd().
+                    IncludeAddT().
                     DefaultBehavior = IndirectionBehaviors.DefaultValue;
 
                 // Act
@@ -158,11 +158,11 @@ namespace Test.program1.MyLibraryTest
                 // Arrange
                 PList<RicePaddy>.
                     ExcludeGeneric().
-                    IncludeAdd().
+                    IncludeAddT().
                     DefaultBehavior = IndirectionBehaviors.Fallthrough;
                 PList<FarmRoad>.
                     ExcludeGeneric().
-                    IncludeAdd().
+                    IncludeAddT().
                     DefaultBehavior = IndirectionBehaviors.Fallthrough;
 
                 // Act, Assert

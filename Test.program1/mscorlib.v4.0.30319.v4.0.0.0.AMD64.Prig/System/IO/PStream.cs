@@ -13,13 +13,13 @@ namespace System.IO.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzBeginRead BeginRead() 
+        public static zzBeginReadByteArrayInt32Int32AsyncCallbackObject BeginReadByteArrayInt32Int32AsyncCallbackObject() 
         {
-            return new zzBeginRead();
+            return new zzBeginReadByteArrayInt32Int32AsyncCallbackObject();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzBeginRead : IBehaviorPreparable 
+        public class zzBeginReadByteArrayInt32Int32AsyncCallbackObject : IBehaviorPreparable 
         {
             public IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult> Body
             {
@@ -55,7 +55,7 @@ namespace System.IO.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfBeginRead_byteArray_int_int_AsyncCallback_Object;
+                    info.Token = TokenOfBeginReadByteArrayInt32Int32AsyncCallbackObject;
                     return info;
                 }
             }
@@ -63,9 +63,9 @@ namespace System.IO.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginRead, Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginReadByteArrayInt32Int32AsyncCallbackObject, Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzBeginRead>.Make(new Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>());
+                    holder.Source = TaggedBagFactory<zzBeginReadByteArrayInt32Int32AsyncCallbackObject>.Make(new Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -89,7 +89,7 @@ namespace System.IO.Prig
 
             internal void RemoveTargetInstanceBody(Stream target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginRead, Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginReadByteArrayInt32Int32AsyncCallbackObject, Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

@@ -13,13 +13,13 @@ namespace UntestableLibrary.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzGetProperty<T> GetProperty<T>() 
+        public static zzGetPropertyOfTStringT<T> GetPropertyOfTStringT<T>() 
         {
-            return new zzGetProperty<T>();
+            return new zzGetPropertyOfTStringT<T>();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzGetProperty<T> : IBehaviorPreparable 
+        public class zzGetPropertyOfTStringT<T> : IBehaviorPreparable 
         {
             public IndirectionFunc<System.String, T, T> Body
             {
@@ -55,7 +55,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfGetProperty_T_string_T;
+                    info.Token = TokenOfGetPropertyOfTStringT;
                     return info;
                 }
             }
@@ -78,9 +78,9 @@ namespace UntestableLibrary.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeGetProperty<T>() 
+            public TypeBehaviorSetting IncludeGetPropertyOfTStringT<T>() 
             {
-                Include(PULConfigurationManager.GetProperty<T>());
+                Include(PULConfigurationManager.GetPropertyOfTStringT<T>());
                 return this;
             }
 

@@ -13,13 +13,13 @@ namespace System.Globalization.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzCheckTicksRange CheckTicksRange() 
+        public static zzCheckTicksRangeInt64 CheckTicksRangeInt64() 
         {
-            return new zzCheckTicksRange();
+            return new zzCheckTicksRangeInt64();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzCheckTicksRange : IBehaviorPreparable 
+        public class zzCheckTicksRangeInt64 : IBehaviorPreparable 
         {
             public IndirectionAction<System.Int64> Body
             {
@@ -55,7 +55,7 @@ namespace System.Globalization.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfCheckTicksRange_long;
+                    info.Token = TokenOfCheckTicksRangeInt64;
                     return info;
                 }
             }

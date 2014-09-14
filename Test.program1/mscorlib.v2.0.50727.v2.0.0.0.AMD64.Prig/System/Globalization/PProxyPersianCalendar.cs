@@ -19,17 +19,17 @@ namespace System.Globalization.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzCheckTicksRange CheckTicksRange() 
+        public zzCheckTicksRangeInt64 CheckTicksRangeInt64() 
         {
-            return new zzCheckTicksRange(m_target);
+            return new zzCheckTicksRangeInt64(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzCheckTicksRange : IBehaviorPreparable 
+        public class zzCheckTicksRangeInt64 : IBehaviorPreparable 
         {
             System.Globalization.PersianCalendar m_target;
 
-            public zzCheckTicksRange(System.Globalization.PersianCalendar target)
+            public zzCheckTicksRangeInt64(System.Globalization.PersianCalendar target)
             {
                 m_target = target;
             }
@@ -38,14 +38,14 @@ namespace System.Globalization.Prig
             {
                 get
                 {
-                    return PPersianCalendar.CheckTicksRange().Body;
+                    return PPersianCalendar.CheckTicksRangeInt64().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PPersianCalendar.CheckTicksRange().RemoveTargetInstanceBody(m_target);
+                        PPersianCalendar.CheckTicksRangeInt64().RemoveTargetInstanceBody(m_target);
                     else
-                        PPersianCalendar.CheckTicksRange().SetTargetInstanceBody(m_target, value);
+                        PPersianCalendar.CheckTicksRangeInt64().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,7 +57,7 @@ namespace System.Globalization.Prig
 
             public IndirectionInfo Info
             {
-                get { return PPersianCalendar.CheckTicksRange().Info; }
+                get { return PPersianCalendar.CheckTicksRangeInt64().Info; }
             }
         }
 

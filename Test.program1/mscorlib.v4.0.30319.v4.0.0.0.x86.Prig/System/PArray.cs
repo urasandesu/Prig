@@ -13,13 +13,13 @@ namespace System.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzCreateInstance CreateInstance() 
+        public static zzCreateInstanceTypeInt32ArrayInt32Array CreateInstanceTypeInt32ArrayInt32Array() 
         {
-            return new zzCreateInstance();
+            return new zzCreateInstanceTypeInt32ArrayInt32Array();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzCreateInstance : IBehaviorPreparable 
+        public class zzCreateInstanceTypeInt32ArrayInt32Array : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Type, System.Int32[], System.Int32[], System.Array> Body
             {
@@ -55,19 +55,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfCreateInstance_Type_intArray_intArray;
+                    info.Token = TokenOfCreateInstanceTypeInt32ArrayInt32Array;
                     return info;
                 }
             }
         }
  
-        public static zzExists<T> Exists<T>() 
+        public static zzExistsOfTTArrayPredicateOfT<T> ExistsOfTTArrayPredicateOfT<T>() 
         {
-            return new zzExists<T>();
+            return new zzExistsOfTTArrayPredicateOfT<T>();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzExists<T> : IBehaviorPreparable 
+        public class zzExistsOfTTArrayPredicateOfT<T> : IBehaviorPreparable 
         {
             public IndirectionFunc<T[], System.Predicate<T>, System.Boolean> Body
             {
@@ -103,19 +103,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfExists_T_TArray_Predicate_T;
+                    info.Token = TokenOfExistsOfTTArrayPredicateOfT;
                     return info;
                 }
             }
         }
  
-        public static zzBinarySearch BinarySearch() 
+        public static zzBinarySearchArrayInt32Int32ObjectIComparer BinarySearchArrayInt32Int32ObjectIComparer() 
         {
-            return new zzBinarySearch();
+            return new zzBinarySearchArrayInt32Int32ObjectIComparer();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzBinarySearch : IBehaviorPreparable 
+        public class zzBinarySearchArrayInt32Int32ObjectIComparer : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Array, System.Int32, System.Int32, System.Object, System.Collections.IComparer, System.Int32> Body
             {
@@ -151,7 +151,7 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfBinarySearch_Array_int_int_object_IComparer;
+                    info.Token = TokenOfBinarySearchArrayInt32Int32ObjectIComparer;
                     return info;
                 }
             }
@@ -174,9 +174,9 @@ namespace System.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeExists<T>() 
+            public TypeBehaviorSetting IncludeExistsOfTTArrayPredicateOfT<T>() 
             {
-                Include(PArray.Exists<T>());
+                Include(PArray.ExistsOfTTArrayPredicateOfT<T>());
                 return this;
             }
 

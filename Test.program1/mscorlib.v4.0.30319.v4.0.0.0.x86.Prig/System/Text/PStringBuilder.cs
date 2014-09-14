@@ -13,13 +13,13 @@ namespace System.Text.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzInsert Insert() 
+        public static zzInsertInt32StringInt32 InsertInt32StringInt32() 
         {
-            return new zzInsert();
+            return new zzInsertInt32StringInt32();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzInsert : IBehaviorPreparable 
+        public class zzInsertInt32StringInt32 : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder> Body
             {
@@ -55,7 +55,7 @@ namespace System.Text.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfInsert_int_string_int;
+                    info.Token = TokenOfInsertInt32StringInt32;
                     return info;
                 }
             }
@@ -63,9 +63,9 @@ namespace System.Text.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsert, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsertInt32StringInt32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzInsert>.Make(new Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>());
+                    holder.Source = TaggedBagFactory<zzInsertInt32StringInt32>.Make(new Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -89,7 +89,7 @@ namespace System.Text.Prig
 
             internal void RemoveTargetInstanceBody(StringBuilder target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsert, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsertInt32StringInt32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -105,13 +105,13 @@ namespace System.Text.Prig
             }
         }
  
-        public static zzReplace Replace() 
+        public static zzReplaceCharCharInt32Int32 ReplaceCharCharInt32Int32() 
         {
-            return new zzReplace();
+            return new zzReplaceCharCharInt32Int32();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzReplace : IBehaviorPreparable 
+        public class zzReplaceCharCharInt32Int32 : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder> Body
             {
@@ -147,7 +147,7 @@ namespace System.Text.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfReplace_char_char_int_int;
+                    info.Token = TokenOfReplaceCharCharInt32Int32;
                     return info;
                 }
             }
@@ -155,9 +155,9 @@ namespace System.Text.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplace, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplaceCharCharInt32Int32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzReplace>.Make(new Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>());
+                    holder.Source = TaggedBagFactory<zzReplaceCharCharInt32Int32>.Make(new Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -181,7 +181,7 @@ namespace System.Text.Prig
 
             internal void RemoveTargetInstanceBody(StringBuilder target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplace, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplaceCharCharInt32Int32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

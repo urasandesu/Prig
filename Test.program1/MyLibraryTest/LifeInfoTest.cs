@@ -99,7 +99,7 @@ namespace Test.program1.MyLibraryTest
             {
                 // Arrange
                 PDateTime.TodayGet().Body = () => today;
-                PULConfigurationManager.GetProperty<DayOfWeek>().Body = (key, defaultValue) => holiday;
+                PULConfigurationManager.GetPropertyOfTStringT<DayOfWeek>().Body = (key, defaultValue) => holiday;
 
                 // Act, Assert
                 return LifeInfo.IsTodayHoliday();

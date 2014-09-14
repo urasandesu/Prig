@@ -13,13 +13,13 @@ namespace System.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzTryParse TryParse() 
+        public static zzTryParseStringInt32Ref TryParseStringInt32Ref() 
         {
-            return new zzTryParse();
+            return new zzTryParseStringInt32Ref();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzTryParse : IBehaviorPreparable 
+        public class zzTryParseStringInt32Ref : IBehaviorPreparable 
         {
             public IndirectionOutFunc<System.String, System.Int32, System.Boolean> Body
             {
@@ -55,7 +55,7 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfTryParse_string_intRef;
+                    info.Token = TokenOfTryParseStringInt32Ref;
                     return info;
                 }
             }

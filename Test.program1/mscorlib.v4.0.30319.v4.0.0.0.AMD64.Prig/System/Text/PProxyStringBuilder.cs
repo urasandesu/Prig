@@ -19,17 +19,17 @@ namespace System.Text.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzInsert Insert() 
+        public zzInsertInt32StringInt32 InsertInt32StringInt32() 
         {
-            return new zzInsert(m_target);
+            return new zzInsertInt32StringInt32(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzInsert : IBehaviorPreparable 
+        public class zzInsertInt32StringInt32 : IBehaviorPreparable 
         {
             System.Text.StringBuilder m_target;
 
-            public zzInsert(System.Text.StringBuilder target)
+            public zzInsertInt32StringInt32(System.Text.StringBuilder target)
             {
                 m_target = target;
             }
@@ -38,14 +38,14 @@ namespace System.Text.Prig
             {
                 get
                 {
-                    return PStringBuilder.Insert().Body;
+                    return PStringBuilder.InsertInt32StringInt32().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PStringBuilder.Insert().RemoveTargetInstanceBody(m_target);
+                        PStringBuilder.InsertInt32StringInt32().RemoveTargetInstanceBody(m_target);
                     else
-                        PStringBuilder.Insert().SetTargetInstanceBody(m_target, value);
+                        PStringBuilder.InsertInt32StringInt32().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,20 +57,20 @@ namespace System.Text.Prig
 
             public IndirectionInfo Info
             {
-                get { return PStringBuilder.Insert().Info; }
+                get { return PStringBuilder.InsertInt32StringInt32().Info; }
             }
         } 
-        public zzReplace Replace() 
+        public zzReplaceCharCharInt32Int32 ReplaceCharCharInt32Int32() 
         {
-            return new zzReplace(m_target);
+            return new zzReplaceCharCharInt32Int32(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzReplace : IBehaviorPreparable 
+        public class zzReplaceCharCharInt32Int32 : IBehaviorPreparable 
         {
             System.Text.StringBuilder m_target;
 
-            public zzReplace(System.Text.StringBuilder target)
+            public zzReplaceCharCharInt32Int32(System.Text.StringBuilder target)
             {
                 m_target = target;
             }
@@ -79,14 +79,14 @@ namespace System.Text.Prig
             {
                 get
                 {
-                    return PStringBuilder.Replace().Body;
+                    return PStringBuilder.ReplaceCharCharInt32Int32().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PStringBuilder.Replace().RemoveTargetInstanceBody(m_target);
+                        PStringBuilder.ReplaceCharCharInt32Int32().RemoveTargetInstanceBody(m_target);
                     else
-                        PStringBuilder.Replace().SetTargetInstanceBody(m_target, value);
+                        PStringBuilder.ReplaceCharCharInt32Int32().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -98,7 +98,7 @@ namespace System.Text.Prig
 
             public IndirectionInfo Info
             {
-                get { return PStringBuilder.Replace().Info; }
+                get { return PStringBuilder.ReplaceCharCharInt32Int32().Info; }
             }
         }
 

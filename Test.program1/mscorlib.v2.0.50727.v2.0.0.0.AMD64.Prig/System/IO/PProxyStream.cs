@@ -19,17 +19,17 @@ namespace System.IO.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzBeginRead BeginRead() 
+        public zzBeginReadByteArrayInt32Int32AsyncCallbackObject BeginReadByteArrayInt32Int32AsyncCallbackObject() 
         {
-            return new zzBeginRead(m_target);
+            return new zzBeginReadByteArrayInt32Int32AsyncCallbackObject(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzBeginRead : IBehaviorPreparable 
+        public class zzBeginReadByteArrayInt32Int32AsyncCallbackObject : IBehaviorPreparable 
         {
             System.IO.Stream m_target;
 
-            public zzBeginRead(System.IO.Stream target)
+            public zzBeginReadByteArrayInt32Int32AsyncCallbackObject(System.IO.Stream target)
             {
                 m_target = target;
             }
@@ -38,14 +38,14 @@ namespace System.IO.Prig
             {
                 get
                 {
-                    return PStream.BeginRead().Body;
+                    return PStream.BeginReadByteArrayInt32Int32AsyncCallbackObject().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PStream.BeginRead().RemoveTargetInstanceBody(m_target);
+                        PStream.BeginReadByteArrayInt32Int32AsyncCallbackObject().RemoveTargetInstanceBody(m_target);
                     else
-                        PStream.BeginRead().SetTargetInstanceBody(m_target, value);
+                        PStream.BeginReadByteArrayInt32Int32AsyncCallbackObject().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,7 +57,7 @@ namespace System.IO.Prig
 
             public IndirectionInfo Info
             {
-                get { return PStream.BeginRead().Info; }
+                get { return PStream.BeginReadByteArrayInt32Int32AsyncCallbackObject().Info; }
             }
         }
 

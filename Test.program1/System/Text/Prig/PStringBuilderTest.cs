@@ -45,7 +45,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PStringBuilder.Insert().Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
+                PStringBuilder.InsertInt32StringInt32().Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
 
                 // Act
                 var sb = new StringBuilder();
@@ -66,7 +66,7 @@ namespace Test.program1.System.Prig
             {
                 // Arrange
                 var sbProxy = new PProxyStringBuilder();
-                sbProxy.Insert().Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
+                sbProxy.InsertInt32StringInt32().Body = (_, index, value, count) => { return new StringBuilder("にゃんぱすー"); };
                 var sb_sut = (StringBuilder)sbProxy;
                 var sb = new StringBuilder();
 
@@ -87,7 +87,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PStringBuilder.Replace().Body = (_, oldChar, newChar, startIndex, count) => { return new StringBuilder("おはもに！"); };
+                PStringBuilder.ReplaceCharCharInt32Int32().Body = (_, oldChar, newChar, startIndex, count) => { return new StringBuilder("おはもに！"); };
 
                 // Act
                 var sb = new StringBuilder("aaaa");

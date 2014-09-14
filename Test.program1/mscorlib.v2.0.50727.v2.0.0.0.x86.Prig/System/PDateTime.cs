@@ -109,13 +109,13 @@ namespace System.Prig
             }
         }
  
-        public static zzFromBinary FromBinary() 
+        public static zzFromBinaryInt64 FromBinaryInt64() 
         {
-            return new zzFromBinary();
+            return new zzFromBinaryInt64();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzFromBinary : IBehaviorPreparable 
+        public class zzFromBinaryInt64 : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Int64, System.DateTime> Body
             {
@@ -151,19 +151,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfFromBinary_long;
+                    info.Token = TokenOfFromBinaryInt64;
                     return info;
                 }
             }
         }
  
-        public static zzDoubleDateToTicks DoubleDateToTicks() 
+        public static zzDoubleDateToTicksDouble DoubleDateToTicksDouble() 
         {
-            return new zzDoubleDateToTicks();
+            return new zzDoubleDateToTicksDouble();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzDoubleDateToTicks : IBehaviorPreparable 
+        public class zzDoubleDateToTicksDouble : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Double, System.Int64> Body
             {
@@ -199,19 +199,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfDoubleDateToTicks_double;
+                    info.Token = TokenOfDoubleDateToTicksDouble;
                     return info;
                 }
             }
         }
  
-        public static zzCompareTo CompareTo() 
+        public static zzCompareToObject CompareToObject() 
         {
-            return new zzCompareTo();
+            return new zzCompareToObject();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzCompareTo : IBehaviorPreparable 
+        public class zzCompareToObject : IBehaviorPreparable 
         {
             public IndirectionRefThisFunc<System.DateTime, System.Object, System.Int32> Body
             {
@@ -247,7 +247,7 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfCompareTo_object;
+                    info.Token = TokenOfCompareToObject;
                     return info;
                 }
             }

@@ -13,13 +13,13 @@ namespace System.Collections.Generic.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzAdd Add() 
+        public static zzAddT AddT() 
         {
-            return new zzAdd();
+            return new zzAddT();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAdd : IBehaviorPreparable 
+        public class zzAddT : IBehaviorPreparable 
         {
             public IndirectionAction<List<T>, T> Body
             {
@@ -55,7 +55,7 @@ namespace System.Collections.Generic.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfAdd_T;
+                    info.Token = TokenOfAddT;
                     return info;
                 }
             }
@@ -63,9 +63,9 @@ namespace System.Collections.Generic.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAdd, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddT, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzAdd>.Make(new Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>());
+                    holder.Source = TaggedBagFactory<zzAddT>.Make(new Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -89,7 +89,7 @@ namespace System.Collections.Generic.Prig
 
             internal void RemoveTargetInstanceBody(List<T> target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAdd, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddT, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -122,9 +122,9 @@ namespace System.Collections.Generic.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeAdd() 
+            public TypeBehaviorSetting IncludeAddT() 
             {
-                Include(PList<T>.Add());
+                Include(PList<T>.AddT());
                 return this;
             }
 

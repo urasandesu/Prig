@@ -19,17 +19,17 @@ namespace System.Globalization.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzGetYearInfo GetYearInfo() 
+        public zzGetYearInfoInt32Int32 GetYearInfoInt32Int32() 
         {
-            return new zzGetYearInfo(m_target);
+            return new zzGetYearInfoInt32Int32(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzGetYearInfo : IBehaviorPreparable 
+        public class zzGetYearInfoInt32Int32 : IBehaviorPreparable 
         {
             System.Globalization.JapaneseLunisolarCalendar m_target;
 
-            public zzGetYearInfo(System.Globalization.JapaneseLunisolarCalendar target)
+            public zzGetYearInfoInt32Int32(System.Globalization.JapaneseLunisolarCalendar target)
             {
                 m_target = target;
             }
@@ -38,14 +38,14 @@ namespace System.Globalization.Prig
             {
                 get
                 {
-                    return PJapaneseLunisolarCalendar.GetYearInfo().Body;
+                    return PJapaneseLunisolarCalendar.GetYearInfoInt32Int32().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PJapaneseLunisolarCalendar.GetYearInfo().RemoveTargetInstanceBody(m_target);
+                        PJapaneseLunisolarCalendar.GetYearInfoInt32Int32().RemoveTargetInstanceBody(m_target);
                     else
-                        PJapaneseLunisolarCalendar.GetYearInfo().SetTargetInstanceBody(m_target, value);
+                        PJapaneseLunisolarCalendar.GetYearInfoInt32Int32().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,20 +57,20 @@ namespace System.Globalization.Prig
 
             public IndirectionInfo Info
             {
-                get { return PJapaneseLunisolarCalendar.GetYearInfo().Info; }
+                get { return PJapaneseLunisolarCalendar.GetYearInfoInt32Int32().Info; }
             }
         } 
-        public zzGetEra GetEra() 
+        public zzGetEraDateTime GetEraDateTime() 
         {
-            return new zzGetEra(m_target);
+            return new zzGetEraDateTime(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzGetEra : IBehaviorPreparable 
+        public class zzGetEraDateTime : IBehaviorPreparable 
         {
             System.Globalization.JapaneseLunisolarCalendar m_target;
 
-            public zzGetEra(System.Globalization.JapaneseLunisolarCalendar target)
+            public zzGetEraDateTime(System.Globalization.JapaneseLunisolarCalendar target)
             {
                 m_target = target;
             }
@@ -79,14 +79,14 @@ namespace System.Globalization.Prig
             {
                 get
                 {
-                    return PJapaneseLunisolarCalendar.GetEra().Body;
+                    return PJapaneseLunisolarCalendar.GetEraDateTime().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PJapaneseLunisolarCalendar.GetEra().RemoveTargetInstanceBody(m_target);
+                        PJapaneseLunisolarCalendar.GetEraDateTime().RemoveTargetInstanceBody(m_target);
                     else
-                        PJapaneseLunisolarCalendar.GetEra().SetTargetInstanceBody(m_target, value);
+                        PJapaneseLunisolarCalendar.GetEraDateTime().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -98,20 +98,20 @@ namespace System.Globalization.Prig
 
             public IndirectionInfo Info
             {
-                get { return PJapaneseLunisolarCalendar.GetEra().Info; }
+                get { return PJapaneseLunisolarCalendar.GetEraDateTime().Info; }
             }
         } 
-        public zzGetGregorianYear GetGregorianYear() 
+        public zzGetGregorianYearInt32Int32 GetGregorianYearInt32Int32() 
         {
-            return new zzGetGregorianYear(m_target);
+            return new zzGetGregorianYearInt32Int32(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzGetGregorianYear : IBehaviorPreparable 
+        public class zzGetGregorianYearInt32Int32 : IBehaviorPreparable 
         {
             System.Globalization.JapaneseLunisolarCalendar m_target;
 
-            public zzGetGregorianYear(System.Globalization.JapaneseLunisolarCalendar target)
+            public zzGetGregorianYearInt32Int32(System.Globalization.JapaneseLunisolarCalendar target)
             {
                 m_target = target;
             }
@@ -120,14 +120,14 @@ namespace System.Globalization.Prig
             {
                 get
                 {
-                    return PJapaneseLunisolarCalendar.GetGregorianYear().Body;
+                    return PJapaneseLunisolarCalendar.GetGregorianYearInt32Int32().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PJapaneseLunisolarCalendar.GetGregorianYear().RemoveTargetInstanceBody(m_target);
+                        PJapaneseLunisolarCalendar.GetGregorianYearInt32Int32().RemoveTargetInstanceBody(m_target);
                     else
-                        PJapaneseLunisolarCalendar.GetGregorianYear().SetTargetInstanceBody(m_target, value);
+                        PJapaneseLunisolarCalendar.GetGregorianYearInt32Int32().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -139,7 +139,7 @@ namespace System.Globalization.Prig
 
             public IndirectionInfo Info
             {
-                get { return PJapaneseLunisolarCalendar.GetGregorianYear().Info; }
+                get { return PJapaneseLunisolarCalendar.GetGregorianYearInt32Int32().Info; }
             }
         }
 

@@ -45,7 +45,7 @@ namespace Test.program1.System.Globalization.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PJapaneseLunisolarCalendar.GetYearInfo().Body = (@this, lunarYear, index) => 41;
+                PJapaneseLunisolarCalendar.GetYearInfoInt32Int32().Body = (@this, lunarYear, index) => 41;
 
                 // Act
                 var calendar = new JapaneseLunisolarCalendar();
@@ -68,9 +68,9 @@ namespace Test.program1.System.Globalization.Prig
                 var calendar = new JapaneseLunisolarCalendar();
 
                 var calendarProxy = new PProxyJapaneseLunisolarCalendar();
-                calendarProxy.GetEra().Body = (@this, time) => calendar.Eras[0];
-                calendarProxy.GetGregorianYear().Body = (@this, year, era) => 2000;
-                calendarProxy.GetYearInfo().Body = (@this, lunarYear, index) => 41;
+                calendarProxy.GetEraDateTime().Body = (@this, time) => calendar.Eras[0];
+                calendarProxy.GetGregorianYearInt32Int32().Body = (@this, year, era) => 2000;
+                calendarProxy.GetYearInfoInt32Int32().Body = (@this, lunarYear, index) => 41;
                 var calendar_sut = (JapaneseLunisolarCalendar)calendarProxy;
 
                 // Act

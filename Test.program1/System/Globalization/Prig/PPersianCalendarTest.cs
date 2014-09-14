@@ -46,9 +46,9 @@ namespace Test.program1.System.Globalization.Prig
             {
                 // Arrange
 #if _NET_3_5
-                PPersianCalendar.CheckTicksRange().Body = (@this, ticks) => { };
+                PPersianCalendar.CheckTicksRangeInt64().Body = (@this, ticks) => { };
 #else
-                PPersianCalendar.CheckTicksRange().Body = ticks => { };
+                PPersianCalendar.CheckTicksRangeInt64().Body = ticks => { };
 #endif
 
                 // Act

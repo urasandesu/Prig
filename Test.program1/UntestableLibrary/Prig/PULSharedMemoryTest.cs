@@ -44,7 +44,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULSharedMemory.GetMemory().Body = (ULSharedMemory @this, int size, out byte[] buf) =>
+                PULSharedMemory.GetMemoryInt32ByteArrayRef().Body = (ULSharedMemory @this, int size, out byte[] buf) =>
                 {
                     buf = new byte[42];
                     for (int i = 0; i < buf.Length; i++)
@@ -77,7 +77,7 @@ namespace Test.program1.UntestableLibrary.Prig
             {
                 // Arrange
                 var smProxy = new PProxyULSharedMemory();
-                smProxy.GetMemory().Body = (ULSharedMemory @this, int size, out byte[] buf) =>
+                smProxy.GetMemoryInt32ByteArrayRef().Body = (ULSharedMemory @this, int size, out byte[] buf) =>
                 {
                     buf = new byte[42];
                     for (int i = 0; i < buf.Length; i++)
@@ -119,7 +119,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 // Arrange
                 var handler = default(ULSharedMemory.DisposedEventHandler);
 
-                PULSharedMemory.AddOnDisposed().Body = (@this, value) => handler += value;
+                PULSharedMemory.AddOnDisposedDisposedEventHandler().Body = (@this, value) => handler += value;
                 PULSharedMemory.Dispose().Body = @this =>
                 {
                     handler(true);

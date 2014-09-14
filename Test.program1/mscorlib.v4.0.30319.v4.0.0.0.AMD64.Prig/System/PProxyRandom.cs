@@ -60,17 +60,17 @@ namespace System.Prig
                 get { return PRandom.Next().Info; }
             }
         } 
-        public zzNext_int Next_int() 
+        public zzNextInt32 NextInt32() 
         {
-            return new zzNext_int(m_target);
+            return new zzNextInt32(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzNext_int : IBehaviorPreparable 
+        public class zzNextInt32 : IBehaviorPreparable 
         {
             System.Random m_target;
 
-            public zzNext_int(System.Random target)
+            public zzNextInt32(System.Random target)
             {
                 m_target = target;
             }
@@ -79,14 +79,14 @@ namespace System.Prig
             {
                 get
                 {
-                    return PRandom.Next_int().Body;
+                    return PRandom.NextInt32().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PRandom.Next_int().RemoveTargetInstanceBody(m_target);
+                        PRandom.NextInt32().RemoveTargetInstanceBody(m_target);
                     else
-                        PRandom.Next_int().SetTargetInstanceBody(m_target, value);
+                        PRandom.NextInt32().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -98,7 +98,7 @@ namespace System.Prig
 
             public IndirectionInfo Info
             {
-                get { return PRandom.Next_int().Info; }
+                get { return PRandom.NextInt32().Info; }
             }
         }
 

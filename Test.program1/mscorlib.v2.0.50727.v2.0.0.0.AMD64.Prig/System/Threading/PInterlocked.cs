@@ -13,13 +13,13 @@ namespace System.Threading.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzExchange<T> Exchange<T>() where T : class
+        public static zzExchangeOfTTRefT<T> ExchangeOfTTRefT<T>() where T : class
         {
-            return new zzExchange<T>();
+            return new zzExchangeOfTTRefT<T>();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzExchange<T> : IBehaviorPreparable where T : class
+        public class zzExchangeOfTTRefT<T> : IBehaviorPreparable where T : class
         {
             public IndirectionRefThisFunc<T, T, T> Body
             {
@@ -55,7 +55,7 @@ namespace System.Threading.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfExchange_T_TRef_T;
+                    info.Token = TokenOfExchangeOfTTRefT;
                     return info;
                 }
             }
@@ -78,9 +78,9 @@ namespace System.Threading.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeExchange<T>() where T : class
+            public TypeBehaviorSetting IncludeExchangeOfTTRefT<T>() where T : class
             {
-                Include(PInterlocked.Exchange<T>());
+                Include(PInterlocked.ExchangeOfTTRefT<T>());
                 return this;
             }
 

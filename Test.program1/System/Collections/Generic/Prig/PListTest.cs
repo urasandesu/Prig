@@ -46,7 +46,7 @@ namespace Test.program1.System.Collections.Generic.Prig
             {
                 // Arrange
                 var actual = default(int);
-                PList<int>.Add().Body = (@this, item) => actual = item;
+                PList<int>.AddT().Body = (@this, item) => actual = item;
 
                 // Act
                 var list = new List<int>();
@@ -66,7 +66,7 @@ namespace Test.program1.System.Collections.Generic.Prig
                 // Arrange
                 var actual = default(int);
                 var listProxy = new PProxyList<int>();
-                listProxy.Add().Body = (@this, item) => actual = item;
+                listProxy.AddT().Body = (@this, item) => actual = item;
                 var list_sut = (List<int>)listProxy;
 
                 var list = new List<int>();
@@ -91,7 +91,7 @@ namespace Test.program1.System.Collections.Generic.Prig
                 var listProxy = new PProxyList<int>();
                 listProxy.
                     ExcludeGeneric().
-                    IncludeAdd().
+                    IncludeAddT().
                     DefaultBehavior = IndirectionBehaviors.NotImplemented;
                 var list_sut = (List<int>)listProxy;
 
@@ -112,7 +112,7 @@ namespace Test.program1.System.Collections.Generic.Prig
                 var listProxy = new PProxyList<int>();
                 listProxy.
                     ExcludeGeneric().
-                    IncludeAdd().
+                    IncludeAddT().
                     DefaultBehavior = IndirectionBehaviors.DefaultValue;
                 var list_sut = (List<int>)listProxy;
 
@@ -137,7 +137,7 @@ namespace Test.program1.System.Collections.Generic.Prig
                 var listProxy = new PProxyList<int>();
                 listProxy.
                     ExcludeGeneric().
-                    IncludeAdd().
+                    IncludeAddT().
                     DefaultBehavior = IndirectionBehaviors.Fallthrough;
                 var list_sut = (List<int>)listProxy;
                 // You have to call the constructor of the type that is original for a proxy.

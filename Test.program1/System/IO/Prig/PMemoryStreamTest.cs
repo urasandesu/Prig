@@ -44,7 +44,7 @@ namespace Test.program1.System.IO.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PMemoryStream.Seek().Body = (@this, offset, loc) => 42L;
+                PMemoryStream.SeekInt64SeekOrigin().Body = (@this, offset, loc) => 42L;
 
                 var buffer = new byte[256];
                 for (int i = 0; i < buffer.Length; i++)
@@ -71,7 +71,7 @@ namespace Test.program1.System.IO.Prig
             {
                 // Arrange
                 var msProxy = new PProxyMemoryStream();
-                msProxy.Seek().Body = (@this, offset, loc) => 42L;
+                msProxy.SeekInt64SeekOrigin().Body = (@this, offset, loc) => 42L;
                 var ms_sut = (MemoryStream)msProxy;
 
                 var buffer = new byte[256];
@@ -99,7 +99,7 @@ namespace Test.program1.System.IO.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PStream.BeginRead().Body = (@this, _buffer, offset, count, callback, state) => 
+                PStream.BeginReadByteArrayInt32Int32AsyncCallbackObject().Body = (@this, _buffer, offset, count, callback, state) => 
                     IndirectionsContext.ExecuteOriginal(() => @this.BeginRead(_buffer, offset, 42, callback, state));
 
                 var buffer = new byte[256];

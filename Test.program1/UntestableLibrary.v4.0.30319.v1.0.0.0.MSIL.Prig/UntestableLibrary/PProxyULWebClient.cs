@@ -19,17 +19,17 @@ namespace UntestableLibrary.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzAddDownloadFileCompleted AddDownloadFileCompleted() 
+        public zzAddDownloadFileCompletedAsyncCompletedEventHandler AddDownloadFileCompletedAsyncCompletedEventHandler() 
         {
-            return new zzAddDownloadFileCompleted(m_target);
+            return new zzAddDownloadFileCompletedAsyncCompletedEventHandler(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAddDownloadFileCompleted : IBehaviorPreparable 
+        public class zzAddDownloadFileCompletedAsyncCompletedEventHandler : IBehaviorPreparable 
         {
             UntestableLibrary.ULWebClient m_target;
 
-            public zzAddDownloadFileCompleted(UntestableLibrary.ULWebClient target)
+            public zzAddDownloadFileCompletedAsyncCompletedEventHandler(UntestableLibrary.ULWebClient target)
             {
                 m_target = target;
             }
@@ -38,14 +38,14 @@ namespace UntestableLibrary.Prig
             {
                 get
                 {
-                    return PULWebClient.AddDownloadFileCompleted().Body;
+                    return PULWebClient.AddDownloadFileCompletedAsyncCompletedEventHandler().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PULWebClient.AddDownloadFileCompleted().RemoveTargetInstanceBody(m_target);
+                        PULWebClient.AddDownloadFileCompletedAsyncCompletedEventHandler().RemoveTargetInstanceBody(m_target);
                     else
-                        PULWebClient.AddDownloadFileCompleted().SetTargetInstanceBody(m_target, value);
+                        PULWebClient.AddDownloadFileCompletedAsyncCompletedEventHandler().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,20 +57,20 @@ namespace UntestableLibrary.Prig
 
             public IndirectionInfo Info
             {
-                get { return PULWebClient.AddDownloadFileCompleted().Info; }
+                get { return PULWebClient.AddDownloadFileCompletedAsyncCompletedEventHandler().Info; }
             }
         } 
-        public zzRemoveDownloadFileCompleted RemoveDownloadFileCompleted() 
+        public zzRemoveDownloadFileCompletedAsyncCompletedEventHandler RemoveDownloadFileCompletedAsyncCompletedEventHandler() 
         {
-            return new zzRemoveDownloadFileCompleted(m_target);
+            return new zzRemoveDownloadFileCompletedAsyncCompletedEventHandler(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzRemoveDownloadFileCompleted : IBehaviorPreparable 
+        public class zzRemoveDownloadFileCompletedAsyncCompletedEventHandler : IBehaviorPreparable 
         {
             UntestableLibrary.ULWebClient m_target;
 
-            public zzRemoveDownloadFileCompleted(UntestableLibrary.ULWebClient target)
+            public zzRemoveDownloadFileCompletedAsyncCompletedEventHandler(UntestableLibrary.ULWebClient target)
             {
                 m_target = target;
             }
@@ -79,14 +79,14 @@ namespace UntestableLibrary.Prig
             {
                 get
                 {
-                    return PULWebClient.RemoveDownloadFileCompleted().Body;
+                    return PULWebClient.RemoveDownloadFileCompletedAsyncCompletedEventHandler().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PULWebClient.RemoveDownloadFileCompleted().RemoveTargetInstanceBody(m_target);
+                        PULWebClient.RemoveDownloadFileCompletedAsyncCompletedEventHandler().RemoveTargetInstanceBody(m_target);
                     else
-                        PULWebClient.RemoveDownloadFileCompleted().SetTargetInstanceBody(m_target, value);
+                        PULWebClient.RemoveDownloadFileCompletedAsyncCompletedEventHandler().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -98,20 +98,20 @@ namespace UntestableLibrary.Prig
 
             public IndirectionInfo Info
             {
-                get { return PULWebClient.RemoveDownloadFileCompleted().Info; }
+                get { return PULWebClient.RemoveDownloadFileCompletedAsyncCompletedEventHandler().Info; }
             }
         } 
-        public zzDownloadFileAsync DownloadFileAsync() 
+        public zzDownloadFileAsyncUri DownloadFileAsyncUri() 
         {
-            return new zzDownloadFileAsync(m_target);
+            return new zzDownloadFileAsyncUri(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzDownloadFileAsync : IBehaviorPreparable 
+        public class zzDownloadFileAsyncUri : IBehaviorPreparable 
         {
             UntestableLibrary.ULWebClient m_target;
 
-            public zzDownloadFileAsync(UntestableLibrary.ULWebClient target)
+            public zzDownloadFileAsyncUri(UntestableLibrary.ULWebClient target)
             {
                 m_target = target;
             }
@@ -120,14 +120,14 @@ namespace UntestableLibrary.Prig
             {
                 get
                 {
-                    return PULWebClient.DownloadFileAsync().Body;
+                    return PULWebClient.DownloadFileAsyncUri().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PULWebClient.DownloadFileAsync().RemoveTargetInstanceBody(m_target);
+                        PULWebClient.DownloadFileAsyncUri().RemoveTargetInstanceBody(m_target);
                     else
-                        PULWebClient.DownloadFileAsync().SetTargetInstanceBody(m_target, value);
+                        PULWebClient.DownloadFileAsyncUri().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -139,7 +139,7 @@ namespace UntestableLibrary.Prig
 
             public IndirectionInfo Info
             {
-                get { return PULWebClient.DownloadFileAsync().Info; }
+                get { return PULWebClient.DownloadFileAsyncUri().Info; }
             }
         }
 

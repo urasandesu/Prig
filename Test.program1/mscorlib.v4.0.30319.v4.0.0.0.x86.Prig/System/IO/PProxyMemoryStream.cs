@@ -19,17 +19,58 @@ namespace System.IO.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzSeek Seek() 
+        public zzCanSeekGet CanSeekGet() 
         {
-            return new zzSeek(m_target);
+            return new zzCanSeekGet(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzSeek : IBehaviorPreparable 
+        public class zzCanSeekGet : IBehaviorPreparable 
         {
             System.IO.MemoryStream m_target;
 
-            public zzSeek(System.IO.MemoryStream target)
+            public zzCanSeekGet(System.IO.MemoryStream target)
+            {
+                m_target = target;
+            }
+
+            public IndirectionFunc<System.IO.MemoryStream, System.Boolean> Body
+            {
+                get
+                {
+                    return PMemoryStream.CanSeekGet().Body;
+                }
+                set
+                {
+                    if (value == null)
+                        PMemoryStream.CanSeekGet().RemoveTargetInstanceBody(m_target);
+                    else
+                        PMemoryStream.CanSeekGet().SetTargetInstanceBody(m_target, value);
+                }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.IO.MemoryStream, System.Boolean>(defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return PMemoryStream.CanSeekGet().Info; }
+            }
+        } 
+        public zzSeekInt64SeekOrigin SeekInt64SeekOrigin() 
+        {
+            return new zzSeekInt64SeekOrigin(m_target);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class zzSeekInt64SeekOrigin : IBehaviorPreparable 
+        {
+            System.IO.MemoryStream m_target;
+
+            public zzSeekInt64SeekOrigin(System.IO.MemoryStream target)
             {
                 m_target = target;
             }
@@ -38,14 +79,14 @@ namespace System.IO.Prig
             {
                 get
                 {
-                    return PMemoryStream.Seek().Body;
+                    return PMemoryStream.SeekInt64SeekOrigin().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PMemoryStream.Seek().RemoveTargetInstanceBody(m_target);
+                        PMemoryStream.SeekInt64SeekOrigin().RemoveTargetInstanceBody(m_target);
                     else
-                        PMemoryStream.Seek().SetTargetInstanceBody(m_target, value);
+                        PMemoryStream.SeekInt64SeekOrigin().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,7 +98,7 @@ namespace System.IO.Prig
 
             public IndirectionInfo Info
             {
-                get { return PMemoryStream.Seek().Info; }
+                get { return PMemoryStream.SeekInt64SeekOrigin().Info; }
             }
         }
 

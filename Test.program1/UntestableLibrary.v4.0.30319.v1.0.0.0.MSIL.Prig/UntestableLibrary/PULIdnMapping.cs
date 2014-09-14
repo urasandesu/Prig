@@ -13,13 +13,13 @@ namespace UntestableLibrary.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzbasic basic() 
+        public static zzbasicUInt32 basicUInt32() 
         {
-            return new zzbasic();
+            return new zzbasicUInt32();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzbasic : IBehaviorPreparable 
+        public class zzbasicUInt32 : IBehaviorPreparable 
         {
             public IndirectionFunc<System.UInt32, System.Boolean> Body
             {
@@ -55,7 +55,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfbasic_uint;
+                    info.Token = TokenOfbasicUInt32;
                     return info;
                 }
             }

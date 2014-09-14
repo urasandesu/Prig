@@ -51,7 +51,7 @@ The command means to create the stub settings for the test indirection. The reas
 
 
 ### Step 3: Modify Stub Settings
-You can find the setting file `<assembly name>.prig` in the project(in this case, it is `mscorlib.prig`). Modify the setting in accordance with the comment, then build all projects: 
+You can find the setting file `<assembly name>.<runtime version>.v<assembly version>.prig` in the project(in this case, it is `mscorlib.v4.0.30319.v4.0.0.0.prig`). Modify the setting in accordance with the comment, then build all projects: 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -84,7 +84,7 @@ You can find the setting file `<assembly name>.prig` in the project(in this case
       <add name="NowGet" alias="NowGet">
         <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
           <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">get_Now</Name>
-          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib</AssemblyName>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
           <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime</ClassName>
           <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime get_Now()</Signature>
           <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime get_Now()</Signature2>

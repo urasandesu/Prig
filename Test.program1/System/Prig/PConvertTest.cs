@@ -44,7 +44,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PConvert.ToInt32().Body = value => 42;
+                PConvert.ToInt32Double().Body = value => 42;
 
                 // Act
                 var actual = Convert.ToInt32(103.919);
@@ -60,7 +60,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PConvert.ToSByte().Body = value => (sbyte)42;
+                PConvert.ToSByteChar().Body = value => (sbyte)42;
 
                 // Act
                 var actual = Convert.ToSByte('a');
@@ -76,7 +76,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PConvert.ToInt16().Body = value => (Int16)42;
+                PConvert.ToInt16Char().Body = value => (Int16)42;
 
                 // Act
                 var actual = Convert.ToInt16('b');
@@ -92,7 +92,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PConvert.ToInt64().Body = value => 42L;
+                PConvert.ToInt64Double().Body = value => 42L;
 
                 // Act
                 var actual = Convert.ToInt64(9223372036854775807.5);
@@ -108,7 +108,7 @@ namespace Test.program1.System.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PConvert.ToBoolean().Body = value => true;
+                PConvert.ToBooleanSingle().Body = value => true;
 
                 // Act
                 var actual = Convert.ToBoolean(0f);

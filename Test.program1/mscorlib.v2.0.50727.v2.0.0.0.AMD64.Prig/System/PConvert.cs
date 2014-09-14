@@ -13,13 +13,13 @@ namespace System.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzToInt32 ToInt32() 
+        public static zzToInt32Double ToInt32Double() 
         {
-            return new zzToInt32();
+            return new zzToInt32Double();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzToInt32 : IBehaviorPreparable 
+        public class zzToInt32Double : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Double, System.Int32> Body
             {
@@ -55,19 +55,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfToInt32_double;
+                    info.Token = TokenOfToInt32Double;
                     return info;
                 }
             }
         }
  
-        public static zzToSByte ToSByte() 
+        public static zzToSByteChar ToSByteChar() 
         {
-            return new zzToSByte();
+            return new zzToSByteChar();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzToSByte : IBehaviorPreparable 
+        public class zzToSByteChar : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Char, System.SByte> Body
             {
@@ -103,19 +103,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfToSByte_char;
+                    info.Token = TokenOfToSByteChar;
                     return info;
                 }
             }
         }
  
-        public static zzToInt16 ToInt16() 
+        public static zzToInt16Char ToInt16Char() 
         {
-            return new zzToInt16();
+            return new zzToInt16Char();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzToInt16 : IBehaviorPreparable 
+        public class zzToInt16Char : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Char, System.Int16> Body
             {
@@ -151,19 +151,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfToInt16_char;
+                    info.Token = TokenOfToInt16Char;
                     return info;
                 }
             }
         }
  
-        public static zzToInt64 ToInt64() 
+        public static zzToInt64Double ToInt64Double() 
         {
-            return new zzToInt64();
+            return new zzToInt64Double();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzToInt64 : IBehaviorPreparable 
+        public class zzToInt64Double : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Double, System.Int64> Body
             {
@@ -199,19 +199,19 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfToInt64_double;
+                    info.Token = TokenOfToInt64Double;
                     return info;
                 }
             }
         }
  
-        public static zzToBoolean ToBoolean() 
+        public static zzToBooleanSingle ToBooleanSingle() 
         {
-            return new zzToBoolean();
+            return new zzToBooleanSingle();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzToBoolean : IBehaviorPreparable 
+        public class zzToBooleanSingle : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Single, System.Boolean> Body
             {
@@ -247,7 +247,7 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfToBoolean_float;
+                    info.Token = TokenOfToBooleanSingle;
                     return info;
                 }
             }

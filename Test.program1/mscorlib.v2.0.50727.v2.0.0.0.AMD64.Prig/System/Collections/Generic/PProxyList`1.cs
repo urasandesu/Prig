@@ -19,17 +19,17 @@ namespace System.Collections.Generic.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzAdd Add() 
+        public zzAddT AddT() 
         {
-            return new zzAdd(m_target);
+            return new zzAddT(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAdd : IBehaviorPreparable 
+        public class zzAddT : IBehaviorPreparable 
         {
             List<T> m_target;
 
-            public zzAdd(List<T> target)
+            public zzAddT(List<T> target)
             {
                 m_target = target;
             }
@@ -38,14 +38,14 @@ namespace System.Collections.Generic.Prig
             {
                 get
                 {
-                    return PList<T>.Add().Body;
+                    return PList<T>.AddT().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PList<T>.Add().RemoveTargetInstanceBody(m_target);
+                        PList<T>.AddT().RemoveTargetInstanceBody(m_target);
                     else
-                        PList<T>.Add().SetTargetInstanceBody(m_target, value);
+                        PList<T>.AddT().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,7 +57,7 @@ namespace System.Collections.Generic.Prig
 
             public IndirectionInfo Info
             {
-                get { return PList<T>.Add().Info; }
+                get { return PList<T>.AddT().Info; }
             }
         }
 
@@ -87,9 +87,9 @@ namespace System.Collections.Generic.Prig
             {
                 m_this = @this;
             }
-            public InstanceBehaviorSetting IncludeAdd() 
+            public InstanceBehaviorSetting IncludeAddT() 
             {
-                Include(m_this.Add());
+                Include(m_this.AddT());
                 return this;
             }
 

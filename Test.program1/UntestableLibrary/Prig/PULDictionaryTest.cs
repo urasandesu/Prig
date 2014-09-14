@@ -44,7 +44,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULDictionary<int, string>.IsCompatibleKey().Body = key => key is string;
+                PULDictionary<int, string>.IsCompatibleKeyObject().Body = key => key is string;
 
                 // Act
                 var actual = ULDictionary<int, string>.IsCompatibleKey("aiueo");

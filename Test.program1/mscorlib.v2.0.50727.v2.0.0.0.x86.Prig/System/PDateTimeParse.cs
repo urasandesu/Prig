@@ -13,13 +13,13 @@ namespace System.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzTryParse TryParse() 
+        public static zzTryParseStringDateTimeFormatInfoDateTimeStylesDateTimeRef TryParseStringDateTimeFormatInfoDateTimeStylesDateTimeRef() 
         {
-            return new zzTryParse();
+            return new zzTryParseStringDateTimeFormatInfoDateTimeStylesDateTimeRef();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzTryParse : IBehaviorPreparable 
+        public class zzTryParseStringDateTimeFormatInfoDateTimeStylesDateTimeRef : IBehaviorPreparable 
         {
             public IndirectionOutFunc<System.String, System.Globalization.DateTimeFormatInfo, System.Globalization.DateTimeStyles, System.DateTime, System.Boolean> Body
             {
@@ -55,7 +55,7 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfTryParse_string_DateTimeFormatInfo_DateTimeStyles_DateTimeRef;
+                    info.Token = TokenOfTryParseStringDateTimeFormatInfoDateTimeStylesDateTimeRef;
                     return info;
                 }
             }

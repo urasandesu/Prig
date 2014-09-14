@@ -13,13 +13,13 @@ namespace System.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzConstructor Constructor() 
+        public static zzConstructorT ConstructorT() 
         {
-            return new zzConstructor();
+            return new zzConstructorT();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzConstructor : IBehaviorPreparable 
+        public class zzConstructorT : IBehaviorPreparable 
         {
             public IndirectionRefThisAction<Nullable<T>, T> Body
             {
@@ -55,7 +55,7 @@ namespace System.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfConstructor_T;
+                    info.Token = TokenOfConstructorT;
                     return info;
                 }
             }
@@ -78,9 +78,9 @@ namespace System.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeConstructor() 
+            public TypeBehaviorSetting IncludeConstructorT() 
             {
-                Include(PNullable<T>.Constructor());
+                Include(PNullable<T>.ConstructorT());
                 return this;
             }
 

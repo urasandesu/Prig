@@ -19,17 +19,17 @@ namespace UntestableLibrary.Prig
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzGetMemory GetMemory() 
+        public zzGetMemoryInt32ByteArrayRef GetMemoryInt32ByteArrayRef() 
         {
-            return new zzGetMemory(m_target);
+            return new zzGetMemoryInt32ByteArrayRef(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzGetMemory : IBehaviorPreparable 
+        public class zzGetMemoryInt32ByteArrayRef : IBehaviorPreparable 
         {
             UntestableLibrary.ULSharedMemory m_target;
 
-            public zzGetMemory(UntestableLibrary.ULSharedMemory target)
+            public zzGetMemoryInt32ByteArrayRef(UntestableLibrary.ULSharedMemory target)
             {
                 m_target = target;
             }
@@ -38,14 +38,14 @@ namespace UntestableLibrary.Prig
             {
                 get
                 {
-                    return PULSharedMemory.GetMemory().Body;
+                    return PULSharedMemory.GetMemoryInt32ByteArrayRef().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PULSharedMemory.GetMemory().RemoveTargetInstanceBody(m_target);
+                        PULSharedMemory.GetMemoryInt32ByteArrayRef().RemoveTargetInstanceBody(m_target);
                     else
-                        PULSharedMemory.GetMemory().SetTargetInstanceBody(m_target, value);
+                        PULSharedMemory.GetMemoryInt32ByteArrayRef().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -57,7 +57,7 @@ namespace UntestableLibrary.Prig
 
             public IndirectionInfo Info
             {
-                get { return PULSharedMemory.GetMemory().Info; }
+                get { return PULSharedMemory.GetMemoryInt32ByteArrayRef().Info; }
             }
         } 
         public zzDispose Dispose() 
@@ -101,17 +101,17 @@ namespace UntestableLibrary.Prig
                 get { return PULSharedMemory.Dispose().Info; }
             }
         } 
-        public zzAddOnDisposed AddOnDisposed() 
+        public zzAddOnDisposedDisposedEventHandler AddOnDisposedDisposedEventHandler() 
         {
-            return new zzAddOnDisposed(m_target);
+            return new zzAddOnDisposedDisposedEventHandler(m_target);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAddOnDisposed : IBehaviorPreparable 
+        public class zzAddOnDisposedDisposedEventHandler : IBehaviorPreparable 
         {
             UntestableLibrary.ULSharedMemory m_target;
 
-            public zzAddOnDisposed(UntestableLibrary.ULSharedMemory target)
+            public zzAddOnDisposedDisposedEventHandler(UntestableLibrary.ULSharedMemory target)
             {
                 m_target = target;
             }
@@ -120,14 +120,14 @@ namespace UntestableLibrary.Prig
             {
                 get
                 {
-                    return PULSharedMemory.AddOnDisposed().Body;
+                    return PULSharedMemory.AddOnDisposedDisposedEventHandler().Body;
                 }
                 set
                 {
                     if (value == null)
-                        PULSharedMemory.AddOnDisposed().RemoveTargetInstanceBody(m_target);
+                        PULSharedMemory.AddOnDisposedDisposedEventHandler().RemoveTargetInstanceBody(m_target);
                     else
-                        PULSharedMemory.AddOnDisposed().SetTargetInstanceBody(m_target, value);
+                        PULSharedMemory.AddOnDisposedDisposedEventHandler().SetTargetInstanceBody(m_target, value);
                 }
             }
 
@@ -139,7 +139,7 @@ namespace UntestableLibrary.Prig
 
             public IndirectionInfo Info
             {
-                get { return PULSharedMemory.AddOnDisposed().Info; }
+                get { return PULSharedMemory.AddOnDisposedDisposedEventHandler().Info; }
             }
         }
 

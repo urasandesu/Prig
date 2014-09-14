@@ -13,13 +13,13 @@ namespace UntestableLibrary.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzConstructor Constructor() 
+        public static zzConstructorInt64 ConstructorInt64() 
         {
-            return new zzConstructor();
+            return new zzConstructorInt64();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzConstructor : IBehaviorPreparable 
+        public class zzConstructorInt64 : IBehaviorPreparable 
         {
             public IndirectionRefThisAction<UntestableLibrary.ULIntPtr, System.Int64> Body
             {
@@ -55,7 +55,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfConstructor_long;
+                    info.Token = TokenOfConstructorInt64;
                     return info;
                 }
             }

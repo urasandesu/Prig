@@ -22,6 +22,7 @@
 * Supported the feature to set default behavior.
 * Modifying stub settings became a bit easier. The PowerShell command `Get-IndirectionStubSetting` supports generating unique name at the same time.
 * Fixed #14: `Environment.GetFolderPath(SpecialFolder)` can't call indirectly.
+* Fixed #15: `WebClient.DownloadStringTaskAsync` can't create indirection stub.
 
 
 Version 0.0.0-alpha7

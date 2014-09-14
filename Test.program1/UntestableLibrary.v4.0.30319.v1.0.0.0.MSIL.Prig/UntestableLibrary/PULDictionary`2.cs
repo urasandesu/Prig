@@ -13,13 +13,13 @@ namespace UntestableLibrary.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzIsCompatibleKey IsCompatibleKey() 
+        public static zzIsCompatibleKeyObject IsCompatibleKeyObject() 
         {
-            return new zzIsCompatibleKey();
+            return new zzIsCompatibleKeyObject();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzIsCompatibleKey : IBehaviorPreparable 
+        public class zzIsCompatibleKeyObject : IBehaviorPreparable 
         {
             public IndirectionFunc<System.Object, System.Boolean> Body
             {
@@ -55,7 +55,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfIsCompatibleKey_object;
+                    info.Token = TokenOfIsCompatibleKeyObject;
                     return info;
                 }
             }
@@ -78,9 +78,9 @@ namespace UntestableLibrary.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeIsCompatibleKey() 
+            public TypeBehaviorSetting IncludeIsCompatibleKeyObject() 
             {
-                Include(PULDictionary<TKey, TValue>.IsCompatibleKey());
+                Include(PULDictionary<TKey, TValue>.IsCompatibleKeyObject());
                 return this;
             }
 

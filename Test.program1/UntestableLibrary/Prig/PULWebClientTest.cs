@@ -50,9 +50,9 @@ namespace Test.program1.UntestableLibrary.Prig
                 var notCalled = true;
                 var handler = default(AsyncCompletedEventHandler);
                 handler = (sender, e) => called = true;
-                PULWebClient.AddDownloadFileCompleted().Body = (@this, value) => handler += value;
-                PULWebClient.RemoveDownloadFileCompleted().Body = (@this, value) => handler -= value;
-                PULWebClient.DownloadFileAsync().Body = (@this, address) =>
+                PULWebClient.AddDownloadFileCompletedAsyncCompletedEventHandler().Body = (@this, value) => handler += value;
+                PULWebClient.RemoveDownloadFileCompletedAsyncCompletedEventHandler().Body = (@this, value) => handler -= value;
+                PULWebClient.DownloadFileAsyncUri().Body = (@this, address) =>
                 {
                     var e = new AsyncCompletedEventArgs(null, false, null);
                     handler(@this, e);

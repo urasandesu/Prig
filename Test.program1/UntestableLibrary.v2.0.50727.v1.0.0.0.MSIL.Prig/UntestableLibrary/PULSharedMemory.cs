@@ -13,13 +13,13 @@ namespace UntestableLibrary.Prig
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzGetMemory GetMemory() 
+        public static zzGetMemoryInt32ByteArrayRef GetMemoryInt32ByteArrayRef() 
         {
-            return new zzGetMemory();
+            return new zzGetMemoryInt32ByteArrayRef();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzGetMemory : IBehaviorPreparable 
+        public class zzGetMemoryInt32ByteArrayRef : IBehaviorPreparable 
         {
             public IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean> Body
             {
@@ -55,7 +55,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfGetMemory;
+                    info.Token = TokenOfGetMemoryInt32ByteArrayRef;
                     return info;
                 }
             }
@@ -63,9 +63,9 @@ namespace UntestableLibrary.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetMemory, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetMemoryInt32ByteArrayRef, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzGetMemory>.Make(new Dictionary<ULSharedMemory, TargetSettingValue<IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>>>());
+                    holder.Source = TaggedBagFactory<zzGetMemoryInt32ByteArrayRef>.Make(new Dictionary<ULSharedMemory, TargetSettingValue<IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -89,7 +89,7 @@ namespace UntestableLibrary.Prig
 
             internal void RemoveTargetInstanceBody(ULSharedMemory target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetMemory, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetMemoryInt32ByteArrayRef, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -197,13 +197,13 @@ namespace UntestableLibrary.Prig
             }
         }
  
-        public static zzAddOnDisposed AddOnDisposed() 
+        public static zzAddOnDisposedDisposedEventHandler AddOnDisposedDisposedEventHandler() 
         {
-            return new zzAddOnDisposed();
+            return new zzAddOnDisposedDisposedEventHandler();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzAddOnDisposed : IBehaviorPreparable 
+        public class zzAddOnDisposedDisposedEventHandler : IBehaviorPreparable 
         {
             public IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler> Body
             {
@@ -239,7 +239,7 @@ namespace UntestableLibrary.Prig
                 {
                     var info = new IndirectionInfo();
                     info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfAddOnDisposed;
+                    info.Token = TokenOfAddOnDisposedDisposedEventHandler;
                     return info;
                 }
             }
@@ -247,9 +247,9 @@ namespace UntestableLibrary.Prig
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddOnDisposed, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddOnDisposedDisposedEventHandler, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzAddOnDisposed>.Make(new Dictionary<ULSharedMemory, TargetSettingValue<IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>>>());
+                    holder.Source = TaggedBagFactory<zzAddOnDisposedDisposedEventHandler>.Make(new Dictionary<ULSharedMemory, TargetSettingValue<IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -273,7 +273,7 @@ namespace UntestableLibrary.Prig
 
             internal void RemoveTargetInstanceBody(ULSharedMemory target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddOnDisposed, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddOnDisposedDisposedEventHandler, Dictionary<ULSharedMemory, TargetSettingValue<IndirectionAction<UntestableLibrary.ULSharedMemory, UntestableLibrary.ULSharedMemory.DisposedEventHandler>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
