@@ -21,16 +21,16 @@ namespace System.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class zzCreateInstanceTypeInt32ArrayInt32Array : IBehaviorPreparable 
         {
-            public IndirectionFunc<System.Type, System.Int32[], System.Int32[], System.Array> Body
+            public IndirectionFunc<System.Type, Int32[], Int32[], System.Array> Body
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Type, System.Int32[], System.Int32[], System.Array>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Type, Int32[], Int32[], System.Array>>>();
                     return holder.GetOrDefault(Info);
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Type, System.Int32[], System.Int32[], System.Array>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Type, Int32[], Int32[], System.Array>>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -45,7 +45,7 @@ namespace System.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Type, System.Int32[], System.Int32[], System.Array>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Type, Int32[], Int32[], System.Array>(defaultBehavior);
                 Body = behavior;
             }
 

@@ -7,30 +7,30 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Urasandesu.Prig.Framework;
 
-namespace System.Prig
+namespace UntestableLibrary.Prig
 {
-    public class PNullable<T> : PNullableBase where T : struct
+    public class PULDictionaryOfTKeyOfTValueEnumerator<TKey, TValue> : PULDictionaryOfTKeyOfTValueEnumeratorBase 
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzConstructorT ConstructorT() 
+        public static zzCurrentGet CurrentGet() 
         {
-            return new zzConstructorT();
+            return new zzCurrentGet();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public class zzConstructorT : IBehaviorPreparable 
+        public class zzCurrentGet : IBehaviorPreparable 
         {
-            public IndirectionRefThisAction<Nullable<T>, T> Body
+            public IndirectionRefFunc<UntestableLibrary.ULDictionary<TKey, TValue>.Enumerator, System.Collections.Generic.KeyValuePair<TKey, TValue>> Body
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<Nullable<T>, T>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefFunc<UntestableLibrary.ULDictionary<TKey, TValue>.Enumerator, System.Collections.Generic.KeyValuePair<TKey, TValue>>>>();
                     return holder.GetOrDefault(Info);
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<Nullable<T>, T>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefFunc<UntestableLibrary.ULDictionary<TKey, TValue>.Enumerator, System.Collections.Generic.KeyValuePair<TKey, TValue>>>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -45,7 +45,7 @@ namespace System.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionRefThisAction<Nullable<T>, T>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionRefFunc<UntestableLibrary.ULDictionary<TKey, TValue>.Enumerator, System.Collections.Generic.KeyValuePair<TKey, TValue>>(defaultBehavior);
                 Body = behavior;
             }
 
@@ -54,8 +54,8 @@ namespace System.Prig
                 get
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfConstructorT;
+                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                    info.Token = TokenOfCurrentGet;
                     return info;
                 }
             }
@@ -64,7 +64,7 @@ namespace System.Prig
 
         public static TypeBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PNullable<T>).GetNestedTypes().
+            var preparables = typeof(PULDictionaryOfTKeyOfTValueEnumerator<TKey, TValue>).GetNestedTypes().
                                           Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
                                           Where(_ => !_.IsGenericType).
                                           Select(_ => Activator.CreateInstance(_)).
@@ -78,9 +78,9 @@ namespace System.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeConstructorT() 
+            public TypeBehaviorSetting IncludeCurrentGet() 
             {
-                Include(PNullable<T>.ConstructorT());
+                Include(PULDictionaryOfTKeyOfTValueEnumerator<TKey, TValue>.CurrentGet());
                 return this;
             }
 
@@ -88,9 +88,9 @@ namespace System.Prig
             {
                 set
                 {
-                    PNullable<T>.DefaultBehavior = value;
+                    PULDictionaryOfTKeyOfTValueEnumerator<TKey, TValue>.DefaultBehavior = value;
                     foreach (var preparable in Preparables)
-                        preparable.Prepare(PNullable<T>.DefaultBehavior);
+                        preparable.Prepare(PULDictionaryOfTKeyOfTValueEnumerator<TKey, TValue>.DefaultBehavior);
                 }
             }
         }

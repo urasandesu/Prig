@@ -21,16 +21,16 @@ namespace System.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class zzConstructorT : IBehaviorPreparable 
         {
-            public IndirectionRefThisAction<Nullable<T>, T> Body
+            public IndirectionRefThisAction<System.Nullable<T>, T> Body
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<Nullable<T>, T>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<System.Nullable<T>, T>>>();
                     return holder.GetOrDefault(Info);
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<Nullable<T>, T>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefThisAction<System.Nullable<T>, T>>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -45,7 +45,7 @@ namespace System.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionRefThisAction<Nullable<T>, T>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionRefThisAction<System.Nullable<T>, T>(defaultBehavior);
                 Body = behavior;
             }
 

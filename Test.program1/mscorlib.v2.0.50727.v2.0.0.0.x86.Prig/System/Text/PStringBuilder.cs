@@ -59,13 +59,13 @@ namespace System.Text.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(StringBuilder target, IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder> value)
+            internal void SetTargetInstanceBody(System.Text.StringBuilder target, IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsertInt32StringInt32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsertInt32StringInt32, Dictionary<System.Text.StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzInsertInt32StringInt32>.Make(new Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>());
+                    holder.Source = TaggedBagFactory<zzInsertInt32StringInt32>.Make(new Dictionary<System.Text.StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -87,9 +87,9 @@ namespace System.Text.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(StringBuilder target)
+            internal void RemoveTargetInstanceBody(System.Text.StringBuilder target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsertInt32StringInt32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInsertInt32StringInt32, Dictionary<System.Text.StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Int32, System.String, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -151,13 +151,13 @@ namespace System.Text.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(StringBuilder target, IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder> value)
+            internal void SetTargetInstanceBody(System.Text.StringBuilder target, IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplaceCharCharInt32Int32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplaceCharCharInt32Int32, Dictionary<System.Text.StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzReplaceCharCharInt32Int32>.Make(new Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>());
+                    holder.Source = TaggedBagFactory<zzReplaceCharCharInt32Int32>.Make(new Dictionary<System.Text.StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -179,9 +179,9 @@ namespace System.Text.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(StringBuilder target)
+            internal void RemoveTargetInstanceBody(System.Text.StringBuilder target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplaceCharCharInt32Int32, Dictionary<StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzReplaceCharCharInt32Int32, Dictionary<System.Text.StringBuilder, TargetSettingValue<IndirectionFunc<System.Text.StringBuilder, System.Char, System.Char, System.Int32, System.Int32, System.Text.StringBuilder>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

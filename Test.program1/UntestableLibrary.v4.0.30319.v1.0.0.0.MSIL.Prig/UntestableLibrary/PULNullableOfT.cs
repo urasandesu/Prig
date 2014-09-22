@@ -21,16 +21,16 @@ namespace UntestableLibrary.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class zzToString : IBehaviorPreparable 
         {
-            public IndirectionRefFunc<ULNullable<T>, System.String> Body
+            public IndirectionRefFunc<UntestableLibrary.ULNullable<T>, System.String> Body
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefFunc<ULNullable<T>, System.String>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefFunc<UntestableLibrary.ULNullable<T>, System.String>>>();
                     return holder.GetOrDefault(Info);
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefFunc<ULNullable<T>, System.String>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionRefFunc<UntestableLibrary.ULNullable<T>, System.String>>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -45,7 +45,7 @@ namespace UntestableLibrary.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionRefFunc<ULNullable<T>, System.String>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionRefFunc<UntestableLibrary.ULNullable<T>, System.String>(defaultBehavior);
                 Body = behavior;
             }
 

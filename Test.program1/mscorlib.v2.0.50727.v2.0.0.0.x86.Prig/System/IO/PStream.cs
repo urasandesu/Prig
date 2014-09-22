@@ -21,16 +21,16 @@ namespace System.IO.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class zzBeginReadByteArrayInt32Int32AsyncCallbackObject : IBehaviorPreparable 
         {
-            public IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult> Body
+            public IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult> Body
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>();
                     return holder.GetOrDefault(Info);
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -45,7 +45,7 @@ namespace System.IO.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>(defaultBehavior);
                 Body = behavior;
             }
 
@@ -59,44 +59,44 @@ namespace System.IO.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(Stream target, IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult> value)
+            internal void SetTargetInstanceBody(System.IO.Stream target, IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginReadByteArrayInt32Int32AsyncCallbackObject, Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginReadByteArrayInt32Int32AsyncCallbackObject, Dictionary<System.IO.Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzBeginReadByteArrayInt32Int32AsyncCallbackObject>.Make(new Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>());
+                    holder.Source = TaggedBagFactory<zzBeginReadByteArrayInt32Int32AsyncCallbackObject>.Make(new Dictionary<System.IO.Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
-                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>(IndirectionBehaviors.Fallthrough) : Body;
+                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>(IndirectionBehaviors.Fallthrough) : Body;
                     RuntimeHelpers.PrepareDelegate(behavior);
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>(behavior, value);
+                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>(behavior, value);
                     {
                         // Prepare JIT
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrIndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>(behavior, holder.Source.Value);
+                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrIndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>(behavior, holder.Source.Value);
                 }
                 else
                 {
                     Debug.Assert(Body != null);
                     var before = holder.Source.Value[target];
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>(before.Original, value);
+                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>(before.Original, value);
                 }
             }
 
-            internal void RemoveTargetInstanceBody(Stream target)
+            internal void RemoveTargetInstanceBody(System.IO.Stream target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginReadByteArrayInt32Int32AsyncCallbackObject, Dictionary<Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzBeginReadByteArrayInt32Int32AsyncCallbackObject, Dictionary<System.IO.Stream, TargetSettingValue<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
                 if (holder.Source.Value.Count == 0)
                     return;
 
-                var before = default(TargetSettingValue<IndirectionFunc<System.IO.Stream, System.Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>);
+                var before = default(TargetSettingValue<IndirectionFunc<System.IO.Stream, Byte[], System.Int32, System.Int32, System.AsyncCallback, System.Object, System.IAsyncResult>>);
                 if (holder.Source.Value.ContainsKey(target))
                     before = holder.Source.Value[target];
                 holder.Source.Value.Remove(target);

@@ -59,13 +59,13 @@ namespace System.IO.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(MemoryStream target, IndirectionFunc<System.IO.MemoryStream, System.Boolean> value)
+            internal void SetTargetInstanceBody(System.IO.MemoryStream target, IndirectionFunc<System.IO.MemoryStream, System.Boolean> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCanSeekGet, Dictionary<MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Boolean>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCanSeekGet, Dictionary<System.IO.MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Boolean>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzCanSeekGet>.Make(new Dictionary<MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Boolean>>>());
+                    holder.Source = TaggedBagFactory<zzCanSeekGet>.Make(new Dictionary<System.IO.MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Boolean>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -87,9 +87,9 @@ namespace System.IO.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(MemoryStream target)
+            internal void RemoveTargetInstanceBody(System.IO.MemoryStream target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCanSeekGet, Dictionary<MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Boolean>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCanSeekGet, Dictionary<System.IO.MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Boolean>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -151,13 +151,13 @@ namespace System.IO.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(MemoryStream target, IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64> value)
+            internal void SetTargetInstanceBody(System.IO.MemoryStream target, IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzSeekInt64SeekOrigin, Dictionary<MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzSeekInt64SeekOrigin, Dictionary<System.IO.MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzSeekInt64SeekOrigin>.Make(new Dictionary<MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64>>>());
+                    holder.Source = TaggedBagFactory<zzSeekInt64SeekOrigin>.Make(new Dictionary<System.IO.MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -179,9 +179,9 @@ namespace System.IO.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(MemoryStream target)
+            internal void RemoveTargetInstanceBody(System.IO.MemoryStream target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzSeekInt64SeekOrigin, Dictionary<MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzSeekInt64SeekOrigin, Dictionary<System.IO.MemoryStream, TargetSettingValue<IndirectionFunc<System.IO.MemoryStream, System.Int64, System.IO.SeekOrigin, System.Int64>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

@@ -10,11 +10,11 @@ namespace System.Collections.Generic.Prig
 {
     public class PProxyList<T> 
     {
-        List<T> m_target;
+        System.Collections.Generic.List<T> m_target;
         
         public PProxyList()
         {
-            m_target = (List<T>)FormatterServices.GetUninitializedObject(typeof(List<T>));
+            m_target = (System.Collections.Generic.List<T>)FormatterServices.GetUninitializedObject(typeof(System.Collections.Generic.List<T>));
         }
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
@@ -27,14 +27,14 @@ namespace System.Collections.Generic.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class zzAddT : IBehaviorPreparable 
         {
-            List<T> m_target;
+            System.Collections.Generic.List<T> m_target;
 
-            public zzAddT(List<T> target)
+            public zzAddT(System.Collections.Generic.List<T> target)
             {
                 m_target = target;
             }
 
-            public IndirectionAction<List<T>, T> Body
+            public IndirectionAction<System.Collections.Generic.List<T>, T> Body
             {
                 get
                 {
@@ -51,7 +51,7 @@ namespace System.Collections.Generic.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<List<T>, T>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<System.Collections.Generic.List<T>, T>(defaultBehavior);
                 Body = behavior;
             }
 
@@ -61,7 +61,7 @@ namespace System.Collections.Generic.Prig
             }
         }
 
-        public static implicit operator List<T>(PProxyList<T> @this)
+        public static implicit operator System.Collections.Generic.List<T>(PProxyList<T> @this)
         {
             return @this.m_target;
         }

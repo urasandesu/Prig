@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Sept 7, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of Sept 23, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
@@ -218,6 +218,9 @@ namespace ConsoleApplication
 }
 ```
 As just described, Prig helps the code that depends on an untestable library gets trig back. I guarantee you will enjoy your development again!!
+
+For more information, see also [Prig's wiki](https://github.com/urasandesu/Prig/wiki).
+
 
 
 

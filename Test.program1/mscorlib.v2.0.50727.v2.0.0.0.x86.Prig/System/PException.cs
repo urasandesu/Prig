@@ -59,13 +59,13 @@ namespace System.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(Exception target, IndirectionFunc<System.Exception, System.String> value)
+            internal void SetTargetInstanceBody(System.Exception target, IndirectionFunc<System.Exception, System.String> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInternalToString, Dictionary<Exception, TargetSettingValue<IndirectionFunc<System.Exception, System.String>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInternalToString, Dictionary<System.Exception, TargetSettingValue<IndirectionFunc<System.Exception, System.String>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzInternalToString>.Make(new Dictionary<Exception, TargetSettingValue<IndirectionFunc<System.Exception, System.String>>>());
+                    holder.Source = TaggedBagFactory<zzInternalToString>.Make(new Dictionary<System.Exception, TargetSettingValue<IndirectionFunc<System.Exception, System.String>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -87,9 +87,9 @@ namespace System.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(Exception target)
+            internal void RemoveTargetInstanceBody(System.Exception target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInternalToString, Dictionary<Exception, TargetSettingValue<IndirectionFunc<System.Exception, System.String>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzInternalToString, Dictionary<System.Exception, TargetSettingValue<IndirectionFunc<System.Exception, System.String>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

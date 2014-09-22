@@ -30,6 +30,8 @@
 
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace UntestableLibrary
 {
@@ -40,6 +42,59 @@ namespace UntestableLibrary
             if (key == null)
                 throw new ArgumentNullException("key");
             return key is TKey;
+        }
+
+        public struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>, IDisposable, IDictionaryEnumerator, IEnumerator
+        {
+            public KeyValuePair<TKey, TValue> Current
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
+
+            object IEnumerator.Current
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public bool MoveNext()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Reset()
+            {
+                throw new NotImplementedException();
+            }
+
+            DictionaryEntry IDictionaryEnumerator.Entry
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            object IDictionaryEnumerator.Key
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            object IDictionaryEnumerator.Value
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            bool IEnumerator.MoveNext()
+            {
+                throw new NotImplementedException();
+            }
+
+            void IEnumerator.Reset()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

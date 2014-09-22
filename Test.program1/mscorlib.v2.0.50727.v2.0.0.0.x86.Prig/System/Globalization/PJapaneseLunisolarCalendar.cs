@@ -59,13 +59,13 @@ namespace System.Globalization.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> value)
+            internal void SetTargetInstanceBody(System.Globalization.JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetYearInfoInt32Int32, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetYearInfoInt32Int32, Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzGetYearInfoInt32Int32>.Make(new Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>());
+                    holder.Source = TaggedBagFactory<zzGetYearInfoInt32Int32>.Make(new Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -87,9 +87,9 @@ namespace System.Globalization.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(JapaneseLunisolarCalendar target)
+            internal void RemoveTargetInstanceBody(System.Globalization.JapaneseLunisolarCalendar target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetYearInfoInt32Int32, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetYearInfoInt32Int32, Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -151,13 +151,13 @@ namespace System.Globalization.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32> value)
+            internal void SetTargetInstanceBody(System.Globalization.JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetEraDateTime, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetEraDateTime, Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzGetEraDateTime>.Make(new Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32>>>());
+                    holder.Source = TaggedBagFactory<zzGetEraDateTime>.Make(new Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -179,9 +179,9 @@ namespace System.Globalization.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(JapaneseLunisolarCalendar target)
+            internal void RemoveTargetInstanceBody(System.Globalization.JapaneseLunisolarCalendar target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetEraDateTime, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetEraDateTime, Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.DateTime, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -243,13 +243,13 @@ namespace System.Globalization.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> value)
+            internal void SetTargetInstanceBody(System.Globalization.JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetGregorianYearInt32Int32, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetGregorianYearInt32Int32, Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzGetGregorianYearInt32Int32>.Make(new Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>());
+                    holder.Source = TaggedBagFactory<zzGetGregorianYearInt32Int32>.Make(new Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -271,9 +271,9 @@ namespace System.Globalization.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(JapaneseLunisolarCalendar target)
+            internal void RemoveTargetInstanceBody(System.Globalization.JapaneseLunisolarCalendar target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetGregorianYearInt32Int32, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetGregorianYearInt32Int32, Dictionary<System.Globalization.JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

@@ -34,7 +34,7 @@ namespace UntestableLibrary.Prig
                 m_target = target;
             }
 
-            public IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean> Body
+            public IndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, Byte[], System.Boolean> Body
             {
                 get
                 {
@@ -51,7 +51,7 @@ namespace UntestableLibrary.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, System.Byte[], System.Boolean>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionOutFunc<UntestableLibrary.ULSharedMemory, System.Int32, Byte[], System.Boolean>(defaultBehavior);
                 Body = behavior;
             }
 

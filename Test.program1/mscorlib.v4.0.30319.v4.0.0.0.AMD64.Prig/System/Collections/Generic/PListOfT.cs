@@ -21,16 +21,16 @@ namespace System.Collections.Generic.Prig
         [EditorBrowsable(EditorBrowsableState.Never)]
         public class zzAddT : IBehaviorPreparable 
         {
-            public IndirectionAction<List<T>, T> Body
+            public IndirectionAction<System.Collections.Generic.List<T>, T> Body
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<List<T>, T>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<System.Collections.Generic.List<T>, T>>>();
                     return holder.GetOrDefault(Info);
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<List<T>, T>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<System.Collections.Generic.List<T>, T>>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -45,7 +45,7 @@ namespace System.Collections.Generic.Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<List<T>, T>(defaultBehavior);
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<System.Collections.Generic.List<T>, T>(defaultBehavior);
                 Body = behavior;
             }
 
@@ -54,49 +54,49 @@ namespace System.Collections.Generic.Prig
                 get
                 {
                     var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+                    info.AssemblyName = "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
                     info.Token = TokenOfAddT;
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(List<T> target, IndirectionAction<List<T>, T> value)
+            internal void SetTargetInstanceBody(System.Collections.Generic.List<T> target, IndirectionAction<System.Collections.Generic.List<T>, T> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddT, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddT, Dictionary<System.Collections.Generic.List<T>, TargetSettingValue<IndirectionAction<System.Collections.Generic.List<T>, T>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzAddT>.Make(new Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>());
+                    holder.Source = TaggedBagFactory<zzAddT>.Make(new Dictionary<System.Collections.Generic.List<T>, TargetSettingValue<IndirectionAction<System.Collections.Generic.List<T>, T>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
-                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<List<T>, T>(IndirectionBehaviors.Fallthrough) : Body;
+                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<System.Collections.Generic.List<T>, T>(IndirectionBehaviors.Fallthrough) : Body;
                     RuntimeHelpers.PrepareDelegate(behavior);
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionAction<List<T>, T>>(behavior, value);
+                    holder.Source.Value[target] = new TargetSettingValue<IndirectionAction<System.Collections.Generic.List<T>, T>>(behavior, value);
                     {
                         // Prepare JIT
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrIndirectionAction<List<T>, T>(behavior, holder.Source.Value);
+                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrIndirectionAction<System.Collections.Generic.List<T>, T>(behavior, holder.Source.Value);
                 }
                 else
                 {
                     Debug.Assert(Body != null);
                     var before = holder.Source.Value[target];
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionAction<List<T>, T>>(before.Original, value);
+                    holder.Source.Value[target] = new TargetSettingValue<IndirectionAction<System.Collections.Generic.List<T>, T>>(before.Original, value);
                 }
             }
 
-            internal void RemoveTargetInstanceBody(List<T> target)
+            internal void RemoveTargetInstanceBody(System.Collections.Generic.List<T> target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddT, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAddT, Dictionary<System.Collections.Generic.List<T>, TargetSettingValue<IndirectionAction<System.Collections.Generic.List<T>, T>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
                 if (holder.Source.Value.Count == 0)
                     return;
 
-                var before = default(TargetSettingValue<IndirectionAction<List<T>, T>>);
+                var before = default(TargetSettingValue<IndirectionAction<System.Collections.Generic.List<T>, T>>);
                 if (holder.Source.Value.ContainsKey(target))
                     before = holder.Source.Value[target];
                 holder.Source.Value.Remove(target);

@@ -59,13 +59,13 @@ namespace System.Globalization.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(PersianCalendar target, IndirectionAction<System.Globalization.PersianCalendar, System.Int64> value)
+            internal void SetTargetInstanceBody(System.Globalization.PersianCalendar target, IndirectionAction<System.Globalization.PersianCalendar, System.Int64> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCheckTicksRangeInt64, Dictionary<PersianCalendar, TargetSettingValue<IndirectionAction<System.Globalization.PersianCalendar, System.Int64>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCheckTicksRangeInt64, Dictionary<System.Globalization.PersianCalendar, TargetSettingValue<IndirectionAction<System.Globalization.PersianCalendar, System.Int64>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzCheckTicksRangeInt64>.Make(new Dictionary<PersianCalendar, TargetSettingValue<IndirectionAction<System.Globalization.PersianCalendar, System.Int64>>>());
+                    holder.Source = TaggedBagFactory<zzCheckTicksRangeInt64>.Make(new Dictionary<System.Globalization.PersianCalendar, TargetSettingValue<IndirectionAction<System.Globalization.PersianCalendar, System.Int64>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -87,9 +87,9 @@ namespace System.Globalization.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(PersianCalendar target)
+            internal void RemoveTargetInstanceBody(System.Globalization.PersianCalendar target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCheckTicksRangeInt64, Dictionary<PersianCalendar, TargetSettingValue<IndirectionAction<System.Globalization.PersianCalendar, System.Int64>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzCheckTicksRangeInt64, Dictionary<System.Globalization.PersianCalendar, TargetSettingValue<IndirectionAction<System.Globalization.PersianCalendar, System.Int64>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 

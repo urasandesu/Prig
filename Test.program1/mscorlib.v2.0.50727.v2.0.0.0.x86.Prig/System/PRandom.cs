@@ -59,13 +59,13 @@ namespace System.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(Random target, IndirectionAction<System.Random, System.Int32> value)
+            internal void SetTargetInstanceBody(System.Random target, IndirectionAction<System.Random, System.Int32> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzConstructorInt32, Dictionary<Random, TargetSettingValue<IndirectionAction<System.Random, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzConstructorInt32, Dictionary<System.Random, TargetSettingValue<IndirectionAction<System.Random, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzConstructorInt32>.Make(new Dictionary<Random, TargetSettingValue<IndirectionAction<System.Random, System.Int32>>>());
+                    holder.Source = TaggedBagFactory<zzConstructorInt32>.Make(new Dictionary<System.Random, TargetSettingValue<IndirectionAction<System.Random, System.Int32>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -87,9 +87,9 @@ namespace System.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(Random target)
+            internal void RemoveTargetInstanceBody(System.Random target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzConstructorInt32, Dictionary<Random, TargetSettingValue<IndirectionAction<System.Random, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzConstructorInt32, Dictionary<System.Random, TargetSettingValue<IndirectionAction<System.Random, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -151,13 +151,13 @@ namespace System.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(Random target, IndirectionFunc<System.Random, System.Int32> value)
+            internal void SetTargetInstanceBody(System.Random target, IndirectionFunc<System.Random, System.Int32> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNext, Dictionary<Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNext, Dictionary<System.Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzNext>.Make(new Dictionary<Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32>>>());
+                    holder.Source = TaggedBagFactory<zzNext>.Make(new Dictionary<System.Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -179,9 +179,9 @@ namespace System.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(Random target)
+            internal void RemoveTargetInstanceBody(System.Random target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNext, Dictionary<Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNext, Dictionary<System.Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
@@ -243,13 +243,13 @@ namespace System.Prig
                     return info;
                 }
             }
-            internal void SetTargetInstanceBody(Random target, IndirectionFunc<System.Random, System.Int32, System.Int32> value)
+            internal void SetTargetInstanceBody(System.Random target, IndirectionFunc<System.Random, System.Int32, System.Int32> value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNextInt32, Dictionary<Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNextInt32, Dictionary<System.Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzNextInt32>.Make(new Dictionary<Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32, System.Int32>>>());
+                    holder.Source = TaggedBagFactory<zzNextInt32>.Make(new Dictionary<System.Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32, System.Int32>>>());
 
                 if (holder.Source.Value.Count == 0)
                 {
@@ -271,9 +271,9 @@ namespace System.Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody(Random target)
+            internal void RemoveTargetInstanceBody(System.Random target)
             {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNextInt32, Dictionary<Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32, System.Int32>>>>>>();
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzNextInt32, Dictionary<System.Random, TargetSettingValue<IndirectionFunc<System.Random, System.Int32, System.Int32>>>>>>();
                 if (holder.Source.Value == null)
                     return;
 
