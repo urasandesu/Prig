@@ -54,7 +54,6 @@
 #include <boost/lambda/bind.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/range/algorithm_ext.hpp>
-#include <boost/timer.hpp>
 
 #ifndef CPPANONYMTEST_H
 #include "CppAnonymTest.h"

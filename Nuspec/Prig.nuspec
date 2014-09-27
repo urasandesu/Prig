@@ -21,6 +21,8 @@
 * Pre-release 9.
 * Fixed #16: Nested Type can't be resolved in its indirection stub.
 * Fixed #17: Prig can't uninstall correctly against the solution that contains multiple test projects.
+* Fixed #18: `Get-IndirectionStubSetting` generates invalid alias against explict implemented interface.
+* Fixed #19: `Find-IndirectionTarget` should filter the members that can't call indirectly by default.
 
 
 Version 0.0.0-alpha8
