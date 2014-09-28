@@ -29,6 +29,7 @@
 
 
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UntestableLibrary;
 using UntestableLibrary.Prig;
@@ -54,7 +55,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 Assert.IsTrue(actual);
             }
         }
-
+        
         [Test]
         public void EnumeratorCurrent_should_be_callable_indirectly()
         {
@@ -71,6 +72,25 @@ namespace Test.program1.UntestableLibrary.Prig
                 // Assert
                 Assert.AreEqual(42, actual.Key);
                 Assert.AreEqual("にゃんぱすー", actual.Value);
+            }
+        }
+
+        [Test]
+        public void IEnumeratorCurrent_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PULDictionaryOfTKeyOfTValueEnumerator<int, string>.SystemCollectionsIEnumeratorCurrentGet().Body =
+                    (ref ULDictionary<int, string>.Enumerator @this) => new KeyValuePair<int, string>(42, "今回はここまで");
+
+                // Act
+                var enumerator = new ULDictionary<int, string>.Enumerator();
+                var actual = (KeyValuePair<int, string>)((IEnumerator)enumerator).Current;
+
+                // Assert
+                Assert.AreEqual(42, actual.Key);
+                Assert.AreEqual("今回はここまで", actual.Value);
             }
         }
     }

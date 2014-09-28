@@ -23,6 +23,7 @@
 * Fixed #17: Prig can't uninstall correctly against the solution that contains multiple test projects.
 * Fixed #18: `Get-IndirectionStubSetting` generates invalid alias against explict implemented interface.
 * Fixed #19: `Find-IndirectionTarget` should filter the members that can't call indirectly by default.
+* Fixed #20: Indirection stub settings for the instance method of an internal class generates build errors.
 
 
 Version 0.0.0-alpha8
