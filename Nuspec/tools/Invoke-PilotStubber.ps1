@@ -55,6 +55,11 @@ param (
     $WhatIf
 )
 
+trap {
+    Write-Error ($Error[0] | Out-String)
+    exit -1
+}
+
 Write-Verbose ('ReferenceFrom            : {0}(Type: {1})' -f $ReferenceFrom, ($ReferenceFrom.GetType()))
 Write-Verbose ('Assembly                 : {0}' -f $Assembly)
 Write-Verbose ('Target Framework Version : {0}' -f $TargetFrameworkVersion)
@@ -75,7 +80,8 @@ if (![string]::IsNullOrEmpty($Assembly)) {
     $asmInfo = [System.Reflection.Assembly]::LoadFrom($AssemblyFrom)
 }
 if ($null -eq $asmInfo) {
-    throw New-Object System.Management.Automation.ParameterBindingException 'The parameter ''Assembly'' or ''AssemblyFrom'' is mandatory.'
+    Write-Error 'The parameter ''Assembly'' or ''AssemblyFrom'' is mandatory.'
+    exit -403162398
 }
  
 $refAsmInfos = New-Object 'System.Collections.Generic.List[System.Reflection.Assembly]'
@@ -98,7 +104,23 @@ foreach ($refAsmName in $asmInfo.GetReferencedAssemblies()) {
         $refAsmInfos.Add([System.Reflection.Assembly]::Load($refAsmName.FullName))
     }
     catch {
-        Write-Warning ($_ | Out-String)
+        if ([string]::IsNullOrEmpty($AssemblyFrom)) {
+            $candidateDir = $OutputPath
+        } else {
+            $candidateDir = [System.IO.Path]::GetDirectoryName($AssemblyFrom)
+        }
+        $refAsmPathWithoutExtension = [System.IO.Path]::Combine($candidateDir, $refAsmName.Name)
+        try {
+            $refAsmInfos.Add([System.Reflection.Assembly]::LoadFrom($refAsmPathWithoutExtension + ".dll"))
+        }
+        catch {
+            try {
+                $refAsmInfos.Add([System.Reflection.Assembly]::LoadFrom($refAsmPathWithoutExtension + ".exe"))
+            }
+            catch {
+                Write-Warning ($_ | Out-String)
+            }
+        }
     }
 }
 $systemAsmInfo = [System.Reflection.Assembly]::LoadWithPartialName('System')
@@ -123,6 +145,11 @@ $fileMap = New-Object System.Configuration.ExeConfigurationFileMap
 $fileMap.ExeConfigFilename = $Settings
 $config = [System.Configuration.ConfigurationManager]::OpenMappedExeConfiguration($fileMap, [System.Configuration.ConfigurationUserLevel]::None)
 $section = $config.GetSection("prig")
+$unintendedSettings = @($section.Stubs | ? { $_.Target.Module.Assembly -ne $asmInfo })
+if (0 -lt $unintendedSettings.Length) {
+    Write-Error ('Now the indirection settings for "{0}" is being analysed, but the settings for "{1}" was detected.' -f $asmInfo.FullName, $unintendedSettings[0].Target.Module.Assembly.FullName)
+    exit -1944878741
+}
 
 $workDir = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($Settings), (ConvertTo-PrigAssemblyName $asmInfo))
 if (![string]::IsNullOrEmpty($workDir) -and ![IO.Directory]::Exists($workDir)) {

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>0.0.0-alpha9</version>
+    <version>0.0.0-alpha10</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,7 +17,13 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 0.0.0-alpha9
+    <releaseNotes>Version 0.0.0-alpha10
+* Pre-release 10.
+* Fixed #23: Can't be replaced the method that exposes the type of GAC unregistered assembly.
+* Fixed #24: Add Comment-Based Help.
+
+
+Version 0.0.0-alpha9
 * Pre-release 9.
 * Fixed #16: Nested Type can't be resolved in its indirection stub.
 * Fixed #17: Prig can't uninstall correctly against the solution that contains multiple test projects.

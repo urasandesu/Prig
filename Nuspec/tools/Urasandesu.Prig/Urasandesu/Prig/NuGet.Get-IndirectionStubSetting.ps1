@@ -28,6 +28,79 @@
 #
 
 function Get-IndirectionStubSetting {
+<#
+    .SYNOPSIS
+        Gets the indirection stub settings on the Package Manager Console or PowerShell.
+
+    .DESCRIPTION
+        This command creates XML tags that can be used as the indirection settings for the target method on the Package Manager Console or PowerShell, and gets them.
+
+        The indirection stub settings mean the tags that can be added to the stub setting file(`*.prig`) that is set up by the command `Add-PrigAssembly`.
+        In particular, the tag is `add`. You can insert it to between the tag `<stubs>...</stubs>` of the file.
+
+        Note that you have to typically generate unique name, and set to the tag(its attribute `name` and `alias`) in the type the target method is declared. 
+        However, you can get easily such name by using this command.
+
+        The naming convention is similar to Microsoft Fakes's, but there is also a little different: 
+        * The namespace that the stubs are located is the original namespace + `.Prig`. 
+        ` For example, the stubs for the types under `System` are located at the namespace `System.Prig`.
+
+        * The prefix of the stub is `P`(no conditions) or `PProxy`(specified instance of a class).
+        ` For example, the stub for `System.DateTime` is `System.Prig.PDateTime`. However, the stub `PProxyDateTime` isn't generated, because it is a structure.
+        ` The stub for `System.Net.HttpWebRequest` is `System.Net.Prig.PHttpWebRequest`. Also, `System.Net.Prig.PProxyHttpWebRequest` is generated, because it is a class.
+
+        See also [Code generation, compilation, and naming conventions in Microsoft Fakes](http://msdn.microsoft.com/en-us/library/hh708916.aspx).
+
+        The results are output as plain text, so I recommend that you use in combination with `clip` command.
+
+    .PARAMETER  InputObject
+        A array of `System.Reflection.MethodBase` object which is target to get the indirection settings.
+
+    .EXAMPLE
+        PS C:\>pfind datetime _now | pget
+        <add name="NowGet" alias="NowGet">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">get_Now</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime get_Now()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime get_Now()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+        </add>
+        
+        PS C:\>pfind datetime _now | pget | clip
+        
+        DESCRIPTION
+        -----------
+        This is the example that is used in combination with `Find-IndirectionTarget`.
+        Search the members that are matched to the regular expression `_now` from the type `System.DateTime`, and get the indirection stub settings.
+        When confirmed that, it has no problem. So, copy it to clipboard, and paste it to the stub settings file.
+
+    .INPUTS
+        System.Reflection.MethodBase, System.Reflection.MethodBase[]
+
+    .OUTPUTS
+        System.String
+
+    .NOTES
+        You have to import the module `Urasandesu.Prig` explicitly if you use this command on PowerShell.
+        The module `Urasandesu.Prig` is placed the directory `tools` of the package directory by NuGet when you installed Prig.
+        So, execute `Import-Module` it if you work on PowerShell.
+        
+        You can also refer to the Get-IndirectionStubSetting command by its built-in alias, "PGet".
+
+    .LINK
+        Add-PrigAssembly
+
+    .LINK
+        Find-IndirectionTarget
+
+    .LINK
+        Invoke-Prig
+
+#>
 
     [CmdletBinding()]
     param (

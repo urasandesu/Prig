@@ -30,6 +30,57 @@
 
 
 function Invoke-Prig {
+<#
+    .SYNOPSIS
+        Executes `prig.exe` on the Package Manager Console.
+
+    .DESCRIPTION
+        This command is the wrapper to execute `prig.exe`.
+
+        In NuGet, the path to the directory `tools` is automatically appended to $env:Path according to the explanation of the document 
+        [Creating And Publishing A Package](http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package).
+        However, it is enabled only at the installed time. If you restart the Visual Studio, the effect will be lost.
+        Due to resolve the issue, it becomes the mechanism which detects the directory `tools` and executes the process `prig.exe` that is in it.
+
+        The function of this command is same as `prig.exe`. For more details, see the help of `prig.exe` that is shown by the command `Invoke-Prig -Help`.
+
+    .PARAMETER  Mode
+        This is same as the subcommand of `prig.exe`. For more details, see also `Invoke-Prig -Help`.
+
+    .PARAMETER  Help
+        This is same as the help of `prig.exe`. For more details, see also `Invoke-Prig -Help`.
+
+    .PARAMETER  Process
+        This is same as the parameter `-process` which is passed to `run` subcommand in `prig.exe`. For more details, see also `Invoke-Prig run -Help`.
+
+    .PARAMETER  Arguments
+        This is same as the parameter `-arguments` which is passed to `run` subcommand in `prig.exe`. For more details, see also `Invoke-Prig run -Help`.
+
+    .PARAMETER  Assembly
+        This is same as the parameter `-assembly` which is passed to `dasm` subcommand in `prig.exe`. For more details, see also `Invoke-Prig dasm -Help`.
+
+    .PARAMETER  AssemblyFrom
+        This is same as the parameter `-assemblyfrom` which is passed to `dasm` subcommand in `prig.exe`. For more details, see also `Invoke-Prig dasm -Help`.
+
+    .INPUTS
+        System.String, System.Management.Automation.SwitchParameter
+
+    .OUTPUTS
+        None
+
+    .NOTES
+        You can also refer to the Invoke-Prig command by its built-in alias, "prig".
+
+    .LINK
+        Add-PrigAssembly
+
+    .LINK
+        Find-IndirectionTarget
+
+    .LINK
+        Get-IndirectionStubSetting
+
+#>
 
     [CmdletBinding(DefaultParametersetName = 'Runner')]
     param (
