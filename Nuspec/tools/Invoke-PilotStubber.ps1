@@ -72,7 +72,6 @@ Write-Verbose ('Invocation From          : {0}' -f $here)
 Import-Module ([System.IO.Path]::Combine($here, 'Urasandesu.Prig'))
 
 Write-Verbose 'Load Settings ...'
-[Void][System.Reflection.Assembly]::LoadWithPartialName('System.Configuration')
 
 if (![string]::IsNullOrEmpty($Assembly)) {
     $asmInfo = [System.Reflection.Assembly]::Load($Assembly)
@@ -123,6 +122,12 @@ foreach ($refAsmName in $asmInfo.GetReferencedAssemblies()) {
         }
     }
 }
+
+$confAsmInfo = [System.Reflection.Assembly]::LoadWithPartialName('System.Configuration')
+if ($refAsmInfos -notcontains $confAsmInfo) {
+    $refAsmInfos.Add($confAsmInfo)
+}
+
 $systemAsmInfo = [System.Reflection.Assembly]::LoadWithPartialName('System')
 if ($refAsmInfos -notcontains $systemAsmInfo) {
     $refAsmInfos.Add($systemAsmInfo)
@@ -169,7 +174,7 @@ Write-Verbose ('    Output to {0} ...' -f $tokensCsInfo.Path)
 
 
 $stubsCsInfos = New-PrigStubsCs $workDir $asmInfo $section $TargetFrameworkVersion
-Write-Verbose ('Generate stubs *.cs(Count: {0}) ...' -f $stubsCsInfos.Count)
+Write-Verbose ('Generate stubs *.g.cs(Count: {0}) ...' -f $stubsCsInfos.Count)
 foreach ($stubsCsInfo in $stubsCsInfos) {
     $stubsCsDir = [System.IO.Path]::GetDirectoryName($stubsCsInfo.Path)
     Write-Verbose ('    Check Directory existence {0} ...' -f $stubsCsDir)
@@ -178,15 +183,13 @@ foreach ($stubsCsInfo in $stubsCsInfos) {
         Write-Verbose ('    Make Directory to {0} ...' -f $stubsCsDir)
     }
     Write-Verbose ('    Check File existence {0} ...' -f $stubsCsInfo.Path)
-    if (![System.IO.File]::Exists($stubsCsInfo.Path)) {
-        $stubsCsInfo.Content | Out-File $stubsCsInfo.Path -Encoding utf8 -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
-        Write-Verbose ('    Output to {0} ...' -f $stubsCsInfo.Path)
-    }
+    $stubsCsInfo.Content | Out-File $stubsCsInfo.Path -Encoding utf8 -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
+    Write-Verbose ('    Output to {0} ...' -f $stubsCsInfo.Path)
 }
 
 
 $proxiesCsInfos = New-PrigProxiesCs $workDir $asmInfo $section $TargetFrameworkVersion
-Write-Verbose ('Generate proxies *.cs(Count: {0}) ...' -f $proxiesCsInfos.Count)
+Write-Verbose ('Generate proxies *.g.cs(Count: {0}) ...' -f $proxiesCsInfos.Count)
 foreach ($proxiesCsInfo in $proxiesCsInfos) {
     $proxiesCsDir = [System.IO.Path]::GetDirectoryName($proxiesCsInfo.Path)
     Write-Verbose ('    Check Directory existence {0} ...' -f $proxiesCsDir)
@@ -195,14 +198,12 @@ foreach ($proxiesCsInfo in $proxiesCsInfos) {
         Write-Verbose ('    Make Directory to {0} ...' -f $proxiesCsDir)
     }
     Write-Verbose ('    Check File existence {0} ...' -f $proxiesCsInfo.Path)
-    if (![System.IO.File]::Exists($proxiesCsInfo.Path)) {
-        $proxiesCsInfo.Content | Out-File $proxiesCsInfo.Path -Encoding utf8 -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
-        Write-Verbose ('    Output to {0} ...' -f $proxiesCsInfo.Path)
-    }
+    $proxiesCsInfo.Content | Out-File $proxiesCsInfo.Path -Encoding utf8 -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
+    Write-Verbose ('    Output to {0} ...' -f $proxiesCsInfo.Path)
 }
 
 
-Write-Verbose 'Generate *.csproj ...'
+Write-Verbose 'Generate *.g.csproj ...'
 $csprojInfo = New-PrigCsproj $workDir $asmInfo $refAsmInfos $KeyFile $TargetFrameworkVersion $OutputPath
 $csprojDir = [System.IO.Path]::GetDirectoryName($csprojInfo.Path)
 if (![string]::IsNullOrEmpty($csprojDir) -and ![IO.Directory]::Exists($csprojDir)) {

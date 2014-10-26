@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Sept 23, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of Oct 26, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
 
 
 
@@ -40,6 +40,8 @@ Run Visual Studio 2013 as Administrator, add test project(e.g. `ConsoleApplicati
 ```powershell
 PM> Install-Package Prig -Pre
 ```
+
+**NOTE:** Installation mostly went well. However, it doesn't go well if performing just after installing Visual Studio. [See also this issue's comment](https://github.com/urasandesu/Prig/issues/21#issuecomment-58741311).
 
 
 ### Step 2: Add Stub Settings
@@ -227,7 +229,7 @@ For more information, see also [Prig's wiki](https://github.com/urasandesu/Prig/
 # INSTALLATION FROM SOURCE CODE
 ## DEPENDENCY
 To build this project needs the following dependencies: 
-* [Visual Studio 2013(more than Professional Edition)](http://www.visualstudio.com/)
+* [Visual Studio 2013(more than Professional Edition because it uses ATL)](http://www.visualstudio.com/)
 * [Boost 1.55.0](http://www.boost.org/)  
 Extract to C:\boost_1_55_0, and will build with the following options(x86 and x64 libs are required):
 ```dos

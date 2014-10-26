@@ -29,6 +29,7 @@
 
 
 
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
@@ -53,6 +54,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
         }
 
         public MethodBase Target { get; private set; }
+        public string Xml { get; private set; }
 
         protected override bool OnDeserializeUnrecognizedElement(string elementName, XmlReader reader)
         {
@@ -60,23 +62,26 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             {
                 case "RuntimeMethodInfo":
                 case "RuntimeConstructorInfo":
-                    Target = DeserializeMethodBase(reader);
+                    var pair = DeserializeMethodBase(reader);
+                    Xml = pair.Key;
+                    Target = pair.Value;
                     return true;
                 default:
                     return base.OnDeserializeUnrecognizedElement(elementName, reader);
             }
         }
 
-        static MethodBase DeserializeMethodBase(XmlReader reader)
+        static KeyValuePair<string, MethodBase> DeserializeMethodBase(XmlReader reader)
         {
             var sb = new StringBuilder();
             sb.Append(reader.ReadOuterXml());
 
+            var s = sb.ToString();
             var ndcs = new NetDataContractSerializer();
-            using (var sr = new StringReader(sb.ToString()))
+            using (var sr = new StringReader(s))
             using (var xr = new XmlTextReader(sr))
             {
-                return (MethodBase)ndcs.ReadObject(xr);
+                return new KeyValuePair<string, MethodBase>(s, (MethodBase)ndcs.ReadObject(xr));
             }
         }
     }

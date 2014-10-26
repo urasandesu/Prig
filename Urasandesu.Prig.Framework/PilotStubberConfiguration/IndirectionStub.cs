@@ -42,13 +42,15 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
     {
         string m_name;
         string m_alias;
+        string m_xml;
         MethodBase m_target;
 
-        internal IndirectionStub(string name, string alias, MethodBase target)
+        internal IndirectionStub(string name, string alias, string xml, MethodBase target)
         {
             Debug.Assert(target != null);
             m_name = name;
             m_alias = alias;
+            m_xml = xml;
             m_target = target;
         }
 
@@ -56,6 +58,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 
         public string Name { get { return m_name; } }
         public string Alias { get { return m_alias; } }
+        public string Xml { get { return m_xml; } }
         public MethodBase Target { get { return m_target; } }
 
         Type m_indDlgt;
@@ -64,7 +67,8 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             get
             {
                 if (m_indDlgt == null)
-                    m_indDlgt = GetIndirectionDelegateInstance(m_target);
+                    using (InstanceGetters.DisableProcessing())
+                        m_indDlgt = GetIndirectionDelegateInstance(m_target);
                 return m_indDlgt;
             }
         }

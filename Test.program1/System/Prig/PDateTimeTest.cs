@@ -32,9 +32,9 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Prig;
 using System.Reflection;
-using System.Threading;
 using Urasandesu.Prig.Framework;
 
 namespace Test.program1.System.Prig
@@ -59,7 +59,7 @@ namespace Test.program1.System.Prig
         }
 
         [Test]
-        public void GetterOfNow_ShouldBeCallableOriginally_AnyTime()
+        public void GetterOfNow_should_be_callable_originally_any_time()
         {
             using (new IndirectionsContext())
             {
@@ -128,7 +128,7 @@ namespace Test.program1.System.Prig
         }
         
         [Test]
-        public void TryParse_should_be_callable_indirectly()
+        public void TryParseStringDateTimeFormatInfoDateTimeStylesDateTimeRef_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
@@ -146,6 +146,36 @@ namespace Test.program1.System.Prig
                 // Assert
                 Assert.IsTrue(actualReturn);
                 Assert.AreEqual(new DateTime(2014, 02, 14, 11, 30, 55, 00), actualResult);
+            }
+        }
+
+        [Test]
+        public void TryParseStringDateTimeFormatInfoDateTimeStylesDateTimeResultRef_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                var dateTimeParse = typeof(DateTime).Assembly.GetTypes().First(_ => _.Name == "DateTimeParse");
+                var dateTimeResult = typeof(DateTime).Assembly.GetTypes().First(_ => _.Name == "DateTimeResult");
+                var dateTimeParse_TryParse = dateTimeParse.GetMethod("TryParse",
+                                                                     BindingFlags.NonPublic |
+                                                                     BindingFlags.Static,
+                                                                     null,
+                                                                     new[] { typeof(string), typeof(DateTimeFormatInfo), typeof(DateTimeStyles), dateTimeResult.MakeByRefType() },
+                                                                     null);
+                var expected = Activator.CreateInstance(dateTimeResult);
+
+                PDateTimeParse.TryParseStringDateTimeFormatInfoDateTimeStylesDateTimeResultRef().Body = args => { args[3] = expected; return true; };
+
+
+                // Act
+                var @params = new object[] { "aiueo", new DateTimeFormatInfo(), DateTimeStyles.None, null };
+                var result = dateTimeParse_TryParse.Invoke(null, @params);
+
+
+                // Assert
+                Assert.AreEqual(true, result);
+                Assert.IsNotNull(@params[3]);
             }
         }
 

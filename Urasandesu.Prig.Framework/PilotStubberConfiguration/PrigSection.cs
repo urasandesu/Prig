@@ -29,16 +29,30 @@
 
 
 
-using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
     public class PrigSection : ConfigurationSection
     {
+        static PrigSection()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+        }
+
+        static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(_ => Regex.IsMatch(_.FullName, args.Name));
+        }
+
         [ConfigurationProperty("stubs", Options = ConfigurationPropertyOptions.IsRequired)]
         internal StubCollection InternalStubs
         {
@@ -64,6 +78,15 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             get { return Stubs.GroupBy(_ => _.Target.DeclaringType).GroupBy(_ => _.Key.Namespace); }
         }
 
+        public void DeserializeStubs(string stubsXml)
+        {
+            using (var sr = new StringReader(stubsXml))
+            using (var xr = new XmlTextReader(sr))
+            {
+                DeserializeElement(xr, true);
+            }
+        }
+
         static IList<IndirectionStub> MakeStubs(StubCollection internalStubs)
         {
             Debug.Assert(internalStubs != null);
@@ -81,7 +104,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             if (internalStub.Target == null)
                 throw new KeyNotFoundException(""); // TODO: 
             
-            return new IndirectionStub(internalStub.Name, internalStub.Alias, internalStub.Target);
+            return new IndirectionStub(internalStub.Name, internalStub.Alias, internalStub.Xml, internalStub.Target);
         }
     }
 }

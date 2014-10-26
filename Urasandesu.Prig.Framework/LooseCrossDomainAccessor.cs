@@ -267,4 +267,19 @@ namespace Urasandesu.Prig.Framework
             }
         }
     }
+
+    public class LooseCrossDomainAccessorUntyped
+    {
+        class Definitions
+        {
+            public static readonly MethodInfo GetOrRegisterOfT = typeof(LooseCrossDomainAccessor).GetMethod("GetOrRegister");
+        }
+
+        public static IndirectionHolderUntyped GetOrRegister(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
+        {
+            var ti = IndirectionHolderUntyped.MakeTypedType(target, delegateType, typeGenericArgs, methodGenericArgs);
+            var mi = Definitions.GetOrRegisterOfT.MakeGenericMethod(ti);
+            return new IndirectionHolderUntyped(mi.Invoke(null, null));
+        }
+    }
 }

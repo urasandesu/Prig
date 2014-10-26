@@ -21,6 +21,8 @@
 * Pre-release 10.
 * Fixed #23: Can't be replaced the method that exposes the type of GAC unregistered assembly.
 * Fixed #24: Add Comment-Based Help.
+* Supported the feature that be able to replace any methods that have some non-public type in its signature.
+* [NOTICE] Changed the generated stub's API. It became that the indirection stubs and proxies are generated ALWAYS(overwrite). Until now, it no longer generates stubs and proxies after it generated them once.
 
 
 Version 0.0.0-alpha9

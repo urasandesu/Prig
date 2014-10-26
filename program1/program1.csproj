@@ -101,6 +101,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mixins\UntestableLibrary\ULTableMixin.cs" />
     <Compile Include="MyLibrary\FarmRoad.cs" />
     <Compile Include="MyLibrary\Route.cs" />
     <Compile Include="MyLibrary\RicePaddy.cs" />

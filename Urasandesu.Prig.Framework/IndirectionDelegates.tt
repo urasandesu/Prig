@@ -235,6 +235,105 @@ foreach (var template in templates)
 <#
 }
 #>
+
+    public static partial class IndirectionDelegates
+    {
+        public static Work CreateDelegateOfDefaultBehaviorUntyped(Type indDlgt, IndirectionBehaviors defaultBehavior)
+        {
+            if (indDlgt == null)
+                throw new ArgumentNullException("indDlgt");
+
+            if (!indDlgt.IsSubclassOf(typeof(MulticastDelegate)))
+                throw new ArgumentException("The parameter must be a delegate type.", "indDlgt");
+
+            var indDlgt_Invoke = indDlgt.GetMethod("Invoke");
+            var @params = indDlgt_Invoke.GetParameters();
+            
+            return new Work(args =>
+            {
+                if (args == null)
+                    throw new ArgumentNullException("args");
+
+                if (defaultBehavior == IndirectionBehaviors.DefaultValue)
+                {
+                    if (args.Length != @params.Length)
+                    {
+                        var msg = string.Format("This default behavior is initialized as {0} parameter(s) method but it is called as {1} parameter(s) method.",
+                                                @params.Length, args.Length);
+                        throw new ArgumentException(msg, "args");
+                    }
+
+                    for (int i = 0; i < @params.Length; i++)
+                    {
+                        if (@params[i].ParameterType.IsByRef)
+                        {
+                            var paramType = @params[i].ParameterType.GetElementType();
+                            args[i] = GetDefaultValue(paramType);
+                        }
+                    }
+
+                    return GetDefaultValue(indDlgt_Invoke.ReturnType);
+                }
+
+                if (defaultBehavior == IndirectionBehaviors.Fallthrough)
+                {
+                    using (InstanceGetters.DisableProcessing())
+                        throw new FallthroughException();
+                }
+
+                using (InstanceGetters.DisableProcessing())
+                    throw new NotImplementedException();
+            });
+        }
+
+        static object GetDefaultValue(Type paramType)
+        {
+            if (paramType == typeof(void))
+                return null;
+            else if (paramType.IsValueType)
+                return Activator.CreateInstance(paramType);
+            else
+                return null;
+        }
+
+        public static Work CreateDelegateExecutingDefaultOrUntypedDelegate(Type indDlgt, Work defaultBehavior, Dictionary<object, TargetSettingValue<Work>> indirections)
+        {
+            if (indDlgt == null)
+                throw new ArgumentNullException("indDlgt");
+
+            if (!indDlgt.IsSubclassOf(typeof(MulticastDelegate)))
+                throw new ArgumentException("The parameter must be a delegate type.", "indDlgt");
+
+            var indDlgt_Invoke = indDlgt.GetMethod("Invoke");
+            var @params = indDlgt_Invoke.GetParameters();
+            if (@params.Length < 1)
+                throw new ArgumentException("The delegate type must have one or more parameters.", "indDlgt");
+
+            return new Work(args =>
+            {
+                if (args == null)
+                    throw new ArgumentNullException("args");
+
+                if (args.Length != @params.Length)
+                {
+                    var msg = string.Format("This default behavior is initialized as {0} parameter(s) method but it is called as {1} parameter(s) method.",
+                                            @params.Length, args.Length);
+                    throw new ArgumentException(msg, "args");
+                }
+
+                if (EqualityComparer<object>.Default.Equals(args[0], default(object)) || !indirections.ContainsKey(args[0]))
+                {
+                    var result = defaultBehavior(args);
+                    return result;
+                }
+                else
+                {
+                    var result = indirections[args[0]].Indirection(args);
+                    return result;
+                }
+            });
+        }
+    }
 }
 
 <#+

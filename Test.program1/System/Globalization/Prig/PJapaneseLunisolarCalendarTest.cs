@@ -30,8 +30,10 @@
 
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Globalization;
 using System.Globalization.Prig;
+using System.Reflection;
 using Urasandesu.Prig.Framework;
 
 namespace Test.program1.System.Globalization.Prig
@@ -54,6 +56,29 @@ namespace Test.program1.System.Globalization.Prig
                 // Assert
                 // Before setting indirection: 平成 26 年 閏 9
                 Assert.AreEqual(42, actual);
+            }
+        }
+
+        [Test]
+        public void CalEraInfo_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                var japaneseLunisolarCalendar_get_CalEraInfo = default(MethodInfo);
+                var expected = default(Array);
+                MakeCalEraInfoTestData(out japaneseLunisolarCalendar_get_CalEraInfo, out expected);
+
+                PJapaneseLunisolarCalendar.CalEraInfoGet().Body = args => expected;
+
+
+                // Act
+                var calendar = new JapaneseLunisolarCalendar();
+                var actual = japaneseLunisolarCalendar_get_CalEraInfo.Invoke(calendar, null) as IEnumerable;
+
+
+                // Assert
+                CollectionAssert.AreEqual(expected, actual);
             }
         }
 
@@ -80,6 +105,60 @@ namespace Test.program1.System.Globalization.Prig
                 Assert.AreEqual(42, actual);
                 Assert.AreNotEqual(calendar.GetLeapMonth(26, calendar.Eras[0]), actual);
             }
+        }
+
+        [Test]
+        public void CalEraInfo_should_be_callable_indirectly_against_only_specified_instance()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                var calendar = new JapaneseLunisolarCalendar();
+
+                var calendarProxy = new PProxyJapaneseLunisolarCalendar();
+                var japaneseLunisolarCalendar_get_CalEraInfo = default(MethodInfo);
+                var expected = default(Array);
+                MakeCalEraInfoTestData(out japaneseLunisolarCalendar_get_CalEraInfo, out expected);
+                calendarProxy.CalEraInfoGet().Body = args => expected;
+                var calendar_sut = (JapaneseLunisolarCalendar)calendarProxy;
+
+
+                // Act
+                var actual = japaneseLunisolarCalendar_get_CalEraInfo.Invoke(calendar_sut, null) as IEnumerable;
+
+
+                // Assert
+                CollectionAssert.AreEqual(expected, actual);
+                CollectionAssert.AreNotEqual(japaneseLunisolarCalendar_get_CalEraInfo.Invoke(calendar, null) as IEnumerable, actual);
+            }
+        }
+
+
+
+        static void MakeCalEraInfoTestData(out MethodInfo japaneseLunisolarCalendar_get_CalEraInfo, out Array expected)
+        {
+            var japaneseLunisolarCalendar = typeof(JapaneseLunisolarCalendar);
+            japaneseLunisolarCalendar_get_CalEraInfo = japaneseLunisolarCalendar.GetMethod("get_CalEraInfo",
+                                                                                           BindingFlags.NonPublic |
+                                                                                           BindingFlags.Instance);
+            var eraInfoArr = japaneseLunisolarCalendar_get_CalEraInfo.ReturnType;
+            var eraInfo = eraInfoArr.GetElementType();
+            var eraInfo_ctor = eraInfo.GetConstructor(BindingFlags.NonPublic |
+                                                      BindingFlags.Instance,
+                                                      null,
+#if _NET_3_5
+                                                      new[] { typeof(int), typeof(int), typeof(int), typeof(int), typeof(int) },
+#else
+                                                      new[] { typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int) },
+#endif
+                                                      null);
+#if _NET_3_5
+            var expectedElem = eraInfo_ctor.Invoke(new object[] { 42, 1900, 1, 1, 20 });
+#else
+            var expectedElem = eraInfo_ctor.Invoke(new object[] { 42, 1900, 1, 1, 20, 1, 13 });
+#endif
+            expected = Array.CreateInstance(eraInfo, 1);
+            expected.SetValue(expectedElem, 0);
         }
     }
 }

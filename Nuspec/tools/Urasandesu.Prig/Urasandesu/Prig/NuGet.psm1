@@ -821,6 +821,60 @@ function ConvertToIndirectionStubName {
 
 
 
+function ConvertTypeToGenericParameterArray {
+    param (
+        [type]
+        $Type
+    )
+
+    $typeofParams = New-Object 'System.Collections.Generic.List[string]'
+    if ($Type.IsGenericType) {
+        foreach ($genericArg in $Type.GetGenericArguments()) {
+            $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+        }
+    }
+
+    "new Type[] {{ {0} }}" -f ($typeofParams -join ', ')
+}
+
+
+
+function ConvertStubToGenericParameterArray {
+    param (
+        [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
+        $Stub
+    )
+
+    $typeofParams = New-Object 'System.Collections.Generic.List[string]'
+    if ($Stub.Target.IsGenericMethod) {
+        foreach ($genericArg in $Stub.Target.GetGenericArguments()) {
+            $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+        }
+    }
+
+    "new Type[] {{ {0} }}" -f ($typeofParams -join ', ')
+}
+
+
+
+function ConvertStubToStubsXml {
+    param (
+        [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
+        $Stub
+    )
+
+    @"
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+  <add name=""{0}"" alias=""{1}"">
+    {2}
+  </add>
+</stubs>"
+"@ -f $Stub.Name, $Stub.Alias, ($Stub.Xml -replace '"', '""')
+}
+
+
+
 . $(Join-Path $here NuGet.Add-PrigAssembly.ps1)
 . $(Join-Path $here NuGet.ConvertTo-PrigAssemblyName.ps1)
 . $(Join-Path $here NuGet.Find-IndirectionTarget.ps1)

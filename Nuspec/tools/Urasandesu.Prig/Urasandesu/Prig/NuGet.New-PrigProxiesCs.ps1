@@ -47,7 +47,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using Urasandesu.NAnonym;
 using Urasandesu.Prig.Framework;
+using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
 namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 {
@@ -100,6 +102,59 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
             {
                 var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehavior$(ConvertTypeToClassName $stub.IndirectionDelegate)(defaultBehavior);
                 Body = behavior;
+            }
+
+            public IndirectionInfo Info
+            {
+                get { return P$(ConvertTypeToClassName $declTypeGrouped.Key).$(ConvertStubToClassName $stub)().Info; }
+            }
+        }
+"@}) + @"
+
+"@ + $(foreach ($stub in $declTypeGrouped | ? { !$_.Target.IsStatic -and !(IsSignaturePublic $_) -and ($_.Target -is [System.Reflection.MethodInfo]) }) {
+        $hasAnyInstanceMember = $true
+@"
+
+        public zz$(ConvertStubToClassName $stub) $(ConvertStubToClassName $stub)() $(ConvertStubToGenericParameterConstraints $stub)
+        {
+            return new zz$(ConvertStubToClassName $stub)(m_target);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class zz$(ConvertStubToClassName $stub) : IBehaviorPreparable $(ConvertStubToGenericParameterConstraints $stub)
+        {
+            $(ConvertTypeToFullName $declTypeGrouped.Key) m_target;
+
+            public zz$(StripGenericParameterCount $stub.Alias)($(ConvertTypeToFullName $declTypeGrouped.Key) target)
+            {
+                m_target = target;
+            }
+
+            public Work Body
+            {
+                get
+                {
+                    return P$(ConvertTypeToClassName $declTypeGrouped.Key).$(ConvertStubToClassName $stub)().Body;
+                }
+                set
+                {
+                    if (value == null)
+                        P$(ConvertTypeToClassName $declTypeGrouped.Key).$(ConvertStubToClassName $stub)().RemoveTargetInstanceBody(m_target);
+                    else
+                        P$(ConvertTypeToClassName $declTypeGrouped.Key).$(ConvertStubToClassName $stub)().SetTargetInstanceBody(m_target, value);
+                }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorUntyped(indDlgt, defaultBehavior);
+                Body = behavior;
+            }
+
+            public IndirectionStub Stub
+            {
+                get { return P$(ConvertTypeToClassName $declTypeGrouped.Key).$(ConvertStubToClassName $stub)().Stub; }
             }
 
             public IndirectionInfo Info
@@ -164,7 +219,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 
             $result = 
                 New-Object psobject | 
-                    Add-Member NoteProperty 'Path' ([System.IO.Path]::Combine($WorkDirectory, "$(ConcatIfNonEmpty $dir '\')PProxy$(ConvertTypeToStubName $declTypeGrouped.Key).cs")) -PassThru | 
+                    Add-Member NoteProperty 'Path' ([System.IO.Path]::Combine($WorkDirectory, "$(ConcatIfNonEmpty $dir '\')PProxy$(ConvertTypeToStubName $declTypeGrouped.Key).g.cs")) -PassThru | 
                     Add-Member NoteProperty 'Content' $content -PassThru
             [Void]$results.Add($result)
         }

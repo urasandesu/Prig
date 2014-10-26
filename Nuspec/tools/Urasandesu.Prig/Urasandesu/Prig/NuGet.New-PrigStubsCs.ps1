@@ -46,7 +46,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Urasandesu.NAnonym;
 using Urasandesu.Prig.Framework;
+using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
 namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 {
@@ -156,6 +158,126 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 
 "@}) + @"
 
+"@ + $(foreach ($stub in $declTypeGrouped | ? { !(IsSignaturePublic $_) }) {
+@"
+
+        public static zz$(ConvertStubToClassName $stub) $(ConvertStubToClassName $stub)() $(ConvertStubToGenericParameterConstraints $stub)
+        {
+            return new zz$(ConvertStubToClassName $stub)();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class zz$(ConvertStubToClassName $stub) : IBehaviorPreparable $(ConvertStubToGenericParameterConstraints $stub)
+        {
+            public Work Body
+            {
+                get
+                {
+                    var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
+                    return holder.GetOrDefault(Info);
+                }
+                set
+                {
+                    var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
+                    if (value == null)
+                    {
+                        holder.Remove(Info);
+                    }
+                    else
+                    {
+                        holder.AddOrUpdate(Info, value);
+                        RuntimeHelpers.PrepareDelegate(value);
+                    }
+                }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
+                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorUntyped(indDlgt, defaultBehavior);
+                Body = behavior;
+            }
+
+            IndirectionStub m_stub;
+            public IndirectionStub Stub
+            {
+                get
+                {
+                    if (m_stub == null)
+                    {
+                        var stubsXml = $(ConvertStubToStubsXml $stub);
+                        var section = new PrigSection();
+                        section.DeserializeStubs(stubsXml);
+                        m_stub = section.Stubs.First();
+                    }
+                    return m_stub;
+                }
+            }
+
+            public IndirectionInfo Info
+            {
+                get
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "$($AssemblyInfo.FullName)";
+                    info.Token = TokenOf$($stub.Name);
+                    return info;
+                }
+            }
+"@ + $(if (!$stub.Target.IsStatic -and !$declTypeGrouped.Key.IsValueType) {
+@"
+
+            internal void SetTargetInstanceBody($(ConvertTypeToFullName $declTypeGrouped.Key) target, Work value)
+            {
+                RuntimeHelpers.PrepareDelegate(value);
+
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zz$(ConvertStubToClassName $stub), Dictionary<object, TargetSettingValue<Work>>>>>();
+                if (holder.Source.Value == null)
+                    holder.Source = TaggedBagFactory<zz$(ConvertStubToClassName $stub)>.Make(new Dictionary<object, TargetSettingValue<Work>>());
+
+                if (holder.Source.Value.Count == 0)
+                {
+                    var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
+                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorUntyped(indDlgt, IndirectionBehaviors.Fallthrough) : Body;
+                    RuntimeHelpers.PrepareDelegate(behavior);
+                    holder.Source.Value[target] = new TargetSettingValue<Work>(behavior, value);
+                    {
+                        // Prepare JIT
+                        var original = holder.Source.Value[target].Original;
+                        var indirection = holder.Source.Value[target].Indirection;
+                    }
+                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrUntypedDelegate(indDlgt, behavior, holder.Source.Value);
+                }
+                else
+                {
+                    Debug.Assert(Body != null);
+                    var before = holder.Source.Value[target];
+                    holder.Source.Value[target] = new TargetSettingValue<Work>(before.Original, value);
+                }
+            }
+
+            internal void RemoveTargetInstanceBody($(ConvertTypeToFullName $declTypeGrouped.Key) target)
+            {
+                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zz$(ConvertStubToClassName $stub), Dictionary<object, TargetSettingValue<Work>>>>>();
+                if (holder.Source.Value == null)
+                    return;
+
+                if (holder.Source.Value.Count == 0)
+                    return;
+
+                var before = default(TargetSettingValue<Work>);
+                if (holder.Source.Value.ContainsKey(target))
+                    before = holder.Source.Value[target];
+                holder.Source.Value.Remove(target);
+                if (holder.Source.Value.Count == 0)
+                    Body = before.Original;
+            }
+"@}) + @"
+
+        }
+
+"@}) + @"
+
 
         public static TypeBehaviorSetting ExcludeGeneric()
         {
@@ -199,7 +321,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 "@
             $result = 
                 New-Object psobject | 
-                    Add-Member NoteProperty 'Path' ([System.IO.Path]::Combine($WorkDirectory, "$(ConcatIfNonEmpty $dir '\')P$(ConvertTypeToStubName $declTypeGrouped.Key).cs")) -PassThru | 
+                    Add-Member NoteProperty 'Path' ([System.IO.Path]::Combine($WorkDirectory, "$(ConcatIfNonEmpty $dir '\')P$(ConvertTypeToStubName $declTypeGrouped.Key).g.cs")) -PassThru | 
                     Add-Member NoteProperty 'Content' $content -PassThru
             [Void]$results.Add($result)
         }
