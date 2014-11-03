@@ -41,7 +41,7 @@ Run Visual Studio 2013 as Administrator, add test project(e.g. `ConsoleApplicati
 PM> Install-Package Prig -Pre
 ```
 
-**NOTE:** Installation mostly went well. However, it doesn't go well if performing just after installing Visual Studio. [See also this issue's comment](https://github.com/urasandesu/Prig/issues/21#issuecomment-58741311).
+**NOTE:** Installation will mostly go well. However, it doesn't go well if performing just after installing Visual Studio. [See also this issue's comment](https://github.com/urasandesu/Prig/issues/21#issuecomment-58741311).
 
 
 ### Step 2: Add Stub Settings
