@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Oct 26, 2014, Prig does not work completely. However, we steadily continue to develop at the private repository. This framework will come out within the year if everything goes well.
+As of Nov 16, 2014, Released V1.0.0.
 
 
 
@@ -36,9 +36,9 @@ You probably can't test this code, because `DateTime.Now` returns the value that
 
 
 ### Step 1: Install From NuGet
-Run Visual Studio 2013 as Administrator, add test project(e.g. `ConsoleApplicationTest`) and run the following command in the Package Manager Console: 
+Run Visual Studio 2013(Express for Windows Desktop or more) as Administrator, add test project(e.g. `ConsoleApplicationTest`) and run the following command in the Package Manager Console: 
 ```powershell
-PM> Install-Package Prig -Pre
+PM> Install-Package Prig
 ```
 
 **NOTE:** Installation will mostly go well. However, it doesn't go well if performing just after installing Visual Studio. [See also this issue's comment](https://github.com/urasandesu/Prig/issues/21#issuecomment-58741311).
@@ -49,7 +49,7 @@ Run the following command in the Package Manager Console:
 ```powershell
 PM> Add-PrigAssembly -Assembly "mscorlib, Version=4.0.0.0"
 ```
-The command means to create the stub settings for the test indirection. The reason to specify `mscorlib` is that `DateTime.Now` belongs `mscorlib`. After the command is invoked, you will get the confirmation message that the project has been modified externally, so reload the project.
+The command means to create the indirection stub settings for the test. The reason to specify `mscorlib` is that `DateTime.Now` belongs `mscorlib`. After the command is invoked, you will get the confirmation message that the project has been modified externally, so reload the project.
 
 
 ### Step 3: Modify Stub Settings
@@ -103,7 +103,7 @@ You can find the setting file `<assembly name>.<runtime version>.v<assembly vers
 
 
 ### Step 4: Make Tests
-In the test code, it become testable through the use of the stub and the replacement to Test Double that returns the fake information.
+In the test code, it becomes testable through the use of the stub and the replacement to Test Double that returns the fake information: 
 ```cs
 using NUnit.Framework;
 using ConsoleApplication;
@@ -169,7 +169,7 @@ namespace ConsoleApplicationTest
 
 
 ### Step 5: Run Tests
-In fact, to enable any profiler based mocking tool, you have to set the environment variables. Microsoft Fakes/Typemock Isolator/Telerik JustMock provides the small runner it required, it is true at Prig. So use `prig.exe` to run the test as follows(continue in the Package Manager Console): 
+In fact, to enable any profiler based mocking tool, you have to set the environment variables. Therefore, such libraries - Microsoft Fakes/Typemock Isolator/Telerik JustMock provide small runner to satisfy the requisition, also it is true at Prig. Use `prig.exe` and run the test as follows(continue in the Package Manager Console): 
 ```powershell
 PM> cd <Your Test Project's Output Directory(e.g. cd .\ConsoleApplicationTest\bin\Debug)>
 PM> prig run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "ConsoleApplicationTest.dll /domain=None /framework=v4.0"

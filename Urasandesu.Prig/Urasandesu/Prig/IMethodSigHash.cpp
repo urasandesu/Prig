@@ -54,7 +54,9 @@ namespace Urasandesu { namespace Prig {
 
         IMethodSigHashImpl::result_type IMethodSigHashImpl::HashValue(IParameter const *pParam)
         {
-            auto dwattr = pParam->GetAttribute().Value();
+            using Urasandesu::Swathe::Metadata::ParameterAttributes;
+
+            auto dwattr = pParam->GetAttribute() & (ParameterAttributes::PA_IN | ParameterAttributes::PA_OUT);
             auto isByRef = static_cast<INT>(pParam->GetParameterType()->IsByRef());
             return dwattr ^ isByRef;
         }

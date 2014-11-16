@@ -71,9 +71,16 @@ namespace Urasandesu { namespace Prig {
 
         IMethodSigEqualToImpl::result_type IMethodSigEqualToImpl::ParameterEqual(IParameter const *pParamX, IParameter const *pParamY)
         {
+            using Urasandesu::Swathe::Metadata::ParameterAttributes;
+
             auto isEqual = true;
+
             if (isEqual)
-                isEqual &= pParamX->GetAttribute().Value() == pParamY->GetAttribute().Value();
+            {
+                auto dwattrX = pParamX->GetAttribute() & (ParameterAttributes::PA_IN | ParameterAttributes::PA_OUT);
+                auto dwattrY = pParamY->GetAttribute() & (ParameterAttributes::PA_IN | ParameterAttributes::PA_OUT);
+                isEqual &= dwattrX == dwattrY;
+            }
             
             if (isEqual)
                 isEqual &= pParamX->GetParameterType()->IsByRef() == pParamY->GetParameterType()->IsByRef();

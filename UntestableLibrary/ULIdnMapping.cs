@@ -33,7 +33,7 @@ namespace UntestableLibrary
 {
     public static class ULIdnMapping
     {
-        public static bool basic(uint cp)
+        public static bool basic(uint cp = 42u)
         {
             return cp < 128u;
         }

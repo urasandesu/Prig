@@ -120,9 +120,9 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 
             public static bool ParameterEquals(ParameterInfo paramX, ParameterInfo paramY)
             {
-                var attrX = paramX.Attributes;
+                var attrX = paramX.Attributes & (ParameterAttributes.In | ParameterAttributes.Out);
                 var isByRefX = paramX.ParameterType.IsByRef;
-                var attrY = paramY.Attributes;
+                var attrY = paramY.Attributes & (ParameterAttributes.In | ParameterAttributes.Out);
                 var isByRefY = paramY.ParameterType.IsByRef;
                 return attrX == attrY && isByRefX == isByRefY;
             }

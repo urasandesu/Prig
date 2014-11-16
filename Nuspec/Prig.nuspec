@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>0.0.0-alpha10</version>
+    <version>1.0.0</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,7 +17,12 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 0.0.0-alpha10
+    <releaseNotes>Version 1.0.0
+* Release 1.
+* Fixed #25: Default parameterized method can't call indirectly.
+
+
+Version 0.0.0-alpha10
 * Pre-release 10.
 * Fixed #23: Can't be replaced the method that exposes the type of GAC unregistered assembly.
 * Fixed #24: Add Comment-Based Help.
@@ -48,45 +53,7 @@ Version 0.0.0-alpha7
 * Fixed #13: TypeLoadException is occurred when trying to detour multiple assemblies.
 
 
-Version 0.0.0-alpha6
-* Pre-release 6.
-* Improved performance replacing original methods to indirect methods. Due to change to cache IndirectionDelegates and to import infrastructure's improvements, this version is x1.5 - x2.0 faster than previous version.
-
-
-Version 0.0.0-alpha5
-* Pre-release 5.
-* Fixed Issue #9: `Add-PrigAssembly -AssemblyFrom` went dead.
-* Fixed Issue #10: `prig -p ConsoleApplication1.exe` went dead.
-* Fixed Issue #11: In .NET 3.5, the assembly containing dynamic methods can't be called indirectly.
-
-
-Version 0.0.0-alpha4
-* Pre-release 4.
-* Supported the feature to generate the stub for one runtime instance.
-* [NOTICE] Changed the generated stub's API. It became a static method from a nested type. For example, until previous, the stub against `System.DateTime.Now` was `System.Prig.PDateTime.NowGet.Body`. From now, the stub becomes `System.Prig.PDateTime.NowGet().Body`. Because the previous version can't propagate an instance.
-* Fixed Issue #6: Methods defined in `.exe` can't be called indirectly.
-* Fixed Issue #7: Path to `tools` become unreachable from the Package Manager Console after building a project.
-* Fixed Issue #8: Against the method that contains a nested type, indirection stub can't be created.
-
-
-Version 0.0.0-alpha3
-* Pre-release 3.
-* Fixed Issue #3: Test is freezed when hijacking the method to add an event handler.
-* Fixed Issue #4: Multiple Prig assemblies can't be added.
-* Fixed Issue #5: Build was failed when adding Prig assembly for 3rd party library.
-
-
-Version 0.0.0-alpha2
-* Pre-release 2.
-* In Add-PrigAssembly command, added the feature to enable that the full path to stubbing assembly is specified. This will allow that you can add Prig Assembly that is not registered to GAC.
-* Added support for generating constraints of generic parameters automatically.
-* Fixed Issue #1: BadImageFormatException occurred.
-* Fixed Issue #2: Shall the name attribute be unique in the Stub Setting?
-
-
-Version 0.0.0-alpha1
-* Pre-release 1.
-* Limited Support for NuGet.
+About more previous versions, please see https://github.com/urasandesu/Prig/releases.
     </releaseNotes>
   </metadata>
   <files>
