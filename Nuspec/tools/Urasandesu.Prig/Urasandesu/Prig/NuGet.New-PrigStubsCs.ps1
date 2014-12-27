@@ -227,7 +227,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 "@ + $(if (!$stub.Target.IsStatic -and !$declTypeGrouped.Key.IsValueType) {
 @"
 
-            internal void SetTargetInstanceBody($(ConvertTypeToFullName $declTypeGrouped.Key) target, Work value)
+            internal void SetTargetInstanceBody(object target, Work value)
             {
                 RuntimeHelpers.PrepareDelegate(value);
 
@@ -256,7 +256,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
                 }
             }
 
-            internal void RemoveTargetInstanceBody($(ConvertTypeToFullName $declTypeGrouped.Key) target)
+            internal void RemoveTargetInstanceBody(object target)
             {
                 var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zz$(ConvertStubToClassName $stub), Dictionary<object, TargetSettingValue<Work>>>>>();
                 if (holder.Source.Value == null)
