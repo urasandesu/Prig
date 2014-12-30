@@ -66,6 +66,10 @@ namespace Urasandesu.Prig.Framework
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool TryRemove([MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
 
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersGetOrAdd")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool GetOrAdd([MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr, out IntPtr ppFuncPtr);
+
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersClear")]
         internal static extern void Clear();
 

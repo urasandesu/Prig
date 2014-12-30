@@ -28,11 +28,19 @@
  */
 
 
+using System;
 
 namespace UntestableLibrary
 {
     public static class ULIdnMapping
     {
+        static readonly uint[] ms_map = new uint[] { 0x96, 0x7c, 0x17, 0x4c, 0x5, 0x49, 0x25, 0x94 };
+
+        static ULIdnMapping()
+        {
+            throw new NotImplementedException();
+        }
+
         public static bool basic(uint cp = 42u)
         {
             return cp < 128u;

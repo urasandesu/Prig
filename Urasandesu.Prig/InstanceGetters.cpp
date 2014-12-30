@@ -39,7 +39,7 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR k
 
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.TryAdd(std::wstring(key), pFuncPtr);
-    CPPANONYM_D_LOGW3(L"InstanceGettersTryAdd(key: %|1$s|, pFuncPtr: 0x%|2$08X|): %|3$d|", key, pFuncPtr, result);
+    CPPANONYM_D_LOGW3(L"InstanceGettersTryAdd(key: %|1$s|, pFuncPtr: 0x%2%): %|3$d|", key, pFuncPtr, result);
     return result;
 }
 
@@ -50,7 +50,7 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR k
     _ASSERTE(ppFuncPtr != NULL);
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.TryGet(std::wstring(key), *ppFuncPtr);
-    CPPANONYM_D_LOGW3(L"InstanceGettersTryGet(key: %|1$s|, *ppFuncPtr: 0x%|2$08X|): %|3$d|", key, *ppFuncPtr, result);
+    CPPANONYM_D_LOGW3(L"InstanceGettersTryGet(key: %|1$s|, *ppFuncPtr: 0x%2%): %|3$d|", key, *ppFuncPtr, result);
     return result;
 }
 
@@ -61,7 +61,18 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWST
     _ASSERTE(ppFuncPtr != NULL);
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.TryRemove(std::wstring(key), *ppFuncPtr);
-    CPPANONYM_D_LOGW3(L"InstanceGettersTryRemove(key: %|1$s|, *ppFuncPtr: 0x%|2$08X|): %|3$d|", key, *ppFuncPtr, result);
+    CPPANONYM_D_LOGW3(L"InstanceGettersTryRemove(key: %|1$s|, *ppFuncPtr: 0x%2%): %|3$d|", key, *ppFuncPtr, result);
+    return result;
+}
+
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr)
+{
+    CPPANONYM_LOG_FUNCTION();
+
+    _ASSERTE(ppFuncPtr != NULL);
+    auto &ing = InstanceGetters::GetInstance();
+    auto result = ing.GetOrAdd(std::wstring(key), pFuncPtr, *ppFuncPtr);
+    CPPANONYM_D_LOGW4(L"InstanceGettersGetOrAdd(key: %|1$s|, pFuncPtr: 0x%2%, *ppFuncPtr: 0x%3%): %|4$d|", key, pFuncPtr, *ppFuncPtr, result);
     return result;
 }
 

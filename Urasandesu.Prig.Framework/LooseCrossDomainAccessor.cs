@@ -64,12 +64,10 @@ namespace Urasandesu.Prig.Framework
 
         public static T GetOrRegister<T>() where T : InstanceHolder<T>
         {
-            var holder = default(T);
-            if ((holder = LooseCrossDomainAccessor<T>.HolderOrDefault) == null)
-            {
-                Register<T>();
-                holder = LooseCrossDomainAccessor<T>.Holder;
-            }
+            var holder = LooseCrossDomainAccessor<T>.HolderOrRegistered;
+            lock (ms_registrations)
+                using (InstanceGetters.DisableProcessing())
+                    ms_registrations.Add(typeof(T));
             return holder;
         }
 
@@ -151,12 +149,61 @@ namespace Urasandesu.Prig.Framework
         {
             using (InstanceGetters.DisableProcessing())
             {
-                var instance = ms_t.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-                var instanceGetter = instance.GetGetMethod();
-                RuntimeHelpers.PrepareMethod(instanceGetter.MethodHandle);
-                var funcPtr = instanceGetter.MethodHandle.GetFunctionPointer();
+                var funcPtr = GetFunctionPointerCore(ms_t);
                 InstanceGetters.TryAdd(ms_key, funcPtr);
             }
+        }
+
+        static IntPtr GetFunctionPointerCore(Type t)
+        {
+            var instance = t.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+            var instanceGetter = instance.GetGetMethod();
+            RuntimeHelpers.PrepareMethod(instanceGetter.MethodHandle);
+            return instanceGetter.MethodHandle.GetFunctionPointer();
+        }
+
+        static T GetOrRegisterHolder()
+        {
+            var funcPtr = default(IntPtr);
+            if (InstanceGetters.TryGet(ms_key, out funcPtr))
+            {
+                using (InstanceGetters.DisableProcessing())
+                    return GetHolderCore(ms_t, funcPtr);
+            }
+            else
+            {
+                var funcPtrTmp = default(IntPtr);
+                using (InstanceGetters.DisableProcessing())
+                    funcPtrTmp = GetFunctionPointerCore(ms_t);
+
+                while (!InstanceGetters.GetOrAdd(ms_key, funcPtrTmp, out funcPtr)) ;
+
+                using (InstanceGetters.DisableProcessing())
+                    return GetHolderCore(ms_t, funcPtr);
+            }
+        }
+
+        static T GetHolderCore(Type t, IntPtr funcPtr)
+        {
+            var extractor = new DynamicMethod("Extractor", t, null, t.Module);
+            var gen = extractor.GetILGenerator();
+            if (IntPtr.Size == 4)
+            {
+                gen.Emit(OpCodes.Ldc_I4, funcPtr.ToInt32());
+            }
+            else if (IntPtr.Size == 8)
+            {
+                gen.Emit(OpCodes.Ldc_I8, funcPtr.ToInt64());
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+            gen.EmitCalli(OpCodes.Calli, CallingConventions.Standard, t, null, null);
+            gen.Emit(OpCodes.Ret);
+            var holder = ((Func<T>)extractor.CreateDelegate(typeof(Func<T>)))();
+            holder.Prepare();
+            return holder;
         }
 
         static bool TryGetHolder(out T holder)
@@ -170,26 +217,7 @@ namespace Urasandesu.Prig.Framework
             else
             {
                 using (InstanceGetters.DisableProcessing())
-                {
-                    var extractor = new DynamicMethod("Extractor", ms_t, null, ms_t.Module);
-                    var gen = extractor.GetILGenerator();
-                    if (IntPtr.Size == 4)
-                    {
-                        gen.Emit(OpCodes.Ldc_I4, funcPtr.ToInt32());
-                    }
-                    else if (IntPtr.Size == 8)
-                    {
-                        gen.Emit(OpCodes.Ldc_I8, funcPtr.ToInt64());
-                    }
-                    else
-                    {
-                        throw new NotSupportedException();
-                    }
-                    gen.EmitCalli(OpCodes.Calli, CallingConventions.Standard, ms_t, null, null);
-                    gen.Emit(OpCodes.Ret);
-                    holder = ((Func<T>)extractor.CreateDelegate(typeof(Func<T>)))();
-                }
-                holder.Prepare();
+                    holder = GetHolderCore(ms_t, funcPtr);
                 return true;
             }
         }
@@ -237,6 +265,27 @@ namespace Urasandesu.Prig.Framework
                                     Thread.MemoryBarrier();
                                 ms_ready = true;
                             }
+                        }
+                    }
+                }
+                return ms_holder;
+            }
+        }
+
+        public static T HolderOrRegistered
+        {
+            get
+            {
+                if (!ms_ready)
+                {
+                    lock (ms_lockObj)
+                    {
+                        if (!ms_ready)
+                        {
+                            ms_holder = GetOrRegisterHolder();
+                            using (InstanceGetters.DisableProcessing())
+                                Thread.MemoryBarrier();
+                            ms_ready = true;
                         }
                     }
                 }

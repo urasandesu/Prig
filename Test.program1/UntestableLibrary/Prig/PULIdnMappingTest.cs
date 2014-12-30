@@ -44,6 +44,7 @@ namespace Test.program1.UntestableLibrary.Prig
             using (new IndirectionsContext())
             {
                 // Arrange
+                PULIdnMapping.StaticConstructor().Body = () => { };
                 PULIdnMapping.basicUInt32().Body = cp => true;
 
                 // Act
