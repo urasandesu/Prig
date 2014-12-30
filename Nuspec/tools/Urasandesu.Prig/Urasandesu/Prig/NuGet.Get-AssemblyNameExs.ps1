@@ -1,5 +1,5 @@
 ﻿# 
-# File: Urasandesu.Prig.psm1
+# File: NuGet.Get-AssemblyNameExs.ps1
 # 
 # Author: Akira Sugiura (urasandesu@gmail.com)
 # 
@@ -29,7 +29,16 @@
 
 
 
-$here = Split-Path $MyInvocation.MyCommand.Path
-Update-FormatData -PrependPath ([System.IO.Path]::Combine($here, 'format.ps1xml'))
+function Get-AssemblyNameExs {
 
-Export-ModuleMember -Function *-* -Alias *
+    [CmdletBinding()]
+    param (
+        $Assembly
+    )
+
+    $results = prig dasm -assembly $Assembly | ConvertFrom-Csv
+    foreach ($result in $results) {
+        $result.psobject.TypeNames.Insert(0, $AssemblyNameExTypeName)
+        $result
+    }
+}

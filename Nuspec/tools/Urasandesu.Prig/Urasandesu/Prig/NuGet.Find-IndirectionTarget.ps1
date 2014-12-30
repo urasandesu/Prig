@@ -30,10 +30,10 @@
 function Find-IndirectionTarget {
 <#
     .SYNOPSIS
-        Finds the targets to create the indirection setting on the Package Console Manager or PowerShell.
+        Finds the targets to create the indirection setting on the Package Console Manager, PowerShell or the Prig setup session.
 
     .DESCRIPTION
-        This command finds the methods that are satisfied the search condition on the Package Manager Console or PowerShell.
+        This command finds the methods that are satisfied the search condition on the Package Manager Console, PowerShell or the Prig setup session.
 
         About the search way, first, it enumerates the members that are satisfied the following conditions from the specified parameter as `-InputObject`: 
         * a public member or a non-public member
@@ -42,16 +42,15 @@ function Find-IndirectionTarget {
         * a constructor(containing a type constructor) or a method
         * a non-abstract members
         
-        From them, it narrow the search to the results that are matched to specified the parameter `-Method`.
-        The string that is compared with `-Method` is same as the string that is listed as the results this command invoked.
+        From them, it narrow the search to the results that are matched to specified the parameter `-Method`. The string that is compared with `-Method` is same as the string that is listed as the results this command invoked.
 
     .PARAMETER  InputObject
         An array of type or an array of string that can be recognized as a type.
-        "The string that can be recognized as a type" means that `Invoke-Expression ('[{0}]' -f $s)` - NOTE: $s is string - can evaluate to `Sytem.Type` object.
-        Therefore, you can specify the parameter like `datetime`, `system.reflection.assembly`, `([int])` and so on.
+        "The string that can be recognized as a type" means that `Invoke-Expression ('[{0}]' -f $s)` - NOTE: $s is string - can evaluate to `Sytem.Type` object. Therefore, you can specify the parameter like `datetime`, `system.reflection.assembly`, `([int])` and so on.
 
     .PARAMETER  Method
-        A search condition for the methods. You can use regular expression.
+        A search condition for the methods.
+        You can use regular expression.
 
     .EXAMPLE
         Find-IndirectionTarget datetime '(today)|(now)'
@@ -83,8 +82,7 @@ function Find-IndirectionTarget {
         
         DESCRIPTION
         -----------
-        In this example, first, it finds the types that is named `httpcontext` from the assembly `System.Web`.
-        Against the results, use this command, and find the members that are matched the regular expression `get_current\b`.
+        In this example, first, it finds the types that is named `httpcontext` from the assembly `System.Web`. Against the results, use this command, and find the members that are matched the regular expression `get_current\b`.
 
     .EXAMPLE
         C:\users\akira\documents\visual studio 2013\Projects\Demo\Demo\bin\Debug>ipmo ..\..\..\packages\Prig.0.0.0-alpha10\tools\Urasandesu.Prig
@@ -106,11 +104,7 @@ function Find-IndirectionTarget {
         -----------
         This is the example that doesn't use the Package Manager Console but use PowerShell.
 
-        By the way, the Package Manager Console doesn't support nested prompt by its design. Therefore, there is the problem that it can never release the assemblies 
-        if it loaded the assemblies to analyze indirection targets once. In the first place, the features that are used mundanely - such as autocompletion, 
-        commands history and so on - are less functionality than PowerShell's.
-
-        I recommend that you always use PowerShell when analyzing the indirection targets.
+        The Package Manager Console doesn't support nested prompt by its design. Therefore, there is the problem that it can never release the assemblies if it loaded the assemblies to analyze indirection targets once. In the first place, the features that are used mundanely - such as autocompletion, commands history and so on - are less functionality than PowerShell's. I highly recommend that you always use PowerShell when analyzing the indirection targets.
 
     .INPUTS
         System.String, System.String[], System.Type, System.Type[]
@@ -119,9 +113,7 @@ function Find-IndirectionTarget {
         None, System.Reflection.MethodBase, System.Reflection.MethodBase[]
 
     .NOTES
-        You have to import the module `Urasandesu.Prig` explicitly if you use this command on PowerShell.
-        The module `Urasandesu.Prig` is placed the directory `tools` of the package directory by NuGet when you installed Prig.
-        So, execute `Import-Module` it if you work on PowerShell.
+        You have to import the module `Urasandesu.Prig` explicitly if you use this command on PowerShell directly. The module `Urasandesu.Prig` is placed the directory `tools` of the package directory by NuGet when you installed Prig. So, execute `Import-Module` from there. By the way, this step requires a little labor. Using the Prig setup session would be more easier. See also the help for `Start-PrigSetup` for more details.
         
         You can also refer to the Find-IndirectionTarget command by its built-in alias, "PFind".
 
@@ -133,6 +125,9 @@ function Find-IndirectionTarget {
 
     .LINK
         Invoke-Prig
+
+    .LINK
+        Start-PrigSetup
 
 #>
 

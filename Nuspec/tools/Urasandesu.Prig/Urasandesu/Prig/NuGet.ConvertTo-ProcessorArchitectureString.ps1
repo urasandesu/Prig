@@ -1,5 +1,5 @@
 ﻿# 
-# File: NuGet.ConvertTo-PrigAssemblyName.ps1
+# File: NuGet.ConvertTo-ProcessorArchitectureString.ps1
 # 
 # Author: Akira Sugiura (urasandesu@gmail.com)
 # 
@@ -29,32 +29,39 @@
 
 
 
-function ConvertTo-PrigAssemblyName {
+function ConvertTo-ProcessorArchitectureString {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true, Position = 0)]
+        [Parameter(Mandatory = $True)]
         $Info
     )
 
     switch ($Info)
     {
         { $_.psobject.TypeNames -contains 'System.Reflection.Assembly' } {  
-            $name = $Info.GetName().Name
-            $runtimeVer = $Info.ImageRuntimeVersion
-            $ver = $Info.GetName().Version
-            $procArch = ConvertTo-ProcessorArchitectureString $Info
+            $procArch = [string]$Info.GetName().ProcessorArchitecture 
+        }
+        { $_.psobject.TypeNames -contains 'System.Reflection.AssemblyName' } {  
+            $procArch = [string]$Info.ProcessorArchitecture 
         }
         { $_.psobject.TypeNames -contains $AssemblyNameExTypeName } {  
-            $name = $Info.Name
-            $runtimeVer = $Info.ImageRuntimeVersion
-            $ver = $Info.Version
-            $procArch = ConvertTo-ProcessorArchitectureString $Info
+            $procArch = $Info.ProcessorArchitecture 
         }
-        Default {
-            throw New-Object System.ArgumentException ('Info(Type: {0}) is not supported.' -f $Info.GetType())
+        { $_ -is [string] } { 
+            $procArch = $Info 
+        }
+        Default { 
+            throw New-Object System.ArgumentException ('Parameter $Info({0}) is not supported.' -f $Info.GetType()) 
         }
     }
 
-    '{0}.{1}.v{2}.{3}.Prig' -f $name, $runtimeVer, $ver, $procArch
+    switch ($procArch)
+    {
+        'X86'                           { "x86"; break }
+        { $_ -match '(Amd64)|(x64)' }   { "AMD64"; break }
+        { $_ -match 'AnyCPU\|true' }    { "x86"; break }
+        { $_ -match '(MSIL)|(AnyCPU)' } { "MSIL"; break }
+        Default                         { "MSIL"; break }
+    }
 }

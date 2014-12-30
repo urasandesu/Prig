@@ -1,5 +1,5 @@
 ﻿# 
-# File: Urasandesu.Prig.psm1
+# File: NuGet.Get-PackageToolsPath.ps1
 # 
 # Author: Akira Sugiura (urasandesu@gmail.com)
 # 
@@ -29,7 +29,13 @@
 
 
 
-$here = Split-Path $MyInvocation.MyCommand.Path
-Update-FormatData -PrependPath ([System.IO.Path]::Combine($here, 'format.ps1xml'))
-
-Export-ModuleMember -Function *-* -Alias *
+function Get-PackageToolsPath {
+    
+    # $(SolutionDir)packages\Prig.1.1.0\tools\Urasandesu.Prig\Urasandesu\Prig
+    $curDirInfo = New-Object System.IO.DirectoryInfo $here
+    
+    # $(SolutionDir)packages\Prig.1.1.0\tools\Urasandesu.Prig\Urasandesu
+    # $(SolutionDir)packages\Prig.1.1.0\tools\Urasandesu.Prig
+    # $(SolutionDir)packages\Prig.1.1.0\tools
+    $curDirInfo.Parent.Parent.Parent.FullName
+}

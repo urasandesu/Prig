@@ -155,43 +155,6 @@ function ToPlatformTarget {
 
 
 
-function ToProcessorArchitectureString {
-    param (
-        [Parameter(Mandatory = $True)]
-        $Info
-    )
-
-    switch ($Info)
-    {
-        { $_.psobject.TypeNames -contains 'System.Reflection.Assembly' } {  
-            $procArch = [string]$Info.GetName().ProcessorArchitecture 
-        }
-        { $_.psobject.TypeNames -contains 'System.Reflection.AssemblyName' } {  
-            $procArch = [string]$Info.ProcessorArchitecture 
-        }
-        { $_.psobject.TypeNames -contains $AssemblyNameExTypeName } {  
-            $procArch = $Info.ProcessorArchitecture 
-        }
-        { $_ -is [string] } { 
-            $procArch = $Info 
-        }
-        Default { 
-            throw New-Object System.ArgumentException ('Parameter $Info({0}) is not supported.' -f $Info.GetType()) 
-        }
-    }
-
-    switch ($procArch)
-    {
-        'X86'                           { "x86"; break }
-        { $_ -match '(Amd64)|(x64)' }   { "AMD64"; break }
-        { $_ -match 'AnyCPU\|true' }    { "x86"; break }
-        { $_ -match '(MSIL)|(AnyCPU)' } { "MSIL"; break }
-        Default                         { "MSIL"; break }
-    }
-}
-
-
-
 function ToReferenceInclude {
     param (
         [System.Reflection.Assembly[]]
@@ -877,13 +840,19 @@ function ConvertStubToStubsXml {
 
 . $(Join-Path $here NuGet.Add-PrigAssembly.ps1)
 . $(Join-Path $here NuGet.ConvertTo-PrigAssemblyName.ps1)
+. $(Join-Path $here NuGet.ConvertTo-ProcessorArchitectureString.ps1)
 . $(Join-Path $here NuGet.Find-IndirectionTarget.ps1)
+. $(Join-Path $here NuGet.Get-AssemblyNameExs.ps1)
+. $(Join-Path $here NuGet.Get-AssemblyNameExsFrom.ps1)
 . $(Join-Path $here NuGet.Get-IndirectionStubSetting.ps1)
+. $(Join-Path $here NuGet.Get-PackageName.ps1)
+. $(Join-Path $here NuGet.Get-PackageToolsPath.ps1)
 . $(Join-Path $here NuGet.Invoke-Prig.ps1)
 . $(Join-Path $here NuGet.New-PrigCsproj.ps1)
 . $(Join-Path $here NuGet.New-PrigProxiesCs.ps1)
 . $(Join-Path $here NuGet.New-PrigStubsCs.ps1)
 . $(Join-Path $here NuGet.New-PrigTokensCs.ps1)
+. $(Join-Path $here NuGet.Start-PrigSetup.ps1)
 
 
 

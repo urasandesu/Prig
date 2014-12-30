@@ -37,10 +37,8 @@ function Invoke-Prig {
     .DESCRIPTION
         This command is the wrapper to execute `prig.exe`.
 
-        In NuGet, the path to the directory `tools` is automatically appended to $env:Path according to the explanation of the document 
-        [Creating And Publishing A Package](http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package).
-        However, it is enabled only at the installed time. If you restart the Visual Studio, the effect will be lost.
-        Due to resolve the issue, it becomes the mechanism which detects the directory `tools` and executes the process `prig.exe` that is in it.
+        In NuGet, the path to the directory `tools` is automatically appended to $env:Path according to the explanation of the document [Creating And Publishing A Package](http://docs.nuget.org/docs/creating-packages/creating-and-publishing-a-package).
+        However, it is enabled only at the installed time. If you restart the Visual Studio, the effect will be lost. Due to resolve the issue, it becomes the mechanism which detects the directory `tools` and executes the process `prig.exe` that is in it.
 
         The function of this command is same as `prig.exe`. For more details, see the help of `prig.exe` that is shown by the command `Invoke-Prig -Help`.
 
@@ -80,6 +78,9 @@ function Invoke-Prig {
     .LINK
         Get-IndirectionStubSetting
 
+    .LINK
+        Start-PrigSetup
+
 #>
 
     [CmdletBinding(DefaultParametersetName = 'Runner')]
@@ -111,20 +112,7 @@ function Invoke-Prig {
         $AssemblyFrom
     )
 
-    $prigPkg = Get-Package Prig
-    $prigPkgName = $prigPkg.Id + '.' + $prigPkg.Version
-
-    [void][System.Reflection.Assembly]::LoadWithPartialName('Microsoft.Build')
-    $msbProjCollection = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection
-    $envProj = (Get-Project).Object.Project
-    $allMsbProjs = $msbProjCollection.GetLoadedProjects($envProj.FullName).GetEnumerator()
-    if(!$allMsbProjs.MoveNext()) {
-        throw New-Object System.InvalidOperationException ('"{0}" has not been loaded.' -f $envProj.FullName)
-    }
-
-    $curMsbProj = $allMsbProjs.Current
-    $solutionDir = $curMsbProj.ExpandString('$(SolutionDir)')
-    $prig = $solutionDir + ('packages\{0}\tools\prig.exe' -f $prigPkgName)
+    $prig = [System.IO.Path]::Combine((Get-PackageToolsPath), 'prig.exe')
     
     if ([string]::IsNullOrEmpty($Mode) -and $Help) {
         & $prig -help
