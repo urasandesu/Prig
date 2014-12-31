@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Nov 16, 2014, Released V1.0.0.
+As of Dec 31, 2014, Released V1.1.0.
 
 
 
