@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+# 
+# File: PrigPackage.vsct
+# 
+# Author: Akira Sugiura (urasandesu@gmail.com)
+# 
+# 
+# Copyright (c) 2015 Akira Sugiura
+#  
+#  This software is MIT License.
+#  
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+#  
+#  The above copyright notice and this permission notice shall be included in
+#  all copies or substantial portions of the Software.
+#  
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#  THE SOFTWARE.
+#
+-->
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="PrigPackage">
+
+    <Menus>
+      <Menu guid="MainMenu" id="MainMenu" priority="0x700" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
+        <Strings>
+          <ButtonText>Pri&amp;g</ButtonText>
+          <CommandName>Pri&amp;g</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <Group guid="AddPrigAssemblyForMSCorLibGroup" id="AddPrigAssemblyForMSCorLibGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_REFERENCEROOT" />
+      </Group>
+
+      <Group guid="AddPrigAssemblyGroup" id="AddPrigAssemblyGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_REFERENCE" />
+      </Group>
+
+      <Group guid="MainMenuGroup" id="MainMenuGroup" priority="0x0600">
+        <Parent guid="MainMenu" id="MainMenu" />
+      </Group>
+
+      <Group guid="EditPrigIndirectionSettingsGroup" id="EditPrigIndirectionSettingsGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="AddPrigAssemblyForMSCorLibGroup" id="AddPrigAssemblyForMSCorLibCommand" priority="0x0100" type="Button">
+        <Parent guid="AddPrigAssemblyForMSCorLibGroup" id="AddPrigAssemblyForMSCorLibGroup" />
+        <Strings>
+          <ButtonText>Add Pri&amp;g Assembly for mscorlib</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="AddPrigAssemblyGroup" id="AddPrigAssemblyCommand" priority="0x0100" type="Button">
+        <Parent guid="AddPrigAssemblyGroup" id="AddPrigAssemblyGroup" />
+        <Strings>
+          <ButtonText>Add Pri&amp;g Assembly</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="MainMenuGroup" id="EnableTestAdapterCommand" priority="0x0100" type="Button">
+        <Parent guid="MainMenuGroup" id="MainMenuGroup" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Enable Test Adapter</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="MainMenuGroup" id="DisableTestAdapterCommand" priority="0x0101" type="Button">
+        <Parent guid="MainMenuGroup" id="MainMenuGroup" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>&amp;Disable Test Adapter</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="EditPrigIndirectionSettingsGroup" id="EditPrigIndirectionSettingsCommand" priority="0x0100" type="Button">
+        <Parent guid="EditPrigIndirectionSettingsGroup" id="EditPrigIndirectionSettingsGroup" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Edit Pri&amp;g Indirection Settings</ButtonText>
+        </Strings>
+      </Button>
+
+    </Buttons>
+
+  </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="MainMenuGroup" id="EnableTestAdapterCommand" editor="guidVSStd97" key1="VK_OEM_2" mod1="Control Shift" />
+    <KeyBinding guid="MainMenuGroup" id="DisableTestAdapterCommand" editor="guidVSStd97" key1="VK_OEM_102" mod1="Control Shift" />
+  </KeyBindings>
+  
+  <Symbols>
+    <GuidSymbol name="PrigPackage" value="{0a06101d-8de3-40c4-b083-c5c16ca227ae}" />
+
+    <GuidSymbol name="MainMenu" value="{349577aa-b891-4271-bc7a-2121ccb68ee5}">
+      <IDSymbol name="MainMenu" value="0x1001" />
+    </GuidSymbol>
+
+    <GuidSymbol name="MainMenuGroup" value="{1ee497a1-b076-46b0-8808-64deb408c423}">
+      <IDSymbol name="MainMenuGroup" value="0x1101" />
+      <IDSymbol name="EnableTestAdapterCommand" value="0x1102" />
+      <IDSymbol name="DisableTestAdapterCommand" value="0x1103" />
+    </GuidSymbol>
+
+    <GuidSymbol name="AddPrigAssemblyForMSCorLibGroup" value="{b99f3bdd-fee9-42ac-a943-303620e0ce53}">
+      <IDSymbol name="AddPrigAssemblyForMSCorLibGroup" value="0x1011" />
+      <IDSymbol name="AddPrigAssemblyForMSCorLibCommand" value="0x1012" />
+    </GuidSymbol>
+
+    <GuidSymbol name="AddPrigAssemblyGroup" value="{7c0c2ffb-c3a5-45d0-9887-026566d68825}">
+      <IDSymbol name="AddPrigAssemblyGroup" value="0x1021" />
+      <IDSymbol name="AddPrigAssemblyCommand" value="0x1022" />
+    </GuidSymbol>
+
+    <GuidSymbol name="EditPrigIndirectionSettingsGroup" value="{15fa994b-e3c6-4f6a-acdb-f311d1ebfa65}">
+      <IDSymbol name="EditPrigIndirectionSettingsGroup" value="0x1031" />
+      <IDSymbol name="EditPrigIndirectionSettingsCommand" value="0x1032" />
+    </GuidSymbol>
+    
+  </Symbols>
+
+</CommandTable>

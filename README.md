@@ -11,6 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
+As of Feb 22, 2015, Developing V1.2.0(Since this version, Prig is going to support Visual Studio integrated environment).  
 As of Dec 31, 2014, Released V1.1.0.
 
 
@@ -269,6 +270,8 @@ Install using with the installer(NUnit-2.6.3.msi).
 Install using with the installer(VS_VmSdk.exe).
 * [NuGet Command-Line Utility](http://docs.nuget.org/docs/start-here/installing-nuget)  
 Download command line utility `nuget.exe`, then append its path to the environment variable `path`.
+* [Microsoft Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)  
+Install using with the installer(vssdk_full.exe).
 
 
 

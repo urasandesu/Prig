@@ -51,13 +51,35 @@ namespace CWeaverDetail {
 
     
     
+    void GetIndirectionDllPaths(wstring const &version, wstring const &currentDir, vector<path> &indDllPaths)
+    {
+        using boost::filesystem::directory_iterator;
+        using boost::filesystem::is_regular_file;
+        using std::regex_search;
+        using std::wregex;
+
+        auto patternStr = version + L".v\\d+.\\d+.\\d+.\\d+.((x86)|(AMD64)|(MSIL)).Prig.dll";
+        boost::replace_all(patternStr, L".", L"\\.");
+        auto pattern = wregex(patternStr);
+        for (directory_iterator i(currentDir), i_end; i != i_end; ++i)
+        {
+            if (!is_regular_file(i->status()))
+                continue;
+            
+            if (!regex_search(i->path().filename().native(), pattern))
+                continue;
+            
+            indDllPaths.push_back(i->path());
+        }
+    }
+
+
+
     STDMETHODIMP CWeaverImpl::InitializeCore( 
         /* [in] */ IUnknown *pICorProfilerInfoUnk)
     {
         using ATL::CComQIPtr;
         using boost::filesystem::current_path;
-        using boost::filesystem::directory_iterator;
-        using boost::filesystem::is_regular_file;
         using boost::lexical_cast;
         using boost::bad_lexical_cast;
         using std::regex_search;
@@ -90,7 +112,15 @@ namespace CWeaverDetail {
         if (CComQIPtr<ICorProfilerInfo3>(pICorProfilerInfoUnk))
             version = wstring(L"v4.0.30319");
         CPPANONYM_D_LOGW1(L"Runtime Version: %|1$s|", version);
+        
+        auto procPath = Environment::GetCurrentProcessPath();
+        auto targetProcName = Environment::GetEnvironmentVariable(L"URASANDESU_PRIG_TARGET_PROCESS_NAME");
+        CPPANONYM_D_LOGW1(L"Current Process Path: %|1$s|", procPath);
+        CPPANONYM_D_LOGW1(L"Target Process Name: %|1$s|", targetProcName);
+        if (!targetProcName.empty() && !regex_search(procPath.native(), wregex(targetProcName)))
+            return S_OK;
 
+        CPPANONYM_LOG_NAMED_SCOPE("if (regex_search(procPath, wregex(targetProcName)))");
         auto const *pHost = HostInfo::CreateHost();
         auto const *pRuntime = pHost->GetRuntime(version);
         m_pProfInfo = pRuntime->GetInfo<ProfilingInfo>();
@@ -106,20 +136,11 @@ namespace CWeaverDetail {
                                 ProfilerEvents::PE_USE_PROFILE_IMAGES | 
                                 ProfilerEvents::PE_DISABLE_TRANSPARENCY_CHECKS_UNDER_FULL_TRUST);
         
-        auto currentDir = current_path().native();
-        auto patternStr = version + L".v\\d+.\\d+.\\d+.\\d+.((x86)|(AMD64)|(MSIL)).Prig.dll";
-        boost::replace_all(patternStr, L".", L"\\.");
-        auto pattern = wregex(patternStr);
-        for (directory_iterator i(currentDir), i_end; i != i_end; ++i)
-        {
-            if (!is_regular_file(i->status()))
-                continue;
-            
-            if (!regex_search(i->path().filename().native(), pattern))
-                continue;
-            
-            m_indDllPaths.push_back(i->path().filename());
-        }
+        m_currentDir = Environment::GetEnvironmentVariable(L"URASANDESU_PRIG_CURRENT_DIRECTORY");
+        if (m_currentDir.empty())
+            m_currentDir = current_path().native();
+        CPPANONYM_D_LOGW1(L"Current Directory: %|1$s|", m_currentDir);
+        GetIndirectionDllPaths(version, m_currentDir, m_indDllPaths);
         if (CPPANONYM_D_LOG_ENABLED())
         {
             BOOST_FOREACH (auto const &indDllPath, m_indDllPaths)
@@ -137,6 +158,8 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW(L"ShutdownCore()");
 
         auto _ = guard_type(m_lock);
+        if (!m_pProfInfo)
+            return S_OK;
         
         m_pProfInfo->DetachFromCurrentProcess();
 
@@ -166,6 +189,8 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW2(L"AppDomainCreationFinishedCore(AppDomainID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(appDomainId), hrStatus);
 
         auto _ = guard_type(m_lock);
+        if (!m_pProfInfo)
+            return S_OK;
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         auto pDomainProf = pProcProf->AttachToAppDomain(appDomainId);
@@ -183,6 +208,8 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW1(L"AppDomainShutdownStartedCore(AppDomainID: 0x%|1$X|)", reinterpret_cast<void *>(appDomainId));
 
         auto _ = guard_type(m_lock);
+        if (!m_pProfInfo)
+            return S_OK;
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         pProcProf->DetachFromAppDomain(appDomainId);
@@ -264,6 +291,8 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
 
         auto _ = guard_type(m_lock);
+        if (!m_pProfInfo)
+            return S_OK;
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         auto pModProf = pProcProf->AttachToModule(moduleId);
@@ -277,7 +306,7 @@ namespace CWeaverDetail {
         
         CPPANONYM_LOG_NAMED_SCOPE("if (!modName.empty())");
         auto candidateIndDllPaths = unordered_set<path, Hash<path>, EqualTo<path> >();
-        auto isCandidate = [&](path const &p) { return p.native().find(modName) != wstring::npos; };
+        auto isCandidate = [&](path const &p) { return p.filename().native().find(modName) != wstring::npos; };
         for_each(m_indDllPaths | filtered(isCandidate), [&](path const &p) { candidateIndDllPaths.insert(p); });
         if (candidateIndDllPaths.empty())
             return S_OK;
@@ -296,7 +325,9 @@ namespace CWeaverDetail {
         auto const *pRuntime = m_pProfInfo->GetRuntime();
         auto pAsmProf = pModProf->AttachToAssembly();
         auto pDomainProf = pAsmProf->AttachToAppDomain();
-        auto targetIndDllPath = path(GetIndirectionDllName(modName, pRuntime, pDomainProf, pAsmProf));
+        auto targetIndDllPath = path(m_currentDir);
+        targetIndDllPath /= GetIndirectionDllName(modName, pRuntime, pDomainProf, pAsmProf);
+        CPPANONYM_D_LOGW1(L"Find detour module: %|1$s|.", targetIndDllPath.native());
         if (candidateIndDllPaths.find(targetIndDllPath) == candidateIndDllPaths.end())
             return S_OK;
         
@@ -330,6 +361,8 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW1(L"ModuleUnloadStartedCore(ModuleID: 0x%|1$X|)", reinterpret_cast<void *>(moduleId));
 
         auto _ = guard_type(m_lock);
+        if (!m_pProfInfo)
+            return S_OK;
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         pProcProf->DetachFromModule(moduleId);
@@ -367,6 +400,8 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$X|, BOOL: 0x%|2$08X|)", reinterpret_cast<void *>(functionId), fIsSafeToBlock);
         
         auto _ = guard_type(m_lock);
+        if (!m_pProfInfo)
+            return S_OK;
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         auto pFuncProf = pProcProf->AttachToFunction(functionId);

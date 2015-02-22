@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Urasandesu.Prig", "Urasandesu.Prig\Urasandesu.Prig.vcxproj", "{3CCF69E5-3F2E-42FE-ACC4-085B2EA0099A}"
 EndProject
@@ -54,6 +54,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Urasandesu.SwathePS", "Swathe\Urasandesu.Swathe\Urasandesu.SwathePS.vcxproj", "{E77A53EC-A69E-41CA-ACE0-5D83636610C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UntestableLibrary", "UntestableLibrary\UntestableLibrary.csproj", "{23389061-145F-4CB1-86ED-64A9F35F52A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.Prig.VSPackage", "Urasandesu.Prig.VSPackage\Urasandesu.Prig.VSPackage.csproj", "{4C9D250E-26A7-4516-B133-478E782BD75F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.Prig.VSPackage", "Test.Urasandesu.Prig.VSPackage\Test.Urasandesu.Prig.VSPackage.csproj", "{509316E7-AB9F-4B2B-985E-4D610D0451A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -331,6 +335,38 @@ Global
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 4)|x64.Build.0 = Release(.NET 4)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 4)|x86.ActiveCfg = Release(.NET 4)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 4)|x86.Build.0 = Release(.NET 4)|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 3.5)|x64.ActiveCfg = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 3.5)|x64.Build.0 = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 3.5)|x86.ActiveCfg = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 3.5)|x86.Build.0 = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 4)|x64.ActiveCfg = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 4)|x64.Build.0 = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 4)|x86.ActiveCfg = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Debug(.NET 4)|x86.Build.0 = Debug|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 3.5)|x64.ActiveCfg = Release|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 3.5)|x64.Build.0 = Release|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 3.5)|x86.ActiveCfg = Release|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 3.5)|x86.Build.0 = Release|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 4)|x64.ActiveCfg = Release|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 4)|x64.Build.0 = Release|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 4)|x86.ActiveCfg = Release|Any CPU
+		{4C9D250E-26A7-4516-B133-478E782BD75F}.Release(.NET 4)|x86.Build.0 = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 3.5)|x64.ActiveCfg = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 3.5)|x64.Build.0 = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 3.5)|x86.ActiveCfg = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 3.5)|x86.Build.0 = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 4)|x64.ActiveCfg = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 4)|x64.Build.0 = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 4)|x86.ActiveCfg = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Debug(.NET 4)|x86.Build.0 = Debug|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 3.5)|x64.ActiveCfg = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 3.5)|x64.Build.0 = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 3.5)|x86.ActiveCfg = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 3.5)|x86.Build.0 = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 4)|x64.ActiveCfg = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 4)|x64.Build.0 = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 4)|x86.ActiveCfg = Release|Any CPU
+		{509316E7-AB9F-4B2B-985E-4D610D0451A6}.Release(.NET 4)|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

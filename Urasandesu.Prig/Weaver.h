@@ -111,6 +111,7 @@ namespace CWeaverDetail {
         IType const *MakeGenericExplicitThisType(IType const *pTarget) const;
 
         typedef boost::lock_guard<boost::mutex> guard_type;
+        wstring m_currentDir;
         vector<path> m_indDllPaths;
         ProfilingInfo *m_pProfInfo;
         boost::mutex m_lock;

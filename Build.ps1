@@ -54,6 +54,14 @@ try {
 }
 
 
+try {
+    cpack | Out-Null
+} catch [System.Management.Automation.CommandNotFoundException] {
+    Write-Error "You have to install Chocolatey. For more information, please see also README.md."
+    exit 1
+}
+
+
 if (![string]::IsNullOrEmpty($BuildTarget)) {
     $buildTarget_ = ":" + $BuildTarget
 }
@@ -61,7 +69,7 @@ if (![string]::IsNullOrEmpty($BuildTarget)) {
 switch ($PsCmdlet.ParameterSetName) {
     'Package' { 
         $solution = "Prig.sln"
-        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_"
+        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Urasandesu_Prig_VSPackage$buildTarget_"
         $configurations = "/p:Configuration=Release%28.NET 3.5%29", "/p:Configuration=Release%28.NET 4%29"
         $platforms = "/p:Platform=x86", "/p:Platform=x64"
         foreach ($configuration in $configurations) {
@@ -77,10 +85,20 @@ switch ($PsCmdlet.ParameterSetName) {
             }
         }
 
+        $curDir = $PWD.Path
         if ($BuildTarget -ne "Clean") {
-            Set-Location .\Nuspec
+            Set-Location ([System.IO.Path]::Combine($curDir, 'NuGet'))
             [System.Environment]::CurrentDirectory = $PWD
             nuget pack .\Prig.nuspec
+            $src = (Resolve-Path *.nupkg).Path
+            $dst = $src + '.zip'
+            Move-Item $src $dst -Force
+        }
+
+        if ($BuildTarget -ne "Clean") {
+            Set-Location ([System.IO.Path]::Combine($curDir, 'Chocolatey'))
+            [System.Environment]::CurrentDirectory = $PWD
+            cpack .\Prig.nuspec
         }
     }
 }
