@@ -74,7 +74,7 @@ About more previous versions, please see https://github.com/urasandesu/Prig/rele
     <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Framework.dll" target="lib\net35\" />
     <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.NAnonym.dll" target="lib\net40\" />
     <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Framework.dll" target="lib\net40\" />
-    <file src="..\Release\AnyCPU\Prig.vsix" target="tools" />
+    <file src="..\Release\x86\Prig.vsix" target="tools" />
     <file src="..\NuGet\*.nupkg.zip" target="tools" />
     <file src="..\Release\x64\Urasandesu.Prig.dll" target="tools\x64\" />
     <file src="..\Release\x86\Urasandesu.Prig.dll" target="tools\x86\" />
