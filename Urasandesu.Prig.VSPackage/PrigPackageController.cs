@@ -107,9 +107,9 @@ namespace Urasandesu.Prig.VSPackage
         {
             if (!viewModel.IsTestAdapterEnabled.Value ||
                 viewModel.CurrentProject.Value == null)
-                return;
-
-            EnableTestAdapterCore(viewModel);
+                DisableTestAdapter(viewModel);
+            else
+                EnableTestAdapterCore(viewModel);
         }
 
         public virtual void OnProjectRemoved(PrigPackageViewModel viewModel, Project project)
@@ -197,9 +197,6 @@ Enable-PrigTestAdapter -Project $Project
             viewModel.Statusbar.BeginProgress();
 
             viewModel.Statusbar.ReportProgress("Disabling Prig test adapter...", 50u, 100u);
-            var project = viewModel.CurrentProject.Value;
-            if (project == null)
-                throw new InvalidOperationException("Current project isn't selected.");
             var command =
 @"
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
@@ -207,9 +204,9 @@ Disable-PrigTestAdapter
 ";
             ExecuteCommand(command);
 
-            viewModel.Statusbar.ReportProgress(string.Format("Completed disabling Prig test adapter for {0}.", project.Name), 100u, 100u);
+            viewModel.Statusbar.ReportProgress("Completed disabling Prig test adapter.", 100u, 100u);
             viewModel.Statusbar.EndProgress();
-            viewModel.Statusbar.Text.Value = string.Format("Completed disabling Prig test adapter for {0}.", project.Name);
+            viewModel.Statusbar.Text.Value = "Completed disabling Prig test adapter.";
         }
 
         void ExecuteCommand(string command, Project project = null)

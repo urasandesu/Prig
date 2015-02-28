@@ -38,11 +38,16 @@ param (
     $BuildTarget
 )
 
+trap {
+    Write-Error ($Error[0] | Out-String)
+    exit -1
+}
+
 try {
     msbuild /ver | Out-Null
 } catch [System.Management.Automation.CommandNotFoundException] {
     Write-Error "You have to run this script in the Developer Command Prompt for VS2013 as Administrator."
-    exit 1
+    exit 392847384
 }
 
 
@@ -50,7 +55,7 @@ try {
     nuget | Out-Null
 } catch [System.Management.Automation.CommandNotFoundException] {
     Write-Error "You have to install NuGet command line utility(nuget.exe). For more information, please see also README.md."
-    exit 1
+    exit 1220074184
 }
 
 
@@ -58,7 +63,15 @@ try {
     cpack | Out-Null
 } catch [System.Management.Automation.CommandNotFoundException] {
     Write-Error "You have to install Chocolatey. For more information, please see also README.md."
-    exit 1
+    exit -915763295
+}
+
+
+try {
+    nant -help | Out-Null
+} catch [System.Management.Automation.CommandNotFoundException] {
+    Write-Error "You have to install NAnt. For more information, please see also README.md."
+    exit 1444470369
 }
 
 
@@ -69,9 +82,28 @@ if (![string]::IsNullOrEmpty($BuildTarget)) {
 switch ($PsCmdlet.ParameterSetName) {
     'Package' { 
         $solution = "Prig.sln"
+        nuget restore $solution
         $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Urasandesu_Prig_VSPackage$buildTarget_"
         $configurations = "/p:Configuration=Release%28.NET 3.5%29", "/p:Configuration=Release%28.NET 4%29"
         $platforms = "/p:Platform=x86", "/p:Platform=x64"
+        foreach ($configuration in $configurations) {
+            foreach ($platform in $platforms) {
+                Write-Verbose ("Solution: {0}" -f $solution)
+                Write-Verbose ("Target: {0}" -f $target)
+                Write-Verbose ("Configuration: {0}" -f $configuration)
+                Write-Verbose ("Platform: {0}" -f $platform)
+                msbuild $solution $target $configuration $platform /m
+                if ($LASTEXITCODE -ne 0) {
+                    exit $LASTEXITCODE
+                }
+            }
+        }
+
+        $solution = "NUnitTestAdapter\NUnitTestAdapter.sln"
+        nuget restore $solution
+        $target = "/t:NUnitTestAdapter$buildTarget_;NUnitTestAdapterInstall$buildTarget_"
+        $configurations = , "/p:Configuration=Release"
+        $platforms = , "/p:Platform=Any CPU"
         foreach ($configuration in $configurations) {
             foreach ($platform in $platforms) {
                 Write-Verbose ("Solution: {0}" -f $solution)
@@ -91,6 +123,21 @@ switch ($PsCmdlet.ParameterSetName) {
             [System.Environment]::CurrentDirectory = $PWD
             nuget pack .\Prig.nuspec
             $src = (Resolve-Path *.nupkg).Path
+            $dst = $src + '.zip'
+            Move-Item $src $dst -Force
+        }
+
+        if ($BuildTarget -ne "Clean") {
+            Set-Location ([System.IO.Path]::Combine($curDir, 'NUnitTestAdapter'))
+            [System.Environment]::CurrentDirectory = $PWD
+            nant package
+            Set-Location 'package'
+            [System.Environment]::CurrentDirectory = $PWD
+            $nuspec = [xml]((Get-ChildItem NUnitVisualStudioTestAdapter-*.nuspec) | Get-Content)
+            $nuspec.package.metadata.id = 'NUnitTestAdapterForPrig'
+            $nuspec.Save('NUnitTestAdapterForPrig.nuspec')
+            nuget pack .\NUnitTestAdapterForPrig.nuspec
+            $src = (Resolve-Path .\NUnitTestAdapterForPrig.*.nupkg).Path
             $dst = $src + '.zip'
             Move-Item $src $dst -Force
         }

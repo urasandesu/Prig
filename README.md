@@ -11,7 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Feb 22, 2015, Developing V1.2.0(Since this version, Prig is going to support Visual Studio integrated environment).  
+As of Feb 28, 2015, Developing ~~V1.2.0~~V2.0.0(Since this version, Prig is going to support Visual Studio integrated environment. More details can be found [here](https://github.com/urasandesu/Prig.V2Docs/blob/master/README.md)).  
 As of Dec 31, 2014, Released V1.1.0.
 
 
@@ -268,10 +268,12 @@ Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual S
 Install using with the installer(NUnit-2.6.3.msi).
 * [Modeling SDK for Microsoft Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40754)  
 Install using with the installer(VS_VmSdk.exe).
-* [NuGet Command-Line Utility](http://docs.nuget.org/docs/start-here/installing-nuget)  
-Download command line utility `nuget.exe`, then append its path to the environment variable `path`.
 * [Microsoft Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)  
 Install using with the installer(vssdk_full.exe).
+* [Chocolatey NuGet](https://chocolatey.org/)  
+Install the instructions in accordance with the page.
+* [NAnt](http://nant.sourceforge.net/)  
+You can also install in accordance with [the help](http://nant.sourceforge.net/release/latest/help/introduction/installation.html), but the easiest way is using Chocolatey: `choco install nant`.
 
 
 

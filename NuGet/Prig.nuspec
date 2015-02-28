@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>1.2.0</version>
+    <version>2.0.0-alpha01</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -17,9 +17,9 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 1.2.0
-* Release 1.2.
-* 
+    <releaseNotes>Version 2.0.0-alpha01
+* [NOTICE] Changed the package management system to Chocolatey from NuGet.
+* [NOTICE] Supported Visual Studio integrated environment.
 
 
 Version 1.1.0
@@ -50,20 +50,6 @@ Version 0.0.0-alpha9
 * Fixed #18: `Get-IndirectionStubSetting` generates invalid alias against explict implemented interface.
 * Fixed #19: `Find-IndirectionTarget` should filter the members that can't call indirectly by default.
 * Fixed #20: Indirection stub settings for the instance method of an internal class generates build errors.
-
-
-Version 0.0.0-alpha8
-* Pre-release 8.
-* Supported the feature to set default behavior.
-* Modifying stub settings became a bit easier. The PowerShell command `Get-IndirectionStubSetting` supports generating unique name at the same time.
-* Fixed #14: `Environment.GetFolderPath(SpecialFolder)` can't call indirectly.
-* Fixed #15: `WebClient.DownloadStringTaskAsync` can't create indirection stub.
-
-
-Version 0.0.0-alpha7
-* Pre-release 7.
-* Fixed #12: `.cctor()` can't replace with indirection stub.
-* Fixed #13: TypeLoadException is occurred when trying to detour multiple assemblies.
 
 
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.

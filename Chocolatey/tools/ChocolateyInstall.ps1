@@ -31,10 +31,12 @@
 $toolsPath = [IO.Path]::Combine($env:chocolateyPackageFolder, 'tools')
 
 
-$src = (Resolve-Path ($toolsPath + '\*.zip')).Path
-$dst = $src -replace '\.zip$', ''
-"  Renaming '$src' to '$dst'..."
-Move-Item $src $dst -Force
+$srcList = Resolve-Path ($toolsPath + '\*.zip')
+foreach ($src in $srcList) {
+    $dst = $src -replace '\.zip$', ''
+    "  Renaming '$src' to '$dst'..."
+    Move-Item $src $dst -Force
+}
 
 
 $name = "Prig Source"
