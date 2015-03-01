@@ -11,8 +11,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of July 30, 2015, Developing V2.0.0(Since this version, Prig is going to support Visual Studio integrated environment. More details can be found [here](https://github.com/urasandesu/Prig.V2Docs/blob/master/README.md)).  
-As of Sep 14, 2015, Released V1.1.1. As the release note indicates, this family will be obsolete soon. We strongly recommend migrating to the family of the v2. About the way of the migration, please see [our Wiki](https://github.com/urasandesu/Prig/wiki/Migration-from-v1-to-v2).
+As of MM dd, yyyy, Released V2.0.0.
 
 
 
@@ -36,21 +35,16 @@ namespace ConsoleApplication
 You probably can't test this code, because `DateTime.Now` returns the value that depends on an external environment. To make be testable, you should replace `DateTime.Now` to the Test Double that returns the fake information. If you use Prig, it will enable you to generate a Test Double by the following steps without any editing the product code:
 
 
-### Step 1: Install From NuGet
-Run Visual Studio 2013(Express for Windows Desktop or more) as Administrator, add test project(e.g. `ConsoleApplicationTest`) and run the following command in the Package Manager Console: 
-```powershell
-PM> Install-Package Prig
+### Step 1: Install From Chocolatey
+Install Chocolatey in accordance with [the top page](https://chocolatey.org/). Then, run Developer Command Prompt for VS2013 as Administrator, execute the following command: 
+```dos
+CMD C:\> choco install prig -Pre
 ```
-
-**NOTE:** Installation will mostly go well. However, it doesn't go well if performing just after installing Visual Studio. [See also this issue's comment](https://github.com/urasandesu/Prig/issues/21#issuecomment-58741311).
 
 
 ### Step 2: Add Stub Settings
-Run the following command in the Package Manager Console: 
-```powershell
-PM> Add-PrigAssembly -Assembly "mscorlib, Version=4.0.0.0"
-```
-The command means to create the indirection stub settings for the test. The reason to specify `mscorlib` is that `DateTime.Now` belongs `mscorlib`. After the command is invoked, you will get the confirmation message that the project has been modified externally, so reload the project.
+Run Visual Studio 2013(Community or more) as Administrator, add test project(e.g. `ConsoleApplicationTest`). Then, right click `References` and select `Add Prig Assembly for mscorlib`:  
+![Add Stub Settings](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%202%20Add%20Stub%20Settings.png)
 
 
 ### Step 3: Modify Stub Settings
@@ -169,30 +163,25 @@ namespace ConsoleApplicationTest
 ```
 
 
-### Step 5: Run Tests
-In fact, to enable any profiler based mocking tool, you have to set the environment variables. Therefore, such libraries - Microsoft Fakes/Typemock Isolator/Telerik JustMock provide small runner to satisfy the requisition, also it is true at Prig. Use `prig.exe` and run the test as follows(continue in the Package Manager Console): 
+### Step 5: Install Test Adapter
+Before running tests in Visual Studio Test Explorer, you have to install a Test Adapter. Currently, Prig supports the following Test Adapters: NUnit, MSTest. As the above described sample, let we use NUnit. Now, in the Package Manager Console, change the `Package source` to `Prig Source`, the `Default project` to `ConsoleApplicationTest` and execute the following command: 
 ```powershell
-PM> cd <Your Test Project's Output Directory(e.g. cd .\ConsoleApplicationTest\bin\Debug)>
-PM> prig run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "ConsoleApplicationTest.dll /domain=None /framework=v4.0"
-NUnit-Console version 2.6.3.13283
-Copyright (C) 2002-2012 Charlie Poole.
-Copyright (C) 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.
-Copyright (C) 2000-2002 Philip Craig.
-All Rights Reserved.
-
-Runtime Environment - 
-   OS Version: Microsoft Windows NT 6.2.9200.0
-  CLR Version: 2.0.50727.8000 ( Net 3.5 )
-
-ProcessModel: Default    DomainUsage: None
-Execution Runtime: v4.0
-...
-Tests run: 3, Errors: 0, Failures: 0, Inconclusive: 0, Time: 0.0934818542535837 seconds
-  Not run: 0, Invalid: 0, Ignored: 0, Skipped: 0
-
-PM> 
-
+PM> Install-Package NUnitTestAdapterForPrig
 ```
+
+After install, build the test project and select the menu `TEST` - `Windows` - `Test Explorer`. Then, you can find runnable tests in the Test Explorer.  
+![Install Test Adapter 01](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2001.png)
+
+When Test Adapter was installed successfully, you can also modify the `Test Settings`. As the following image, change `Default Processor Architecture` to `x64` and uncheck `Keep Test Execution Engine Running`:  
+![Install Test Adapter 02](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2002.png)
+
+
+### Step 6: Run Tests
+In fact, to enable any profiler based mocking tool, you have to set the environment variables. Therefore, such libraries - Microsoft Fakes/Typemock Isolator/Telerik JustMock provide small runner to satisfy the requisition, also it is true at Prig. Select the menu `PRIG` - `Enable Test Adapter for ConsoleApplicationTest`:  
+![Run Tests 01](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2001.png)
+
+Then, execute `TEST` - `Run` - `All Tests`, you can get test results in the Test Explorer.  
+![Run Tests 02](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2002.png)
 
 
 ### Final Step: Refactoring and Get Trig Back!
@@ -270,8 +259,6 @@ Install using with the installer(NUnit-2.6.3.msi).
 Install using with the installer(VS_VmSdk.exe).
 * [Microsoft Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)  
 Install using with the installer(vssdk_full.exe).
-* [Chocolatey NuGet](https://chocolatey.org/)  
-Install the instructions in accordance with the page.
 * [NAnt](http://nant.sourceforge.net/)  
 You can also install in accordance with [the help](http://nant.sourceforge.net/release/latest/help/introduction/installation.html), but the easiest way is using Chocolatey: `choco install nant`.
 
