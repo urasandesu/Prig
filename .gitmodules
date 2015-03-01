@@ -9,4 +9,4 @@
 	url = git@github.com:urasandesu/Swathe.git
 [submodule "NUnitTestAdapter"]
 	path = NUnitTestAdapter
-	url = https://github.com/urasandesu/nunit-vs-adapter.git
+	url = git@github.com:urasandesu/nunit-vs-adapter.git
