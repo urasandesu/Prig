@@ -55,7 +55,6 @@ $variableName = "URASANDESU_PRIG_PACKAGE_FOLDER"
 
 $name = "Prig Source"
 "  Unregistering the nuget source '$name'..."
-$nuget = [IO.Path]::Combine($env:ChocolateyInstall, 'chocolateyinstall\NuGet.exe')
-if (0 -lt @(& $nuget sources list | ? { $_ -match 'Prig Source' }).Length) {
-    & $nuget sources remove -name $name
+if (0 -lt @(nuget sources list | ? { $_ -match 'Prig Source' }).Length) {
+    nuget sources remove -name $name
 }

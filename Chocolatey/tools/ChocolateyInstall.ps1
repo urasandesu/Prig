@@ -42,11 +42,10 @@ foreach ($src in $srcList) {
 $name = "Prig Source"
 $source = $env:chocolateyPackageFolder
 "  Registering the nuget source '$source' as '$name'..."
-$nuget = [IO.Path]::Combine($env:ChocolateyInstall, 'chocolateyinstall\NuGet.exe')
-if (0 -lt @(& $nuget sources list | ? { $_ -match 'Prig Source' }).Length) {
-    & $nuget sources update -name $name -source "$source"
+if (0 -lt @(nuget sources list | ? { $_ -match 'Prig Source' }).Length) {
+    nuget sources update -name $name -source "$source"
 } else {
-    & $nuget sources add -name $name -source "$source"
+    nuget sources add -name $name -source "$source"
 }
 
 
