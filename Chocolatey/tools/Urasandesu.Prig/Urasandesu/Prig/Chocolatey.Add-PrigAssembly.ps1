@@ -51,6 +51,10 @@ function Add-PrigAssembly {
         You can use this parameter only in the Prig setup session. If you specify this parameter in another environment, the error "Invalid operation is detected" will be occurred. For more detail, please see the help for `Start-PrigSetup`.
         You can also refer to the ReferencedAssembly parameter by its built-in alias, "ra".
 
+    .PARAMETER  Project
+        A `EnvDTE.DTE` object that adds Prig assembly.
+        This API supports the Prig infrastructure and is not intended to be used directly from your code.
+
     .EXAMPLE
         Add-PrigAssembly -Assembly "mscorlib, Version=4.0.0.0"
         
@@ -116,9 +120,6 @@ function Add-PrigAssembly {
 
     .LINK
         Get-IndirectionStubSetting
-
-    .LINK
-        Invoke-Prig
 
     .LINK
         Start-PrigSetup

@@ -124,9 +124,6 @@ function Find-IndirectionTarget {
         Get-IndirectionStubSetting
 
     .LINK
-        Invoke-Prig
-
-    .LINK
         Start-PrigSetup
 
 #>

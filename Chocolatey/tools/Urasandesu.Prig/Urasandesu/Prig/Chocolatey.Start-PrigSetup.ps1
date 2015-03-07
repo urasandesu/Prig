@@ -40,6 +40,18 @@ function Start-PrigSetup {
     .PARAMETER  NoIntro
         Omits the introduction help that is displayed when startup the session.
 
+    .PARAMETER  AdditionalInclude
+        A referenced assembly name that is used as additional `Include`.
+        This API supports the Prig infrastructure and is not intended to be used directly from your code.
+
+    .PARAMETER  EditorialInclude
+        A referenced assembly name that is used as editorial `Include`.
+        This API supports the Prig infrastructure and is not intended to be used directly from your code.
+
+    .PARAMETER  Project
+        A `EnvDTE.DTE` object that adds Prig assembly.
+        This API supports the Prig infrastructure and is not intended to be used directly from your code.
+
     .EXAMPLE
         PM> Start-PrigSetup
         
@@ -134,9 +146,6 @@ function Start-PrigSetup {
 
     .LINK
         Get-IndirectionStubSetting
-
-    .LINK
-        Invoke-Prig
 
 #>
 
