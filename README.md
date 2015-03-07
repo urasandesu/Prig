@@ -211,7 +211,7 @@ namespace ConsoleApplication
 ```
 As just described, Prig helps the code that depends on an untestable library gets trig back. I guarantee you will enjoy your development again!!
 
-For more information, see also [Prig's wiki](https://github.com/urasandesu/Prig/wiki).
+For more information, see also [Prig's wiki](https://github.com/urasandesu/Prig.V2Docs/wiki).
 
 
 
