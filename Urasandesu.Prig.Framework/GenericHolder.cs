@@ -29,10 +29,20 @@
 
 
 
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
 namespace Urasandesu.Prig.Framework
 {
     public class GenericHolder<T> : InstanceHolder<GenericHolder<T>>
     {
+        static GenericHolder()
+        {
+            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            foreach (var method in typeof(GenericHolder<T>).GetMethods(all))
+                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
+        }
+
         GenericHolder() { }
         public T Source { get; set; }
 

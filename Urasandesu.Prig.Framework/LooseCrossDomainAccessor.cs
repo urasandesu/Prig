@@ -42,14 +42,14 @@ namespace Urasandesu.Prig.Framework
     {
         protected LooseCrossDomainAccessor() { }
 
-        static readonly HashSet<Type> ms_registrations = new HashSet<Type>();
+        static readonly HashSet<Action> ms_unloadMethods = new HashSet<Action>();
 
         public static void Register<T>() where T : InstanceHolder<T>
         {
             LooseCrossDomainAccessor<T>.Register();
-            lock (ms_registrations)
+            lock (ms_unloadMethods)
                 using (InstanceGetters.DisableProcessing())
-                    ms_registrations.Add(typeof(T));
+                    ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
         }
 
         public static void Unload<T>() where T : InstanceHolder<T>
@@ -65,9 +65,9 @@ namespace Urasandesu.Prig.Framework
         public static T GetOrRegister<T>() where T : InstanceHolder<T>
         {
             var holder = LooseCrossDomainAccessor<T>.HolderOrRegistered;
-            lock (ms_registrations)
+            lock (ms_unloadMethods)
                 using (InstanceGetters.DisableProcessing())
-                    ms_registrations.Add(typeof(T));
+                    ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
             return holder;
         }
 
@@ -81,16 +81,12 @@ namespace Urasandesu.Prig.Framework
 
         public static void Clear()
         {
-            lock (ms_registrations)
+            lock (ms_unloadMethods)
             {
                 using (InstanceGetters.DisableProcessing())
                 {
-                    var unloadMethods = ms_registrations.Select(_ => typeof(LooseCrossDomainAccessor<>).MakeGenericType(_)).
-                                                         Select(_ => _.GetMethod("Unload")).
-                                                         ToArray();
-                    for (int i = 0; i < unloadMethods.Length; i++)
-                        unloadMethods[i].Invoke(null, new object[0]);
-                    InstanceGetters.Clear();
+                    foreach (var unloadMethod in ms_unloadMethods)
+                        unloadMethod();
                 }
             }
         }
@@ -143,6 +139,13 @@ namespace Urasandesu.Prig.Framework
         static readonly Type ms_t = typeof(T);
         static readonly string ms_key = ms_t.AssemblyQualifiedName;
 
+        static LooseCrossDomainAccessor()
+        {
+            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            foreach (var method in typeof(LooseCrossDomainAccessor<T>).GetMethods(all))
+                RuntimeHelpers.PrepareMethod(method.MethodHandle);
+        }
+
         protected LooseCrossDomainAccessor() { }
 
         public static void Register()
@@ -158,7 +161,6 @@ namespace Urasandesu.Prig.Framework
         {
             var instance = t.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
             var instanceGetter = instance.GetGetMethod();
-            RuntimeHelpers.PrepareMethod(instanceGetter.MethodHandle);
             return instanceGetter.MethodHandle.GetFunctionPointer();
         }
 
@@ -295,25 +297,9 @@ namespace Urasandesu.Prig.Framework
 
         public static void Unload()
         {
-            if (ms_ready)
-            {
-                lock (ms_lockObj)
-                {
-                    if (ms_ready)
-                    {
-                        var funcPtr = default(IntPtr);
-                        InstanceGetters.TryRemove(ms_key, out funcPtr);
-                        if (ms_holder != null)
-                        {
-                            ms_holder.Dispose();
-                            ms_holder = null;
-                        }
-                        using (InstanceGetters.DisableProcessing())
-                            Thread.MemoryBarrier();
-                        ms_ready = false;
-                    }
-                }
-            }
+            lock (ms_lockObj)
+                if (ms_holder != null)
+                    ms_holder.Dispose();
         }
     }
 

@@ -30,6 +30,9 @@
 
 
 using System;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Prig.Framework
@@ -38,6 +41,10 @@ namespace Urasandesu.Prig.Framework
     {
         static InstanceHolder()
         {
+            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            foreach (var method in typeof(InstanceHolder<T>).GetMethods(all).Where(_ => !_.IsAbstract))
+                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
+
             // Prepare JIT here if the type has been already known explicitly.
             new FallthroughException();
         }

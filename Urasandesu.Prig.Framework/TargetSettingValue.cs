@@ -29,10 +29,20 @@
 
 
 
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
 namespace Urasandesu.Prig.Framework
 {
     public struct TargetSettingValue<TIndirection>
     {
+        static TargetSettingValue()
+        {
+            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            foreach (var method in typeof(TargetSettingValue<TIndirection>).GetMethods(all))
+                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(TIndirection).TypeHandle });
+        }
+
         readonly TIndirection m_original;
         readonly TIndirection m_indirection;
 

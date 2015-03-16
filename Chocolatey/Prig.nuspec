@@ -2,12 +2,13 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0-alpha02</version>
+    <version>2.0.0-alpha03</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
     <licenseUrl>https://github.com/urasandesu/Prig/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/urasandesu/Prig</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/PrigIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>
       Prig is a lightweight framework for test indirections in .NET Framework.
@@ -17,7 +18,11 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.0-alpha02
+    <releaseNotes>Version 2.0.0-alpha03
+* Improve stability a little. Support the test runners that have never been able to run. The test runners like NUnit(GUI)/xUnit.net/MbUnit couldn't even start up until now(They were raising `ExecutionEngineException`).
+
+
+Version 2.0.0-alpha02
 * Fixed #29: Support Chocolatey v0.9.9.
 
 

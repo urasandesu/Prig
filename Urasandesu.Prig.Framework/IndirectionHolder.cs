@@ -35,6 +35,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using Urasandesu.NAnonym;
 using Urasandesu.NAnonym.Mixins.System;
 using Urasandesu.NAnonym.Mixins.System.Reflection.Emit;
@@ -44,6 +45,13 @@ namespace Urasandesu.Prig.Framework
 {
     public class IndirectionHolder<TDelegate> : InstanceHolder<IndirectionHolder<TDelegate>> where TDelegate : class
     {
+        static IndirectionHolder()
+        {
+            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            foreach (var method in typeof(IndirectionHolder<TDelegate>).GetMethods(all))
+                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(TDelegate).TypeHandle });
+        }
+
         IndirectionHolder() { }
 
         Dictionary<string, TDelegate> m_dict = InstanceGetters.DisableProcessing().EnsureDisposalThen(_ => new Dictionary<string, TDelegate>());
