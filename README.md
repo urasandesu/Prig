@@ -38,7 +38,7 @@ You probably can't test this code, because `DateTime.Now` returns the value that
 ### Step 1: Install From Chocolatey
 Install Chocolatey in accordance with [the top page](https://chocolatey.org/). Then, run Developer Command Prompt for VS2013 as Administrator, execute the following command: 
 ```dos
-CMD C:\> choco install prig -Pre
+CMD C:\> choco install prig -Pre -y
 ```
 
 
@@ -164,10 +164,12 @@ namespace ConsoleApplicationTest
 
 
 ### Step 5: Install Test Adapter
-Before running tests in Visual Studio Test Explorer, you have to install a Test Adapter. Currently, Prig supports the following Test Adapters: NUnit, MSTest. As the above described sample, let we use NUnit. Now, in the Package Manager Console, change the `Package source` to `Prig Source`, the `Default project` to `ConsoleApplicationTest` and execute the following command: 
+Before running tests in Visual Studio Test Explorer, you have to install a Test Adapter. Currently, Prig supports the following Test Adapters: NUnit, MSTest, [xUnit.net](https://www.nuget.org/packages/xunit.runner.visualstudio/2.0.0-rc4-build1049). As the above described sample, let we use NUnit. Now, in the Package Manager Console, change the `Package source` to `Prig Source`, the `Default project` to `ConsoleApplicationTest` and execute the following command: 
 ```powershell
 PM> Install-Package NUnitTestAdapterForPrig
 ```
+
+**NOTE:** Unfortunately, you can't use official [NUnit Test Adapter](https://www.nuget.org/packages/NUnitTestAdapter/) because it doesn't support any configurations like prime NUnit which is supported, e.g. [NUnit Gui Runner's Settings](http://www.nunit.org/index.php?p=settingsDialog&r=2.6.3) and [NUnit-Console's Settings](http://www.nunit.org/index.php?p=consoleCommandLine&r=2.6.3).
 
 After install, build the test project and select the menu `TEST` - `Windows` - `Test Explorer`. Then, you can find runnable tests in the Test Explorer.  
 ![Install Test Adapter 01](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2001.png)
