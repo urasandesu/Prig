@@ -203,8 +203,8 @@ function ConvertTypeToFullName {
         $defName = (ConvertTypeToFullName $Type.DeclaringType) + '.' + $Type.Name
     } elseif ($Type.IsGenericType -and !$Type.IsGenericTypeDefinition) {
         $defName = $Type.Namespace + "." + $Type.Name
-    } elseif ($Type.HasElementType) {
-        $defName = $Type.Name
+#    } elseif ($Type.HasElementType) {
+#        $defName = $Type.Name
     } elseif ($Type.IsGenericParameter) {
         $defName = $Type.Name
     }
