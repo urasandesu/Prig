@@ -65,9 +65,10 @@ namespace Urasandesu.Prig.Framework
         public static T GetOrRegister<T>() where T : InstanceHolder<T>
         {
             var holder = LooseCrossDomainAccessor<T>.HolderOrRegistered;
-            lock (ms_unloadMethods)
-                using (InstanceGetters.DisableProcessing())
-                    ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
+            if (holder != null)
+                lock (ms_unloadMethods)
+                    using (InstanceGetters.DisableProcessing())
+                        ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
             return holder;
         }
 
@@ -150,6 +151,9 @@ namespace Urasandesu.Prig.Framework
 
         public static void Register()
         {
+            if (ms_key == null)
+                return;
+
             using (InstanceGetters.DisableProcessing())
             {
                 var funcPtr = GetFunctionPointerCore(ms_t);
@@ -166,6 +170,9 @@ namespace Urasandesu.Prig.Framework
 
         static T GetOrRegisterHolder()
         {
+            if (ms_key == null)
+                return default(T);
+
             var funcPtr = default(IntPtr);
             if (InstanceGetters.TryGet(ms_key, out funcPtr))
             {
@@ -210,6 +217,10 @@ namespace Urasandesu.Prig.Framework
 
         static bool TryGetHolder(out T holder)
         {
+            holder = default(T);
+            if (ms_key == null)
+                return false;
+
             var funcPtr = default(IntPtr);
             if (!InstanceGetters.TryGet(ms_key, out funcPtr))
             {
@@ -285,9 +296,12 @@ namespace Urasandesu.Prig.Framework
                         if (!ms_ready)
                         {
                             ms_holder = GetOrRegisterHolder();
-                            using (InstanceGetters.DisableProcessing())
-                                Thread.MemoryBarrier();
-                            ms_ready = true;
+                            if (ms_holder != null)
+                            {
+                                using (InstanceGetters.DisableProcessing())
+                                    Thread.MemoryBarrier();
+                                ms_ready = true;
+                            }
                         }
                     }
                 }
