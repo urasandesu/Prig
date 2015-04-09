@@ -202,18 +202,22 @@ function ConvertTypeToFullName {
         $defName = $Type.Name
     }
         
-    if (!$Type.IsGenericParameter -and $Type.IsNested) {
+    if ($Type.IsGenericParameter -and !$Type.IsNested) {
+        $defName = $Type.Name
+    } elseif ($Type.IsGenericParameter) {
+        $defName = ([string]$defName).Replace("+",".")
+    } elseif (!$Type.IsGenericParameter -and $Type.IsNested) {
         $defName = (ConvertTypeToFullName $Type.DeclaringType) + '.' + $Type.Name
     } elseif ($Type.IsGenericType -and !$Type.IsGenericTypeDefinition) {
         $defName = $Type.Namespace + "." + $Type.Name
-    } elseif ($Type.IsGenericParameter) {
-        $defName = $Type.Name
+    } elseif ($Type.HasElementType) {
+        $defName=(ConvertTypeToFullName $Type.GetElementType()) + "[]"
     }
 
     if ($Type.IsGenericType) {
-        #if ($Type.HasElementType -and $Type.IsGenericTypeDefinition) {
-        #    $defName = $Type.Name
-        #}
+        if ($Type.HasElementType -and $Type.IsGenericTypeDefinition) {
+            $defName = $Type.Name
+        }
         $genericArgs = $Type.GetGenericArguments()
         if ($Type.Name -match '`(\d+)') {
             $genericArgs = $genericArgs[($genericArgs.Length - ([int]$Matches[1]))..($genericArgs.Length - 1)]

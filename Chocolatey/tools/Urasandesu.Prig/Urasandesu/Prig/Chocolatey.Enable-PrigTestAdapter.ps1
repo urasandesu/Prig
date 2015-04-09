@@ -47,9 +47,10 @@ function Enable-PrigTestAdapter {
         }
     }
 
-    $executionengineId = (Get-WmiObject Win32_Process | ? { $_.ParentProcessId -eq $devenvId -and $_.ProcessName -match 'vstest\.executionengine' }).ProcessId
+    $executionEngineProcess = (Get-WmiObject Win32_Process | ? { $_.ParentProcessId -eq $devenvId -and $_.ProcessName -match 'vstest\.executionengine' })
 
-    if ($null -ne $executionengineId) {
+    if ($null -ne $executionEngineProcess) {
+        $executionengineId = $executionEngineProcess.ProcessId
         try {
             $executionengine = [System.Diagnostics.Process]::GetProcessById($executionengineId)
             if ($null -ne $executionengine) {
