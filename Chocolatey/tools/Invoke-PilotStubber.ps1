@@ -157,9 +157,11 @@ if (0 -lt $unintendedSettings.Length) {
 }
 
 $workDir = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($Settings), (ConvertTo-PrigAssemblyName $asmInfo))
-if (![string]::IsNullOrEmpty($workDir) -and ![IO.Directory]::Exists($workDir)) {
-    New-Item $workDir -ItemType Directory -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
+Write-Verbose ('    Work Directory {0} ...' -f $workDir)
+if (![string]::IsNullOrEmpty($workDir) -and [IO.Directory]::Exists($workDir)) {
+    Remove-Item $workDir -Force -Recurse -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
 }
+New-Item $workDir -ItemType Directory -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
 
 
 Write-Verbose 'Generate Tokens.g.cs ...'
