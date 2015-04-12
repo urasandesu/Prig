@@ -31,6 +31,7 @@
 
 using EnvDTE;
 using Microsoft.Practices.Unity;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using NuGet.VisualStudio;
 using System;
@@ -94,6 +95,13 @@ namespace Urasandesu.Prig.VSPackage
             var projectItem = MonitoringSelectionService.GetSelectedItem<ProjectItem>();
             var editorialInclude = Regex.Replace(projectItem.Name, @"(.*)\.v\d+\.\d+\.\d+\.v\d+\.\d+\.\d+\.\d+\.prig", "$1");
             EditPrigIndirectionSettingsCore(viewModel, editorialInclude);
+        }
+
+        public virtual void RemovePrigAssembly(PrigPackageViewModel viewModel)
+        {
+            var projectItem = MonitoringSelectionService.GetSelectedItem<ProjectItem>();
+            var deletionalInclude = Regex.Replace(projectItem.Name, @"(.*)\.prig$", "$1");
+            RemovePrigAssemblyCore(viewModel, deletionalInclude);
         }
 
         public virtual void BeforeQueryStatusEditPrigIndirectionSettings(PrigPackageViewModel viewModel)
@@ -170,6 +178,32 @@ Start-PrigSetup -EditorialInclude {0} -Project $Project
             viewModel.Statusbar.ReportProgress(string.Format("Completed editing Prig assembly for {0}.", editorialInclude), 100u, 100u);
             viewModel.Statusbar.EndProgress();
             viewModel.Statusbar.Text.Value = string.Format("Completed editing Prig assembly for {0}.", editorialInclude);
+        }
+
+        void RemovePrigAssemblyCore(PrigPackageViewModel viewModel, string deletionalInclude)
+        {
+            if (viewModel.ShowMessageBox(string.Format("Are you sure you want to remove Prig assembly {0}?", deletionalInclude), OLEMSGBUTTON.OLEMSGBUTTON_YESNO, OLEMSGICON.OLEMSGICON_QUERY) != VSConstants.MessageBoxResult.IDYES)
+                return;
+
+            viewModel.Statusbar.BeginProgress();
+
+            viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
+            var project = MonitoringSelectionService.GetCurrentProject();
+            if (!InstallerServices.IsPackageInstalled(project, "Prig"))
+                InstallPackage(viewModel, project, "Prig", 50u, 100u);
+
+            viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
+            var command = string.Format(
+@"
+Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
+Start-PrigSetup -DeletionalInclude {0} -Project $Project
+", deletionalInclude);
+            ExecuteCommand(command, project);
+
+            viewModel.Statusbar.ReportProgress(string.Format("Completed removing Prig assembly {0}.", deletionalInclude), 100u, 100u);
+            viewModel.ShowMessageBox(string.Format("Completed removing Prig assembly {0}.", deletionalInclude), OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
+            viewModel.Statusbar.EndProgress();
+            viewModel.Statusbar.Text.Value = string.Format("Completed removing Prig assembly {0}.", deletionalInclude);
         }
 
         void EnableTestAdapterCore(PrigPackageViewModel viewModel)

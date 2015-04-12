@@ -61,7 +61,10 @@ param (
     $AdditionalInclude, 
 
     [string]
-    $EditorialInclude
+    $EditorialInclude, 
+
+    [string]
+    $DeletionalInclude
 )
 
 Write-Verbose ('ProjectName              : {0}' -f $ProjectName)
@@ -72,8 +75,9 @@ Write-Verbose ('ReferenceInclude         : {0}' -f $ReferenceInclude)
 Write-Verbose ('ReferenceHintPath        : {0}' -f $ReferenceHintPath)
 Write-Verbose ('ProjectReferenceInclude  : {0}' -f $ProjectReferenceInclude)
 Write-Verbose ('NoIntro                  : {0}' -f $NoIntro)
-Write-Verbose ('AdditionalInclude          : {0}' -f $AdditionalInclude)
-Write-Verbose ('EditorialInclude           : {0}' -f $EditorialInclude)
+Write-Verbose ('AdditionalInclude        : {0}' -f $AdditionalInclude)
+Write-Verbose ('EditorialInclude         : {0}' -f $EditorialInclude)
+Write-Verbose ('DeletionalInclude        : {0}' -f $DeletionalInclude)
 
 if (!$NoIntro) {
 @'
@@ -253,6 +257,10 @@ $ImportPrigSetupSessionDetail = 'Import-PrigSetupSessionDetail' | New-Module {
 Import-Module ([System.IO.Path]::Combine((Split-Path $MyInvocation.MyCommand.Path), 'Urasandesu.Prig'))
 & $ImportPrigSetupSessionDetail { Main $args[0] } (Split-Path $MyInvocation.MyCommand.Path)
 Remove-Module $ImportPrigSetupSessionDetail
+
+if (![string]::IsNullOrEmpty($DeletionalInclude)) {
+    Remove-PrigAssembly -pa $DeletionalInclude
+}
 
 if (![string]::IsNullOrEmpty($AdditionalInclude)) {
     foreach ($refAsm in $ReferencedAssemblies | ? { $_.GetName().Name -eq $AdditionalInclude }) {

@@ -51,6 +51,7 @@ namespace Urasandesu.Prig.VSPackage
 
         public const uint EditPrigIndirectionSettingsGroup = 0x1031;
         public const uint EditPrigIndirectionSettingsCommand = 0x1032;
+        public const uint RemovePrigAssemblyCommand = 0x1033;
 
     };
 }

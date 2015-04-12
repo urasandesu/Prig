@@ -108,6 +108,15 @@
         </Strings>
       </Button>
 
+      <Button guid="EditPrigIndirectionSettingsGroup" id="RemovePrigAssemblyCommand" priority="0x0101" type="Button">
+        <Parent guid="EditPrigIndirectionSettingsGroup" id="EditPrigIndirectionSettingsGroup" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>R&amp;emove Prig Assembly</ButtonText>
+        </Strings>
+      </Button>
+
     </Buttons>
 
   </Commands>
@@ -143,6 +152,7 @@
     <GuidSymbol name="EditPrigIndirectionSettingsGroup" value="{15fa994b-e3c6-4f6a-acdb-f311d1ebfa65}">
       <IDSymbol name="EditPrigIndirectionSettingsGroup" value="0x1031" />
       <IDSymbol name="EditPrigIndirectionSettingsCommand" value="0x1032" />
+      <IDSymbol name="RemovePrigAssemblyCommand" value="0x1033" />
     </GuidSymbol>
     
   </Symbols>

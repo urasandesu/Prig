@@ -48,6 +48,10 @@ function Start-PrigSetup {
         A referenced assembly name that is used as editorial `Include`.
         This API supports the Prig infrastructure and is not intended to be used directly from your code.
 
+    .PARAMETER  DeletionalInclude
+        A referenced assembly name that is used as deletional `Include`.
+        This API supports the Prig infrastructure and is not intended to be used directly from your code.
+
     .PARAMETER  Project
         A `EnvDTE.DTE` object that adds Prig assembly.
         This API supports the Prig infrastructure and is not intended to be used directly from your code.
@@ -147,6 +151,9 @@ function Start-PrigSetup {
     .LINK
         Get-IndirectionStubSetting
 
+    .LINK
+        Remove-PrigAssembly
+
 #>
 
     [CmdletBinding()]
@@ -159,6 +166,9 @@ function Start-PrigSetup {
 
         [string]
         $EditorialInclude, 
+
+        [string]
+        $DeletionalInclude, 
 
         $Project
     )
@@ -238,7 +248,8 @@ function Start-PrigSetup {
 
     $targetFrmwrkVer = $curMsbProj.ExpandString('$(TargetFrameworkVersion)')
     $argList = '-NoLogo', '-File', """$importPrigSetupSession""", """$($envProj.Name)""", """$($envProj.FullName)""", """$targetFrmwrkVer""", """$outPath.""", """$refInclude""", """$refHint""", """$projRefInclude"""
-    if ([string]::IsNullOrEmpty($AdditionalInclude)) {
+    $shouldBeAutomated = ![string]::IsNullOrEmpty($AdditionalInclude) -or ![string]::IsNullOrEmpty($DeletionalInclude)
+    if (!$shouldBeAutomated) {
         $argList = ,'-NoExit' + $argList
     }
     if ($targetFrmwrkVer -eq 'v3.5') {
@@ -253,12 +264,27 @@ function Start-PrigSetup {
     if (![string]::IsNullOrEmpty($EditorialInclude)) {
         $argList += "-EditorialInclude ""$EditorialInclude"""
     }
+    if (![string]::IsNullOrEmpty($DeletionalInclude)) {
+        $argList += "-DeletionalInclude ""$DeletionalInclude"""
+    }
     if ($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent) {
         $argList += '-Verbose'
     }
     Write-Verbose ('Argument List: {0}' -f ($argList -join ' '))
 
-    Start-Process $powershell $argList -Wait -WindowStyle $(if (![string]::IsNullOrEmpty($AdditionalInclude)) { 'Hidden' } else { 'Normal' })
+    $tmpFileName = [System.IO.Path]::GetTempFileName()
+
+    Start-Process $powershell $argList -Wait -WindowStyle $(if ($shouldBeAutomated) { 'Hidden' } else { 'Normal' }) -RedirectStandardError $tmpFileName
+    $errors = Get-Content $tmpFileName
+    Remove-Item $tmpFileName -ErrorAction SilentlyContinue
+    if (0 -lt $errors.Length) {
+        $msg = $errors -join "`r`n"
+        if ($shouldBeAutomated) {
+            throw New-Object System.InvalidOperationException $msg
+        } else {
+            $Host.UI.WriteErrorLine($msg)
+        }
+    }
 }
 
 New-Alias PStart Start-PrigSetup

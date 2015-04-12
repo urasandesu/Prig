@@ -181,6 +181,30 @@ function SetStubSettingNoneItem {
 
 
 
+function HasAlreadyExistedStubSettingNoneItem {
+
+    param (
+        [Parameter(Mandatory = $true)]
+        [Microsoft.Build.Evaluation.Project]
+        $MSBuildProject,
+
+        [Parameter(Mandatory = $true)]
+        $AssemblyNameEx
+    )
+
+    $prigAssembly = "{0}.{1}.v{2}" -f $AssemblyNameEx.Name, $AssemblyNameEx.ImageRuntimeVersion, $AssemblyNameEx.Version
+    $escapedPrigAssembly = [regex]::Escape($prigAssembly)
+    $items = 
+        $MSBuildProject.ItemsIgnoringCondition | 
+            Where-Object { $_.ItemType -eq "None" } | 
+            Where-Object { $_.EvaluatedInclude -match "\.prig\b" } | 
+            Where-Object { $_.EvaluatedInclude -match $escapedPrigAssembly }
+    
+    $items.Length -ne 0
+}
+
+
+
 $os = Get-WmiObject Win32_OperatingSystem
 [System.Reflection.ProcessorArchitecture]$osArch = 0
 $osArch = $(if ($os.OSArchitecture -match '64') { 'Amd64' } else { 'X86' })
@@ -238,6 +262,10 @@ foreach ($platformTarget in $platformTargets.GetEnumerator()) {
     if (1 -lt $actualNames.Count) {
         $Host.UI.WriteErrorLine(("Ambiguous match found: `r`n{0}" -f ([string]::Join("`r`n", ($actualNames | % { $_.FullName })))))
         exit -1786925265
+    }
+    if (!$isPlatformMatched -and (HasAlreadyExistedStubSettingNoneItem $curMsbProj $actualNames[0])) {
+        $Host.UI.WriteErrorLine(("The Prig assembly for {0} has already been added." -f $actualNames[0].Name))
+        exit -1863575335
     }
         
     SetPrigAssemblyReferenceItem $curMsbProj $actualNames[0] $platformTarget.Key

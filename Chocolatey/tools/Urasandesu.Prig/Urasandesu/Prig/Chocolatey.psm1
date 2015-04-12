@@ -855,6 +855,7 @@ function ConvertStubToStubsXml {
 
 
 . $(Join-Path $here Chocolatey.Add-PrigAssembly.ps1)
+. $(Join-Path $here Chocolatey.Remove-PrigAssembly.ps1)
 . $(Join-Path $here Chocolatey.ConvertTo-PrigAssemblyName.ps1)
 . $(Join-Path $here Chocolatey.ConvertTo-ProcessorArchitectureString.ps1)
 . $(Join-Path $here Chocolatey.Disable-PrigTestAdapter.ps1)

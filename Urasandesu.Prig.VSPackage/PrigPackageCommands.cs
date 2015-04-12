@@ -128,6 +128,18 @@ namespace Urasandesu.Prig.VSPackage
         }
     }
 
+    class RemovePrigAssemblyCommand : PrigPackageCommand
+    {
+        public RemovePrigAssemblyCommand(PrigPackageViewModel viewModel)
+            : base(viewModel)
+        { }
+
+        protected override void InvokeCore(object parameter)
+        {
+            Controller.RemovePrigAssembly(ViewModel);
+        }
+    }
+
     class EditPrigIndirectionSettingsBeforeQueryStatusCommand : PrigPackageCommand
     {
         public EditPrigIndirectionSettingsBeforeQueryStatusCommand(PrigPackageViewModel viewModel)

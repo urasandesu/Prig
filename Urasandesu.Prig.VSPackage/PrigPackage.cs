@@ -112,6 +112,7 @@ namespace Urasandesu.Prig.VSPackage
             menuCommandService.AddCommand(NewEnableTestAdapterCommand(ViewModel));
             menuCommandService.AddCommand(NewDisableTestAdapterCommand(ViewModel));
             menuCommandService.AddCommand(NewEditPrigIndirectionSettingsCommand(ViewModel));
+            menuCommandService.AddCommand(NewRemovePrigAssemblyCommand(ViewModel));
             container.RegisterInstance(menuCommandService);
         }
 
@@ -161,6 +162,17 @@ namespace Urasandesu.Prig.VSPackage
             var handler = new EventHandler((sender, e) => viewModel.EditPrigIndirectionSettingsCommand.Execute(sender));
             var menuCommand = new OleMenuCommand(handler, commandId);
             viewModel.EditPrigIndirectionSettingsCommand.CanExecuteChanged += (sender, e) => menuCommand.Enabled = ((ICommand)sender).CanExecute(menuCommand);
+            menuCommand.BeforeQueryStatus += (sender, e) => viewModel.EditPrigIndirectionSettingsBeforeQueryStatusCommand.Execute(sender);
+            viewModel.IsEditPrigIndirectionSettingsCommandVisible.Subscribe(_ => menuCommand.Visible = _);
+            return menuCommand;
+        }
+
+        static OleMenuCommand NewRemovePrigAssemblyCommand(PrigPackageViewModel viewModel)
+        {
+            var commandId = new CommandID(GuidList.EditPrigIndirectionSettingsGroup, (int)PkgCmdIDList.RemovePrigAssemblyCommand);
+            var handler = new EventHandler((sender, e) => viewModel.RemovePrigAssemblyCommand.Execute(sender));
+            var menuCommand = new OleMenuCommand(handler, commandId);
+            viewModel.RemovePrigAssemblyCommand.CanExecuteChanged += (sender, e) => menuCommand.Enabled = ((ICommand)sender).CanExecute(menuCommand);
             menuCommand.BeforeQueryStatus += (sender, e) => viewModel.EditPrigIndirectionSettingsBeforeQueryStatusCommand.Execute(sender);
             viewModel.IsEditPrigIndirectionSettingsCommandVisible.Subscribe(_ => menuCommand.Visible = _);
             return menuCommand;

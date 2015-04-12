@@ -35,6 +35,7 @@ function Add-PrigAssembly {
     .DESCRIPTION
         This command adds the stub setting file that sets up the indirection settings for specified assembly to a project on the Package Manager Console or the Prig setup session.
         Target project is the value that is selected as `Default project: ` on the Package Manager Console. The stub setting file is named like `<assembly name>.<runtime version>.v<assembly version>.prig`. After the file is added, you will get the confirmation message that the project has been modified externally, so reload the project.
+        Also, you can't add the setting file for same assembly. If you want to add it again, execute `Remove-PrigAssembly` command once to remove the setting file.
 
     .PARAMETER  Assembly
         A display name recognizing uniquely an assembly. 
@@ -109,10 +110,6 @@ function Add-PrigAssembly {
         None
 
     .NOTES
-        If you added the stub setting files once, it can only remove manually. Let's say you mistake the project that should be selected as `Default project: `. In this case, you have to remove the tags `Reference`, `None`, `PreBuildEvent` that are matched the regular expression `\.prig"`.
-
-        Also, you can't set up the stub settings for multiple assemblies to one file. If you set up such setting, you will get the build error.
-        
         You can also refer to the Add-PrigAssembly command by its built-in alias, "PAdd".
 
     .LINK
@@ -120,6 +117,9 @@ function Add-PrigAssembly {
 
     .LINK
         Get-IndirectionStubSetting
+
+    .LINK
+        Remove-PrigAssembly
 
     .LINK
         Start-PrigSetup
@@ -187,11 +187,10 @@ function Add-PrigAssembly {
 
     Start-Process $powershell $argList -Wait -RedirectStandardError $tmpFileName -NoNewWindow
     $errors = Get-Content $tmpFileName
+    Remove-Item $tmpFileName -ErrorAction SilentlyContinue
     if (0 -lt $errors.Length) {
         $Host.UI.WriteErrorLine($errors -join "`r`n")
     }
-
-    Remove-Item $tmpFileName -ErrorAction SilentlyContinue
 }
 
 New-Alias PAdd Add-PrigAssembly

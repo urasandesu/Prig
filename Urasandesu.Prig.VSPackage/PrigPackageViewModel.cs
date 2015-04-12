@@ -144,6 +144,17 @@ namespace Urasandesu.Prig.VSPackage
             }
         }
 
+        RemovePrigAssemblyCommand m_removePrigAssemblyCommand;
+        public ICommand RemovePrigAssemblyCommand
+        {
+            get
+            {
+                if (m_removePrigAssemblyCommand == null)
+                    m_removePrigAssemblyCommand = BuildUpPackageCommand(new RemovePrigAssemblyCommand(this));
+                return m_removePrigAssemblyCommand;
+            }
+        }
+
         EditPrigIndirectionSettingsBeforeQueryStatusCommand m_editPrigIndirectionSettingsBeforeQueryStatusCommand;
         public ICommand EditPrigIndirectionSettingsBeforeQueryStatusCommand
         {
