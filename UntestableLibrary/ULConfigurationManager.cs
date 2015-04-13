@@ -32,6 +32,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq.Expressions;
 using System.Threading;
 
 namespace UntestableLibrary
@@ -167,5 +168,13 @@ namespace UntestableLibrary
 
 
         protected ULConfigurationManager() { }
+    }
+
+    public static class ULNameHalper
+    {
+        public static string GetName<T>(Expression<Func<T>> exp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

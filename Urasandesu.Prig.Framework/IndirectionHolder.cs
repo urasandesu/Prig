@@ -129,17 +129,14 @@ namespace Urasandesu.Prig.Framework
             }
             {
                 var method = default(TDelegate);
-                var result = TryGet(IndirectionInfo.Empty, out method);
-                Debug.Assert(result);
+                TryGet(IndirectionInfo.Empty, out method);
             }
             {
                 var method = default(TDelegate);
-                var result = TryRemove(IndirectionInfo.Empty, out method);
-                Debug.Assert(result);
+                TryRemove(IndirectionInfo.Empty, out method);
             }
             {
-                var result = GetOrDefault(IndirectionInfo.Empty);
-                Debug.Assert(result == null);
+                GetOrDefault(IndirectionInfo.Empty);
             }
         }
 

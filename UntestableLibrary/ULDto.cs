@@ -82,10 +82,18 @@ namespace UntestableLibrary
         static void ValidateState(ULTableStatus status)
         {
             if (!status.IsOpened)
+            {
+                Console.WriteLine(string.Format("{0} property value is {1}.", ULNameHalper.GetName(() => status.IsOpened), status.IsOpened));
+                Console.WriteLine(string.Format("By the way, look at {0} field. What do you think of it?", ULNameHalper.GetName(() => DateTime.MaxValue)));
                 throw new InvalidOperationException("The column can not be modified because owner table has not been opened.");
+            }
 
             if (0 < status.RowsCount)
+            {
+                Console.WriteLine(string.Format("{0}.", ULNameHalper.GetName(() => ULConfigurationManager.GetProperty("foo", "bar"))));
+                Console.WriteLine(string.Format("When are you going to do it? If not {0}, then when?", ULNameHalper.GetName(() => DateTime.Now)));
                 throw new ArgumentException("The column can not be modified because some rows already exist.");
+            }
         }
     }
 
