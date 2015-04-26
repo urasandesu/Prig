@@ -48,6 +48,22 @@
 #include <prig/DisassemblerCommandFwd.h>
 #endif
 
+#ifndef PRIG_INSTALLERCOMMANDFWD_H
+#include <prig/InstallerCommandFwd.h>
+#endif
+
+#ifndef PRIG_LISTERCOMMANDFWD_H
+#include <prig/ListerCommandFwd.h>
+#endif
+
+#ifndef PRIG_UPDATERCOMMANDFWD_H
+#include <prig/UpdaterCommandFwd.h>
+#endif
+
+#ifndef PRIG_UNINSTALLERCOMMANDFWD_H
+#include <prig/UninstallerCommandFwd.h>
+#endif
+
 #ifndef PRIG_COMMANDFACTORYFWD_H
 #include <prig/CommandFactoryFwd.h>
 #endif
@@ -66,6 +82,10 @@ namespace prig {
             static shared_ptr<HelpCommand> MakeHelpCommand(options_description const &desc);
             static shared_ptr<RunnerCommand> MakeRunnerCommand(wstring const &process, wstring const &arguments);
             static shared_ptr<DisassemblerCommand> MakeDisassemblerCommand(wstring const &asmFullName, wstring const &asmPath);
+            static shared_ptr<InstallerCommand> MakeInstallerCommand(wstring const &package, wstring const &source);
+            static shared_ptr<ListerCommand> MakeListerCommand(wstring const &filter, bool localonly);
+            static shared_ptr<UpdaterCommand> MakeUpdaterCommand(wstring const &package, wstring const &delegate_);
+            static shared_ptr<UninstallerCommand> MakeUninstallerCommand(wstring const &package);
         };
 
     }   // namespace CommandFactoryDetail {

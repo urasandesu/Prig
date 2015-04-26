@@ -42,21 +42,7 @@
 namespace prig { 
 
     namespace RunnerCommandDetail {
-        
-        void FillCommandLine(wstring const &process, wstring const &arguments, vector<WCHAR> &commandLine)
-        {
-            using boost::algorithm::join_if;
 
-            auto v = vector<wstring>();
-            v.push_back(L"\"" + process + L"\"");
-            v.push_back(arguments);
-
-            auto joined = join_if(v, L" ", [](wstring const &s) { return !s.empty(); });
-            commandLine = vector<WCHAR>(joined.c_str(), joined.c_str() + joined.size() + 1u);
-        }
-        
-        
-        
         void PrepareEnvironment()
         {
             using Urasandesu::CppAnonym::Environment;
@@ -75,37 +61,9 @@ namespace prig {
 
         int Run(wstring const &process, wstring const &arguments)
         {
-            using Urasandesu::CppAnonym::CppAnonymSystemException;
+            using Urasandesu::CppAnonym::Diagnostics::Process;
 
-            auto processInfo = PROCESS_INFORMATION();
-            ::ZeroMemory(&processInfo, sizeof(PROCESS_INFORMATION));
-            BOOST_SCOPE_EXIT((&processInfo))
-            {
-                if (processInfo.hThread)
-                    ::CloseHandle(processInfo.hThread);
-
-                if (processInfo.hProcess)
-                    ::CloseHandle(processInfo.hProcess);
-            }
-            BOOST_SCOPE_EXIT_END
-
-            auto startupInfo = STARTUPINFO();
-            ::ZeroMemory(&startupInfo, sizeof(STARTUPINFO));
-            startupInfo.cb = sizeof(STARTUPINFO);
-
-            auto commandLine = vector<WCHAR>();
-            FillCommandLine(process, arguments, commandLine);
-
-            if(!::CreateProcess(process.c_str(), &commandLine[0], nullptr, nullptr, FALSE, 0, nullptr, nullptr, &startupInfo, &processInfo))
-                BOOST_THROW_EXCEPTION(CppAnonymSystemException(::GetLastError()));
-
-            ::WaitForSingleObject(processInfo.hProcess, INFINITE);
-
-            auto exitCode = 0ul;
-            if (!::GetExitCodeProcess(processInfo.hProcess, &exitCode))
-                BOOST_THROW_EXCEPTION(CppAnonymSystemException(::GetLastError()));
-
-            return exitCode;
+            return Process::StartAndWaitForExit(process, arguments);
         }
 
 

@@ -106,6 +106,9 @@
     <Filter Include="Source Files\Urasandesu\Swathe\Profiling">
       <UniqueIdentifier>{0bfff1dd-e194-4f2e-b416-eb0a866933f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Urasandesu\CppAnonym\Diagnostics">
+      <UniqueIdentifier>{3b58a984-7466-4883-9c94-83a72d86e384}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -151,6 +154,30 @@
       <Filter>Header Files\prig</Filter>
     </ClInclude>
     <ClInclude Include="prig\DisassemblerCommandFwd.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\InstallerCommand.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\InstallerCommandFwd.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\ListerCommand.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\ListerCommandFwd.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\UpdaterCommand.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\UpdaterCommandFwd.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\UninstallerCommand.h">
+      <Filter>Header Files\prig</Filter>
+    </ClInclude>
+    <ClInclude Include="prig\UninstallerCommandFwd.h">
       <Filter>Header Files\prig</Filter>
     </ClInclude>
   </ItemGroup>
@@ -691,6 +718,21 @@
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Version.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="prig\InstallerCommand.cpp">
+      <Filter>Source Files\prig</Filter>
+    </ClCompile>
+    <ClCompile Include="prig\ListerCommand.cpp">
+      <Filter>Source Files\prig</Filter>
+    </ClCompile>
+    <ClCompile Include="prig\UpdaterCommand.cpp">
+      <Filter>Source Files\prig</Filter>
+    </ClCompile>
+    <ClCompile Include="prig\UninstallerCommand.cpp">
+      <Filter>Source Files\prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Diagnostics\Process.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym\Diagnostics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

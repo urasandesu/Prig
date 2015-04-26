@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;OUTPUT_DEBUG;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm212 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm230 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,7 +110,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;OUTPUT_DEBUG;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm213 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm230 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,7 +129,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm199 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm230 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,7 +150,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm199 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm230 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -172,12 +172,20 @@
     <ClInclude Include="prig\DisassemblerCommandFwd.h" />
     <ClInclude Include="prig\HelpCommand.h" />
     <ClInclude Include="prig\HelpCommandFwd.h" />
+    <ClInclude Include="prig\InstallerCommand.h" />
+    <ClInclude Include="prig\InstallerCommandFwd.h" />
+    <ClInclude Include="prig\ListerCommand.h" />
+    <ClInclude Include="prig\ListerCommandFwd.h" />
     <ClInclude Include="prig\ProgramOption.h" />
     <ClInclude Include="prig\ProgramOptionFwd.h" />
     <ClInclude Include="prig\RunnerCommand.h" />
     <ClInclude Include="prig\RunnerCommandFwd.h" />
     <ClInclude Include="prig\StubberCommand.h" />
     <ClInclude Include="prig\StubberCommandFwd.h" />
+    <ClInclude Include="prig\UninstallerCommand.h" />
+    <ClInclude Include="prig\UninstallerCommandFwd.h" />
+    <ClInclude Include="prig\UpdaterCommand.h" />
+    <ClInclude Include="prig\UpdaterCommandFwd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -190,6 +198,7 @@
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymNotSupportedException.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymObjectDisposedException.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\CppAnonymSystemException.cpp" />
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Diagnostics\Process.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Environment.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Log.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\SimpleDisposable.cpp" />
@@ -233,9 +242,13 @@
     <ClCompile Include="prig\CommandFactory.cpp" />
     <ClCompile Include="prig\DisassemblerCommand.cpp" />
     <ClCompile Include="prig\HelpCommand.cpp" />
+    <ClCompile Include="prig\InstallerCommand.cpp" />
+    <ClCompile Include="prig\ListerCommand.cpp" />
     <ClCompile Include="prig\ProgramOption.cpp" />
     <ClCompile Include="prig\RunnerCommand.cpp" />
     <ClCompile Include="prig\StubberCommand.cpp" />
+    <ClCompile Include="prig\UninstallerCommand.cpp" />
+    <ClCompile Include="prig\UpdaterCommand.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

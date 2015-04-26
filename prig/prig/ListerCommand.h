@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ProgramOptionFwd.h
+ * File: ListerCommand.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,63 +29,46 @@
 
 
 #pragma once
-#ifndef PRIG_PROGRAMOPTIONFWDFWD_H
-#define PRIG_PROGRAMOPTIONFWDFWD_H
+#ifndef PRIG_LISTERCOMMAND_H
+#define PRIG_LISTERCOMMAND_H
 
-#ifndef PRIG_HELPCOMMANDFWD_H
-#include <prig/HelpCommandFwd.h>
-#endif
-
-#ifndef PRIG_RUNNERCOMMANDFWD_H
-#include <prig/RunnerCommandFwd.h>
-#endif
-
-#ifndef PRIG_STUBBERCOMMANDFWD_H
-#include <prig/StubberCommandFwd.h>
-#endif
-
-#ifndef PRIG_DISASSEMBLERCOMMANDFWD_H
-#include <prig/DisassemblerCommandFwd.h>
-#endif
-
-#ifndef PRIG_INSTALLERCOMMANDFWD_H
-#include <prig/InstallerCommandFwd.h>
+#ifndef PRIG_COMMANDFACTORYFWD_H
+#include <prig/CommandFactoryFwd.h>
 #endif
 
 #ifndef PRIG_LISTERCOMMANDFWD_H
 #include <prig/ListerCommandFwd.h>
 #endif
 
-#ifndef PRIG_UPDATERCOMMANDFWD_H
-#include <prig/UpdaterCommandFwd.h>
-#endif
-
-#ifndef PRIG_UNINSTALLERCOMMANDFWD_H
-#include <prig/UninstallerCommandFwd.h>
-#endif
-
 namespace prig { 
 
-    typedef boost::variant<
-        boost::shared_ptr<HelpCommand>, 
-        boost::shared_ptr<RunnerCommand>, 
-        boost::shared_ptr<StubberCommand>, 
-        boost::shared_ptr<DisassemblerCommand>, 
-        boost::shared_ptr<InstallerCommand>, 
-        boost::shared_ptr<ListerCommand>, 
-        boost::shared_ptr<UpdaterCommand>, 
-        boost::shared_ptr<UninstallerCommand>
-    > Command;
+    namespace ListerCommandDetail {
 
-    namespace ProgramOptionDetail {
+        using std::wstring;
 
-        class ProgramOptionImpl;
+        class ListerCommandImpl
+        {
+        public:
+            int Execute();
 
-    }   // namespace ProgramOptionDetail {
+        private:
+            friend class CommandFactoryDetail::CommandFactoryImpl;
 
-    struct ProgramOption;
+            void SetFilter(wstring const &filter);
+            void SetLocalonly(bool localonly);
+
+            wstring m_filter;
+            bool m_localonly;
+        };
+
+    }   // namespace ListerCommandDetail {
+
+    struct ListerCommand : 
+        ListerCommandDetail::ListerCommandImpl
+    {
+    };
     
 }   // namespace prig { 
 
-#endif  // PRIG_PROGRAMOPTIONFWDFWD_H
+#endif  // PRIG_LISTERCOMMAND_H
 

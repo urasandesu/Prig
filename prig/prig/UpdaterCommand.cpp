@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: UpdaterCommand.cpp
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,75 +28,40 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
-
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
-#endif
-
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
-#endif
-
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
-#endif
-
-#ifndef PRIG_DISASSEMBLERCOMMAND_H
-#include <prig/DisassemblerCommand.h>
-#endif
-
-#ifndef PRIG_INSTALLERCOMMAND_H
-#include <prig/InstallerCommand.h>
-#endif
-
-#ifndef PRIG_LISTERCOMMAND_H
-#include <prig/ListerCommand.h>
-#endif
 
 #ifndef PRIG_UPDATERCOMMAND_H
 #include <prig/UpdaterCommand.h>
 #endif
 
-#ifndef PRIG_UNINSTALLERCOMMAND_H
-#include <prig/UninstallerCommand.h>
-#endif
+namespace prig { 
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+    namespace UpdaterCommandDetail {
+        
+        int UpdaterCommandImpl::Execute()
+        {
+            std::wcout << L"package: " << m_package << std::endl;
+            std::wcout << L"delegate_: " << m_delegate << std::endl;
+            BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+        }
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
+        
+        
+        void UpdaterCommandImpl::SetPackage(wstring const &package)
+        {
+            _ASSERTE(m_package.empty());
+            m_package = package;
+        }
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
+        
+        
+        void UpdaterCommandImpl::SetDelegate(wstring const &delegate_)
+        {
+            _ASSERTE(m_delegate.empty());
+            m_delegate = delegate_;
+        }
 
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+    } // namespace UpdaterCommandDetail {
 
+}   // namespace prig { 

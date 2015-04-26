@@ -172,6 +172,243 @@ namespace prig {
             
             return CommandFactory::MakeDisassemblerCommand(asmFullName, asmPath);
         }
+
+
+        
+        Command ReparseToInstallerCommand(variables_map const &globalVm, wparsed_options const &globalParsed)
+        {
+            using boost::program_options::include_positional;
+            using boost::program_options::positional_options_description;
+            using boost::to_lower;
+
+            auto installerDesc = options_description
+                (
+                "INSTALLER OPTIONS\n"
+                "Specify options to install as a target package of Prig.\n"
+                "\n"
+                "==== EXAMPLE 1 ====\n"
+                "CMD C:\\> prig install NUnit -source \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\"\n"
+                "\n"
+                "This command installs NUnit as a target packages of Prig. NUnit is located at \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\", so you have to specify the directory path.\n"
+                "\n");
+            
+            installerDesc.add_options()(
+                "help", 
+                "Display help message.\n"
+                "\n")
+                (
+                "package", 
+                wvalue<wstring>()->required(), 
+                "Package to install. Currently, there is no convention, but easy to understand and globaly identified naming is recommended. It is better to apply the package name same as Chocolatey or NuGet.\n"
+                "This option is mandatory.\n"
+                "\n")
+                (
+                "source", 
+                wvalue<wstring>()->required(), 
+                "Package location to install. If its path contains any spaces, you shall surround with \"(double quotes).\n"
+                "This option is mandatory.\n"
+                "\n");
+
+            if (globalVm.count("help"))
+                return CommandFactory::MakeHelpCommand(installerDesc);
+
+            auto opts = collect_unrecognized(globalParsed.options, include_positional);
+            opts.erase(opts.begin());
+
+            auto installerPosDesc = positional_options_description();
+            installerPosDesc.
+                add("package", 1).
+                add("subargs", -1);
+
+            auto installerVm = variables_map();
+            auto installerParsed = wcommand_line_parser(opts).options(installerDesc).positional(installerPosDesc).allow_unregistered().style(STYLE).run();
+            store(installerParsed, installerVm);
+            notify(installerVm);
+
+            auto package = installerVm["package"].as<wstring>();
+            to_lower(package);
+                
+            auto source = installerVm["source"].as<wstring>();
+                
+            return CommandFactory::MakeInstallerCommand(package, source);
+        }
+
+
+        
+        Command ReparseToListerCommand(variables_map const &globalVm, wparsed_options const &globalParsed)
+        {
+            using boost::program_options::include_positional;
+            using boost::program_options::positional_options_description;
+            using boost::to_lower;
+
+            auto listerDesc = options_description
+                (
+                "LISTER OPTIONS\n"
+                "Specify options to list the packages that Prig installed as targets.\n"
+                "\n"
+                "==== EXAMPLE 1 ====\n"
+                "CMD C:\\> prig list NUnit -localonly\n"
+                "\n"
+                "This command lists the packages that Prig installed as the method replacement targets. Packages are filtered by the name \"NUnit\".\n"
+                "\n");
+            
+            listerDesc.add_options()(
+                "help", 
+                "Display help message.\n"
+                "\n")
+                (
+                "filter", 
+                wvalue<wstring>(), 
+                "Filter to list. It is used as partial matching term, and also the case is ignored. If this option is not specified, the command enumerates all installed packages.\n"
+                "\n")
+                (
+                "localonly", 
+                "Indicates the search location is local only. In current version, this option is ignored if specified.\n"
+                "\n");
+
+            if (globalVm.count("help"))
+                return CommandFactory::MakeHelpCommand(listerDesc);
+
+            auto opts = collect_unrecognized(globalParsed.options, include_positional);
+            opts.erase(opts.begin());
+
+            auto listerPosDesc = positional_options_description();
+            listerPosDesc.
+                add("filter", 1).
+                add("subargs", -1);
+
+            auto listerVm = variables_map();
+            auto listerParsed = wcommand_line_parser(opts).options(listerDesc).positional(listerPosDesc).allow_unregistered().style(STYLE).run();
+            store(listerParsed, listerVm);
+            notify(listerVm);
+
+            auto filter = wstring();
+            if (listerVm.count("filter"))
+            {
+                filter = listerVm["filter"].as<wstring>();
+                to_lower(filter);
+            }
+            
+            auto localonly = false;
+            if (listerVm.count("localonly"))
+            {
+                localonly = true;
+            }
+
+            return CommandFactory::MakeListerCommand(filter, localonly);
+        }
+
+
+        
+        Command ReparseToUpdaterCommand(variables_map const &globalVm, wparsed_options const &globalParsed)
+        {
+            using boost::program_options::include_positional;
+            using boost::program_options::positional_options_description;
+            using boost::to_lower;
+
+            auto updaterDesc = options_description
+                (
+                "UPDATER OPTIONS\n"
+                "Specify options to upgrade a package.\n"
+                "\n"
+                "==== EXAMPLE 1 ====\n"
+                "CMD C:\\> prig update NUnit -delegate \"C:\\Users\\User\\AdditionalDelegates\\ThreeOrMoreRefOutDelegates\\bin\\Release\\ThreeOrMoreRefOutDelegates.dll\"\n"
+                "\n"
+                "This command updates the package to use additional delegates for a method replacement with NUnit. Also you have to specify the -delegate option because the delegates is contained in ThreeOrMoreRefOutDelegates.dll\n"
+                "\n");
+            
+            updaterDesc.add_options()(
+                "help", 
+                "Display help message.\n"
+                "\n")
+                (
+                "package", 
+                wvalue<wstring>()->required(), 
+                "Specify the packages to update by semicolon delimited format. `all` indicates applying same upgrade option to all installed packages.\n"
+                "\n")
+                (
+                "delegate", 
+                wvalue<wstring>(), 
+                "A configuration for update. This option adds the assembly that contains the indirection delegates. If its path contains any spaces, you shall surround with \"(double quotes). Also, if you want to use multiple assemblies, specify them by semicolon delimited format.\n"
+                "\n");
+
+            if (globalVm.count("help"))
+                return CommandFactory::MakeHelpCommand(updaterDesc);
+
+            auto opts = collect_unrecognized(globalParsed.options, include_positional);
+            opts.erase(opts.begin());
+
+            auto updaterPosDesc = positional_options_description();
+            updaterPosDesc.
+                add("package", 1).
+                add("subargs", -1);
+
+            auto updaterVm = variables_map();
+            auto updaterParsed = wcommand_line_parser(opts).options(updaterDesc).positional(updaterPosDesc).allow_unregistered().style(STYLE).run();
+            store(updaterParsed, updaterVm);
+            notify(updaterVm);
+
+            auto package = updaterVm["package"].as<wstring>();
+            to_lower(package);
+                
+            auto delegate_ = wstring();
+            if (updaterVm.count("delegate"))
+                delegate_ = updaterVm["delegate"].as<wstring>();
+                
+            return CommandFactory::MakeUpdaterCommand(package, delegate_);
+        }
+
+
+        
+        Command ReparseToUninstallerCommand(variables_map const &globalVm, wparsed_options const &globalParsed)
+        {
+            using boost::program_options::include_positional;
+            using boost::program_options::positional_options_description;
+            using boost::to_lower;
+
+            auto uninstallerDesc = options_description
+                (
+                "UNINSTALLER OPTIONS\n"
+                "Specify options to uninstall a package from Prig.\n"
+                "\n"
+                "==== EXAMPLE 1 ====\n"
+                "CMD C:\\> prig uninstall NUnit\n"
+                "\n"
+                "This command uninstalls NUnit from Prig.\n"
+                "\n");
+            
+            uninstallerDesc.add_options()(
+                "help", 
+                "Display help message.\n"
+                "\n")
+                (
+                "package", 
+                wvalue<wstring>()->required(), 
+                "Package to uninstall. You have to specify the package name that is same as when installed. However, the case is insensitive.\n"
+                "This option is mandatory.\n"
+                "\n");
+
+            if (globalVm.count("help"))
+                return CommandFactory::MakeHelpCommand(uninstallerDesc);
+
+            auto opts = collect_unrecognized(globalParsed.options, include_positional);
+            opts.erase(opts.begin());
+
+            auto uninstallerPosDesc = positional_options_description();
+            uninstallerPosDesc.
+                add("package", 1).
+                add("subargs", -1);
+
+            auto uninstallerVm = variables_map();
+            auto uninstallerParsed = wcommand_line_parser(opts).options(uninstallerDesc).positional(uninstallerPosDesc).allow_unregistered().style(STYLE).run();
+            store(uninstallerParsed, uninstallerVm);
+            notify(uninstallerVm);
+
+            auto package = uninstallerVm["package"].as<wstring>();
+            to_lower(package);
+                
+            return CommandFactory::MakeUninstallerCommand(package);
+        }
         
 
 
@@ -197,6 +434,10 @@ namespace prig {
                 "\n"
                 "  * run\n"
                 "  * dasm\n"
+                "  * install\n"
+                "  * list\n"
+                "  * update\n"
+                "  * uninstall\n"
                 "\n"
                 "About each command usage, see each command's help.\n"
                 "\n"
@@ -235,6 +476,14 @@ namespace prig {
                     return ReparseToStubberCommand(globalVm, globalParsed);
                 else if (cmd == L"dasm")
                     return ReparseToDisassemblerCommand(globalVm, globalParsed);
+                else if (cmd == L"install")
+                    return ReparseToInstallerCommand(globalVm, globalParsed);
+                else if (cmd == L"list")
+                    return ReparseToListerCommand(globalVm, globalParsed);
+                else if (cmd == L"update")
+                    return ReparseToUpdaterCommand(globalVm, globalParsed);
+                else if (cmd == L"uninstall")
+                    return ReparseToUninstallerCommand(globalVm, globalParsed);
             }
 
             return CommandFactory::MakeHelpCommand(globalDesc);

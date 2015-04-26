@@ -47,6 +47,22 @@
 #include <prig/DisassemblerCommand.h>
 #endif
 
+#ifndef PRIG_INSTALLERCOMMAND_H
+#include <prig/InstallerCommand.h>
+#endif
+
+#ifndef PRIG_LISTERCOMMAND_H
+#include <prig/ListerCommand.h>
+#endif
+
+#ifndef PRIG_UPDATERCOMMAND_H
+#include <prig/UpdaterCommand.h>
+#endif
+
+#ifndef PRIG_UNINSTALLERCOMMAND_H
+#include <prig/UninstallerCommand.h>
+#endif
+
 #ifndef PRIG_COMMANDFACTORY_H
 #include <prig/CommandFactory.h>
 #endif
@@ -85,6 +101,53 @@ namespace prig {
             auto pCommand = make_shared<DisassemblerCommand>();
             pCommand->SetAssembly(asmFullName);
             pCommand->SetAssemblyFrom(asmPath);
+            return pCommand;
+        }
+        
+        
+        
+        shared_ptr<InstallerCommand> CommandFactoryImpl::MakeInstallerCommand(wstring const &package, wstring const &source)
+        {
+            using boost::make_shared;
+
+            auto pCommand = make_shared<InstallerCommand>();
+            pCommand->SetPackage(package);
+            pCommand->SetSource(source);
+            return pCommand;
+        }
+        
+        
+        
+        shared_ptr<ListerCommand> CommandFactoryImpl::MakeListerCommand(wstring const &filter, bool localonly)
+        {
+            using boost::make_shared;
+
+            auto pCommand = make_shared<ListerCommand>();
+            pCommand->SetFilter(filter);
+            pCommand->SetLocalonly(localonly);
+            return pCommand;
+        }
+        
+        
+        
+        shared_ptr<UpdaterCommand> CommandFactoryImpl::MakeUpdaterCommand(wstring const &package, wstring const &delegate_)
+        {
+            using boost::make_shared;
+
+            auto pCommand = make_shared<UpdaterCommand>();
+            pCommand->SetPackage(package);
+            pCommand->SetDelegate(delegate_);
+            return pCommand;
+        }
+        
+        
+        
+        shared_ptr<UninstallerCommand> CommandFactoryImpl::MakeUninstallerCommand(wstring const &package)
+        {
+            using boost::make_shared;
+
+            auto pCommand = make_shared<UninstallerCommand>();
+            pCommand->SetPackage(package);
             return pCommand;
         }
 

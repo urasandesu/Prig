@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0-alpha03</version>
+    <version>2.0.0-alpha033</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,23 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.0-alpha03
+    <releaseNotes>Version 2.0.0-alpha033
+* 
+
+
+Version 2.0.0-alpha032
+* Merge Infrastructure Enhancement(See also Swathe issues [#1](https://github.com/urasandesu/Swathe/issues/1))
+* Fixed #36: If an assembly is added-removed multiple times there is duplicated prebuild steps
+* Fixed #35: Rebuilding after .prig file had types removed still contains removed types in prig assembly
+* Fix error when enabling Test Adapter and no vstest running
+* Fix more generation issues
+
+
+Version 2.0.0-alpha031
+* Response to Strange Behavior. Depending on the replacing method, the static method of the infrastructure is sometimes called before initializing the field of the type. For example, you will find the behavior if you try [a sample of Generics](https://github.com/urasandesu/Prig/wiki/Generics) with [Prig v2.0.0-alpha03](https://github.com/urasandesu/Prig/releases/tag/v2.0.0-alpha03) in Visual Studio integrated environment. It seems very strange behavior, but we have to consider that in this layer.
+
+
+Version 2.0.0-alpha03
 * Improve stability a little. Support the test runners that have never been able to run. The test runners like NUnit(GUI)/xUnit.net/MbUnit couldn't even start up until now(They were raising `ExecutionEngineException`).
 
 

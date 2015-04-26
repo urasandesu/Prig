@@ -1,5 +1,5 @@
 ﻿/* 
- * File: prig.cpp
+ * File: UninstallerCommand.cpp
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,75 +28,31 @@
  */
 
 
-// prig.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
-
-#ifndef PRIG_PROGRAMOPTION_H
-#include <prig/ProgramOption.h>
-#endif
-
-#ifndef PRIG_HELPCOMMAND_H
-#include <prig/HelpCommand.h>
-#endif
-
-#ifndef PRIG_RUNNERCOMMAND_H
-#include <prig/RunnerCommand.h>
-#endif
-
-#ifndef PRIG_STUBBERCOMMAND_H
-#include <prig/StubberCommand.h>
-#endif
-
-#ifndef PRIG_DISASSEMBLERCOMMAND_H
-#include <prig/DisassemblerCommand.h>
-#endif
-
-#ifndef PRIG_INSTALLERCOMMAND_H
-#include <prig/InstallerCommand.h>
-#endif
-
-#ifndef PRIG_LISTERCOMMAND_H
-#include <prig/ListerCommand.h>
-#endif
-
-#ifndef PRIG_UPDATERCOMMAND_H
-#include <prig/UpdaterCommand.h>
-#endif
 
 #ifndef PRIG_UNINSTALLERCOMMAND_H
 #include <prig/UninstallerCommand.h>
 #endif
 
-#ifndef URASANDESU_SWATHE_H
-#include <Urasandesu/Swathe.h>
-#endif
+namespace prig { 
 
-struct ExecuteCommandVisitor : 
-    boost::static_visitor<int>
-{
-    template<class T>
-    int operator ()(T const &pCommand) const
-    {
-        return pCommand->Execute();
-    }
-};
+    namespace UninstallerCommandDetail {
+        
+        int UninstallerCommandImpl::Execute()
+        {
+            std::wcout << L"package: " << m_package << std::endl;
+            BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+        }
 
-int wmain(int argc, WCHAR* argv[])
-{
-    using namespace prig;
+        
+        
+        void UninstallerCommandImpl::SetPackage(wstring const &package)
+        {
+            _ASSERTE(m_package.empty());
+            m_package = package;
+        }
 
-    try
-    {
-        auto option = ProgramOption(argc, argv);
-        auto command = option.Parse();
-        return boost::apply_visitor(ExecuteCommandVisitor(), command);
-    }
-    catch (...)
-    {
-        std::cerr << boost::diagnostic_information(boost::current_exception()) << std::endl;
-        return 1;
-    }
-}
+    } // namespace UninstallerCommandDetail {
 
+}   // namespace prig { 
