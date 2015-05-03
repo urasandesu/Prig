@@ -254,6 +254,7 @@
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\SemiAutoPtr.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Utilities\TypeInfo.cpp" />
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Version.cpp" />
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Xml.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\BaseSwatheStorage.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ControlFlow.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\ICustomAttributeEqualTo.cpp" />
@@ -320,6 +321,7 @@
     </ClCompile>
     <ClCompile Include="Urasandesu\Prig\IMethodSigEqualTo.cpp" />
     <ClCompile Include="Urasandesu\Prig\IMethodSigHash.cpp" />
+    <ClCompile Include="Urasandesu\Prig\PrigConfig.cpp" />
     <ClCompile Include="Urasandesu\Prig\PrigData.cpp" />
     <ClCompile Include="Weaver.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyInfo.cpp" />
@@ -458,6 +460,8 @@
     <ClInclude Include="Urasandesu\Prig\IMethodSigEqualToFwd.h" />
     <ClInclude Include="Urasandesu\Prig\IMethodSigHash.h" />
     <ClInclude Include="Urasandesu\Prig\IMethodSigHashFwd.h" />
+    <ClInclude Include="Urasandesu\Prig\PrigConfig.h" />
+    <ClInclude Include="Urasandesu\Prig\PrigConfigFwd.h" />
     <ClInclude Include="Urasandesu\Prig\PrigData.h" />
     <ClInclude Include="Urasandesu\Prig\PrigDataFwd.h" />
     <ClInclude Include="Weaver.h" />

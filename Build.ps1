@@ -83,7 +83,7 @@ switch ($PsCmdlet.ParameterSetName) {
     'Package' { 
         $solution = "Prig.sln"
         nuget restore $solution
-        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Urasandesu_Prig_VSPackage$buildTarget_"
+        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Urasandesu_Prig_VSPackage$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0404$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0804$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_1205$buildTarget_"
         $configurations = "/p:Configuration=Release%28.NET 3.5%29", "/p:Configuration=Release%28.NET 4%29"
         $platforms = "/p:Platform=x86", "/p:Platform=x64"
         foreach ($configuration in $configurations) {

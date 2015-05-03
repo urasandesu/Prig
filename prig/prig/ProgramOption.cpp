@@ -312,9 +312,9 @@ namespace prig {
                 "Specify options to upgrade a package.\n"
                 "\n"
                 "==== EXAMPLE 1 ====\n"
-                "CMD C:\\> prig update NUnit -delegate \"C:\\Users\\User\\AdditionalDelegates\\ThreeOrMoreRefOutDelegates\\bin\\Release\\ThreeOrMoreRefOutDelegates.dll\"\n"
+                "CMD C:\\> prig update All -delegate \"C:\\Users\\User\\AdditionalDelegates\\ThreeOrMoreRefOutDelegates\\bin\\Release\\ThreeOrMoreRefOutDelegates.dll\"\n"
                 "\n"
-                "This command updates the package to use additional delegates for a method replacement with NUnit. Also you have to specify the -delegate option because the delegates is contained in ThreeOrMoreRefOutDelegates.dll\n"
+                "This command updates all package to use additional delegates for a method replacement. Also you have to specify the -delegate option because the delegates is contained in ThreeOrMoreRefOutDelegates.dll\n"
                 "\n");
             
             updaterDesc.add_options()(
@@ -324,12 +324,12 @@ namespace prig {
                 (
                 "package", 
                 wvalue<wstring>()->required(), 
-                "Specify the packages to update by semicolon delimited format. `all` indicates applying same upgrade option to all installed packages.\n"
+                "Specify the packages to update by semicolon delimited format. `All` indicates applying same upgrade option to all installed packages.\n"
                 "\n")
                 (
                 "delegate", 
                 wvalue<wstring>(), 
-                "A configuration for update. This option adds the assembly that contains the indirection delegates. If its path contains any spaces, you shall surround with \"(double quotes). Also, if you want to use multiple assemblies, specify them by semicolon delimited format.\n"
+                "A configuration for update. This option adds the assembly that contains the indirection delegates. This option can only be specified when specifying `package` option to `All`. If its path contains any spaces, you shall surround with \"(double quotes). Also, if you want to use multiple assemblies, specify them by semicolon delimited format.\n"
                 "\n");
 
             if (globalVm.count("help"))

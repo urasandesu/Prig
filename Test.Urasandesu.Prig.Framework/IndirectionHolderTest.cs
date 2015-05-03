@@ -38,6 +38,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Urasandesu.NAnonym.Mixins.System;
+using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Assert = Test.Urasandesu.Prig.Framework.TestUtilities.LooseCrossDomainAssert;
 
@@ -421,7 +422,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.DateTime>(defaultBehavior);
+                var behavior = HelperForIndirectionFunc<System.DateTime>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -504,7 +505,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<List<T>, T>(defaultBehavior);
+                var behavior = HelperForIndirectionAction<List<T>, T>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -528,7 +529,7 @@ namespace Test.Urasandesu.Prig.Framework
 
                 if (holder.Source.Value.Count == 0)
                 {
-                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<List<T>, T>(IndirectionBehaviors.Fallthrough) : Body;
+                    var behavior = Body == null ? HelperForIndirectionAction<List<T>, T>.CreateDelegateOfDefaultBehavior(IndirectionBehaviors.Fallthrough) : Body;
                     RuntimeHelpers.PrepareDelegate(behavior);
                     holder.Source.Value[target] = new TargetSettingValue<IndirectionAction<List<T>, T>>(behavior, value);
                     {
@@ -536,7 +537,7 @@ namespace Test.Urasandesu.Prig.Framework
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrIndirectionAction<List<T>, T>(behavior, holder.Source.Value);
+                    Body = HelperForIndirectionAction<List<T>, T>.CreateDelegateExecutingDefaultOr(behavior, holder.Source.Value);
                 }
                 else
                 {
@@ -639,7 +640,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionAction<List<T>, T>(defaultBehavior);
+                var behavior = HelperForIndirectionAction<List<T>, T>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -733,7 +734,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<T[], System.Predicate<T>, System.Boolean>(defaultBehavior);
+                var behavior = HelperForIndirectionFunc<T[], System.Predicate<T>, System.Boolean>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -823,7 +824,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(defaultBehavior);
+                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -847,7 +848,7 @@ namespace Test.Urasandesu.Prig.Framework
 
                 if (holder.Source.Value.Count == 0)
                 {
-                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(IndirectionBehaviors.Fallthrough) : Body;
+                    var behavior = Body == null ? HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(IndirectionBehaviors.Fallthrough) : Body;
                     RuntimeHelpers.PrepareDelegate(behavior);
                     holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(behavior, value);
                     {
@@ -855,7 +856,7 @@ namespace Test.Urasandesu.Prig.Framework
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(behavior, holder.Source.Value);
+                    Body = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateExecutingDefaultOr(behavior, holder.Source.Value);
                 }
                 else
                 {
@@ -914,7 +915,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(defaultBehavior);
+                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -938,7 +939,7 @@ namespace Test.Urasandesu.Prig.Framework
 
                 if (holder.Source.Value.Count == 0)
                 {
-                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(IndirectionBehaviors.Fallthrough) : Body;
+                    var behavior = Body == null ? HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(IndirectionBehaviors.Fallthrough) : Body;
                     RuntimeHelpers.PrepareDelegate(behavior);
                     holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(behavior, value);
                     {
@@ -946,7 +947,7 @@ namespace Test.Urasandesu.Prig.Framework
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(behavior, holder.Source.Value);
+                    Body = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateExecutingDefaultOr(behavior, holder.Source.Value);
                 }
                 else
                 {
@@ -1044,7 +1045,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(defaultBehavior);
+                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -1085,7 +1086,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>(defaultBehavior);
+                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 

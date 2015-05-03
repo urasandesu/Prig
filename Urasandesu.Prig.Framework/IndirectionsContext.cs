@@ -43,7 +43,7 @@ namespace Urasandesu.Prig.Framework
 
         bool m_disposed;
 
-        public static void ExecuteOriginal(IndirectionAction action)
+        public static void ExecuteOriginal(Action action)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
@@ -52,7 +52,7 @@ namespace Urasandesu.Prig.Framework
                 action();
         }
 
-        public static T ExecuteOriginal<T>(IndirectionFunc<T> func)
+        public static T ExecuteOriginal<T>(Func<T> func)
         {
             if (func == null)
                 throw new ArgumentNullException("func");
@@ -63,21 +63,9 @@ namespace Urasandesu.Prig.Framework
 
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        static Func<IndirectionAssemblyRepository> ms_newAssemblyRepository;
-        internal static Func<IndirectionAssemblyRepository> NewAssemblyRepository
-        {
-            get
-            {
-                if (ms_newAssemblyRepository == null)
-                    ms_newAssemblyRepository = () => new IndirectionAssemblyRepository();
-                return ms_newAssemblyRepository;
-            }
-            set { ms_newAssemblyRepository = value; }
-        }
-
         public static BehaviorSetting ExcludeGeneric()
         {
-            var repository = NewAssemblyRepository();
+            var repository = InstanceGetters.NewIndirectionAssemblyRepository();
             var indAsmInfos = repository.FindAll();
             var preparables = indAsmInfos.SelectMany(_ => _.GetTypes()).
                                           Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).

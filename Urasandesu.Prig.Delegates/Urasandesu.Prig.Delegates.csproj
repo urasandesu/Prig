@@ -1,23 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}</ProjectGuid>
+    <ProjectGuid>{6CFA6744-745A-4CD6-8F1E-940D2B025FAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Urasandesu.Prig.Framework</RootNamespace>
-    <AssemblyName>Urasandesu.Prig.Framework</AssemblyName>
+    <RootNamespace>Urasandesu.Prig.Delegates</RootNamespace>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Urasandesu.Prig.Framework.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Urasandesu.Prig.Delegates.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -27,6 +24,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AssemblyName>Urasandesu.Prig.Delegates.v2.0.50727.v0.1.0.0.MSIL</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|AnyCPU'">
@@ -37,6 +35,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AssemblyName>Urasandesu.Prig.Delegates.v2.0.50727.v0.1.0.0.MSIL</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|AnyCPU'">
@@ -47,6 +46,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AssemblyName>Urasandesu.Prig.Delegates.v4.0.30319.v0.1.0.0.MSIL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|AnyCPU'">
@@ -57,6 +57,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AssemblyName>Urasandesu.Prig.Delegates.v4.0.30319.v0.1.0.0.MSIL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -70,43 +71,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdditionalDelegatesAssemblyRepository.cs" />
-    <Compile Include="FallthroughException.cs" />
-    <Compile Include="FlowControlException.cs" />
-    <Compile Include="BehaviorSetting.cs" />
-    <Compile Include="IndirectionBehaviors.cs" />
-    <Compile Include="IndirectionAssemblyRepository.cs" />
-    <Compile Include="PrigConfig.cs" />
-    <Compile Include="TaggedBagFactory.cs" />
-    <Compile Include="TaggedBag.cs" />
-    <Compile Include="TargetSettingValue.cs" />
-    <Compile Include="IBehaviorPreparable.cs" />
-    <Compile Include="PilotStubberConfiguration\IndirectionStub.cs" />
-    <Compile Include="PilotStubberConfiguration\PrigSection.cs" />
-    <Compile Include="PilotStubberConfiguration\StubCollection.cs" />
-    <Compile Include="PilotStubberConfiguration\StubElement.cs" />
-    <Compile Include="GenericHolder.cs" />
-    <Compile Include="IndirectableAttribute.cs" />
-    <Compile Include="IndirectionDelegateAttribute.cs" />
-    <Compile Include="IndirectionsContext.cs" />
-    <Compile Include="IndirectionHolder.cs" />
-    <Compile Include="IndirectionInfo.cs" />
-    <Compile Include="InstanceGetters.cs" />
-    <Compile Include="InstanceHolder.cs" />
-    <Compile Include="LooseCrossDomainAccessor.cs" />
+    <Compile Include="HelperForUntypedIndirectionDelegate.cs" />
+    <Compile Include="IndirectionDelegates.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IndirectionDelegates.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Urasandesu.Prig.Framework.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
-      <Project>{C04A5E86-30E1-4C38-B916-324D000E240E}</Project>
-      <Name>Urasandesu.NAnonym</Name>
-    </ProjectReference>
+    <None Include="IndirectionDelegates.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IndirectionDelegates.g.cs</LastGenOutput>
+    </None>
+    <None Include="IndirectionDelegatesContent.t4" />
+    <None Include="Urasandesu.Prig.Delegates.snk" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
+      <Project>{c04a5e86-30e1-4c38-b916-324d000e240e}</Project>
+      <Name>Urasandesu.NAnonym</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj">
+      <Project>{b4f8abb2-2feb-484c-9ef5-404c88c44e1a}</Project>
+      <Name>Urasandesu.Prig.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

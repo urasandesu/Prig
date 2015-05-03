@@ -1,10 +1,10 @@
 ﻿/* 
- * File: PrigDataFwd.h
+ * File: AssemblyInfo.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2014 Akira Sugiura
+ * Copyright (c) 2015 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -28,23 +28,19 @@
  */
 
 
-#pragma once
-#ifndef URASANDESU_PRIG_PRIGDATAFWD_H
-#define URASANDESU_PRIG_PRIGDATAFWD_H
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
-namespace Urasandesu { namespace Prig { 
-
-    namespace PrigDataDetail {
-
-        struct IndirectionDelegates;
-        struct PrigData;
-
-    }   // namespace PrigDataDetail {
-    
-    using PrigDataDetail::IndirectionDelegates;
-    using PrigDataDetail::PrigData;
-    
-}}   // namespace Urasandesu { namespace Prig { 
-
-#endif  // URASANDESU_PRIG_PRIGDATAFWD_H
-
+[assembly: AssemblyTitle("Urasandesu.Prig.Delegates.0404")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Urasandesu.Prig.Delegates.0404")]
+[assembly: AssemblyCopyright("Copyright © Akira Sugiura 2015")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: ComVisible(false)]
+[assembly: Guid("ca7dbefd-c8e8-49f7-9bc4-d27889d64b9e")]
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.1.0.0")]

@@ -47,6 +47,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Urasandesu.NAnonym;
+using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
@@ -91,7 +92,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehavior$(ConvertTypeToClassName $stub.IndirectionDelegate)(defaultBehavior);
+                var behavior = HelperFor$(ConvertTypeToClassName $stub.IndirectionDelegate).CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -118,7 +119,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 
                 if (holder.Source.Value.Count == 0)
                 {
-                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehavior$(ConvertTypeToClassName $stub.IndirectionDelegate)(IndirectionBehaviors.Fallthrough) : Body;
+                    var behavior = Body == null ? HelperFor$(ConvertTypeToClassName $stub.IndirectionDelegate).CreateDelegateOfDefaultBehavior(IndirectionBehaviors.Fallthrough) : Body;
                     RuntimeHelpers.PrepareDelegate(behavior);
                     holder.Source.Value[target] = new TargetSettingValue<$(ConvertTypeToClassName $stub.IndirectionDelegate)>(behavior, value);
                     {
@@ -126,7 +127,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOr$(ConvertTypeToClassName $stub.IndirectionDelegate)(behavior, holder.Source.Value);
+                    Body = HelperFor$(ConvertTypeToClassName $stub.IndirectionDelegate).CreateDelegateExecutingDefaultOr(behavior, holder.Source.Value);
                 }
                 else
                 {
@@ -194,7 +195,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
                 var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorUntyped(indDlgt, defaultBehavior);
+                var behavior = HelperForUntypedIndirectionDelegate.CreateDelegateOfDefaultBehavior(indDlgt, defaultBehavior);
                 Body = behavior;
             }
 
@@ -238,7 +239,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
                 if (holder.Source.Value.Count == 0)
                 {
                     var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
-                    var behavior = Body == null ? IndirectionDelegates.CreateDelegateOfDefaultBehaviorUntyped(indDlgt, IndirectionBehaviors.Fallthrough) : Body;
+                    var behavior = Body == null ? HelperForUntypedIndirectionDelegate.CreateDelegateOfDefaultBehavior(indDlgt, IndirectionBehaviors.Fallthrough) : Body;
                     RuntimeHelpers.PrepareDelegate(behavior);
                     holder.Source.Value[target] = new TargetSettingValue<Work>(behavior, value);
                     {
@@ -246,7 +247,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = IndirectionDelegates.CreateDelegateExecutingDefaultOrUntypedDelegate(indDlgt, behavior, holder.Source.Value);
+                    Body = HelperForUntypedIndirectionDelegate.CreateDelegateExecutingDefaultOr(indDlgt, behavior, holder.Source.Value);
                 }
                 else
                 {

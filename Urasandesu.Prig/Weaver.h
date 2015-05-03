@@ -46,6 +46,10 @@
 #include <Urasandesu/Prig/PrigDataFwd.h>
 #endif
 
+#ifndef URASANDESU_PRIG_PRIGCONFIG_H
+#include <Urasandesu/Prig/PrigConfig.h>
+#endif
+
 namespace CWeaverDetail {
 
     using namespace Urasandesu::CppAnonym::Utilities;
@@ -59,6 +63,7 @@ namespace CWeaverDetail {
     using std::vector;
     using std::wstring;
     using Urasandesu::Prig::PrigData;
+    using Urasandesu::Prig::PrigPackageConfig;
 
     class CWeaverImpl : 
         public ICorProfilerCallback5Impl<ICorProfilerCallback5>
@@ -107,11 +112,13 @@ namespace CWeaverDetail {
     private:
         SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData);
         void EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen);
-        IType const *GetIndirectionDelegateInstance(IMethod const *pTarget, IModule const *pIndDll, IType const *pIndDlgtAttrType, PrigData &prigData) const;
+        IType const *GetIndirectionDelegateInstance(IMethod const *pTarget, IType const *pIndDlgtAttrType, PrigData &prigData) const;
         IType const *MakeGenericExplicitThisType(IType const *pTarget) const;
 
         typedef boost::lock_guard<boost::mutex> guard_type;
         wstring m_currentDir;
+        path m_pkgPath;
+        PrigPackageConfig m_currentPkg;
         vector<path> m_indDllPaths;
         ProfilingInfo *m_pProfInfo;
         boost::mutex m_lock;

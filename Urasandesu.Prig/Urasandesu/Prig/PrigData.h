@@ -53,26 +53,41 @@ namespace Urasandesu { namespace Prig {
     namespace PrigDataDetail {
 
         using boost::filesystem::path;
+        using boost::noncopyable;
         using boost::unordered_map;
+        using boost::ptr_vector;
         using std::vector;
         using std::wstring;
         using Urasandesu::Swathe::Metadata::ICustomAttribute;
+        using Urasandesu::Swathe::Metadata::IAssembly;
         using Urasandesu::Swathe::Metadata::IMethod;
         using Urasandesu::Swathe::Metadata::IType;
         
-        struct PrigData
+        struct IndirectionDelegates : 
+            noncopyable
+        {
+            IndirectionDelegates() : 
+                m_pIndirectionDelegatesAssembly(nullptr), 
+                m_indirectionDelegatesInit(false)
+            { }
+
+            IAssembly const *m_pIndirectionDelegatesAssembly;
+            vector<IType const *> m_indirectionDelegates;
+            bool m_indirectionDelegatesInit;
+        };
+
+        struct PrigData : 
+            noncopyable
         {
             PrigData() : 
-                m_indirectablesInit(false), 
-                m_indirectionDelegatesInit(false)
+                m_indirectablesInit(false)
             { }
 
             wstring m_corVersion;
             path m_indDllPath;
             unordered_map<mdToken, ICustomAttribute const *> m_indirectables;
             bool m_indirectablesInit;
-            vector<IType const *> m_indirectionDelegates;
-            bool m_indirectionDelegatesInit;
+            ptr_vector<IndirectionDelegates> m_indirectionDelegatesList;
             unordered_map<IMethod const *, IType const *, IMethodSigHash, IMethodSigEqualTo> m_indDlgtCache;
         };
 

@@ -31,6 +31,7 @@
 using NUnit.Framework;
 using System;
 using Urasandesu.NAnonym.Mixins.System;
+using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 
 namespace Test.Urasandesu.Prig.Framework
@@ -47,7 +48,7 @@ namespace Test.Urasandesu.Prig.Framework
                 var cache = default(IndirectionAction<int, int>);
 
                 // Act
-                IndirectionDelegates.ExecuteOriginalOfStaticIndirectionAction(() => cache, _cache => cache = _cache, typeof(TestClass), "Add", 10, 32);
+                HelperForIndirectionAction<int, int>.ExecuteOriginalOfStatic(() => cache, _cache => cache = _cache, typeof(TestClass), "Add", 10, 32);
 
                 // Assert
                 Assert.AreEqual(42, TestClass.StaticResult);
@@ -63,7 +64,7 @@ namespace Test.Urasandesu.Prig.Framework
             var target = new TestClass();
 
             // Act
-            IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionAction(() => cache, _cache => cache = _cache, typeof(TestClass), "Minus", target, 52, 10);
+            HelperForIndirectionAction<TestClass, int, int>.ExecuteOriginalOfInstance(() => cache, _cache => cache = _cache, typeof(TestClass), "Minus", target, 52, 10);
 
             // Assert
             Assert.AreEqual(42, target.InstanceResult);
@@ -78,7 +79,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             // Act
             var actual = 0;
-            IndirectionDelegates.ExecuteOriginalOfStaticIndirectionOutAction(() => cache, _cache => cache = _cache, typeof(TestClass), "Add", 10, 32, out actual);
+            HelperForIndirectionOutAction<int, int, int>.ExecuteOriginalOfStatic(() => cache, _cache => cache = _cache, typeof(TestClass), "Add", 10, 32, out actual);
 
             // Assert
             Assert.AreEqual(42, actual);
@@ -94,7 +95,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             // Act
             var actual = 0;
-            IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionOutAction(() => cache, _cache => cache = _cache, typeof(TestClass), "Minus", target, 52, 10, out actual);
+            HelperForIndirectionOutAction<TestClass, int, int, int>.ExecuteOriginalOfInstance(() => cache, _cache => cache = _cache, typeof(TestClass), "Minus", target, 52, 10, out actual);
 
             // Assert
             Assert.AreEqual(42, actual);
@@ -110,7 +111,7 @@ namespace Test.Urasandesu.Prig.Framework
             // Act
             var actual1 = 0;
             var actual2 = 0;
-            IndirectionDelegates.ExecuteOriginalOfStaticIndirectionOutOutAction(() => cache, _cache => cache = _cache, typeof(TestClass), "Add", 10, 32, out actual1, out actual2);
+            HelperForIndirectionOutOutAction<int, int, int, int>.ExecuteOriginalOfStatic(() => cache, _cache => cache = _cache, typeof(TestClass), "Add", 10, 32, out actual1, out actual2);
 
             // Assert
             Assert.AreEqual(42, actual1);
@@ -126,7 +127,7 @@ namespace Test.Urasandesu.Prig.Framework
             var target = new TestClass();
 
             // Act
-            var actual = IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionFunc(() => cache, _cache => cache = _cache, typeof(TestClass), "get_PI", target);
+            var actual = HelperForIndirectionFunc<TestClass, double>.ExecuteOriginalOfInstance(() => cache, _cache => cache = _cache, typeof(TestClass), "get_PI", target);
 
             // Assert
             Assert.LessOrEqual(Math.Abs(Math.PI - actual), 0.001);
@@ -143,7 +144,7 @@ namespace Test.Urasandesu.Prig.Framework
             // Act
             var result1 = 52;
             var result2 = 0;
-            var actual = IndirectionDelegates.ExecuteOriginalOfInstanceIndirectionRefRefFunc(() => cache, _cache => cache = _cache, typeof(TestClass), "Minus", target, 10, ref result1, ref result2);
+            var actual = HelperForIndirectionRefRefFunc<TestClass, int, int, int, int>.ExecuteOriginalOfInstance(() => cache, _cache => cache = _cache, typeof(TestClass), "Minus", target, 10, ref result1, ref result2);
 
             // Assert
             Assert.AreEqual(42, actual);
@@ -160,7 +161,7 @@ namespace Test.Urasandesu.Prig.Framework
             var target = new TestStruct(21.0);
 
             // Act
-            var actual = IndirectionDelegates.ExecuteOriginalOfStaticIndirectionRefThisFunc(() => cache, _cache => cache = _cache, typeof(TestStruct), "Pow", ref target, 2.0);
+            var actual = HelperForIndirectionRefThisFunc<TestStruct, double, double>.ExecuteOriginalOfStatic(() => cache, _cache => cache = _cache, typeof(TestStruct), "Pow", ref target, 2.0);
 
             // Assert
             Assert.LessOrEqual(Math.Abs(42.0 - target.Value), 0.001);
@@ -177,7 +178,7 @@ namespace Test.Urasandesu.Prig.Framework
 
             // Act
             var result = Math.PI;
-            var actual = IndirectionDelegates.ExecuteOriginalOfStaticIndirectionRefThisRefRefFunc(() => cache, _cache => cache = _cache, typeof(TestStruct), "Pow", ref target, 2.0, ref result);
+            var actual = HelperForIndirectionRefThisRefRefFunc<TestStruct, double, double, double>.ExecuteOriginalOfStatic(() => cache, _cache => cache = _cache, typeof(TestStruct), "Pow", ref target, 2.0, ref result);
 
             // Assert
             Assert.LessOrEqual(Math.Abs(Math.PI - target.Value), 0.001);

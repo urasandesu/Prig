@@ -156,6 +156,13 @@ if (0 -lt $unintendedSettings.Length) {
     exit -1944878741
 }
 
+$additionalAsmInfos = @($section.Stubs | % { $_.IndirectionDelegate.Module.Assembly })
+foreach ($additionalAsmInfo in $additionalAsmInfos) {
+    if ($refAsmInfos -notcontains $additionalAsmInfo) {
+        $refAsmInfos.Add($additionalAsmInfo)
+    }
+}
+
 $workDir = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($Settings), (ConvertTo-PrigAssemblyName $asmInfo))
 Write-Verbose ('    Work Directory {0} ...' -f $workDir)
 if (![string]::IsNullOrEmpty($workDir) -and [IO.Directory]::Exists($workDir)) {

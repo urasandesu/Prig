@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigDataFwd.h
+ * File: PrigConfigFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,22 +29,24 @@
 
 
 #pragma once
-#ifndef URASANDESU_PRIG_PRIGDATAFWD_H
-#define URASANDESU_PRIG_PRIGDATAFWD_H
+#ifndef URASANDESU_PRIG_PRIGCONFIGFWD_H
+#define URASANDESU_PRIG_PRIGCONFIGFWD_H
 
 namespace Urasandesu { namespace Prig { 
 
-    namespace PrigDataDetail {
+    namespace PrigConfigDetail {
 
-        struct IndirectionDelegates;
-        struct PrigData;
+        class PrigAdditionalDelegateConfig;
+        class PrigPackageConfig;
+        class PrigConfig;
 
-    }   // namespace PrigDataDetail {
+    }   // namespace PrigConfigDetail {
     
-    using PrigDataDetail::IndirectionDelegates;
-    using PrigDataDetail::PrigData;
+    using PrigConfigDetail::PrigAdditionalDelegateConfig;
+    using PrigConfigDetail::PrigPackageConfig;
+    using PrigConfigDetail::PrigConfig;
     
 }}   // namespace Urasandesu { namespace Prig { 
 
-#endif  // URASANDESU_PRIG_PRIGDATAFWD_H
+#endif  // URASANDESU_PRIG_PRIGCONFIGFWD_H
 

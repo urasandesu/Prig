@@ -48,6 +48,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using Urasandesu.NAnonym;
+using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
@@ -100,7 +101,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehavior$(ConvertTypeToClassName $stub.IndirectionDelegate)(defaultBehavior);
+                var behavior = HelperFor$(ConvertTypeToClassName $stub.IndirectionDelegate).CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
             }
 
@@ -148,7 +149,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
             public void Prepare(IndirectionBehaviors defaultBehavior)
             {
                 var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
-                var behavior = IndirectionDelegates.CreateDelegateOfDefaultBehaviorUntyped(indDlgt, defaultBehavior);
+                var behavior = HelperForUntypedIndirectionDelegate.CreateDelegateOfDefaultBehavior(indDlgt, defaultBehavior);
                 Body = behavior;
             }
 

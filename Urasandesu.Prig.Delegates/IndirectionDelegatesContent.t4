@@ -1,12 +1,10 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ assembly name="System.Core" #>
+﻿<#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".g.cs" #>
 <#
 /* 
- * File: IndirectionDelegates.tt
+ * File: IndirectionDelegatesContent.t4
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -33,30 +31,6 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-
-var templates = new[] 
-{ 
-    new GenericDelegateTemplate("IndirectionAction",              0, 0, 17, 0, 0, false), 
-    new GenericDelegateTemplate("IndirectionOutAction",           0, 0, 17, 1, 0, false), 
-    new GenericDelegateTemplate("IndirectionOutOutAction",        0, 0, 17, 2, 0, false), 
-    new GenericDelegateTemplate("IndirectionRefAction",           0, 0, 17, 0, 1, false), 
-    new GenericDelegateTemplate("IndirectionRefRefAction",        0, 0, 17, 0, 2, false), 
-    new GenericDelegateTemplate("IndirectionRefThisAction",       1, 1, 16, 0, 0, false), 
-    new GenericDelegateTemplate("IndirectionRefThisOutAction",    1, 0, 17, 1, 0, false), 
-    new GenericDelegateTemplate("IndirectionRefThisOutOutAction", 1, 0, 17, 2, 0, false), 
-    new GenericDelegateTemplate("IndirectionRefThisRefAction",    1, 0, 17, 0, 1, false), 
-    new GenericDelegateTemplate("IndirectionRefThisRefRefAction", 1, 0, 17, 0, 2, false), 
-    new GenericDelegateTemplate("IndirectionFunc",                0, 0, 17, 0, 0, true), 
-    new GenericDelegateTemplate("IndirectionOutFunc",             0, 0, 17, 1, 0, true), 
-    new GenericDelegateTemplate("IndirectionOutOutFunc",          0, 0, 17, 2, 0, true), 
-    new GenericDelegateTemplate("IndirectionRefFunc",             0, 0, 17, 0, 1, true), 
-    new GenericDelegateTemplate("IndirectionRefRefFunc",          0, 0, 17, 0, 2, true), 
-    new GenericDelegateTemplate("IndirectionRefThisFunc",         1, 1, 16, 0, 0, true), 
-    new GenericDelegateTemplate("IndirectionRefThisOutFunc",      1, 0, 17, 1, 0, true), 
-    new GenericDelegateTemplate("IndirectionRefThisOutOutFunc",   1, 0, 17, 2, 0, true), 
-    new GenericDelegateTemplate("IndirectionRefThisRefFunc",      1, 0, 17, 0, 1, true), 
-    new GenericDelegateTemplate("IndirectionRefThisRefRefFunc",   1, 0, 17, 0, 2, true), 
-};
 #>
 /* 
  * File: IndirectionDelegates.g.cs
@@ -92,8 +66,9 @@ using System;
 using System.Collections.Generic;
 using Urasandesu.NAnonym;
 using Urasandesu.NAnonym.Mixins.System;
+using Urasandesu.Prig.Framework;
 
-namespace Urasandesu.Prig.Framework
+namespace Urasandesu.Prig.Delegates
 {
 <#
 foreach (var template in templates)
@@ -115,16 +90,16 @@ foreach (var template in templates)
     foreach (var methodDef in template.MethodDefinitions)
     {
 #>
-    public static partial class IndirectionDelegates
+    public static class HelperFor<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>
     {
-        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfStatic<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Func<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheGetter, Action<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheSetter, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
+        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfStatic(Func<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheGetter, Action<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheSetter, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
         {
             if (cacheGetter() == null)
             {
                 var dlgt = type.GetMethodDelegate(name, new Type[] { <#= methodDef.LoadParameterTypes() #> });
                 if (dlgt == null)
                     throw new ArgumentException(string.Format("The method '{0}' is not found in the type '{1}'.", name, type));
-                var original = ToStatic<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+                var original = ToStatic(dlgt);
                 cacheSetter(original);
                 System.Diagnostics.Debug.Assert(object.ReferenceEquals(cacheGetter(), original));
             }
@@ -133,7 +108,7 @@ foreach (var template in templates)
             return <#= methodDef.LoadExecutedResult() #>;
         }
 
-        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> ToStatic<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Exec exec)
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> ToStatic(Exec exec)
         {
             return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
             {
@@ -145,7 +120,7 @@ foreach (var template in templates)
             });
         }
 
-        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> CreateDelegateOfDefaultBehavior<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(IndirectionBehaviors defaultBehavior)
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> CreateDelegateOfDefaultBehavior(IndirectionBehaviors defaultBehavior)
         {
             return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
             {
@@ -175,7 +150,7 @@ foreach (var template in templates)
             if (methodDef.MiddleParameterDefinitions.Any())
             {
 #>
-        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> CreateDelegateExecutingDefaultOr<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> defaultBehavior, Dictionary<T1, TargetSettingValue<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>>> indirections)
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> CreateDelegateExecutingDefaultOr(<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> defaultBehavior, Dictionary<T1, TargetSettingValue<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>>> indirections)
         {
             return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
             {
@@ -197,14 +172,14 @@ foreach (var template in templates)
             }
 #>
 
-        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfInstance<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Func<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheGetter, Action<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheSetter, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
+        public static <#= methodDef.DefineReturnType() #> ExecuteOriginalOfInstance(Func<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheGetter, Action<<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>> cacheSetter, Type type, string name<#= string.IsNullOrEmpty(methodDef.DefineParameters()) ? "" : ", " #><#= methodDef.DefineParameters() #>)
         {
             if (cacheGetter() == null)
             {
                 var dlgt = type.GetMethodDelegate(name, new Type[] { <#= methodDef.LoadParameterTypes(2) #> });
                 if (dlgt == null)
                     throw new ArgumentException(string.Format("The method '{0}' is not found in the type '{1}'.", name, type));
-                var original = ToInstance<#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>(dlgt);
+                var original = ToInstance(dlgt);
                 cacheSetter(original);
                 System.Diagnostics.Debug.Assert(object.ReferenceEquals(cacheGetter(), original));
             }
@@ -213,7 +188,7 @@ foreach (var template in templates)
             return <#= methodDef.LoadExecutedResult() #>;
         }
 
-        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> ToInstance<#= methodDef.Name #><#= methodDef.DefineGenericArguments() #>(Exec exec)
+        public static <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #> ToInstance(Exec exec)
         {
             return new <#= methodDef.Name #><#= methodDef.LoadGenericArguments() #>((<#= methodDef.DefineParameters() #>) =>
             {
@@ -235,105 +210,6 @@ foreach (var template in templates)
 <#
 }
 #>
-
-    public static partial class IndirectionDelegates
-    {
-        public static Work CreateDelegateOfDefaultBehaviorUntyped(Type indDlgt, IndirectionBehaviors defaultBehavior)
-        {
-            if (indDlgt == null)
-                throw new ArgumentNullException("indDlgt");
-
-            if (!indDlgt.IsSubclassOf(typeof(MulticastDelegate)))
-                throw new ArgumentException("The parameter must be a delegate type.", "indDlgt");
-
-            var indDlgt_Invoke = indDlgt.GetMethod("Invoke");
-            var @params = indDlgt_Invoke.GetParameters();
-            
-            return new Work(args =>
-            {
-                if (args == null)
-                    throw new ArgumentNullException("args");
-
-                if (defaultBehavior == IndirectionBehaviors.DefaultValue)
-                {
-                    if (args.Length != @params.Length)
-                    {
-                        var msg = string.Format("This default behavior is initialized as {0} parameter(s) method but it is called as {1} parameter(s) method.",
-                                                @params.Length, args.Length);
-                        throw new ArgumentException(msg, "args");
-                    }
-
-                    for (int i = 0; i < @params.Length; i++)
-                    {
-                        if (@params[i].ParameterType.IsByRef)
-                        {
-                            var paramType = @params[i].ParameterType.GetElementType();
-                            args[i] = GetDefaultValue(paramType);
-                        }
-                    }
-
-                    return GetDefaultValue(indDlgt_Invoke.ReturnType);
-                }
-
-                if (defaultBehavior == IndirectionBehaviors.Fallthrough)
-                {
-                    using (InstanceGetters.DisableProcessing())
-                        throw new FallthroughException();
-                }
-
-                using (InstanceGetters.DisableProcessing())
-                    throw new NotImplementedException();
-            });
-        }
-
-        static object GetDefaultValue(Type paramType)
-        {
-            if (paramType == typeof(void))
-                return null;
-            else if (paramType.IsValueType)
-                return Activator.CreateInstance(paramType);
-            else
-                return null;
-        }
-
-        public static Work CreateDelegateExecutingDefaultOrUntypedDelegate(Type indDlgt, Work defaultBehavior, Dictionary<object, TargetSettingValue<Work>> indirections)
-        {
-            if (indDlgt == null)
-                throw new ArgumentNullException("indDlgt");
-
-            if (!indDlgt.IsSubclassOf(typeof(MulticastDelegate)))
-                throw new ArgumentException("The parameter must be a delegate type.", "indDlgt");
-
-            var indDlgt_Invoke = indDlgt.GetMethod("Invoke");
-            var @params = indDlgt_Invoke.GetParameters();
-            if (@params.Length < 1)
-                throw new ArgumentException("The delegate type must have one or more parameters.", "indDlgt");
-
-            return new Work(args =>
-            {
-                if (args == null)
-                    throw new ArgumentNullException("args");
-
-                if (args.Length != @params.Length)
-                {
-                    var msg = string.Format("This default behavior is initialized as {0} parameter(s) method but it is called as {1} parameter(s) method.",
-                                            @params.Length, args.Length);
-                    throw new ArgumentException(msg, "args");
-                }
-
-                if (EqualityComparer<object>.Default.Equals(args[0], default(object)) || !indirections.ContainsKey(args[0]))
-                {
-                    var result = defaultBehavior(args);
-                    return result;
-                }
-                else
-                {
-                    var result = indirections[args[0]].Indirection(args);
-                    return result;
-                }
-            });
-        }
-    }
 }
 
 <#+
@@ -346,7 +222,9 @@ class GenericDelegateTemplate
     readonly int m_lastOutParamCount;
     readonly int m_lastRefParamCount;
     readonly bool m_hasReturn;
-    public GenericDelegateTemplate(string name, int firstRefParamCount, int middleParamStartIndex, int middleParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn)
+    readonly int m_skipCount;
+    readonly int m_takeCount;
+    public GenericDelegateTemplate(string name, int firstRefParamCount, int middleParamStartIndex, int middleParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn, int skipCount, int takeCount)
     {
         m_name = name;
         m_firstRefParamCount = firstRefParamCount;
@@ -355,6 +233,8 @@ class GenericDelegateTemplate
         m_lastOutParamCount = lastOutParamCount;
         m_lastRefParamCount = lastRefParamCount;
         m_hasReturn = hasReturn;
+        m_skipCount = skipCount;
+        m_takeCount = takeCount;
     }
 
     IEnumerable<GenericInvokerDefinition> m_dlgtDefs;
@@ -363,7 +243,7 @@ class GenericDelegateTemplate
         get
         {
             if (m_dlgtDefs == null)
-                m_dlgtDefs = MakeDelegateDefinitions(m_name, m_firstRefParamCount, m_middleParamStartIndex, m_middleParamCount, m_lastOutParamCount, m_lastRefParamCount, m_hasReturn);
+                m_dlgtDefs = MakeDelegateDefinitions(m_name, m_firstRefParamCount, m_middleParamStartIndex, m_middleParamCount, m_lastOutParamCount, m_lastRefParamCount, m_hasReturn).Skip(m_skipCount).Take(m_takeCount);
             return m_dlgtDefs;
         }
     }
@@ -374,7 +254,7 @@ class GenericDelegateTemplate
         get
         {
             if (m_methodDefs == null)
-                m_methodDefs = MakeMethodDefinitions(m_name, m_firstRefParamCount, m_middleParamStartIndex, m_middleParamCount, m_lastOutParamCount, m_lastRefParamCount, m_hasReturn);
+                m_methodDefs = MakeMethodDefinitions(m_name, m_firstRefParamCount, m_middleParamStartIndex, m_middleParamCount, m_lastOutParamCount, m_lastRefParamCount, m_hasReturn).Skip(m_skipCount).Take(m_takeCount);
             return m_methodDefs;
         }
     }
@@ -407,7 +287,7 @@ class GenericDelegateTemplate
         }
     }
 
-    private static void FillCommonSignatureDefinitions(int firstRefParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn, ref IEnumerable<GenericResultParameterDefinition> firstRefParamDefs, ref IEnumerable<GenericResultParameterDefinition> lastOutParamDefs, ref IEnumerable<GenericResultParameterDefinition> lastRefParamDefs, ref GenericReturnDefinition retDef)
+    static void FillCommonSignatureDefinitions(int firstRefParamCount, int lastOutParamCount, int lastRefParamCount, bool hasReturn, ref IEnumerable<GenericResultParameterDefinition> firstRefParamDefs, ref IEnumerable<GenericResultParameterDefinition> lastOutParamDefs, ref IEnumerable<GenericResultParameterDefinition> lastRefParamDefs, ref GenericReturnDefinition retDef)
     {
         firstRefParamDefs = MakeFirstRefParameterDefinitions(1, firstRefParamCount);
         lastOutParamDefs = MakeOutParameterDefinitions(lastOutParamCount);
@@ -878,3 +758,4 @@ class GenericOutReturnDefinition : GenericReturnDefinition
     }
 }
 #>
+

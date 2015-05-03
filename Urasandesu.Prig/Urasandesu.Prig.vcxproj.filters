@@ -646,6 +646,12 @@
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Version.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
+    <ClCompile Include="Urasandesu\Prig\PrigConfig.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Xml.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -685,6 +691,12 @@
       <Filter>Header Files\Urasandesu\Prig</Filter>
     </ClInclude>
     <ClInclude Include="Urasandesu\Prig\IMethodSigEqualToFwd.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\PrigConfig.h">
+      <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="Urasandesu\Prig\PrigConfigFwd.h">
       <Filter>Header Files\Urasandesu\Prig</Filter>
     </ClInclude>
   </ItemGroup>

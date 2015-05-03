@@ -82,6 +82,22 @@
       <Project>{C04A5E86-30E1-4C38-B916-324D000E240E}</Project>
       <Name>Urasandesu.NAnonym</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.Prig.Delegates.0404\Urasandesu.Prig.Delegates.0404.csproj">
+      <Project>{ef9f1b81-8558-44c5-8cc6-84c0e112a5ac}</Project>
+      <Name>Urasandesu.Prig.Delegates.0404</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.Prig.Delegates.0804\Urasandesu.Prig.Delegates.0804.csproj">
+      <Project>{fa517774-800a-4dd7-9a06-6e289193aa40}</Project>
+      <Name>Urasandesu.Prig.Delegates.0804</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.Prig.Delegates.1205\Urasandesu.Prig.Delegates.1205.csproj">
+      <Project>{fffa9d95-2834-49e1-b42e-7f1396dc89b9}</Project>
+      <Name>Urasandesu.Prig.Delegates.1205</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.Prig.Delegates\Urasandesu.Prig.Delegates.csproj">
+      <Project>{6cfa6744-745a-4cd6-8f1e-940d2b025fae}</Project>
+      <Name>Urasandesu.Prig.Delegates</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj">
       <Project>{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}</Project>
       <Name>Urasandesu.Prig.Framework</Name>

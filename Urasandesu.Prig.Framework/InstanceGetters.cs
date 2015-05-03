@@ -50,6 +50,8 @@ namespace Urasandesu.Prig.Framework
             return (string)subKey.GetValue("");
         }
 
+        
+        
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetDllDirectory(string lpPathName);
@@ -96,6 +98,32 @@ namespace Urasandesu.Prig.Framework
         {
             EnterDisabledProcessing();
             return new InstanceGettersProcessingDisabled();
+        }
+
+        
+        
+        static Func<IndirectionAssemblyRepository> ms_newIndirectionAssemblyRepository;
+        internal static Func<IndirectionAssemblyRepository> NewIndirectionAssemblyRepository
+        {
+            get
+            {
+                if (ms_newIndirectionAssemblyRepository == null)
+                    ms_newIndirectionAssemblyRepository = () => new IndirectionAssemblyRepository();
+                return ms_newIndirectionAssemblyRepository;
+            }
+            set { ms_newIndirectionAssemblyRepository = value; }
+        }
+
+        static Func<AdditionalDelegatesAssemblyRepository> ms_newAdditionalDelegatesAssemblyRepository;
+        internal static Func<AdditionalDelegatesAssemblyRepository> NewAdditionalDelegatesAssemblyRepository
+        {
+            get
+            {
+                if (ms_newAdditionalDelegatesAssemblyRepository == null)
+                    ms_newAdditionalDelegatesAssemblyRepository = () => new AdditionalDelegatesAssemblyRepository();
+                return ms_newAdditionalDelegatesAssemblyRepository;
+            }
+            set { ms_newAdditionalDelegatesAssemblyRepository = value; }
         }
     }
 }

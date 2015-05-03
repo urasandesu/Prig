@@ -35,6 +35,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Collections.Generic;
 using Urasandesu.NAnonym.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
@@ -68,7 +70,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             {
                 if (m_indDlgt == null)
                     using (InstanceGetters.DisableProcessing())
-                        m_indDlgt = GetIndirectionDelegateInstance(m_target);
+                        m_indDlgt = GetIndirectionDelegateInstance(m_target, InstanceGetters.NewAdditionalDelegatesAssemblyRepository().FindAll());
                 return m_indDlgt;
             }
         }
@@ -162,42 +164,47 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             }
         }
 
-        static Type GetIndirectionDelegateInstance(MethodBase target)
+        static Type GetIndirectionDelegateInstance(MethodBase target, IEnumerable<Assembly> indDlls)
         {
             Debug.Assert(target != null);
-            var indDlgtAttrType = typeof(IndirectionDelegateAttribute);
-            var indDll = indDlgtAttrType.Assembly;
-            var indDlgts = indDll.GetTypes().Where(_ => _.IsDefined(indDlgtAttrType, false));
-            var indDlgt = indDlgts.FirstOrDefault(new IndirectionDelegateFinder(target).Predicate);
-            if (indDlgt == null)
-                throw new KeyNotFoundException(""); // TODO: 
 
-            if (!indDlgt.IsGenericType)
+            var indDlgtAttrType = typeof(IndirectionDelegateAttribute);
+            foreach (var indDll in indDlls)
             {
-                return indDlgt;
-            }
-            else
-            {
-                var genericArgs = new List<Type>();
-                if (!target.IsStatic)
+                var indDlgts = indDll.GetTypes().Where(_ => _.IsDefined(indDlgtAttrType, false));
+                var indDlgt = indDlgts.FirstOrDefault(new IndirectionDelegateFinder(target).Predicate);
+                if (indDlgt == null)
+                    continue;
+
+                if (!indDlgt.IsGenericType)
                 {
-                    var declaringType = target.DeclaringType;
-                    if (declaringType.IsGenericType)
-                        declaringType = MakeGenericExplicitThisType(declaringType);
-                    genericArgs.Add(declaringType);
+                    return indDlgt;
                 }
-                var @params = target.GetParameters();
-                foreach (var param in @params)
+                else
                 {
-                    var paramType = param.ParameterType;
-                    genericArgs.Add(paramType.IsByRef ? paramType.GetElementType() : paramType);
+                    var genericArgs = new List<Type>();
+                    if (!target.IsStatic)
+                    {
+                        var declaringType = target.DeclaringType;
+                        if (declaringType.IsGenericType)
+                            declaringType = MakeGenericExplicitThisType(declaringType);
+                        genericArgs.Add(declaringType);
+                    }
+                    var @params = target.GetParameters();
+                    foreach (var param in @params)
+                    {
+                        var paramType = param.ParameterType;
+                        genericArgs.Add(paramType.IsByRef ? paramType.GetElementType() : paramType);
+                    }
+                    var _target = default(MethodInfo);
+                    if ((_target = target as MethodInfo) != null && _target.ReturnType != typeof(void))
+                        genericArgs.Add(_target.ReturnType);
+                    var indDlgtInst = indDlgt.MakeGenericType(genericArgs.ToArray());
+                    return indDlgtInst;
                 }
-                var _target = default(MethodInfo);
-                if ((_target = target as MethodInfo) != null && _target.ReturnType != typeof(void))
-                    genericArgs.Add(_target.ReturnType);
-                var indDlgtInst = indDlgt.MakeGenericType(genericArgs.ToArray());
-                return indDlgtInst;
             }
+
+            throw new KeyNotFoundException(""); // TODO: 
         }
 
         static Type MakeGenericExplicitThisType(Type target)
