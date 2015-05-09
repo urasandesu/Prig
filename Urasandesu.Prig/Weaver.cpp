@@ -373,6 +373,10 @@ namespace CWeaverDetail {
             pDomainProf->SetData(asmId, pData);
         }
 
+        auto *pDisp = pDomainProf->GetMetadataDispenser();
+        auto &asmResolver = pDisp->GetAssemblyResolver();
+        asmResolver.AddSearchDirectory(m_currentDir);
+
         return S_OK;
     }
 
@@ -450,8 +454,12 @@ namespace CWeaverDetail {
         if (!prigData.m_indirectablesInit)
         {
             CPPANONYM_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit");
-            auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
+            auto const &corVersion = prigData.m_corVersion;
+            auto libPath = m_pkgPath / (corVersion == L"v2.0.50727" ? L"lib\\net35" : L"lib\\net40");
+            auto prigFrmwrkName = wstring(L"Urasandesu.Prig.Framework.") + corVersion + L".v0.1.0.0.MSIL.dll";
+            auto const *pPrigFrmwrk = pDisp->GetAssemblyFrom(libPath / prigFrmwrkName);
             auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
+            prigData.m_pPrigFrameworkDll = pPrigFrmwrkDll;
             auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
             auto const *pIndAsm = pDisp->GetAssemblyFrom(prigData.m_indDllPath);
             auto indAttrs = pIndAsm->GetCustomAttributes(pIndAttrType);
@@ -485,8 +493,6 @@ namespace CWeaverDetail {
                     indDlgts.m_pIndirectionDelegatesAssembly = pDisp->GetAssemblyFrom(additionalDlgt.HintPath);
             }
             
-            auto const &corVersion = prigData.m_corVersion;
-            auto libPath = m_pkgPath / (corVersion == L"v2.0.50727" ? L"lib\\net35" : L"lib\\net40");
             auto prigDelegatesNames = vector<wstring>(4);
             prigDelegatesNames[0] = L"Urasandesu.Prig.Delegates." + corVersion + L".v0.1.0.0.MSIL.dll";
             prigDelegatesNames[1] = L"Urasandesu.Prig.Delegates.0404." + corVersion + L".v0.1.0.0.MSIL.dll";
@@ -595,12 +601,11 @@ namespace CWeaverDetail {
         CPPANONYM_V_LOG1("Processing time to get BCL definitions 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
         timer = cpu_timer();
 
-        auto const *pPrigFrmwrk = pDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
-        auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
-
         CPPANONYM_V_LOG1("Processing time to find Urasandesu.Prig.Framework: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
         timer = cpu_timer();
 
+        _ASSERTE(prigData.m_pPrigFrameworkDll);
+        auto const *pPrigFrmwrkDll = prigData.m_pPrigFrameworkDll;
         auto const *pIndInfo = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionInfo");
         auto const *pIndHolder1 = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionHolder`1");
         auto const *pIndDlgtAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionDelegateAttribute");

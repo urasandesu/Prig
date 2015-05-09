@@ -84,14 +84,14 @@ About more previous versions, please see https://github.com/urasandesu/Prig/rele
     </dependencies> 
   </metadata>
   <files>
-    <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.NAnonym.dll" target="lib\net35\" />
-    <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Framework.dll" target="lib\net35\" />
+    <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll" target="lib\net35\" />
+    <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll" target="lib\net35\" />
     <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Delegates.v2.0.50727.v0.1.0.0.MSIL.dll" target="lib\net35\" />
     <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Delegates.0404.v2.0.50727.v0.1.0.0.MSIL.dll" target="lib\net35\" />
     <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Delegates.0804.v2.0.50727.v0.1.0.0.MSIL.dll" target="lib\net35\" />
     <file src="..\Release(.NET 3.5)\AnyCPU\Urasandesu.Prig.Delegates.1205.v2.0.50727.v0.1.0.0.MSIL.dll" target="lib\net35\" />
-    <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.NAnonym.dll" target="lib\net40\" />
-    <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Framework.dll" target="lib\net40\" />
+    <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll" target="lib\net40\" />
+    <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll" target="lib\net40\" />
     <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Delegates.v4.0.30319.v0.1.0.0.MSIL.dll" target="lib\net40\" />
     <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Delegates.0404.v4.0.30319.v0.1.0.0.MSIL.dll" target="lib\net40\" />
     <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Delegates.0804.v4.0.30319.v0.1.0.0.MSIL.dll" target="lib\net40\" />

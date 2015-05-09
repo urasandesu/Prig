@@ -60,6 +60,7 @@ namespace Urasandesu { namespace Prig {
         using std::wstring;
         using Urasandesu::Swathe::Metadata::ICustomAttribute;
         using Urasandesu::Swathe::Metadata::IAssembly;
+        using Urasandesu::Swathe::Metadata::IModule;
         using Urasandesu::Swathe::Metadata::IMethod;
         using Urasandesu::Swathe::Metadata::IType;
         
@@ -80,7 +81,8 @@ namespace Urasandesu { namespace Prig {
             noncopyable
         {
             PrigData() : 
-                m_indirectablesInit(false)
+                m_indirectablesInit(false), 
+                m_pPrigFrameworkDll(nullptr)
             { }
 
             wstring m_corVersion;
@@ -89,6 +91,7 @@ namespace Urasandesu { namespace Prig {
             bool m_indirectablesInit;
             ptr_vector<IndirectionDelegates> m_indirectionDelegatesList;
             unordered_map<IMethod const *, IType const *, IMethodSigHash, IMethodSigEqualTo> m_indDlgtCache;
+            IModule const *m_pPrigFrameworkDll;
         };
 
     }   // namespace PrigDataDetail {
