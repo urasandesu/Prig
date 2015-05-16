@@ -259,7 +259,7 @@ namespace prig {
                 (
                 "filter", 
                 wvalue<wstring>(), 
-                "Filter to list. It is used as partial matching term, and also the case is ignored. If this option is not specified, the command enumerates all installed packages.\n"
+                "Filter to list. Against the package name or source, it is used as regular expression pattern, and also the case is ignored. If this option is not specified, the command enumerates all installed packages.\n"
                 "\n")
                 (
                 "localonly", 
@@ -309,7 +309,7 @@ namespace prig {
             auto updaterDesc = options_description
                 (
                 "UPDATER OPTIONS\n"
-                "Specify options to upgrade a package.\n"
+                "Specify options to update a package.\n"
                 "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig update All -delegate \"C:\\Users\\User\\AdditionalDelegates\\ThreeOrMoreRefOutDelegates\\bin\\Release\\ThreeOrMoreRefOutDelegates.dll\"\n"
@@ -324,12 +324,13 @@ namespace prig {
                 (
                 "package", 
                 wvalue<wstring>()->required(), 
-                "Specify the packages to update by semicolon delimited format. `All` indicates applying same upgrade option to all installed packages.\n"
+                "Specify the packages to update by semicolon delimited format. `All` indicates applying same update option to all installed packages.\n"
                 "\n")
                 (
                 "delegate", 
                 wvalue<wstring>(), 
-                "A configuration for update. This option adds the assembly that contains the indirection delegates. This option can only be specified when specifying `package` option to `All`. If its path contains any spaces, you shall surround with \"(double quotes). Also, if you want to use multiple assemblies, specify them by semicolon delimited format.\n"
+                "A configuration for update. This option adds the assembly that contains the indirection delegates. This option can only be specified when specifying `package` option to `All`. If its path contains any spaces, you shall surround with \"(double quotes). Also, if you want to use multiple assemblies, specify them by semicolon delimited format.\n" 
+                "NOTE: You have to specify at least one configuration.\n"
                 "\n");
 
             if (globalVm.count("help"))
@@ -351,10 +352,20 @@ namespace prig {
             auto package = updaterVm["package"].as<wstring>();
             to_lower(package);
                 
+            auto hasAnyConfig = false;
             auto delegate_ = wstring();
             if (updaterVm.count("delegate"))
-                delegate_ = updaterVm["delegate"].as<wstring>();
+            {
+                if (package != L"all")
+                    return CommandFactory::MakeHelpCommand(updaterDesc);
                 
+                delegate_ = updaterVm["delegate"].as<wstring>();
+                hasAnyConfig = true;
+            }
+                
+            if (!hasAnyConfig)
+                return CommandFactory::MakeHelpCommand(updaterDesc);
+            
             return CommandFactory::MakeUpdaterCommand(package, delegate_);
         }
 
@@ -384,7 +395,7 @@ namespace prig {
                 (
                 "package", 
                 wvalue<wstring>()->required(), 
-                "Package to uninstall. You have to specify the package name that is same as when installed. However, the case is insensitive.\n"
+                "Package to uninstall. You have to specify the package name that is same as when installed. However, the case is insensitive. `All` indicates uninstalling all packages.\n"
                 "This option is mandatory.\n"
                 "\n");
 

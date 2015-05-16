@@ -28,16 +28,17 @@
 #
 
 
+$chocoToolsPath = [IO.Path]::Combine($env:chocolateyPackageFolder, 'tools')
+
+
 '  Uninstalling Prig.vsix...'
 cmd /c '" "%VS120COMNTOOLS%VsDevCmd.bat" & vsixinstaller /q /u:0a06101d-8de3-40c4-b083-c5c16ca227ae "'
 
 
-$asms = 'Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL', 
-        'Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL'
-foreach ($asm in $asms) {
-    "  Unregistering the assembly '$asm' from GAC..."
-    cmd /c ('" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /nologo /u "{0}" "' -f $asm)
-}
+$prig = [IO.Path]::Combine($chocoToolsPath, 'prig.exe')
+$packageName = "All"
+"  Uninstalling the all package..."
+& $prig uninstall $packageName
 
 
 $profilers = [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'tools\x64\Urasandesu.Prig.dll'), 

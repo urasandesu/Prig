@@ -91,12 +91,6 @@
     <Filter Include="Source Files\Urasandesu\Swathe\Metadata">
       <UniqueIdentifier>{57a8ed83-e0da-4a8a-ad81-dda0aba6cbb2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Urasandesu">
-      <UniqueIdentifier>{5f1ff073-b0c3-4790-84f1-d1ef8139e591}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Urasandesu\Prig">
-      <UniqueIdentifier>{0c478961-5b1e-40a3-89da-b3e8a66013d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\prig">
       <UniqueIdentifier>{4b3e5bef-9080-4593-aad2-4bf21743d1a8}</UniqueIdentifier>
     </Filter>
@@ -108,6 +102,9 @@
     </Filter>
     <Filter Include="Source Files\Urasandesu\CppAnonym\Diagnostics">
       <UniqueIdentifier>{3b58a984-7466-4883-9c94-83a72d86e384}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Urasandesu\Prig">
+      <UniqueIdentifier>{76b101b0-ca40-49bc-8f2c-c4b4f904c74e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -733,6 +730,27 @@
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Diagnostics\Process.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym\Diagnostics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Urasandesu.Prig\Urasandesu\Prig\IMethodSigEqualTo.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Urasandesu.Prig\Urasandesu\Prig\IMethodSigHash.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Urasandesu.Prig\Urasandesu\Prig\PrigConfig.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Urasandesu.Prig\Urasandesu\Prig\PrigData.cpp">
+      <Filter>Source Files\Urasandesu\Prig</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Xml.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\IO.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Json.cpp">
+      <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

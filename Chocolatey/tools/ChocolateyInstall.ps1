@@ -28,15 +28,21 @@
 #
 
 
-$toolsPath = [IO.Path]::Combine($env:chocolateyPackageFolder, 'tools')
+$chocoToolsPath = [IO.Path]::Combine($env:chocolateyPackageFolder, 'tools')
 
 
-$srcList = Resolve-Path ($toolsPath + '\*.zip')
-foreach ($src in $srcList) {
-    $dst = $src -replace '\.zip$', ''
+foreach ($hedge in (dir $env:chocolateyPackageFolder -r | ? { $_.Extension -eq '.hedge' })) {
+    $src = $hedge.FullName
+    $dst = $src -replace '\.hedge$', ''
     "  Renaming '$src' to '$dst'..."
     Move-Item $src $dst -Force
 }
+
+
+$packageName = "Prig"
+"  Creating the nuget package '$packageName'..."
+$nugetPackageFolder = [IO.Path]::Combine($chocoToolsPath, 'NuGet')
+nuget pack ([IO.Path]::Combine($nugetPackageFolder, "Prig.nuspec")) -OutputDirectory $chocoToolsPath
 
 
 $name = "Prig Source"
@@ -63,18 +69,15 @@ foreach ($profiler in $profilers) {
 }
 
 
-$asms = [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'lib\net35\Urasandesu.NAnonym.dll'), 
-        [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'lib\net35\Urasandesu.Prig.Framework.dll'), 
-        [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'lib\net40\Urasandesu.NAnonym.dll'), 
-        [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'lib\net40\Urasandesu.Prig.Framework.dll')
-foreach ($asm in $asms) {
-    "  Registering the assembly '$asm' to GAC..."
-    cmd /c ('" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /f /nologo /i "{0}" "' -f $asm)
-}
+$prig = [IO.Path]::Combine($chocoToolsPath, 'prig.exe')
+$packageName = "TestWindow"
+$source = "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow"
+"  Installing the default source '$source' as the package '$packageName'..."
+& $prig install $packageName -source $source
 
 
 $packageName = 'Prig'
-$vsixPath = [IO.Path]::Combine($toolsPath, 'Prig.vsix')
+$vsixPath = [IO.Path]::Combine($chocoToolsPath, 'Prig.vsix')
 $vsixUrl = ([uri]$vsixPath).AbsoluteUri
 
 Install-ChocolateyVsixPackage $packageName $vsixUrl

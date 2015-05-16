@@ -35,15 +35,60 @@
 #include <prig/ListerCommand.h>
 #endif
 
+#ifndef URASANDESU_PRIG_PRIGCONFIG_H
+#include <Urasandesu/Prig/PrigConfig.h>
+#endif
+
 namespace prig { 
 
     namespace ListerCommandDetail {
         
         int ListerCommandImpl::Execute()
         {
-            std::wcout << L"filter: " << m_filter << std::endl;
-            std::wcout << L"localonly: " << m_localonly << std::endl;
-            BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+            using namespace Urasandesu::CppAnonym::Json;
+            using boost::property_tree::wptree;
+            using std::endl;
+            using std::regex_constants::icase;
+            using std::wregex;
+            using std::wcout;
+            using Urasandesu::Prig::PrigConfig;
+            
+            
+            auto pattern = wregex(m_filter, icase);
+            
+            auto prigConfigPath = PrigConfig::GetConfigPath();
+            
+            auto config = PrigConfig();
+            config.TrySerializeFrom(prigConfigPath);
+            
+            auto pt = wptree();
+            auto pkgspt = wptree();
+            BOOST_FOREACH (auto const &pkg, config.Packages)
+            {
+                if (!m_filter.empty() && 
+                    !regex_search(pkg.Name, pattern) &&
+                    !regex_search(pkg.Source.native(), pattern))
+                    continue;
+                
+                auto pkgpt = wptree();
+                pkgpt.put(L"Name", pkg.Name);
+                pkgpt.put(L"Source", pkg.Source.native());
+                auto additionalDlgtspt = wptree();
+                BOOST_FOREACH (auto const &additionalDlgt, pkg.AdditionalDelegates)
+                {
+                    auto additionalDlgtpt = wptree();
+                    additionalDlgtpt.put(L"FullName", additionalDlgt.FullName);
+                    additionalDlgtpt.put(L"HintPath", additionalDlgt.HintPath.native());
+                    additionalDlgtspt.push_back(make_pair(L"", additionalDlgtpt));
+                }
+                pkgpt.add_child(L"AdditionalDelegates", additionalDlgtspt);
+                pkgspt.push_back(make_pair(L"", pkgpt));
+            }
+            pt.add_child(L"Packages", pkgspt); 
+            
+            wcout << pt << endl;
+            
+            return 0;
         }
 
         

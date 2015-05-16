@@ -44,6 +44,7 @@ namespace prig {
 
     namespace InstallerCommandDetail {
 
+        using boost::filesystem::path;
         using std::wstring;
 
         class InstallerCommandImpl
@@ -55,10 +56,10 @@ namespace prig {
             friend class CommandFactoryDetail::CommandFactoryImpl;
 
             void SetPackage(wstring const &package);
-            void SetSource(wstring const &source);
+            void SetSource(path const &source);
 
             wstring m_package;
-            wstring m_source;
+            path m_source;
         };
 
     }   // namespace InstallerCommandDetail {

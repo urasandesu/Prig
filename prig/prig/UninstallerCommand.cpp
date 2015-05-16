@@ -35,14 +35,95 @@
 #include <prig/UninstallerCommand.h>
 #endif
 
+#ifndef URASANDESU_PRIG_PRIGCONFIG_H
+#include <Urasandesu/Prig/PrigConfig.h>
+#endif
+
 namespace prig { 
 
     namespace UninstallerCommandDetail {
         
+        using boost::filesystem::path;
+        using std::vector;
+        using Urasandesu::Prig::PrigConfig;
+        using Urasandesu::Prig::PrigPackageConfig;
+        
+        void FillPrigDllNames(path const &libPath, vector<wstring> &prigDllNames)
+        {
+            using boost::filesystem::recursive_directory_iterator;
+            
+            for (recursive_directory_iterator i(libPath), i_end; i != i_end; ++i)
+            {
+                if (!is_regular_file(i->status()))
+                    continue;
+                
+                prigDllNames.push_back(i->path().filename().native());
+            }
+        }
+
+        void RemoveSymLinkForPrigLib(PrigPackageConfig const &pkg, vector<wstring> const &prigDllNames)
+        {
+            if (!exists(pkg.Source))
+                return;
+            
+            BOOST_FOREACH (auto const &prigDllName, prigDllNames)
+            {
+                auto symlink = pkg.Source / prigDllName;
+                if (exists(symlink))
+                    remove(symlink);
+            }
+        }
+
+        void RemoveSymLinkForAdditionalDelegates(PrigPackageConfig const &pkg)
+        {
+            if (!exists(pkg.Source))
+                return;
+            
+            BOOST_FOREACH (auto const &additionalDlgt, pkg.AdditionalDelegates)
+            {
+                auto symlink = pkg.Source / additionalDlgt.HintPath.filename();
+                if (exists(symlink))
+                    remove(symlink);
+            }
+        }
+
         int UninstallerCommandImpl::Execute()
         {
-            std::wcout << L"package: " << m_package << std::endl;
-            BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+            using boost::wformat;
+            using std::endl;
+            using std::wcout;
+            
+            
+            auto prigConfigPath = PrigConfig::GetConfigPath();
+            
+            auto config = PrigConfig();
+            config.TrySerializeFrom(prigConfigPath);
+            
+            auto pkgs = config.FindPackages(m_package);
+            auto hasProcessed = false;
+            auto prigDllNames = vector<wstring>();
+            BOOST_FOREACH (auto const &pkg, pkgs)
+            {
+                if (!hasProcessed)
+                {
+                    hasProcessed = true;
+                    
+                    auto libPath = PrigConfig::GetLibPath();
+                    FillPrigDllNames(libPath, prigDllNames);
+                }
+                
+                RemoveSymLinkForPrigLib(pkg, prigDllNames);
+                RemoveSymLinkForAdditionalDelegates(pkg);
+                config.DeletePackage(pkg);
+            }
+            if (!hasProcessed)
+            {
+                wcout << wformat(L"The specified package:%|1$s| is not found. It might have been already uninstalled.") % m_package << endl;
+                return 0;
+            }
+            
+            config.TryDeserializeTo(prigConfigPath);
+            return 0;
         }
 
         

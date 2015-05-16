@@ -35,15 +35,73 @@
 #include <prig/InstallerCommand.h>
 #endif
 
+#ifndef URASANDESU_PRIG_PRIGCONFIG_H
+#include <Urasandesu/Prig/PrigConfig.h>
+#endif
+
 namespace prig { 
 
     namespace InstallerCommandDetail {
         
+        using Urasandesu::Prig::PrigConfig;
+        using Urasandesu::Prig::PrigPackageConfig;
+
+        bool CreateSymLinkForPrigLib(path const &libPath, path const &source)
+        {
+            using boost::filesystem::create_symlink;
+            using boost::filesystem::exists;
+            using boost::filesystem::recursive_directory_iterator;
+            using boost::filesystem::remove;
+
+            if (!exists(source))
+                return false;
+            
+            for (recursive_directory_iterator i(libPath), i_end; i != i_end; ++i)
+            {
+                if (!is_regular_file(i->status()))
+                    continue;
+                
+                auto symlink = source / i->path().filename();
+                if (exists(symlink))
+                    remove(symlink);
+                create_symlink(i->path(), symlink);
+            }
+
+            return true;
+        }
+        
         int InstallerCommandImpl::Execute()
         {
-            std::wcout << L"package: " << m_package << std::endl;
-            std::wcout << L"source: " << m_source << std::endl;
-            BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+            using boost::wformat;
+            using std::endl;
+            using std::wcout;
+            
+            
+            auto prigConfigPath = PrigConfig::GetConfigPath();
+            
+            auto config = PrigConfig();
+            config.TrySerializeFrom(prigConfigPath);
+            
+            auto result = config.FindPackage(m_source);
+            if (result)
+            {
+                wcout << wformat(L"The specified source:%|1$s| has already installed.") % m_source << endl;
+                return 0;
+            }
+            
+            auto libPath = PrigConfig::GetLibPath();
+            if (!CreateSymLinkForPrigLib(libPath, m_source))
+            {
+                wcout << wformat(L"The specified source:%|1$s| is invalid.") % m_source << endl;
+                return 1;
+            }
+            
+            auto package = PrigPackageConfig();
+            package.Name = m_package;
+            package.Source = m_source;
+            config.Packages.push_back(package);
+            config.TryDeserializeTo(prigConfigPath);
+            return 0;
         }
 
         
@@ -56,7 +114,7 @@ namespace prig {
 
         
         
-        void InstallerCommandImpl::SetSource(wstring const &source)
+        void InstallerCommandImpl::SetSource(path const &source)
         {
             _ASSERTE(m_source.empty());
             m_source = source;

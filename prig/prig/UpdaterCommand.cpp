@@ -35,15 +35,113 @@
 #include <prig/UpdaterCommand.h>
 #endif
 
+#ifndef URASANDESU_PRIG_PRIGCONFIG_H
+#include <Urasandesu/Prig/PrigConfig.h>
+#endif
+
 namespace prig { 
 
     namespace UpdaterCommandDetail {
         
+        using boost::filesystem::path;
+        using std::vector;
+        using Urasandesu::Prig::PrigConfig;
+        using Urasandesu::Prig::PrigPackageConfig;
+        using Urasandesu::Prig::PrigAdditionalDelegateConfig;
+
+        bool FillDelegatePaths(wstring const &delegate_, vector<path> &delegatePaths)
+        {
+            using boost::is_any_of;
+            using boost::split;
+            
+            auto strs = vector<wstring>();
+            split(strs, delegate_, is_any_of(L";"));
+            BOOST_FOREACH (auto const &str, strs)
+            {
+                if (str.empty())
+                    continue;
+                
+                delegatePaths.push_back(str);
+                if (!exists(delegatePaths.back()))
+                    return false;
+            }
+            
+            return true;
+        }
+
+        void FillAdditionalDelegates(vector<path> const &delegatePaths, vector<PrigAdditionalDelegateConfig> &additionalDlgts)
+        {
+            using namespace Urasandesu::Swathe::Hosting;
+            using namespace Urasandesu::Swathe::Metadata;
+
+            auto const *pHost = HostInfo::CreateHost();
+            auto const *pRuntime = pHost->GetRuntime(L"v4.0.30319");    // Specifying the fixed version is enough because we want to just get the display name of the assembly.
+            auto const *pMetaInfo = pRuntime->GetInfo<MetadataInfo>();
+            auto const *pDisp = pMetaInfo->CreateDispenser();
+            BOOST_FOREACH (auto const &delegatePath, delegatePaths)
+            {
+                auto additionalDlgt = PrigAdditionalDelegateConfig();
+                additionalDlgt.FullName = pDisp->GetAssemblyFrom(delegatePath)->GetFullName();
+                additionalDlgt.HintPath = delegatePath;
+                additionalDlgts.push_back(additionalDlgt);
+            }
+        }
+
+        void CreateSymLinkForAdditionalDelegates(PrigPackageConfig const &pkg, vector<PrigAdditionalDelegateConfig> const &additionalDlgts)
+        {
+            BOOST_FOREACH (auto const &additionalDlgt, additionalDlgts)
+            {
+                auto symlink = pkg.Source / additionalDlgt.HintPath.filename();
+                if (exists(symlink))
+                    remove(symlink);
+                create_symlink(additionalDlgt.HintPath, symlink);
+            }
+        }
+
         int UpdaterCommandImpl::Execute()
         {
-            std::wcout << L"package: " << m_package << std::endl;
-            std::wcout << L"delegate_: " << m_delegate << std::endl;
-            BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException());
+            using boost::wformat;
+            using std::endl;
+            using std::wcout;
+            using Urasandesu::CppAnonym::CppAnonymNotSupportedException;
+            
+            if (!m_delegate.empty())
+            {
+                auto delegatePaths = vector<path>();
+                if (!FillDelegatePaths(m_delegate, delegatePaths))
+                {
+                    wcout << wformat(L"The specified delegate:\"%|1$s|\" is invalid. It contains the path %|2$s| that doesn't exist.") % m_delegate % delegatePaths.back() << endl;
+                    return 1;
+                }
+                
+                auto additionalDlgts = vector<PrigAdditionalDelegateConfig>();
+                FillAdditionalDelegates(delegatePaths, additionalDlgts);
+                
+                auto prigConfigPath = PrigConfig::GetConfigPath();
+                
+                auto config = PrigConfig();
+                config.TrySerializeFrom(prigConfigPath);
+                
+                auto hasProcessed = false;
+                BOOST_FOREACH (auto &pkg, config.Packages)
+                {
+                    if (!hasProcessed)
+                        hasProcessed = true;
+                    
+                    CreateSymLinkForAdditionalDelegates(pkg, additionalDlgts);
+                    pkg.AddOrUpdateAdditionalDelegates(additionalDlgts);
+                }
+                if (!hasProcessed)
+                {
+                    wcout << wformat(L"The specified package:%|1$s| is not found. It might have been already uninstalled.") % m_package << endl;
+                    return 1;
+                }
+                
+                config.TryDeserializeTo(prigConfigPath);
+                return 0;
+            }
+            
+            BOOST_THROW_EXCEPTION(CppAnonymNotSupportedException(L"We shouldn't get here."));
         }
 
         

@@ -79,12 +79,9 @@ Version 0.0.0-alpha9
 
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.
     </releaseNotes>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="Urasandesu.NAnonym" />
-      <frameworkAssembly assemblyName="Urasandesu.Prig.Framework" />
-    </frameworkAssemblies>
   </metadata>
   <files>
+    <file src="..\..\lib\**\*.*" target="lib" />
     <file src="tools\**\*.*" target="tools" />
   </files>
 </package>

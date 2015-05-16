@@ -88,8 +88,6 @@ namespace CWeaverDetail {
         using Urasandesu::CppAnonym::Collections::FindIf;
         using Urasandesu::CppAnonym::CppAnonymInvalidOperationException;
         using Urasandesu::CppAnonym::Environment;
-        using Urasandesu::CppAnonym::Xml::operator >>;
-        using Urasandesu::CppAnonym::Xml::FromUTF8;
         using Urasandesu::Prig::PrigConfig;
 
 #ifdef _DEBUG
@@ -153,12 +151,10 @@ namespace CWeaverDetail {
                 CPPANONYM_D_LOGW1(L"Indirection DLL: %|1$s|", indDllPath.native());
         }
 
-        m_pkgPath = path(Environment::GetEnvironmentVariable(L"URASANDESU_PRIG_PACKAGE_FOLDER"));
-        auto toolsPath = m_pkgPath / L"tools";
-        auto prigConfigPath = toolsPath / L"Prig.config";
+        m_pkgPath = PrigConfig::GetPackagePath();
         
         auto config = PrigConfig();
-        FromUTF8(prigConfigPath) >> make_nvp("Config", config);
+        config.TrySerializeFrom(PrigConfig::GetConfigPath());
             
         auto procDirPath = procPath.parent_path();
         auto result = FindIf(config.Packages, [&procDirPath](PrigPackageConfig const &pkg) { return equivalent(pkg.Source, procDirPath); });
@@ -880,6 +876,7 @@ namespace CWeaverDetail {
             }
             
             // find IndirectionDelegate which has same signature with the target method and cache it.
+            if (!pIndDlgt)
             {
                 auto result = FindIf(pDlgts.m_indirectionDelegates, IndirectionDelegateFinder(pTarget));
                 if (!result)

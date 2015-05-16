@@ -67,14 +67,6 @@ try {
 }
 
 
-try {
-    nant -help | Out-Null
-} catch [System.Management.Automation.CommandNotFoundException] {
-    Write-Error "You have to install NAnt. For more information, please see also README.md."
-    exit 1444470369
-}
-
-
 if (![string]::IsNullOrEmpty($BuildTarget)) {
     $buildTarget_ = ":" + $BuildTarget
 }
@@ -99,49 +91,7 @@ switch ($PsCmdlet.ParameterSetName) {
             }
         }
 
-        $solution = "NUnitTestAdapter\NUnitTestAdapter.sln"
-        nuget restore $solution
-        $target = "/t:NUnitTestAdapter$buildTarget_;NUnitTestAdapterInstall$buildTarget_"
-        $configurations = , "/p:Configuration=Release"
-        $platforms = , "/p:Platform=Any CPU"
-        foreach ($configuration in $configurations) {
-            foreach ($platform in $platforms) {
-                Write-Verbose ("Solution: {0}" -f $solution)
-                Write-Verbose ("Target: {0}" -f $target)
-                Write-Verbose ("Configuration: {0}" -f $configuration)
-                Write-Verbose ("Platform: {0}" -f $platform)
-                msbuild $solution $target $configuration $platform /m
-                if ($LASTEXITCODE -ne 0) {
-                    exit $LASTEXITCODE
-                }
-            }
-        }
-
         $curDir = $PWD.Path
-        if ($BuildTarget -ne "Clean") {
-            Set-Location ([System.IO.Path]::Combine($curDir, 'NuGet'))
-            [System.Environment]::CurrentDirectory = $PWD
-            nuget pack .\Prig.nuspec
-            $src = (Resolve-Path *.nupkg).Path
-            $dst = $src + '.zip'
-            Move-Item $src $dst -Force
-        }
-
-        if ($BuildTarget -ne "Clean") {
-            Set-Location ([System.IO.Path]::Combine($curDir, 'NUnitTestAdapter'))
-            [System.Environment]::CurrentDirectory = $PWD
-            nant package
-            Set-Location 'package'
-            [System.Environment]::CurrentDirectory = $PWD
-            $nuspec = [xml]((Get-ChildItem NUnitVisualStudioTestAdapter-*.nuspec) | Get-Content)
-            $nuspec.package.metadata.id = 'NUnitTestAdapterForPrig'
-            $nuspec.Save('NUnitTestAdapterForPrig.nuspec')
-            nuget pack .\NUnitTestAdapterForPrig.nuspec
-            $src = (Resolve-Path .\NUnitTestAdapterForPrig.*.nupkg).Path
-            $dst = $src + '.zip'
-            Move-Item $src $dst -Force
-        }
-
         if ($BuildTarget -ne "Clean") {
             Set-Location ([System.IO.Path]::Combine($curDir, 'Chocolatey'))
             [System.Environment]::CurrentDirectory = $PWD

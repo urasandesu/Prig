@@ -71,6 +71,7 @@ namespace Urasandesu { namespace Prig {
     namespace PrigConfigDetail {
 
         using boost::filesystem::path;
+        using boost::optional;
         using std::vector;
         using std::wstring;
 
@@ -97,6 +98,8 @@ namespace Urasandesu { namespace Prig {
             path Source;
             vector<PrigAdditionalDelegateConfig> AdditionalDelegates;
 
+            void AddOrUpdateAdditionalDelegates(vector<PrigAdditionalDelegateConfig> const &additionalDlgts);
+
         private:
             friend class boost::serialization::access;
             template <class Archive>
@@ -111,7 +114,18 @@ namespace Urasandesu { namespace Prig {
         class PrigConfig
         {
         public: 
+            static wstring const FILE_NAME;
             vector<PrigPackageConfig> Packages;
+
+            static path const &GetPackagePath();
+            static path const &GetToolsPath();
+            static path const &GetLibPath();
+            static path const &GetConfigPath();
+            bool TrySerializeFrom(path const &prigConfigPath);
+            bool TryDeserializeTo(path const &prigConfigPath) const;
+            optional<PrigPackageConfig> FindPackage(path const &source) const;
+            vector<PrigPackageConfig> FindPackages(wstring const &pkgName) const;
+            void DeletePackage(PrigPackageConfig const &item);
 
         private:
             friend class boost::serialization::access;
