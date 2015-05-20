@@ -97,6 +97,7 @@ About more previous versions, please see https://github.com/urasandesu/Prig/rele
     <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Delegates.0804.v4.0.30319.v0.1.0.0.MSIL.dll" target="lib\net40\" />
     <file src="..\Release(.NET 4)\AnyCPU\Urasandesu.Prig.Delegates.1205.v4.0.30319.v0.1.0.0.MSIL.dll" target="lib\net40\" />
     <file src="..\Release\x86\Prig.vsix" target="tools" />
+    <file src="..\NUnitTestAdapter\package\*.nupkg.hedge" target="tools" />
     <file src="..\Release\x64\Urasandesu.Prig.dll" target="tools\x64\" />
     <file src="..\Release\x86\Urasandesu.Prig.dll" target="tools\x86\" />
     <file src="..\Release\x86\prig.exe" target="tools" />

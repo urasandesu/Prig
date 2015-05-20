@@ -36,14 +36,6 @@
 #include <Urasandesu/Swathe.h>
 #endif
 
-#ifndef URASANDESU_PRIG_IMETHODSIGHASH_H
-#include <Urasandesu/Prig/IMethodSigHash.h>
-#endif
-
-#ifndef URASANDESU_PRIG_IMETHODSIGEQUALTO_H
-#include <Urasandesu/Prig/IMethodSigEqualTo.h>
-#endif
-
 #ifndef URASANDESU_PRIG_PRIGDATAFWD_H
 #include <Urasandesu/Prig/PrigDataFwd.h>
 #endif
@@ -61,7 +53,6 @@ namespace Urasandesu { namespace Prig {
         using Urasandesu::Swathe::Metadata::ICustomAttribute;
         using Urasandesu::Swathe::Metadata::IAssembly;
         using Urasandesu::Swathe::Metadata::IModule;
-        using Urasandesu::Swathe::Metadata::IMethod;
         using Urasandesu::Swathe::Metadata::IType;
         
         struct IndirectionDelegates : 
@@ -90,7 +81,6 @@ namespace Urasandesu { namespace Prig {
             unordered_map<mdToken, ICustomAttribute const *> m_indirectables;
             bool m_indirectablesInit;
             ptr_vector<IndirectionDelegates> m_indirectionDelegatesList;
-            unordered_map<IMethod const *, IType const *, IMethodSigHash, IMethodSigEqualTo> m_indDlgtCache;
             IModule const *m_pPrigFrameworkDll;
         };
 

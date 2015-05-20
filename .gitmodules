@@ -7,3 +7,6 @@
 [submodule "Swathe"]
 	path = Swathe
 	url = git@github.com:urasandesu/Swathe.git
+[submodule "NUnitTestAdapter"]
+	path = NUnitTestAdapter
+	url = git@github.com:urasandesu/nunit-vs-adapter.git

@@ -66,6 +66,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 
+// regsvr32 /i .\x86\Urasandesu.Prig.dll
+// regsvr32 /i .\x64\Urasandesu.Prig.dll
+
 // SET URASANDESU_CPPANONYM_LOGGING_SEVERITY=0
 // SET URASANDESU_PRIG_DEBUGGING_BREAK=10000
 //  System.Environment.SetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK", "-1");

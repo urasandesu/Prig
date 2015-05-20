@@ -247,7 +247,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
                         var original = holder.Source.Value[target].Original;
                         var indirection = holder.Source.Value[target].Indirection;
                     }
-                    Body = HelperForUntypedIndirectionDelegate.CreateDelegateExecutingDefaultOr(indDlgt, behavior, holder.Source.Value);
+                    Body = HelperForUntypedIndirectionDelegate.CreateDelegateExecutingDefaultOrUntypedDelegate(indDlgt, behavior, holder.Source.Value);
                 }
                 else
                 {

@@ -836,21 +836,13 @@ namespace CWeaverDetail {
 
         auto timer = cpu_timer();
         
-        auto const *pIndDlgt = static_cast<IType *>(nullptr);
-        // check whether the delegate is cached.
-        {
-            auto result = prigData.m_indDlgtCache.find(pTarget);
-            if (result != prigData.m_indDlgtCache.end())
-                pIndDlgt = (*result).second;
-        }
-
         auto &dlgtsList = prigData.m_indirectionDelegatesList;
         BOOST_FOREACH (auto &pDlgts, dlgtsList)
         {
             CPPANONYM_V_LOG1("Processing time to check whether the delegate is cached: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
             timer = cpu_timer();
 
-            // enumerate IndirectionDelegate and cache them.
+            // enumerate IndirectionDelegate and cache them if needed.
             if (!pDlgts.m_indirectionDelegatesInit)
             {
                 CPPANONYM_LOG_NAMED_SCOPE("!pDlgts->m_indirectionDelegatesInit");
@@ -875,15 +867,14 @@ namespace CWeaverDetail {
                 timer = cpu_timer();
             }
             
-            // find IndirectionDelegate which has same signature with the target method and cache it.
-            if (!pIndDlgt)
+            // find IndirectionDelegate which has same signature with the target method.
+            auto const *pIndDlgt = static_cast<IType *>(nullptr);
             {
                 auto result = FindIf(pDlgts.m_indirectionDelegates, IndirectionDelegateFinder(pTarget));
                 if (!result)
                     continue;
                 
                 pIndDlgt = *result;
-                prigData.m_indDlgtCache[pTarget] = pIndDlgt;
 
                 CPPANONYM_V_LOG1("Processing time to find IndirectionDelegate which has same signature with the target method and cache it: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
                 timer = cpu_timer();

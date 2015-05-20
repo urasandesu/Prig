@@ -50,12 +50,7 @@ namespace Urasandesu.Prig.Framework
             var toolsPath = Path.Combine(pkgPath, "tools");
             var prigConfigPath = Path.Combine(toolsPath, "Prig.config");
 
-            var config = default(PrigConfig);
-            using (var sr = new StreamReader(prigConfigPath))
-            {
-                var serializer = new XmlSerializer(typeof(PrigConfig));
-                config = (PrigConfig)serializer.Deserialize(sr);
-            }
+            var config = DeserializeOrEmpty<PrigConfig>(prigConfigPath);
             // This is by design, all additional delegates settings have same information. See also the help for `prig update` command.
             var pkg = config.Packages.item.DefaultIfEmpty(new PrigPackageConfig()).First();
             var additionalDlgts = pkg.AdditionalDelegates.item;
@@ -72,6 +67,18 @@ namespace Urasandesu.Prig.Framework
                 ms_indirectionDelegatesList.Add(Assembly.LoadFrom(Path.Combine(libPath, prigDelegatesName)));
 
             return ms_indirectionDelegatesList;
+        }
+
+        T DeserializeOrEmpty<T>(string path) where T : new()
+        {
+            if (!File.Exists(path))
+                return new T();
+
+            using (var sr = new StreamReader(path))
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                return (T)serializer.Deserialize(sr);
+            }
         }
     }
 }

@@ -101,13 +101,136 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.core.interfaces, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.util, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NUnit.VisualStudio.TestAdapter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4cb40d35494691ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug%28.NET 3.5%29'">
+    <Reference Include="Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0404.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.0404.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0804.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.0804.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.1205.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.1205.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release%28.NET 3.5%29'">
+    <Reference Include="Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0404.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.0404.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0804.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.0804.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.1205.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.1205.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Delegates.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug%28.NET 4%29'">
+    <Reference Include="Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0404.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.0404.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0804.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.0804.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.1205.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.1205.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release%28.NET 4%29'">
+    <Reference Include="Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0404.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.0404.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.0804.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.0804.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.1205.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.1205.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Delegates.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Delegates.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL">
+      <HintPath>C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x86'">
     <Reference Include="mscorlib.v2.0.50727.v2.0.0.0.x86.Prig" />
@@ -167,24 +290,6 @@
     <Compile Include="UntestableLibrary\Prig\PULDictionaryTest.cs" />
     <Compile Include="UntestableLibrary\Prig\PULNullableTest.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
-      <Project>{c04a5e86-30e1-4c38-b916-324d000e240e}</Project>
-      <Name>Urasandesu.NAnonym</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\program1\program1.csproj">
-      <Project>{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}</Project>
-      <Name>program1</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UntestableLibrary\UntestableLibrary.csproj">
-      <Project>{23389061-145f-4cb1-86ed-64a9f35f52a6}</Project>
-      <Name>UntestableLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Urasandesu.Prig.Framework\Urasandesu.Prig.Framework.csproj">
-      <Project>{B4F8ABB2-2FEB-484C-9EF5-404C88C44E1A}</Project>
-      <Name>Urasandesu.Prig.Framework</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug%28.NET 3.5%29'">
     <None Include="mscorlib.v2.0.50727.v2.0.0.0.prig" />
     <None Include="UntestableLibrary.v2.0.50727.v1.0.0.0.prig" />
@@ -194,7 +299,9 @@
     <None Include="UntestableLibrary.v2.0.50727.v1.0.0.0.prig" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug%28.NET 4%29'">
-    <None Include="mscorlib.v4.0.30319.v4.0.0.0.prig" />
+    <None Include="mscorlib.v4.0.30319.v4.0.0.0.prig">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="UntestableLibrary.v4.0.30319.v1.0.0.0.prig" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Release%28.NET 4%29'">
@@ -203,39 +310,59 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Test.program1.snk" />
+    <None Include="packages.config" />
+    <None Include="v2.0.50727.AMD64.runsettings">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="v2.0.50727.x86.runsettings" />
+    <None Include="v4.0.30319.AMD64.runsettings" />
+    <None Include="v4.0.30319.x86.runsettings" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\program1\program1.csproj">
+      <Project>{68a62ef4-b2ad-4634-8961-f66c2d60cbb0}</Project>
+      <Name>program1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UntestableLibrary\UntestableLibrary.csproj">
+      <Project>{23389061-145f-4cb1-86ed-64a9f35f52a6}</Project>
+      <Name>UntestableLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x86'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x86'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 3.5%29|x64'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 3.5%29|x64'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 3.5%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v3.5 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v2.0.50727.v2.0.0.0.prig" "
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -Version 2.0 -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 3.5%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v3.5 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v2.0.50727.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x86'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig" "
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig" "
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x86'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig" "
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig" "
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug%28.NET 4%29|x64'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig" "
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Debug%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig" "
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Debug%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release%28.NET 4%29|x64'">
-    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig"
-cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "$(SolutionDir)Chocolatey\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.NAnonym.dll','$(SolutionDir)Release%28.NET 4%29\AnyCPU\Urasandesu.Prig.Framework.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
+    <PreBuildEvent>cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -Assembly "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" -TargetFrameworkVersion v4.0 -KeyFile "$(ProjectDir)Test.program1.snk" -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)mscorlib.v4.0.30319.v4.0.0.0.prig"
+cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" &amp; "%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -File "C:\ProgramData\chocolatey\lib\Prig\tools\Invoke-PilotStubber.ps1" -ReferenceFrom "@('C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll','C:\ProgramData\chocolatey\lib\Prig\lib\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll')" -AssemblyFrom "$(SolutionDir)UntestableLibrary\bin\Release%28.NET 4%29\AnyCPU\UntestableLibrary.dll" -TargetFrameworkVersion v4.0 -OutputPath "$(TargetDir)." -Settings "$(ProjectDir)UntestableLibrary.v4.0.30319.v1.0.0.0.prig" "</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

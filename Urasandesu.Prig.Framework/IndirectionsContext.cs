@@ -31,13 +31,17 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 
 namespace Urasandesu.Prig.Framework
 {
     public class IndirectionsContext : IDisposable
     {
+        static readonly object ms_syncObj = new object();
+
         public IndirectionsContext()
         {
+            Monitor.Enter(ms_syncObj);
             DefaultBehavior = IndirectionBehaviors.Fallthrough;
         }
 
@@ -93,6 +97,7 @@ namespace Urasandesu.Prig.Framework
                 {
                     DefaultBehavior = IndirectionBehaviors.Fallthrough;
                     LooseCrossDomainAccessor.Clear();
+                    Monitor.Exit(ms_syncObj);
                 }
             }
             m_disposed = true;

@@ -2,7 +2,7 @@
 <configuration>
   
   <configSections>
-    <section name="prig" type="Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework" />
+    <section name="prig" type="Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL" />
   </configSections>
 
   <prig>
@@ -63,18 +63,6 @@
           <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.Globalization.PersianCalendar</ClassName>
           <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Void CheckTicksRange(Int64)</Signature>
           <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Void CheckTicksRange(System.Int64)</Signature2>
-          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
-          <GenericArguments i:nil="true" xmlns="" />
-        </RuntimeMethodInfo>
-      </add>
-
-      <add name="CanSeekGet" alias="CanSeekGet">
-        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
-          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">get_CanSeek</Name>
-          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
-          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">System.IO.MemoryStream</ClassName>
-          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean get_CanSeek()</Signature>
-          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean get_CanSeek()</Signature2>
           <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
           <GenericArguments i:nil="true" xmlns="" />
         </RuntimeMethodInfo>
