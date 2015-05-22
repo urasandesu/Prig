@@ -73,6 +73,14 @@ function Enable-PrigTestAdapter {
 
     $curMsbProj = $allMsbProjs.Current
     $targetDir = $curMsbProj.ExpandString('$(TargetDir)')
+    if ([string]::IsNullOrEmpty($targetDir)) {
+        # Reevaluate $(TargetDir). I have not completely understood the cause of that yet, but it sometimes becomes empty.
+        $envProj.ConfigurationManager | % { $_.OutputGroups } | Out-String | Out-Null
+        $targetDir = $curMsbProj.ExpandString('$(TargetDir)')
+        if ([string]::IsNullOrEmpty($targetDir)) {
+            throw New-Object System.InvalidOperationException '"$(TargetDir)" has not been able to resolve.'
+        }
+    }
 
     [System.Environment]::SetEnvironmentVariable($EnableProfilingKey, $EnableProfilingValueEnabled)
     [System.Environment]::SetEnvironmentVariable($ProfilerKey, $ProfilerValue)
