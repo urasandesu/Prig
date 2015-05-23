@@ -59,16 +59,37 @@ function EraseStubberPreBuildEventProperty {
         $EscapedPrigAssembly
     )
     
-    $preBuildEvents = 
-        $MSBuildProject.Xml.Properties | 
-            Where-Object { $_.Name -eq 'PreBuildEvent' } | 
-            Where-Object { $_.Value -cmatch '\bPrig\b' }
-    
-    if (0 -lt $preBuildEvents.Length) {
-        foreach ($preBuildEvent in $preBuildEvents) {
-            $cmds = @($preBuildEvent.Value -split "`r`n")
+    $targetNames = 'BeforeBuild', 'BeforeRebuild'
+    foreach ($targetName in $targetNames) {
+        $targets = 
+            $MSBuildProject.Xml.Targets | 
+                Where-Object { $_.Name -eq $targetName }
+        if ($targets.Length -eq 0) {
+            continue;
+        }
+
+        $execs = 
+            $targets[0].Children | 
+                Where-Object { $_.Name -eq 'Exec' } | 
+                Where-Object { $_.GetParameter('Command') -cmatch '\bPrig\b' }
+        if ($execs.Length -eq 0) {
+            continue;
+        }
+
+        for ($i = 0; $i -lt $execs.Length; $i++) {
+            $command = $execs[$i].GetParameter('Command')
+            $cmds = @($command -split "`r`n")
             $remainings = @($cmds | ? { $_ -notmatch $EscapedPrigAssembly })
-            $preBuildEvent.Value = $remainings -join "`r`n"
+            $command = $remainings -join "`r`n"
+            if ([string]::IsNullOrEmpty($command)) {
+                $targets[0].RemoveChild($execs[$i])
+            } else {
+                $execs[$i].SetParameter('Command', $command)
+            }
+        }
+
+        if ($targets[0].Children.Count -eq 0) {
+            $MSBuildProject.Xml.RemoveChild($targets[0])
         }
     }
 }

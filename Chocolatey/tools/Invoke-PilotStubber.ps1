@@ -50,6 +50,9 @@ param (
     [Parameter(Mandatory = $True)]
     [string]
     $Settings, 
+
+    [string]
+    $BuildTarget = 'BeforeRebuild', 
     
     [switch]
     $WhatIf
@@ -66,6 +69,8 @@ Write-Verbose ('Target Framework Version : {0}' -f $TargetFrameworkVersion)
 Write-Verbose ('Key File                 : {0}' -f $KeyFile)
 Write-Verbose ('Output Path              : {0}' -f $OutputPath)
 Write-Verbose ('Settings                 : {0}' -f $Settings)
+Write-Verbose ('Build Target             : {0}' -f $BuildTarget)
+
 
 $here = Split-Path $MyInvocation.MyCommand.Path
 Write-Verbose ('Invocation From          : {0}' -f $here)
@@ -81,6 +86,13 @@ if (![string]::IsNullOrEmpty($Assembly)) {
 if ($null -eq $asmInfo) {
     Write-Error 'The parameter ''Assembly'' or ''AssemblyFrom'' is mandatory.'
     exit -403162398
+}
+
+$asmName = ConvertTo-PrigAssemblyName $asmInfo
+$targetInfo = dir ([System.IO.Path]::Combine($OutputPath, $asmName) + ".dll")
+if ($BuildTarget -eq 'BeforeBuild' -and $targetInfo.Exists -and [System.IO.File]::GetLastWriteTime($Settings) -lt $targetInfo.LastWriteTime) {
+    Write-Host ('The indirection stub dll "{0}" has been already existed. Skip the processing to make it ...' -f $targetInfo.FullName)
+    exit 0
 }
  
 $refAsmInfos = New-Object 'System.Collections.Generic.List[System.Reflection.Assembly]'

@@ -119,36 +119,52 @@ function SetStubberPreBuildEventProperty {
     $argKeyFile = '-KeyFile "{0}\Urasandesu.Prig.snk"' -f $toolsPath
     $argOutputPath = '-OutputPath "$(TargetDir)."'
     $argSettings = '-Settings "$(ProjectDir){0}.{1}.v{2}.prig"' -f $AssemblyNameEx.Name, $AssemblyNameEx.ImageRuntimeVersion, $AssemblyNameEx.Version
-    $cmd = 'cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" & {0} {1} {2} {3} {4} {5} {6} {7} {8} "' -f 
-                $powershell, 
-                $argOther, 
-                $argFile, 
-                $argReferenceFrom, 
-                $argAssembly, 
-                $argTargetFrameworkVersion, 
-                $argKeyFile, 
-                $argOutputPath, 
-                $argSettings
-        
 
     if ($Platform -match 'AnyCPU') {
         $condition = "'`$(Platform)|`$(Prefer32Bit)' == '$Platform'"
     } else {
         $condition = "'`$(Platform)' == '$Platform'"
     }
+
+    $targetNames = 'BeforeBuild', 'BeforeRebuild'
+    foreach ($targetName in $targetNames) {
+        $argBuildTarget = '-BuildTarget {0}' -f $targetName
+        $cmd = 'cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" & {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} "' -f 
+                    $powershell, 
+                    $argOther, 
+                    $argFile, 
+                    $argReferenceFrom, 
+                    $argAssembly, 
+                    $argTargetFrameworkVersion, 
+                    $argKeyFile, 
+                    $argOutputPath, 
+                    $argSettings, 
+                    $argBuildTarget
+        
+        $targets = 
+            $MSBuildProject.Xml.Targets | 
+                Where-Object { $_.Name -eq $targetName }
+        
+        if ($targets.Length -eq 0) {
+            $targets = $MSBuildProject.Xml.CreateTargetElement($targetName)
+            $MSBuildProject.Xml.InsertAfterChild($targets, @($MSBuildProject.Xml.Imports)[-1])
+        }
+
+        $execs = 
+            $targets[0].Children | 
+                Where-Object { $_.Name -eq 'Exec' } | 
+                Where-Object { $_.Condition -eq $condition }
     
-    $preBuildEvents = 
-        $MSBuildProject.Xml.Properties | 
-            Where-Object { $_.Name -eq 'PreBuildEvent' } | 
-            Where-Object { $_.Parent.Condition -eq $condition }
-    
-    if (0 -lt $preBuildEvents.Length) {
-        $preBuildEvents[0].Value += "`r`n$cmd"
-    } else {
-        $propGroup = $MSBuildProject.Xml.CreatePropertyGroupElement()
-        $MSBuildProject.Xml.InsertAfterChild($propGroup, @($MSBuildProject.Xml.Imports)[-1])
-        $propGroup.Condition = $condition
-        [void]$propGroup.AddProperty('PreBuildEvent', $cmd)
+        if ($execs.Length -eq 0) {
+            $execs = $targets[0].AddTask('Exec')
+            $execs.Condition = $condition
+        }
+        $command = $execs[0].GetParameter('Command')
+        if (![string]::IsNullOrEmpty($command)) {
+            $command += "`r`n"
+        }
+        $command += $cmd
+        $execs[0].SetParameter('Command', $command)
     }
 }
 
