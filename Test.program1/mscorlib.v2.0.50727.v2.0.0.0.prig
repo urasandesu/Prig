@@ -2,7 +2,7 @@
 <configuration>
   
   <configSections>
-    <section name="prig" type="Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL" />
+    <section name="prig" type="Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework" />
   </configSections>
 
   <prig>

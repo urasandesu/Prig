@@ -151,8 +151,6 @@ namespace CWeaverDetail {
                 CPPANONYM_D_LOGW1(L"Indirection DLL: %|1$s|", indDllPath.native());
         }
 
-        m_pkgPath = PrigConfig::GetPackagePath();
-        
         auto config = PrigConfig();
         config.TrySerializeFrom(PrigConfig::GetConfigPath());
             
@@ -423,6 +421,7 @@ namespace CWeaverDetail {
         using std::wregex;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
         using Urasandesu::Prig::IndirectionDelegates;
+        using Urasandesu::Prig::PrigConfig;
         
         CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$X|, BOOL: 0x%|2$08X|)", reinterpret_cast<void *>(functionId), fIsSafeToBlock);
         
@@ -450,10 +449,8 @@ namespace CWeaverDetail {
         if (!prigData.m_indirectablesInit)
         {
             CPPANONYM_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit");
-            auto const &corVersion = prigData.m_corVersion;
-            auto libPath = m_pkgPath / (corVersion == L"v2.0.50727" ? L"lib\\net35" : L"lib\\net40");
-            auto prigFrmwrkName = wstring(L"Urasandesu.Prig.Framework.") + corVersion + L".v0.1.0.0.MSIL.dll";
-            auto const *pPrigFrmwrk = pDisp->GetAssemblyFrom(libPath / prigFrmwrkName);
+            auto const &libPath = PrigConfig::GetLibPath();
+            auto const *pPrigFrmwrk = pDisp->GetAssemblyFrom(libPath / L"Urasandesu.Prig.Framework.dll");
             auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
             prigData.m_pPrigFrameworkDll = pPrigFrmwrkDll;
             auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
@@ -490,10 +487,10 @@ namespace CWeaverDetail {
             }
             
             auto prigDelegatesNames = vector<wstring>(4);
-            prigDelegatesNames[0] = L"Urasandesu.Prig.Delegates." + corVersion + L".v0.1.0.0.MSIL.dll";
-            prigDelegatesNames[1] = L"Urasandesu.Prig.Delegates.0404." + corVersion + L".v0.1.0.0.MSIL.dll";
-            prigDelegatesNames[2] = L"Urasandesu.Prig.Delegates.0804." + corVersion + L".v0.1.0.0.MSIL.dll";
-            prigDelegatesNames[3] = L"Urasandesu.Prig.Delegates.1205." + corVersion + L".v0.1.0.0.MSIL.dll";
+            prigDelegatesNames[0] = L"Urasandesu.Prig.Delegates.dll";
+            prigDelegatesNames[1] = L"Urasandesu.Prig.Delegates.0404.dll";
+            prigDelegatesNames[2] = L"Urasandesu.Prig.Delegates.0804.dll";
+            prigDelegatesNames[3] = L"Urasandesu.Prig.Delegates.1205.dll";
             BOOST_FOREACH (auto const &prigDelegatesName, prigDelegatesNames)
             {
                 prigData.m_indirectionDelegatesList.push_back(new IndirectionDelegates());

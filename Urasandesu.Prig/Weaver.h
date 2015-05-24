@@ -117,7 +117,6 @@ namespace CWeaverDetail {
 
         typedef boost::lock_guard<boost::mutex> guard_type;
         wstring m_currentDir;
-        path m_pkgPath;
         PrigPackageConfig m_currentPkg;
         vector<path> m_indDllPaths;
         ProfilingInfo *m_pProfInfo;

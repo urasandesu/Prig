@@ -57,12 +57,12 @@ namespace Urasandesu.Prig.Framework
             ms_indirectionDelegatesList = additionalDlgts.Select(_ => Assembly.LoadFrom(_.HintPath.Native)).ToList();
 
             var corVersion = typeof(object).Assembly.ImageRuntimeVersion;
-            var libPath = Path.Combine(pkgPath, corVersion == "v2.0.50727" ? @"lib\net35" : @"lib\net40");
+            var libPath = Path.Combine(pkgPath, "lib");
             var prigDelegatesNames = new string[4];
-            prigDelegatesNames[0] = "Urasandesu.Prig.Delegates." + corVersion + ".v0.1.0.0.MSIL.dll";
-            prigDelegatesNames[1] = "Urasandesu.Prig.Delegates.0404." + corVersion + ".v0.1.0.0.MSIL.dll";
-            prigDelegatesNames[2] = "Urasandesu.Prig.Delegates.0804." + corVersion + ".v0.1.0.0.MSIL.dll";
-            prigDelegatesNames[3] = "Urasandesu.Prig.Delegates.1205." + corVersion + ".v0.1.0.0.MSIL.dll";
+            prigDelegatesNames[0] = "Urasandesu.Prig.Delegates.dll";
+            prigDelegatesNames[1] = "Urasandesu.Prig.Delegates.0404.dll";
+            prigDelegatesNames[2] = "Urasandesu.Prig.Delegates.0804.dll";
+            prigDelegatesNames[3] = "Urasandesu.Prig.Delegates.1205.dll";
             foreach (var prigDelegatesName in prigDelegatesNames)
                 ms_indirectionDelegatesList.Add(Assembly.LoadFrom(Path.Combine(libPath, prigDelegatesName)));
 

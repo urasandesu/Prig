@@ -111,11 +111,10 @@ function SetStubberPreBuildEventProperty {
     $argTargetFrameworkVersion = '-TargetFrameworkVersion {0}' -f $TargetFrameworkVersion
     if ($TargetFrameworkVersion -eq 'v3.5') {
         $argOther = '-Version 2.0 -NoLogo -NoProfile'
-        $argReferenceFrom = '-ReferenceFrom "@(''{0}\net35\Urasandesu.NAnonym.v2.0.50727.v0.2.0.0.MSIL.dll'',''{0}\net35\Urasandesu.Prig.Framework.v2.0.50727.v0.1.0.0.MSIL.dll'')"' -f $libPath
     } else {
         $argOther = '-NoLogo -NoProfile'
-        $argReferenceFrom = '-ReferenceFrom "@(''{0}\net40\Urasandesu.NAnonym.v4.0.30319.v0.2.0.0.MSIL.dll'',''{0}\net40\Urasandesu.Prig.Framework.v4.0.30319.v0.1.0.0.MSIL.dll'')"' -f $libPath
     }
+    $argReferenceFrom = '-ReferenceFrom "@(''{0}\Urasandesu.NAnonym.dll'',''{0}\Urasandesu.Prig.Framework.dll'')"' -f $libPath
     $argKeyFile = '-KeyFile "{0}\Urasandesu.Prig.snk"' -f $toolsPath
     $argOutputPath = '-OutputPath "$(TargetDir)."'
     $argSettings = '-Settings "$(ProjectDir){0}.{1}.v{2}.prig"' -f $AssemblyNameEx.Name, $AssemblyNameEx.ImageRuntimeVersion, $AssemblyNameEx.Version
@@ -189,7 +188,7 @@ function SetStubSettingNoneItem {
     [void]$MSBuildProject.AddItem('None', $stubSettingName)
     $stubSetting = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($ProjectFullName), $stubSettingName)
     if (![System.IO.File]::Exists($stubSetting)) {
-        $stubSettingTemplate = [System.IO.Path]::Combine((Get-PackageToolsPath), ('PilotStubber.{0}.prig' -f $AssemblyNameEx.ImageRuntimeVersion))
+        $stubSettingTemplate = [System.IO.Path]::Combine((Get-PackageToolsPath), 'PilotStubber.prig')
         Copy-Item $stubSettingTemplate $stubSetting -ErrorAction Stop | Out-Null
     }
 }

@@ -51,13 +51,13 @@ namespace Test.Urasandesu.Prig.Framework
         public void SetUp()
         {
             LooseCrossDomainAccessor.Clear();
-            IndirectionsContext.NewAssemblyRepository = () => new MockIndirectionAssemblyRepository();
+            InstanceGetters.NewIndirectionAssemblyRepository = () => new MockIndirectionAssemblyRepository();
         }
 
         [TearDown]
         public void TearDown()
         {
-            IndirectionsContext.NewAssemblyRepository = null;
+            InstanceGetters.NewIndirectionAssemblyRepository = null;
             LooseCrossDomainAccessor.Clear();
         }
 

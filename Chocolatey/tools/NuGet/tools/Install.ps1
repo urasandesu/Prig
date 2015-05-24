@@ -39,8 +39,6 @@ param (
 )
 
 $chocoLibPath = [IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'lib')
-$chocoNet35LibPath = [IO.Path]::Combine($chocoLibPath, 'net35')
-$chocoNet40LibPath = [IO.Path]::Combine($chocoLibPath, 'net40')
 $chocoToolsPath = [IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools')
 
 
@@ -49,17 +47,11 @@ Import-Module ([System.IO.Path]::Combine($chocoToolsPath, 'Urasandesu.Prig'))
 
 $here = Split-Path $MyInvocation.MyCommand.Path
 $nugetLibPath = [IO.Path]::Combine([IO.Path]::GetDirectoryName($here), 'lib')
-$nugetNet35LibPath = [IO.Path]::Combine($nugetLibPath, 'net35')
-$nugetNet40LibPath = [IO.Path]::Combine($nugetLibPath, 'net40')
 $nugetToolsPath = [IO.Path]::Combine($nugetPackageFolder, 'tools')
 rmdir $nugetLibPath -Recurse -ErrorAction SilentlyContinue
-$items = @($nugetNet35LibPath, $chocoNet35LibPath), @($nugetNet40LibPath, $chocoNet40LibPath)
-foreach ($item in $items) {
-    $nugetNetLibPath, $chocoNetLibPath = $item
-    mkdir $nugetNetLibPath | Out-Null
-    foreach ($dll in (dir $chocoNetLibPath)) {
-        $target = [IO.Path]::Combine($nugetNetLibPath, $dll.Name)
-        $source = $dll.FullName
-        cmd /c ('" mklink "{0}" "{1}" "' -f $target, $source)
-    }
+mkdir $nugetLibPath | Out-Null
+foreach ($dll in (dir $chocoLibPath)) {
+    $target = [IO.Path]::Combine($nugetLibPath, $dll.Name)
+    $source = $dll.FullName
+    cmd /c ('" mklink "{0}" "{1}" "' -f $target, $source)
 }
