@@ -41,6 +41,8 @@ Install Chocolatey in accordance with [the top page](https://chocolatey.org/). T
 CMD C:\> choco install prig -Pre -y
 ```
 
+**NOTE:** Prig requires PowerShell v3.0+. If you want to use Prig in Windows 7, please install [Windows Management Framework 3.0+](https://www.microsoft.com/en-us/download/details.aspx?id=34595) beforehand. [See also this issue](https://github.com/urasandesu/Prig/issues/41).
+
 
 ### Step 2: Add Stub Settings
 Run Visual Studio 2013(Community or more) as Administrator, add test project(e.g. `ConsoleApplicationTest`). Then, right click `References` and select `Add Prig Assembly for mscorlib`:  
@@ -218,12 +220,12 @@ namespace ConsoleApplicationTest
 
 
 ### Step 5: Install Test Adapter
-Before running tests in Visual Studio Test Explorer, you have to install a Test Adapter. Currently, Prig supports the following Test Adapters: NUnit, MSTest, [xUnit.net](https://www.nuget.org/packages/xunit.runner.visualstudio/2.0.0-rc4-build1049). As the above described sample, let we use NUnit. Now, in the Package Manager Console, change the `Package source` to `Prig Source`, the `Default project` to `ConsoleApplicationTest` and execute the following command: 
+Before running tests in Visual Studio Test Explorer, you have to install a Test Adapter. Currently, Prig supports the following Test Adapters: NUnit, MSTest, [xUnit.net](https://www.nuget.org/packages/xunit.runner.visualstudio/). As the above described sample, let we use NUnit. Now, in the Package Manager Console, change the `Package source` to `Prig Source`, the `Default project` to `ConsoleApplicationTest` and execute the following command: 
 ```powershell
 PM> Install-Package NUnitTestAdapterForPrig
 ```
 
-**NOTE:** Unfortunately, you can't use official [NUnit Test Adapter](https://www.nuget.org/packages/NUnitTestAdapter/) because it doesn't support any configurations like prime NUnit which is supported, e.g. [NUnit Gui Runner's Settings](http://www.nunit.org/index.php?p=settingsDialog&r=2.6.3) and [NUnit-Console's Settings](http://www.nunit.org/index.php?p=consoleCommandLine&r=2.6.3).
+**NOTE:** Unfortunately, you can't use official [NUnit Test Adapter](https://www.nuget.org/packages/NUnitTestAdapter/) because it doesn't support any configurations like prime NUnit which is supported, e.g. [NUnit Gui Runner's Settings](http://www.nunit.org/index.php?p=settingsDialog&r=2.6.4) and [NUnit-Console's Settings](http://www.nunit.org/index.php?p=consoleCommandLine&r=2.6.4).
 
 After install, build the test project and select the menu `TEST` - `Windows` - `Test Explorer`. Then, you can find runnable tests in the Test Explorer.  
 ![Install Test Adapter 01](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2001.png)
