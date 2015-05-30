@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Prig: Open Source Alternative to Microsoft Fakes By: @urasandesu</title>
+    <title>Prig by urasandesu</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
     <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
@@ -20,8 +20,8 @@
         <p class="header">Open Source Alternative to Microsoft Fakes</p>
 
         <ul>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v1.1.0/Prig-v1.1.0.with.binary.zip">Download BIN</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v1.1.0/Prig-v1.1.0.zip">Download SRC</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/tarball/master">Download TAR</a></li>
           <li><a class="buttons github" href="https://github.com/urasandesu/Prig">View On GitHub</a></li>
         </ul>
 
@@ -47,7 +47,8 @@ This framework enables that any methods are replaced with mocks. For example, a 
 <h2>
 <a id="status" class="anchor" href="#status" aria-hidden="true"><span class="octicon octicon-link"></span></a>STATUS</h2>
 
-<p>As of Dec 31, 2014, Released V1.1.0.</p>
+<p>As of May 24, 2015, Developing V2.0.0(Since this version, Prig is going to support Visual Studio integrated environment. More details can be found <a href="https://github.com/urasandesu/Prig.V2Docs/blob/master/README.md">here</a>).<br>
+As of Dec 31, 2014, Released V1.1.0.</p>
 
 <h2>
 <a id="quick-tour" class="anchor" href="#quick-tour" aria-hidden="true"><span class="octicon octicon-link"></span></a>QUICK TOUR</h2>
@@ -58,9 +59,9 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 <span class="pl-k">namespace</span> <span class="pl-en">ConsoleApplication</span>
 {
-    <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-s">class</span> <span class="pl-en">LifeInfo</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">class</span> <span class="pl-en">LifeInfo</span>
     {
-        <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-st">bool</span> <span class="pl-en">IsNowLunchBreak</span>()
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">bool</span> <span class="pl-en">IsNowLunchBreak</span>()
         {
             <span class="pl-k">var</span> now = DateTime.Now;
             <span class="pl-k">return</span> <span class="pl-c1">12</span> &lt;= now.Hour &amp;&amp; now.Hour &lt; <span class="pl-c1">13</span>;
@@ -75,7 +76,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 <p>Run Visual Studio 2013(Express for Windows Desktop or more) as Administrator, add test project(e.g. <code>ConsoleApplicationTest</code>) and run the following command in the Package Manager Console: </p>
 
-<div class="highlight highlight-powershell"><pre>PM&gt; <span class="pl-k"><span class="pl-k">Install-Package</span></span> Prig</pre></div>
+<div class="highlight highlight-powershell"><pre>PM<span class="pl-k">&gt;</span> <span class="pl-c1">Install-Package</span> Prig</pre></div>
 
 <p><strong>NOTE:</strong> Installation will mostly go well. However, it doesn't go well if performing just after installing Visual Studio. <a href="https://github.com/urasandesu/Prig/issues/21#issuecomment-58741311">See also this issue's comment</a>.</p>
 
@@ -84,7 +85,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 <p>Run the following command in the Package Manager Console: </p>
 
-<div class="highlight highlight-powershell"><pre>PM&gt; <span class="pl-k"><span class="pl-k">Add-PrigAssembly</span></span> <span class="pl-k">-</span>Assembly <span class="pl-s1"><span class="pl-pds">"</span>mscorlib, Version=4.0.0.0<span class="pl-pds">"</span></span></pre></div>
+<div class="highlight highlight-powershell"><pre>PM<span class="pl-k">&gt;</span> <span class="pl-c1">Add-PrigAssembly</span> <span class="pl-k">-</span>Assembly <span class="pl-s">"mscorlib, Version=4.0.0.0"</span></pre></div>
 
 <p>The command means to create the indirection stub settings for the test. The reason to specify <code>mscorlib</code> is that <code>DateTime.Now</code> belongs <code>mscorlib</code>. After the command is invoked, you will get the confirmation message that the project has been modified externally, so reload the project.</p>
 
@@ -93,11 +94,11 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 <p>You can find the setting file <code>&lt;assembly name&gt;.&lt;runtime version&gt;.v&lt;assembly version&gt;.prig</code> in the project(in this case, it is <code>mscorlib.v4.0.30319.v4.0.0.0.prig</code>). Modify the setting in accordance with the comment, then build all projects: </p>
 
-<div class="highlight highlight-xml"><pre>&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s1"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s1"><span class="pl-pds">"</span>utf-8<span class="pl-pds">"</span></span>?&gt;
+<div class="highlight highlight-xml"><pre>&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s"><span class="pl-pds">"</span>utf-8<span class="pl-pds">"</span></span>?&gt;
 &lt;<span class="pl-ent">configuration</span>&gt;
 
   &lt;<span class="pl-ent">configSections</span>&gt;
-    &lt;<span class="pl-ent">section</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>prig<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework<span class="pl-pds">"</span></span> /&gt;
+    &lt;<span class="pl-ent">section</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>prig<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework<span class="pl-pds">"</span></span> /&gt;
   &lt;/<span class="pl-ent">configSections</span>&gt;
 
   <span class="pl-c">&lt;!-- </span>
@@ -121,15 +122,15 @@ This framework enables that any methods are replaced with mocks. For example, a 
   &lt;<span class="pl-ent">prig</span>&gt;
 
     &lt;<span class="pl-ent">stubs</span>&gt;
-      &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>NowGet<span class="pl-pds">"</span></span> <span class="pl-e">alias</span>=<span class="pl-s1"><span class="pl-pds">"</span>NowGet<span class="pl-pds">"</span></span>&gt;
-        &lt;<span class="pl-ent">RuntimeMethodInfo</span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">i</span>=<span class="pl-s1"><span class="pl-pds">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">x</span>=<span class="pl-s1"><span class="pl-pds">"</span>http://www.w3.org/2001/XMLSchema<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s1"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">FactoryType</span>=<span class="pl-s1"><span class="pl-pds">"</span>MemberInfoSerializationHolder<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s1"><span class="pl-pds">"</span>System.Reflection.MemberInfoSerializationHolder<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s1"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">z</span>=<span class="pl-s1"><span class="pl-pds">"</span>http://schemas.microsoft.com/2003/10/Serialization/<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span>http://schemas.datacontract.org/2004/07/System.Reflection<span class="pl-pds">"</span></span>&gt;
-          &lt;<span class="pl-ent">Name</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s1"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s1"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s1"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;get_Now&lt;/<span class="pl-ent">Name</span>&gt;
-          &lt;<span class="pl-ent">AssemblyName</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s1"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s1"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s1"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&lt;/<span class="pl-ent">AssemblyName</span>&gt;
-          &lt;<span class="pl-ent">ClassName</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s1"><span class="pl-pds">"</span>4<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s1"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s1"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;System.DateTime&lt;/<span class="pl-ent">ClassName</span>&gt;
-          &lt;<span class="pl-ent">Signature</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s1"><span class="pl-pds">"</span>5<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s1"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s1"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;System.DateTime get_Now()&lt;/<span class="pl-ent">Signature</span>&gt;
-          &lt;<span class="pl-ent">Signature2</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s1"><span class="pl-pds">"</span>6<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s1"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s1"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;System.DateTime get_Now()&lt;/<span class="pl-ent">Signature2</span>&gt;
-          &lt;<span class="pl-ent">MemberType</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s1"><span class="pl-pds">"</span>7<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s1"><span class="pl-pds">"</span>System.Int32<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s1"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;8&lt;/<span class="pl-ent">MemberType</span>&gt;
-          &lt;<span class="pl-ent">GenericArguments</span> <span class="pl-e">i</span><span class="pl-e">:</span><span class="pl-e">nil</span>=<span class="pl-s1"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span> /&gt;
+      &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>NowGet<span class="pl-pds">"</span></span> <span class="pl-e">alias</span>=<span class="pl-s"><span class="pl-pds">"</span>NowGet<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">RuntimeMethodInfo</span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">i</span>=<span class="pl-s"><span class="pl-pds">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">x</span>=<span class="pl-s"><span class="pl-pds">"</span>http://www.w3.org/2001/XMLSchema<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">FactoryType</span>=<span class="pl-s"><span class="pl-pds">"</span>MemberInfoSerializationHolder<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.Reflection.MemberInfoSerializationHolder<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">z</span>=<span class="pl-s"><span class="pl-pds">"</span>http://schemas.microsoft.com/2003/10/Serialization/<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span>http://schemas.datacontract.org/2004/07/System.Reflection<span class="pl-pds">"</span></span>&gt;
+          &lt;<span class="pl-ent">Name</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;get_Now&lt;/<span class="pl-ent">Name</span>&gt;
+          &lt;<span class="pl-ent">AssemblyName</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&lt;/<span class="pl-ent">AssemblyName</span>&gt;
+          &lt;<span class="pl-ent">ClassName</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>4<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;System.DateTime&lt;/<span class="pl-ent">ClassName</span>&gt;
+          &lt;<span class="pl-ent">Signature</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>5<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;System.DateTime get_Now()&lt;/<span class="pl-ent">Signature</span>&gt;
+          &lt;<span class="pl-ent">Signature2</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>6<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;System.DateTime get_Now()&lt;/<span class="pl-ent">Signature2</span>&gt;
+          &lt;<span class="pl-ent">MemberType</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>7<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.Int32<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;8&lt;/<span class="pl-ent">MemberType</span>&gt;
+          &lt;<span class="pl-ent">GenericArguments</span> <span class="pl-e">i</span><span class="pl-e">:</span><span class="pl-e">nil</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span> /&gt;
         &lt;/<span class="pl-ent">RuntimeMethodInfo</span>&gt;
       &lt;/<span class="pl-ent">add</span>&gt;
     &lt;/<span class="pl-ent">stubs</span>&gt;
@@ -152,15 +153,15 @@ This framework enables that any methods are replaced with mocks. For example, a 
 <span class="pl-k">namespace</span> <span class="pl-en">ConsoleApplicationTest</span>
 {
     [TestFixture]
-    <span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">LifeInfoTest</span>
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">LifeInfoTest</span>
     {
         [Test]
-        <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">IsNowLunchBreak_should_return_false_when_11_oclock</span>()
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">IsNowLunchBreak_should_return_false_when_11_oclock</span>()
         {
-            <span class="pl-k">using</span> (<span class="pl-s">new</span> IndirectionsContext())
+            <span class="pl-k">using</span> (<span class="pl-k">new</span> IndirectionsContext())
             {
                 <span class="pl-c">// Arrange</span>
-                PDateTime.NowGet().Body = () =&gt; <span class="pl-s">new</span> DateTime(<span class="pl-c1">2013</span>, <span class="pl-c1">12</span>, <span class="pl-c1">13</span>, <span class="pl-c1">11</span>, <span class="pl-c1">00</span>, <span class="pl-c1">00</span>);
+                PDateTime.NowGet().Body = () =&gt; <span class="pl-k">new</span> DateTime(<span class="pl-c1">2013</span>, <span class="pl-c1">12</span>, <span class="pl-c1">13</span>, <span class="pl-c1">11</span>, <span class="pl-c1">00</span>, <span class="pl-c1">00</span>);
 
                 <span class="pl-c">// Act</span>
                 <span class="pl-k">var</span> result = LifeInfo.IsNowLunchBreak();
@@ -171,12 +172,12 @@ This framework enables that any methods are replaced with mocks. For example, a 
         }
 
         [Test]
-        <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">IsNowLunchBreak_should_return_true_when_12_oclock</span>()
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">IsNowLunchBreak_should_return_true_when_12_oclock</span>()
         {
-            <span class="pl-k">using</span> (<span class="pl-s">new</span> IndirectionsContext())
+            <span class="pl-k">using</span> (<span class="pl-k">new</span> IndirectionsContext())
             {
                 <span class="pl-c">// Arrange</span>
-                PDateTime.NowGet().Body = () =&gt; <span class="pl-s">new</span> DateTime(<span class="pl-c1">2013</span>, <span class="pl-c1">12</span>, <span class="pl-c1">13</span>, <span class="pl-c1">12</span>, <span class="pl-c1">00</span>, <span class="pl-c1">00</span>);
+                PDateTime.NowGet().Body = () =&gt; <span class="pl-k">new</span> DateTime(<span class="pl-c1">2013</span>, <span class="pl-c1">12</span>, <span class="pl-c1">13</span>, <span class="pl-c1">12</span>, <span class="pl-c1">00</span>, <span class="pl-c1">00</span>);
 
                 <span class="pl-c">// Act</span>
                 <span class="pl-k">var</span> result = LifeInfo.IsNowLunchBreak();
@@ -187,12 +188,12 @@ This framework enables that any methods are replaced with mocks. For example, a 
         }
 
         [Test]
-        <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">IsNowLunchBreak_should_return_false_when_13_oclock</span>()
+        <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">IsNowLunchBreak_should_return_false_when_13_oclock</span>()
         {
-            <span class="pl-k">using</span> (<span class="pl-s">new</span> IndirectionsContext())
+            <span class="pl-k">using</span> (<span class="pl-k">new</span> IndirectionsContext())
             {
                 <span class="pl-c">// Arrange</span>
-                PDateTime.NowGet().Body = () =&gt; <span class="pl-s">new</span> DateTime(<span class="pl-c1">2013</span>, <span class="pl-c1">12</span>, <span class="pl-c1">13</span>, <span class="pl-c1">13</span>, <span class="pl-c1">00</span>, <span class="pl-c1">00</span>);
+                PDateTime.NowGet().Body = () =&gt; <span class="pl-k">new</span> DateTime(<span class="pl-c1">2013</span>, <span class="pl-c1">12</span>, <span class="pl-c1">13</span>, <span class="pl-c1">13</span>, <span class="pl-c1">00</span>, <span class="pl-c1">00</span>);
 
                 <span class="pl-c">// Act</span>
                 <span class="pl-k">var</span> result = LifeInfo.IsNowLunchBreak();
@@ -209,26 +210,26 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 <p>In fact, to enable any profiler based mocking tool, you have to set the environment variables. Therefore, such libraries - Microsoft Fakes/Typemock Isolator/Telerik JustMock provide small runner to satisfy the requisition, also it is true at Prig. Use <code>prig.exe</code> and run the test as follows(continue in the Package Manager Console): </p>
 
-<div class="highlight highlight-powershell"><pre>PM&gt; <span class="pl-k"><span class="pl-k">cd</span></span> &lt;Your Test Project<span class="pl-s1"><span class="pl-pds">'</span>s Output Directory(e.g. cd .\ConsoleApplicationTest\bin\Debug)&gt;<span class="pl-ii"></span></span>
-PM&gt; prig run <span class="pl-k">-</span><span class="pl-k">process</span> <span class="pl-s1"><span class="pl-pds">"</span>C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe<span class="pl-pds">"</span></span> <span class="pl-k">-</span>arguments <span class="pl-s1"><span class="pl-pds">"</span>ConsoleApplicationTest.dll /domain=None /framework=v4.0<span class="pl-pds">"</span></span>
-<span class="pl-k"><span class="pl-k">NUnit-Console</span></span> version <span class="pl-c1">2.6</span>.<span class="pl-c1">3.13283</span>
-Copyright (C) <span class="pl-c1">2002</span><span class="pl-k"><span class="pl-k">-</span></span><span class="pl-c1">2012</span> Charlie Poole.
-Copyright (C) <span class="pl-c1">2002</span><span class="pl-k"><span class="pl-k">-</span></span><span class="pl-c1">2004</span> James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.
-Copyright (C) <span class="pl-c1">2000</span><span class="pl-k"><span class="pl-k">-</span></span><span class="pl-c1">2002</span> Philip Craig.
-All Rights Reserved.
-
-Runtime Environment <span class="pl-k">-</span> 
-   OS Version: Microsoft Windows NT <span class="pl-c1">6.2</span>.<span class="pl-c1">9200.0</span>
-  CLR Version: <span class="pl-c1">2.0</span>.<span class="pl-c1">50727.8000</span> ( Net <span class="pl-c1">3.5</span> )
-
-ProcessModel: Default    DomainUsage: None
-Execution Runtime: v4.0
-...
-Tests run: <span class="pl-c1">3</span>, Errors: <span class="pl-c1">0</span>, Failures: <span class="pl-c1">0</span>, Inconclusive: <span class="pl-c1">0</span>, Time: <span class="pl-c1">0.0934818542535837</span> seconds
-  Not run: <span class="pl-c1">0</span>, Invalid: <span class="pl-c1">0</span>, Ignored: <span class="pl-c1">0</span>, Skipped: <span class="pl-c1">0</span>
-
-PM&gt; 
-</pre></div>
+<div class="highlight highlight-powershell"><pre>PM<span class="pl-k">&gt;</span> cd <span class="pl-k">&lt;</span>Your Test Project<span class="pl-s">'s Output Directory(e.g. cd .\ConsoleApplicationTest\bin\Debug)&gt;</span>
+<span class="pl-s">PM&gt; prig run -process "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe" -arguments "ConsoleApplicationTest.dll /domain=None /framework=v4.0"</span>
+<span class="pl-s">NUnit-Console version 2.6.3.13283</span>
+<span class="pl-s">Copyright (C) 2002-2012 Charlie Poole.</span>
+<span class="pl-s">Copyright (C) 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.</span>
+<span class="pl-s">Copyright (C) 2000-2002 Philip Craig.</span>
+<span class="pl-s">All Rights Reserved.</span>
+<span class="pl-s"></span>
+<span class="pl-s">Runtime Environment - </span>
+<span class="pl-s">   OS Version: Microsoft Windows NT 6.2.9200.0</span>
+<span class="pl-s">  CLR Version: 2.0.50727.8000 ( Net 3.5 )</span>
+<span class="pl-s"></span>
+<span class="pl-s">ProcessModel: Default    DomainUsage: None</span>
+<span class="pl-s">Execution Runtime: v4.0</span>
+<span class="pl-s">...</span>
+<span class="pl-s">Tests run: 3, Errors: 0, Failures: 0, Inconclusive: 0, Time: 0.0934818542535837 seconds</span>
+<span class="pl-s">  Not run: 0, Invalid: 0, Ignored: 0, Skipped: 0</span>
+<span class="pl-s"></span>
+<span class="pl-s">PM&gt; </span>
+<span class="pl-s"></span></pre></div>
 
 <h3>
 <a id="final-step-refactoring-and-get-trig-back" class="anchor" href="#final-step-refactoring-and-get-trig-back" aria-hidden="true"><span class="octicon octicon-link"></span></a>Final Step: Refactoring and Get Trig Back!</h3>
@@ -239,15 +240,15 @@ PM&gt;
 
 <span class="pl-k">namespace</span> <span class="pl-en">ConsoleApplication</span>
 {
-    <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-s">class</span> <span class="pl-en">LifeInfo</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">class</span> <span class="pl-en">LifeInfo</span>
     {
-        <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-st">bool</span> <span class="pl-en">IsNowLunchBreak</span>()
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">bool</span> <span class="pl-en">IsNowLunchBreak</span>()
         {
             <span class="pl-c">// 1. Add overload to isolate from external environment then call it from original method.</span>
             <span class="pl-k">return</span> IsNowLunchBreak(DateTime.Now);
         }
 
-        <span class="pl-s">public</span> <span class="pl-s">static</span> <span class="pl-st">bool</span> <span class="pl-en">IsNowLunchBreak</span>(<span class="pl-st">DateTime</span> <span class="pl-vpf">now</span>)
+        <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">bool</span> <span class="pl-en">IsNowLunchBreak</span>(<span class="pl-k">DateTime</span> <span class="pl-smi">now</span>)
         {
             <span class="pl-c">// 2. Also, I think the expression '12 &lt;= now.Hour &amp;&amp; now.Hour &lt; 13' is too complex.</span>
             <span class="pl-c">//    Better this way, isn't it?</span>
@@ -316,8 +317,14 @@ Install using with the installer(NUnit-2.6.3.msi).</li>
 <a href="http://www.microsoft.com/en-us/download/details.aspx?id=40754">Modeling SDK for Microsoft Visual Studio 2013</a><br>
 Install using with the installer(VS_VmSdk.exe).</li>
 <li>
-<a href="http://docs.nuget.org/docs/start-here/installing-nuget">NuGet Command-Line Utility</a><br>
-Download command line utility <code>nuget.exe</code>, then append its path to the environment variable <code>path</code>.</li>
+<a href="http://www.microsoft.com/en-us/download/details.aspx?id=40758">Microsoft Visual Studio 2013 SDK</a><br>
+Install using with the installer(vssdk_full.exe).</li>
+<li>
+<a href="https://chocolatey.org/">Chocolatey NuGet</a><br>
+Install the instructions in accordance with the page.</li>
+<li>
+<a href="http://nant.sourceforge.net/">NAnt</a><br>
+You can also install in accordance with <a href="http://nant.sourceforge.net/release/latest/help/introduction/installation.html">the help</a>, but the easiest way is using Chocolatey: <code>choco install nant</code>.</li>
 </ul>
 
 <h2>
@@ -400,7 +407,7 @@ CMD AnyCPU&gt;
 </code></pre>
       </section>
       <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
