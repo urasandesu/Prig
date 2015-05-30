@@ -1,10 +1,6 @@
-# Prig
-## SYNOPSIS
-Prig is a lightweight framework for test indirections in .NET Framework.
+# Prig: Open Source Alternative to Microsoft Fakes
+![Prig](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/PrigPreviewImage.png)
 
-
-
-## DESCRIPTION
 Prig(PRototyping jIG) is a framework that generates a [Test Double](http://martinfowler.com/bliki/TestDouble.html) like [Microsoft Fakes](http://msdn.microsoft.com/en-us/library/hh549175.aspx)/[Typemock Isolator](http://www.typemock.com/isolator-product-page)/[Telerik JustMock](http://www.telerik.com/products/mocking.aspx) based on Unmanaged Profiler APIs.
 This framework enables that any methods are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.
 
