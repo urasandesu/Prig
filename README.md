@@ -20,9 +20,9 @@ Let's say you want to test the following code:
 ```cs
 using System;
 
-namespace ConsoleApplication
+namespace QuickTour
 {
-    public static class LifeInfo
+    public class LifeInfo
     {
         public static bool IsNowLunchBreak()
         {
@@ -45,7 +45,7 @@ CMD C:\> choco install prig -Pre -y
 
 
 ### Step 2: Add Stub Settings
-Run Visual Studio 2013(Community or more) as Administrator, add test project(e.g. `ConsoleApplicationTest`). Then, right click `References` and select `Add Prig Assembly for mscorlib`:  
+Run Visual Studio 2013(Community or more) as Administrator, add test project(e.g. `QuickTourTest`). Then, right click `References` and select `Add Prig Assembly for mscorlib`:  
 ![Add Stub Settings](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%202%20Add%20Stub%20Settings.png)
 
 
@@ -88,7 +88,7 @@ See also the command's help `padd`, `pfind` and `pget`.
 
 
 
-Current Project: ConsoleApplicationTest
+Current Project: QuickTourTest
 WARNING: Change the Current Project from `Default Project: ` on the Package Manager Console if it isn't what you want.
 
 
@@ -102,14 +102,14 @@ mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 
 
 
-PS ConsoleApplication>
+PS 01.QuickTour>
 
 ```
 
 Now, we want to get the indirection setting for `DateTime.Now`. In this case, execute the following commands and copy it to the clipboard: 
 ```powershell
-PS ConsoleApplication> $TargetReferencedAssembly.GetTypes() | ? { $_.Name -eq 'datetime' } | pfind -m 'get_Now' | pget | clip
-PS ConsoleApplication> exit
+PS 01.QuickTour> $TargetReferencedAssembly.GetTypes() | ? { $_.Name -eq 'datetime' } | pfind -m 'get_Now' | pget | clip
+PS 01.QuickTour> exit
 ```
 
 Exit the Prig setup session, and paste the copied information to the setting file:  
@@ -154,12 +154,12 @@ Were you able to build successfully? OK, now you're ready to test them.
 In the test code, it becomes testable through the use of the stub and the replacement to Test Double that returns the fake information: 
 ```cs
 using NUnit.Framework;
-using ConsoleApplication;
+using QuickTour;
 using System;
 using System.Prig;
 using Urasandesu.Prig.Framework;
 
-namespace ConsoleApplicationTest
+namespace QuickTourTest
 {
     [TestFixture]
     public class LifeInfoTest
@@ -220,7 +220,7 @@ namespace ConsoleApplicationTest
 
 
 ### Step 5: Install Test Adapter
-Before running tests in Visual Studio Test Explorer, you have to install a Test Adapter. Currently, Prig supports the following Test Adapters: NUnit, MSTest, [xUnit.net](https://www.nuget.org/packages/xunit.runner.visualstudio/). As the above described sample, let we use NUnit. Now, in the Package Manager Console, change the `Package source` to `Prig Source`, the `Default project` to `ConsoleApplicationTest` and execute the following command: 
+Before running tests in Visual Studio Test Explorer, you have to install a Test Adapter. Currently, Prig supports the following Test Adapters: NUnit, MSTest, [xUnit.net](https://www.nuget.org/packages/xunit.runner.visualstudio/). As the above described sample, let we use NUnit. Now, in the Package Manager Console, change the `Package source` to `Prig Source`, the `Default project` to `QuickTourTest` and execute the following command: 
 ```powershell
 PM> Install-Package NUnitTestAdapterForPrig
 ```
@@ -247,9 +247,9 @@ If tests have been created, you can refactor illimitably! For example, you proba
 ```cs
 using System;
 
-namespace ConsoleApplication
+namespace QuickTour
 {
-    public static class LifeInfo
+    public class LifeInfo
     {
         public static bool IsNowLunchBreak()
         {
@@ -277,7 +277,7 @@ For more information, see also [Prig's wiki](https://github.com/urasandesu/Prig.
 # INSTALLATION FROM SOURCE CODE
 ## DEPENDENCY
 To build this project needs the following dependencies: 
-* [Visual Studio 2013(more than Professional Edition because it uses ATL)](http://www.visualstudio.com/)
+* [Visual Studio 2013(more than Professional Edition because it uses ATL. Also, you can use Community Edition)](http://www.visualstudio.com/)
 * [Boost 1.55.0](http://www.boost.org/)  
 Extract to C:\boost_1_55_0, and will build with the following options(x86 and x64 libs are required):
 ```dos
@@ -322,7 +322,34 @@ You can also install in accordance with [the help](http://nant.sourceforge.net/r
 
 
 
+
 ## BUILD
+### From PowerShell Script
+Run Developer Command Prompt for VS2013 as Administrator, and execute the following commands: 
+```dos
+CMD Prig> cd
+C:\Users\User\Prig
+
+CMD Prig> powershell
+Windows PowerShell
+Copyright (C) 2014 Microsoft Corporation. All rights reserved.
+
+
+PS Prig> .\Build.ps1
+...
+
+Chocolatey v0.9.9.1
+Attempting to build package from 'Prig.nuspec'.
+Successfully created package 'Prig.2.0.0-alpha04.nupkg'
+PS Chocolatey>
+
+```
+
+**NOTE:** It takes somewhere round 30 minutes.
+
+
+
+### From Visual Studio
 After preparing all dependencies, you can build this project in the following steps:
 
 1. Run Visual Studio as Administrator, and open Prig.sln(This sln contains some ATL projects, so the build process will modify registry).
@@ -332,70 +359,66 @@ After preparing all dependencies, you can build this project in the following st
 
 
 ## REGISTRATION
-Run Developer Command Prompt for VS2013 as Administrator, and register dlls that were output to `$(SolutionDir)$(Configuration)\$(PlatformTarget)\` to registry and GAC as follows(these are the examples for x86/.NET 3.5, but also another environments are in the same manner): 
-```dos
-CMD x86>cd
-C:\Prig\Release\x86
+If you built Prig by PowerShell script, Prig nupkg will be output to `<top level directory you cloned>\Chocolatey` directory. So, run PowerShell as Administrator from the directory, and execute the following command: 
+```powershell
+PS Chocolatey> dir
 
-CMD x86>regsvr32 /i Urasandesu.Prig.dll
 
-CMD x86>cd "..\..\Release(.NET 3.5)\AnyCPU"
+    Directory: C:\Users\User\Prig\Chocolatey
 
-CMD AnyCPU>cd
-C:\Prig\Release(.NET 3.5)\AnyCPU
 
-CMD AnyCPU>gacutil /i Urasandesu.NAnonym.dll
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
+Mode                LastWriteTime     Length Name
+----                -------------     ------ ----
+d----        2015/05/27     22:11            tools
+-a---        2015/05/30     17:18    4143089 Prig.2.0.0-alpha04.nupkg
+-a---        2015/05/27     22:11       5477 Prig.nuspec
 
-Assembly successfully added to the cache
 
-CMD AnyCPU>gacutil /i Urasandesu.Prig.Framework.dll
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
+PS Chocolatey> choco install prig -s "$pwd;https://chocolatey.org/api/v2/" -pre -y
+Chocolatey v0.9.9.1
+Installing the following packages:
+prig
+By installing you accept licenses for the packages.
 
-Assembly successfully added to the cache
+Prig v2.0.0-alpha04
+   Renaming 'C:\ProgramData\chocolatey\lib\Prig\tools\NUnitTestAdapterForPrig.2.0.0.nupkg.hedge' to 'C:\ProgramData\chocolatey\lib\Prig\tools\NUnitTestAdapterForPrig.2.0.0.nupkg'...
+   Renaming 'C:\ProgramData\chocolatey\lib\Prig\tools\NuGet\Prig.nuspec.hedge' to 'C:\ProgramData\chocolatey\lib\Prig\tools\NuGet\Prig.nuspec'...
+   Creating the nuget package 'Prig'...
+   ...
 
-CMD AnyCPU>
+
+ prig has been installed successfully.
+
+Chocolatey installed 1/1 package(s). 0 package(s) failed.
+ See the log for details.
+PS Chocolatey>
+
 ```
 
 
 
 ## UNREGISTRATION
-Unregistration operation is similar in the registration. Run Developer Command Prompt for VS2013 as Administrator and execute the following commands: 
-```dos
-CMD x86>cd
-C:\Prig\Release\x86
+Unregistration operation is similar in the registration. Run PowerShell as Administrator and execute the following commands: 
+```powershell
+PS Chocolatey> choco uninstall prig -y -f
+Chocolatey v0.9.9.1
+Uninstalling the following packages:
+prig
 
-CMD x86>regsvr32 /u Urasandesu.Prig.dll
+Prig v2.0.0-alpha04 (forced)
+   Uninstalling Prig.vsix...
+   Uninstalling the all package...
+   Unregistering the profiler 'C:\ProgramData\chocolatey\lib\Prig\tools\x64\Urasandesu.Prig.dll' from Registry...
+   Unregistering the profiler 'C:\ProgramData\chocolatey\lib\Prig\tools\x86\Urasandesu.Prig.dll' from Registry...
+   ...
 
-CMD x86>cd "..\..\Release(.NET 3.5)\AnyCPU"
+Chocolatey uninstalled 1/1 packages. 0 packages failed.
+See the log for details.
+PS Chocolatey>
 
-CMD AnyCPU>cd
-C:\Prig\Release(.NET 3.5)\AnyCPU
-
-CMD AnyCPU>gacutil /u "Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL"
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-
-Assembly: Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL
-Uninstalled: Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL
-Number of items uninstalled = 1
-Number of failures = 0
-
-CMD AnyCPU>gacutil /u "Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL"
-Microsoft (R) .NET Global Assembly Cache Utility.  Version 4.0.30319.33440
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-
-Assembly: Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL
-Uninstalled: Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL
-Number of items uninstalled = 1
-Number of failures = 0
-
-CMD AnyCPU>
 ```
+
+**NOTE:** You have to run PowerShell as a different process from the registration time.
 
 
 
