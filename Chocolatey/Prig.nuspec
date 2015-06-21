@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0-alpha04</version>
+    <version>2.0.0-alpha05</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,12 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.0-alpha04
+    <releaseNotes>Version 2.0.0-alpha05
+* 
+* 
+
+
+Version 2.0.0-alpha04
 * Update NUnit Test Adapter for Prig from based on 1.2.0 to based on 2.0.0.
 * [BREAKING CHANGE] To fix the following issues, alpha04 has lost compatibility with alpha03. Also, `choco upgrade` command cannot even work. I will publish the migration steps in [this page](https://github.com/urasandesu/Prig.V2Docs/wiki/Migration-from-alpha03-to-alpha04) as soon as possible.
 * Fixed #41: Error in remove prig assembly

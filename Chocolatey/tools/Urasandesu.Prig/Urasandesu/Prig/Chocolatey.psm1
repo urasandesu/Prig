@@ -371,7 +371,7 @@ function IsSignaturePublic {
 
 
 
-function GetExplicitlyImplementedInterface {
+function GetImplementedInterface {
     param (
         [System.Reflection.MethodInfo]
         $MethodInfo
@@ -394,19 +394,32 @@ function GetExplicitlyImplementedInterface {
             return $null
         }
 
-        $name = ""
         if ($mapping.InterfaceMethods[$index] -ne $null) {
             $interfaceMethod = $mapping.InterfaceMethods[$index]
-            $name = $interfaceMethod.Name
-            if (!$MethodInfo.Name.Equals($name, [System.StringComparison]::Ordinal)) {
-                return New-Object psobject | 
-                            Add-Member NoteProperty 'Interface' $interface -PassThru | 
-                            Add-Member NoteProperty 'InterfaceMethod' $interfaceMethod -PassThru
-            }
+            return New-Object psobject | 
+                        Add-Member NoteProperty 'Interface' $interface -PassThru | 
+                        Add-Member NoteProperty 'InterfaceMethod' $interfaceMethod -PassThru
         }
     }
 
     $null
+}
+
+
+
+function GetExplicitlyImplementedInterface {
+    param (
+        [System.Reflection.MethodInfo]
+        $MethodInfo
+    )
+
+    $result = GetImplementedInterface $MethodInfo
+    if ($null -ne $result) {
+        $name = $result.InterfaceMethod.Name
+        if (!$MethodInfo.Name.Equals($name, [System.StringComparison]::Ordinal)) {
+            $result
+        }
+    }
 }
 
 

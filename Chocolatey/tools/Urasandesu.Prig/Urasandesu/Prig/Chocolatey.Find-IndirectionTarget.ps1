@@ -134,7 +134,13 @@ function Find-IndirectionTarget {
         $InputObject, 
     
         [Parameter(Position = 1)]
-        $Method 
+        $Method, 
+    
+        [switch]
+        $PublicOnly, 
+    
+        [switch]
+        $IgnoreMockable 
     )
 
     begin {
@@ -155,15 +161,20 @@ function Find-IndirectionTarget {
 
                 $memberInfos = $typeInfo.GetMembers([System.Reflection.BindingFlags]'Public, NonPublic, Instance, Static, DeclaredOnly')
                 $indirectlyCallables = $memberInfos | ? { $_ -is [System.Reflection.MethodBase] } | ? { !$_.IsAbstract }
+
                 if ($null -ne $Method) {
-                    foreach ($indirectlyCallable in $indirectlyCallables) {
-                        if ($indirectlyCallable.ToString() -match $Method) {
-                            $indirectlyCallable
-                        }
-                    }
-                } else {
-                    $indirectlyCallables
+                    $indirectlyCallables = $indirectlyCallables | ? { $_.ToString() -match $Method }
                 }
+
+                if ($PublicOnly) {
+                    $indirectlyCallables = $indirectlyCallables | ? { $_.IsPublic -or ($_ -is [System.Reflection.MethodInfo] -and $null -ne (GetImplementedInterface $_)) }
+                }
+
+                if ($IgnoreMockable -and !$typeInfo.IsSealed) {
+                    $indirectlyCallables = $indirectlyCallables | ? { !$_.IsVirtual }
+                }
+
+                $indirectlyCallables
             }
         }
     } end {
