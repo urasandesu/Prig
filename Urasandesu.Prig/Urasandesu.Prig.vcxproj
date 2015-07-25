@@ -285,6 +285,7 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\Signature.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Metadata\StackBehaviour.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\Profiling\ProfilingSpecialValues.cpp" />
+    <ClCompile Include="DelegatedMethodPreparation.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
@@ -299,7 +300,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="IndirectionDelegates.cpp" />
+    <ClCompile Include="IndirectionPreparation.cpp" />
     <ClCompile Include="InstanceGetters.cpp" />
+    <ClCompile Include="OriginalMethodPreparation.cpp" />
     <ClCompile Include="PrigData.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -452,8 +456,16 @@
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Metadata\BaseClassPimpl\BaseFieldMetadataPimpl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DelegatedMethodPreparation.h" />
+    <ClInclude Include="DelegatedMethodPreparationFwd.h" />
     <ClInclude Include="dllmain.h" />
+    <ClInclude Include="IndirectionDelegates.h" />
+    <ClInclude Include="IndirectionDelegatesFwd.h" />
+    <ClInclude Include="IndirectionPreparation.h" />
+    <ClInclude Include="IndirectionPreparationFwd.h" />
     <ClInclude Include="InstanceGetters.h" />
+    <ClInclude Include="OriginalMethodPreparation.h" />
+    <ClInclude Include="OriginalMethodPreparationFwd.h" />
     <ClInclude Include="PrigData.h" />
     <ClInclude Include="PrigDataFwd.h" />
     <ClInclude Include="Resource.h" />

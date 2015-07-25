@@ -29,7 +29,10 @@
 
 
 #include "StdAfx.h"
-#include "InstanceGetters.h"
+
+#ifndef INDIRETIONINTERFACES_H
+#include <InstanceGetters.h>
+#endif
 
 typedef Urasandesu::CppAnonym::Collections::GlobalSafeDictionary<std::wstring, void const *> InstanceGetters;
 

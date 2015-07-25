@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigDataFwd.h
+ * File: IndirectionDelegates.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,16 +29,34 @@
 
 
 #pragma once
-#ifndef PRIGDATAFWD_H
-#define PRIGDATAFWD_H
+#ifndef INDIRECTIONDELEGATES_H
+#define INDIRECTIONDELEGATES_H
 
-namespace PrigDataDetail {
+#ifndef URASANDESU_SWATHE_H
+#include <Urasandesu/Swathe.h>
+#endif
 
-    struct PrigData;
+#ifndef INDIRECTIONDELEGATESFWD_H
+#include <IndirectionDelegatesFwd.h>
+#endif
 
-}   // namespace PrigDataDetail {
-    
-using PrigDataDetail::PrigData;
+namespace IndirectionDelegatesDetail {
 
-#endif  // PRIGDATAFWD_H
+    using namespace Urasandesu::Swathe::Metadata;
+    using boost::noncopyable;
+    using std::vector;
+
+    struct IndirectionDelegates : 
+        noncopyable
+    {
+        IndirectionDelegates();
+
+        IAssembly const *m_pIndirectionDelegatesAssembly;
+        vector<IType const *> m_indirectionDelegates;
+        bool m_indirectionDelegatesInit;
+    };
+
+}   // namespace IndirectionDelegatesDetail {
+
+#endif  // INDIRECTIONDELEGATES_H
 

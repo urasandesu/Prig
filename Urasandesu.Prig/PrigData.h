@@ -36,104 +36,31 @@
 #include <Urasandesu/Swathe.h>
 #endif
 
+#ifndef INDIRECTIONDELEGATESFWD_H
+#include <IndirectionDelegatesFwd.h>
+#endif
+
+#ifndef INDIRECTIONPREPARATION_H
+#include <IndirectionPreparation.h>
+#endif
+
 #ifndef PRIGDATAFWD_H
 #include <PrigDataFwd.h>
 #endif
 
 namespace PrigDataDetail {
 
+    using namespace Urasandesu::Swathe::Metadata;
     using boost::filesystem::path;
     using boost::noncopyable;
     using boost::unordered_map;
     using boost::ptr_vector;
-    using std::vector;
     using std::wstring;
-    using namespace Urasandesu::CppAnonym::Utilities;
-    using namespace Urasandesu::Swathe::Metadata;
-    using namespace Urasandesu::Swathe::Profiling;
-        
-    struct IndirectionDelegates : 
-        noncopyable
-    {
-        IndirectionDelegates() : 
-            m_pIndirectionDelegatesAssembly(nullptr), 
-            m_indirectionDelegatesInit(false)
-        { }
-
-        IAssembly const *m_pIndirectionDelegatesAssembly;
-        vector<IType const *> m_indirectionDelegates;
-        bool m_indirectionDelegatesInit;
-    };
-
-    struct IndirectionPreparation : 
-        noncopyable
-    {
-        virtual ~IndirectionPreparation() { }
-        virtual void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const = 0;
-    };
-
-    struct OriginalMethodPreparation : 
-        IndirectionPreparation
-    {
-        OriginalMethodPreparation() : 
-            m_pInt32(nullptr), 
-            m_pTryPrigTarget(nullptr), 
-            m_mdt(mdTokenNil)
-        { }
-
-        void FillIndirectionPreparation(MetadataDispenser const *pDisp, MethodGenerator *pTarget, PrigData &prigData);
-        void ResolveIndirectionPreparation(AssemblyGenerator *pAsmGen);
-        SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen) const;
-        void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const;
-
-        IType const *m_pInt32;
-        IMethod const *m_pTryPrigTarget;
-        mdToken m_mdt;
-    };
-
-    struct DelegatedMethodPreparation : 
-        IndirectionPreparation
-    {
-        DelegatedMethodPreparation() : 
-            m_pIndHolder1IndDlgtInst(nullptr), 
-            m_pIndInfo(nullptr), 
-            m_pIndDlgtInst(nullptr), 
-            m_pException(nullptr), 
-            m_pTarget(nullptr), 
-            m_pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst(nullptr), 
-            m_pIndInfo_set_AssemblyName(nullptr), 
-            m_pIndInfo_set_Token(nullptr), 
-            m_pIndHolder1IndDlgtInst_TryGet(nullptr), 
-            m_pIndDlgtInst_Invoke(nullptr), 
-            m_pLooseCrossDomainAccessor_IsInstanceOfIdentity(nullptr)
-        { }
-
-        void FillIndirectionPreparation(MetadataDispenser const *pDisp, MethodGenerator *pTarget, PrigData &prigData);
-        void ResolveIndirectionPreparation(AssemblyGenerator *pAsmGen);
-        SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen) const;
-        void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const;
-
-        IType const *m_pIndHolder1IndDlgtInst;
-        IType const *m_pIndInfo;
-        IType const *m_pIndDlgtInst;
-        IType const *m_pException;
-        IMethod const *m_pTarget;
-        IMethod const *m_pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst;
-        IMethod const *m_pIndInfo_set_AssemblyName;
-        IMethod const *m_pIndInfo_set_Token;
-        IMethod const *m_pIndHolder1IndDlgtInst_TryGet;
-        IMethod const *m_pIndDlgtInst_Invoke;
-        IMethod const *m_pLooseCrossDomainAccessor_IsInstanceOfIdentity;
-    };
 
     struct PrigData : 
         noncopyable
     {
-        PrigData() : 
-            m_indirectablesInit(false), 
-            m_pMSCorLibDll(nullptr), 
-            m_pPrigFrameworkDll(nullptr)
-        { }
+        PrigData();
 
         template<class T>
         T &NewPreparation(mdToken mdt)

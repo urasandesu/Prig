@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigDataFwd.h
+ * File: IndirectionPreparation.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,16 +29,31 @@
 
 
 #pragma once
-#ifndef PRIGDATAFWD_H
-#define PRIGDATAFWD_H
+#ifndef INDIRECTIONPREPARATION_H
+#define INDIRECTIONPREPARATION_H
 
-namespace PrigDataDetail {
+#ifndef URASANDESU_SWATHE_H
+#include <Urasandesu/Swathe.h>
+#endif
 
-    struct PrigData;
+#ifndef INDIRECTIONPREPARATIONFWD_H
+#include <IndirectionPreparationFwd.h>
+#endif
 
-}   // namespace PrigDataDetail {
-    
-using PrigDataDetail::PrigData;
+namespace IndirectionPreparationDetail {
 
-#endif  // PRIGDATAFWD_H
+    using namespace Urasandesu::CppAnonym::Utilities;
+    using namespace Urasandesu::Swathe::Profiling;
+    using boost::noncopyable;
+
+    struct IndirectionPreparation : 
+        noncopyable
+    {
+        virtual ~IndirectionPreparation();
+        virtual void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const = 0;
+    };
+
+}   // namespace IndirectionPreparationDetail {
+
+#endif  // INDIRECTIONPREPARATION_H
 

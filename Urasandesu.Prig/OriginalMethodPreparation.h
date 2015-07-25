@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigDataFwd.h
+ * File: OriginalMethodPreparation.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,16 +29,39 @@
 
 
 #pragma once
-#ifndef PRIGDATAFWD_H
-#define PRIGDATAFWD_H
+#ifndef ORIGINALMETHODPREPARATION_H
+#define ORIGINALMETHODPREPARATION_H
 
-namespace PrigDataDetail {
+#ifndef INDIRECTIONPREPARATION_H
+#include <IndirectionPreparation.h>
+#endif
 
-    struct PrigData;
+#ifndef ORIGINALMETHODPREPARATIONFWD_H
+#include <OriginalMethodPreparationFwd.h>
+#endif
 
-}   // namespace PrigDataDetail {
-    
-using PrigDataDetail::PrigData;
+namespace OriginalMethodPreparationDetail {
 
-#endif  // PRIGDATAFWD_H
+    using namespace Urasandesu::CppAnonym::Utilities;
+    using namespace Urasandesu::Swathe::Metadata;
+    using namespace Urasandesu::Swathe::Profiling;
+
+    struct OriginalMethodPreparation : 
+        IndirectionPreparation
+    {
+        OriginalMethodPreparation();
+
+        void FillIndirectionPreparation(MetadataDispenser const *pDisp, MethodGenerator *pTarget, PrigData &prigData);
+        void ResolveIndirectionPreparation(AssemblyGenerator *pAsmGen);
+        SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen) const;
+        void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const;
+
+        IType const *m_pInt32;
+        IMethod const *m_pTryPrigTarget;
+        mdToken m_mdt;
+    };
+
+}   // namespace OriginalMethodPreparationDetail {
+
+#endif  // ORIGINALMETHODPREPARATION_H
 

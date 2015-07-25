@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigDataFwd.h
+ * File: DelegatedMethodPreparationFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,16 +29,16 @@
 
 
 #pragma once
-#ifndef PRIGDATAFWD_H
-#define PRIGDATAFWD_H
+#ifndef DELEGATEDMETHODPREPARATIONFWD_H
+#define DELEGATEDMETHODPREPARATIONFWD_H
 
-namespace PrigDataDetail {
+namespace DelegatedMethodPreparationDetail {
 
-    struct PrigData;
+    struct DelegatedMethodPreparation;
 
-}   // namespace PrigDataDetail {
+}   // namespace DelegatedMethodPreparationDetail {
     
-using PrigDataDetail::PrigData;
+using DelegatedMethodPreparationDetail::DelegatedMethodPreparation;
 
-#endif  // PRIGDATAFWD_H
+#endif  // DELEGATEDMETHODPREPARATIONFWD_H
 

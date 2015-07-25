@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigDataFwd.h
+ * File: IndirectionPreparationFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,16 +29,30 @@
 
 
 #pragma once
+#ifndef INDIRECTIONPREPARATIONFWD_H
+#define INDIRECTIONPREPARATIONFWD_H
+
 #ifndef PRIGDATAFWD_H
-#define PRIGDATAFWD_H
+#include <PrigDataFwd.h>
+#endif
 
-namespace PrigDataDetail {
+namespace IndirectionPreparationDetail {
 
-    struct PrigData;
+    using namespace Urasandesu::Swathe::Metadata;
 
-}   // namespace PrigDataDetail {
+    struct IndirectionPreparation;
+
+    void EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, IMethod const *pMethodGen, INT offset = 0);
+    IType const *MakeGenericExplicitItsInstance(IType const *pTarget);
+    IMethod const *MakeGenericExplicitItsInstance(IMethod const *pTarget);
+    IType const *GetIndirectionDelegateInstance(IMethod const *pTarget, IType const *pIndDlgtAttrType, PrigData &prigData);
+
+}   // namespace IndirectionPreparationDetail {
     
-using PrigDataDetail::PrigData;
+using IndirectionPreparationDetail::IndirectionPreparation;
+using IndirectionPreparationDetail::EmitIndirectParameters;
+using IndirectionPreparationDetail::MakeGenericExplicitItsInstance;
+using IndirectionPreparationDetail::GetIndirectionDelegateInstance;
 
-#endif  // PRIGDATAFWD_H
+#endif  // INDIRECTIONPREPARATIONFWD_H
 

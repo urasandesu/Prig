@@ -52,6 +52,12 @@ function Find-IndirectionTarget {
         A search condition for the methods.
         You can use regular expression.
 
+    .PARAMETER  PublicOnly
+        Omits non-public members from the search results.
+
+    .PARAMETER  IgnoreMockable
+        Omits mockable members from the search results.
+
     .EXAMPLE
         Find-IndirectionTarget datetime '(today)|(now)'
 

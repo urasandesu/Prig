@@ -42,10 +42,6 @@
 #include <Urasandesu/Swathe.h>
 #endif
 
-#ifndef PRIGDATAFWD_H
-#include <PrigDataFwd.h>
-#endif
-
 #ifndef URASANDESU_PRIG_PRIGCONFIG_H
 #include <Urasandesu/Prig/PrigConfig.h>
 #endif

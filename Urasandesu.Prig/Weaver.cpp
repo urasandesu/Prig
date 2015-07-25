@@ -35,6 +35,18 @@
 #include <PrigData.h>
 #endif
 
+#ifndef INDIRECTIONDELEGATES_H
+#include <IndirectionDelegates.h>
+#endif
+
+#ifndef ORIGINALMETHODPREPARATION_H
+#include <OriginalMethodPreparation.h>
+#endif
+
+#ifndef DELEGATEDMETHODPREPARATION_H
+#include <DelegatedMethodPreparation.h>
+#endif
+
 namespace CWeaverDetail {
 
     CWeaverImpl::CWeaverImpl() : 
