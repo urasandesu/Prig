@@ -637,9 +637,6 @@
     <ClCompile Include="Urasandesu\Prig\IMethodSigHash.cpp">
       <Filter>Source Files\Urasandesu\Prig</Filter>
     </ClCompile>
-    <ClCompile Include="Urasandesu\Prig\PrigData.cpp">
-      <Filter>Source Files\Urasandesu\Prig</Filter>
-    </ClCompile>
     <ClCompile Include="Urasandesu\Prig\IMethodSigEqualTo.cpp">
       <Filter>Source Files\Urasandesu\Prig</Filter>
     </ClCompile>
@@ -657,6 +654,9 @@
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Json.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="PrigData.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -687,12 +687,6 @@
     <ClInclude Include="Urasandesu\Prig\IMethodSigHashFwd.h">
       <Filter>Header Files\Urasandesu\Prig</Filter>
     </ClInclude>
-    <ClInclude Include="Urasandesu\Prig\PrigData.h">
-      <Filter>Header Files\Urasandesu\Prig</Filter>
-    </ClInclude>
-    <ClInclude Include="Urasandesu\Prig\PrigDataFwd.h">
-      <Filter>Header Files\Urasandesu\Prig</Filter>
-    </ClInclude>
     <ClInclude Include="Urasandesu\Prig\IMethodSigEqualTo.h">
       <Filter>Header Files\Urasandesu\Prig</Filter>
     </ClInclude>
@@ -704,6 +698,12 @@
     </ClInclude>
     <ClInclude Include="Urasandesu\Prig\PrigConfigFwd.h">
       <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="PrigData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrigDataFwd.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

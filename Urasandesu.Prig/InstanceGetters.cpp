@@ -113,3 +113,13 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProces
     CPPANONYM_D_LOGW1(L"InstanceGettersIsDisabledProcessing(): %|1$d|", result);
     return result;
 }
+
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty()
+{
+    CPPANONYM_LOG_FUNCTION();
+
+    auto &ing = InstanceGetters::GetInstance();
+    auto result = ing.Empty();
+    CPPANONYM_D_LOGW1(L"InstanceGettersEmpty(): %|1$d|", result);
+    return result;
+}

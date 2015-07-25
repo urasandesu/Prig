@@ -31,16 +31,8 @@
 #include "stdafx.h"
 #include "Weaver.h"
 
-#ifndef URASANDESU_PRIG_IMETHODSIGHASH_H
-#include <Urasandesu/Prig/IMethodSigHash.h>
-#endif
-
-#ifndef URASANDESU_PRIG_IMETHODSIGEQUALTO_H
-#include <Urasandesu/Prig/IMethodSigEqualTo.h>
-#endif
-
-#ifndef URASANDESU_PRIG_PRIGDATA_H
-#include <Urasandesu/Prig/PrigData.h>
+#ifndef PRIGDATA_H
+#include <PrigData.h>
 #endif
 
 namespace CWeaverDetail {
@@ -275,13 +267,10 @@ namespace CWeaverDetail {
 
 
 
-    wstring GetIndirectionDllName(wstring const &modName, RuntimeHost const *pRuntime, TempPtr<AppDomainProfiler> &pDomainProf, TempPtr<AssemblyProfiler> &pAsmProf)
+    wstring GetIndirectionDllName(wstring const &modName, RuntimeHost const *pRuntime, AssemblyGenerator const *pAsmGen)
     {
         using std::wostringstream;
-        using Urasandesu::CppAnonym::CppAnonymNotSupportedException;
 
-        auto *pDisp = pDomainProf->GetMetadataDispenser();
-        auto const *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
         auto targetIndDllName = wostringstream();
         targetIndDllName << modName;
         targetIndDllName << L"." << pRuntime->GetCORVersion();
@@ -290,6 +279,88 @@ namespace CWeaverDetail {
         targetIndDllName << L".Prig.dll";
         
         return targetIndDllName.str();
+    }
+
+    void FillIndirectionDelegatesList(PrigPackageConfig const &currentPkg, MetadataDispenser const *pDisp, PrigData &prigData)
+    {
+        using std::regex_search;
+        using std::wregex;
+        using Urasandesu::Prig::PrigConfig;
+
+        BOOST_FOREACH (auto const &additionalDlgt, currentPkg.AdditionalDelegates)
+        {
+            prigData.m_indirectionDelegatesList.push_back(new IndirectionDelegates());
+            auto &indDlgts = prigData.m_indirectionDelegatesList.back();
+                
+            auto patternStr = additionalDlgt.FullName;
+            boost::replace_all(patternStr, L".", L"\\.");
+            auto pattern = wregex(patternStr);
+            BOOST_FOREACH (auto const &pAsm, pDisp->GetAssemblies())
+            {
+                if (!regex_search(pAsm->GetFullName(), pattern))
+                    continue;
+                    
+                indDlgts.m_pIndirectionDelegatesAssembly = pAsm;
+                break;
+            }
+                
+            if (!indDlgts.m_pIndirectionDelegatesAssembly)
+                indDlgts.m_pIndirectionDelegatesAssembly = pDisp->GetAssemblyFrom(additionalDlgt.HintPath);
+        }
+            
+        auto prigDelegatesNames = vector<wstring>(4);
+        prigDelegatesNames[0] = L"Urasandesu.Prig.Delegates.dll";
+        prigDelegatesNames[1] = L"Urasandesu.Prig.Delegates.0404.dll";
+        prigDelegatesNames[2] = L"Urasandesu.Prig.Delegates.0804.dll";
+        prigDelegatesNames[3] = L"Urasandesu.Prig.Delegates.1205.dll";
+        BOOST_FOREACH (auto const &prigDelegatesName, prigDelegatesNames)
+        {
+            prigData.m_indirectionDelegatesList.push_back(new IndirectionDelegates());
+            auto &indDlgts = prigData.m_indirectionDelegatesList.back();
+                
+            indDlgts.m_pIndirectionDelegatesAssembly = pDisp->GetAssemblyFrom(PrigConfig::GetLibPath() / prigDelegatesName);
+        }
+    }
+
+    void FillIndirectionPreparationList(MetadataDispenser const *pDisp, AssemblyGenerator *pAsmGen, PrigData &prigData)
+    {
+        using Urasandesu::Prig::PrigConfig;
+
+        auto mscorlibFullName = wstring();
+        if (prigData.m_corVersion == L"v2.0.50727")
+            mscorlibFullName = L"mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+        else if (prigData.m_corVersion == L"v4.0.30319")
+            mscorlibFullName = L"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
+        _ASSERTE(!mscorlibFullName.empty());
+        auto const *pMSCorLib = pDisp->GetAssembly(mscorlibFullName);
+        prigData.m_pMSCorLibDll = pMSCorLib->GetMainModule();
+        
+        auto const *pPrigFrmwrk = pDisp->GetAssemblyFrom(PrigConfig::GetLibPath() / L"Urasandesu.Prig.Framework.dll");
+        auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
+        prigData.m_pPrigFrameworkDll = pPrigFrmwrkDll;
+
+        auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
+        auto const *pIndAsm = pDisp->GetAssemblyFrom(prigData.m_indDllPath);
+        auto indAttrs = pIndAsm->GetCustomAttributes(pIndAttrType);
+        BOOST_FOREACH (auto const *pIndAttr, indAttrs)
+        {
+            auto mdt = GetIndirectableToken(pIndAttr);
+            auto *pTarget = pAsmGen->GetMethodGenerator(mdt);
+
+            auto &orgPrep = prigData.NewPreparation<OriginalMethodPreparation>(mdt);
+            orgPrep.FillIndirectionPreparation(pDisp, pTarget, prigData);
+            orgPrep.ResolveIndirectionPreparation(pAsmGen);
+            
+            auto &dlgtPrep = prigData.NewPreparation<DelegatedMethodPreparation>(orgPrep.m_mdt);
+            dlgtPrep.FillIndirectionPreparation(pDisp, pTarget, prigData);
+            dlgtPrep.ResolveIndirectionPreparation(pAsmGen);
+        }
+
+        if (CPPANONYM_D_LOG_ENABLED())
+        {
+            BOOST_FOREACH (auto const &pair, prigData.m_indirectables)
+                CPPANONYM_D_LOGW1(L"Indirectable Token: 0x%|1$08X|", pair.first);
+        }
     }
 
     STDMETHODIMP CWeaverImpl::ModuleLoadFinishedCore( 
@@ -305,6 +376,7 @@ namespace CWeaverDetail {
         using boost::range::for_each;
         using std::wostringstream;
         using Urasandesu::CppAnonym::Utilities::AnyPtr;
+        using Urasandesu::Prig::PrigConfig;
 
         CPPANONYM_D_LOGW2(L"ModuleLoadFinishedCore(ModuleID: 0x%|1$X|, HRESULT: 0x%|2$08X|)", reinterpret_cast<void *>(moduleId), hrStatus);
 
@@ -343,8 +415,10 @@ namespace CWeaverDetail {
         auto const *pRuntime = m_pProfInfo->GetRuntime();
         auto pAsmProf = pModProf->AttachToAssembly();
         auto pDomainProf = pAsmProf->AttachToAppDomain();
+        auto *pDisp = pDomainProf->GetMetadataDispenser();
+        auto *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
         auto targetIndDllPath = path(m_currentDir);
-        targetIndDllPath /= GetIndirectionDllName(modName, pRuntime, pDomainProf, pAsmProf);
+        targetIndDllPath /= GetIndirectionDllName(modName, pRuntime, pAsmGen);
         CPPANONYM_D_LOGW1(L"Find detour module: %|1$s|.", targetIndDllPath.native());
         if (candidateIndDllPaths.find(targetIndDllPath) == candidateIndDllPaths.end())
             return S_OK;
@@ -356,20 +430,24 @@ namespace CWeaverDetail {
         pAsmProf.Persist();
         pDomainProf.Persist();
 
+        auto &asmResolver = pDisp->GetAssemblyResolver();
+        asmResolver.AddSearchDirectory(m_currentDir);
+
         auto asmId = lexical_cast<wstring>(pAsmProf->GetID());
         auto pData = pDomainProf->GetData(asmId);
         if (!pData)
         {
             auto *pPrigData = new PrigData();
             pData = AnyPtr(pPrigData);
-            pPrigData->m_corVersion = pRuntime->GetCORVersion();
-            pPrigData->m_indDllPath = targetIndDllPath;
+            auto &prigData = *pPrigData;
+            
+            prigData.m_corVersion = pRuntime->GetCORVersion();
+            prigData.m_indDllPath = targetIndDllPath;
+            FillIndirectionDelegatesList(m_currentPkg, pDisp, prigData);
+            FillIndirectionPreparationList(pDisp, pAsmGen, prigData);
+            
             pDomainProf->SetData(asmId, pData);
         }
-
-        auto *pDisp = pDomainProf->GetMetadataDispenser();
-        auto &asmResolver = pDisp->GetAssemblyResolver();
-        asmResolver.AddSearchDirectory(m_currentDir);
 
         return S_OK;
     }
@@ -415,13 +493,6 @@ namespace CWeaverDetail {
         CPPANONYM_LOG_FUNCTION();
 
         using boost::lexical_cast;
-        using boost::timer::cpu_timer;
-        using boost::timer::default_places;
-        using std::regex_search;
-        using std::wregex;
-        using Urasandesu::CppAnonym::Utilities::AnyPtr;
-        using Urasandesu::Prig::IndirectionDelegates;
-        using Urasandesu::Prig::PrigConfig;
         
         CPPANONYM_D_LOGW2(L"JITCompilationStartedCore(FunctionID: 0x%|1$X|, BOOL: 0x%|2$08X|)", reinterpret_cast<void *>(functionId), fIsSafeToBlock);
         
@@ -446,61 +517,6 @@ namespace CWeaverDetail {
         _ASSERTE(pData);
         auto &prigData = *pData.Get<PrigData *>();
         _ASSERTE(!prigData.m_indDllPath.empty());
-        if (!prigData.m_indirectablesInit)
-        {
-            CPPANONYM_LOG_NAMED_SCOPE("!prigData.m_indirectablesInit");
-            auto const &libPath = PrigConfig::GetLibPath();
-            auto const *pPrigFrmwrk = pDisp->GetAssemblyFrom(libPath / L"Urasandesu.Prig.Framework.dll");
-            auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
-            prigData.m_pPrigFrameworkDll = pPrigFrmwrkDll;
-            auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
-            auto const *pIndAsm = pDisp->GetAssemblyFrom(prigData.m_indDllPath);
-            auto indAttrs = pIndAsm->GetCustomAttributes(pIndAttrType);
-            BOOST_FOREACH (auto const *pIndAttr, indAttrs)
-                prigData.m_indirectables[GetIndirectableToken(pIndAttr)] = pIndAttr;
-
-            if (CPPANONYM_D_LOG_ENABLED())
-            {
-                BOOST_FOREACH (auto const &pair, prigData.m_indirectables)
-                    CPPANONYM_D_LOGW1(L"Indirectable Token: 0x%|1$08X|", pair.first);
-            }
-
-            BOOST_FOREACH (auto const &additionalDlgt, m_currentPkg.AdditionalDelegates)
-            {
-                prigData.m_indirectionDelegatesList.push_back(new IndirectionDelegates());
-                auto &indDlgts = prigData.m_indirectionDelegatesList.back();
-                
-                auto patternStr = additionalDlgt.FullName;
-                boost::replace_all(patternStr, L".", L"\\.");
-                auto pattern = wregex(patternStr);
-                BOOST_FOREACH (auto const &pAsm, pDisp->GetAssemblies())
-                {
-                    if (!regex_search(pAsm->GetFullName(), pattern))
-                        continue;
-                    
-                    indDlgts.m_pIndirectionDelegatesAssembly = pAsm;
-                    break;
-                }
-                
-                if (!indDlgts.m_pIndirectionDelegatesAssembly)
-                    indDlgts.m_pIndirectionDelegatesAssembly = pDisp->GetAssemblyFrom(additionalDlgt.HintPath);
-            }
-            
-            auto prigDelegatesNames = vector<wstring>(4);
-            prigDelegatesNames[0] = L"Urasandesu.Prig.Delegates.dll";
-            prigDelegatesNames[1] = L"Urasandesu.Prig.Delegates.0404.dll";
-            prigDelegatesNames[2] = L"Urasandesu.Prig.Delegates.0804.dll";
-            prigDelegatesNames[3] = L"Urasandesu.Prig.Delegates.1205.dll";
-            BOOST_FOREACH (auto const &prigDelegatesName, prigDelegatesNames)
-            {
-                prigData.m_indirectionDelegatesList.push_back(new IndirectionDelegates());
-                auto &indDlgts = prigData.m_indirectionDelegatesList.back();
-                
-                indDlgts.m_pIndirectionDelegatesAssembly = pDisp->GetAssemblyFrom(libPath / prigDelegatesName);
-            }
-            
-            prigData.m_indirectablesInit = true;
-        }
         
         typedef decltype(prigData.m_indirectables) Indirectables;
         typedef Indirectables::iterator Iterator;
@@ -517,417 +533,13 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW(L"This method is marked by IndirectableAttribute.");
         pFuncProf.Persist();
         
-        auto timer = cpu_timer();
-        {
-            CPPANONYM_LOG_NAMED_SCOPE("Modifying method");
-
-            auto subTimer = cpu_timer();
+        auto const &indPrep = prigData.m_indirectionPreparationList[(*result).second];
+        indPrep.EmitMethodBody(pMethodGen, pFuncProf);
         
-            auto pNewBodyProf = pFuncProf->NewFunctionBody();
-            auto *pNewBodyGen = pNewBodyProf->GetMethodBodyGenerator(pMethodGen);
-        
-            auto const *pBody = pMethodGen->GetMethodBody();
-            BOOST_FOREACH (auto const *pLocal, pBody->GetLocals())
-                pNewBodyGen->DefineLocal(pLocal->GetLocalType());
-
-            CPPANONYM_V_LOG2("Processing time to define locals of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-            subTimer = cpu_timer();
-
-            auto offset = EmitIndirectMethodBody(pNewBodyGen, pDisp, pMethodGen, prigData);
-
-            CPPANONYM_V_LOG2("Processing time to emit indirect method body of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-            subTimer = cpu_timer();
-        
-            BOOST_FOREACH (auto const *pInst, pBody->GetInstructions())
-                pNewBodyGen->Emit(pInst);
-
-            CPPANONYM_V_LOG2("Processing time to emit original method body of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-            subTimer = cpu_timer();
-        
-            BOOST_FOREACH (auto const &exClause, pBody->GetExceptionClauses())
-                pNewBodyGen->DefineExceptionClause(exClause, offset);
-
-            CPPANONYM_V_LOG2("Processing time to define exception clauses of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-
-            pFuncProf->SetFunctionBody(pNewBodyProf);
-        
-            pProcProf->DetachFromFunction(functionId);
-        }
-
-        CPPANONYM_V_LOG2("Processing time to modify the method(Token: 0x%|1$08X|): %|2$s|.", mdt, timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        pProcProf->DetachFromFunction(functionId);
 
         return S_OK;
     }
-
-
-
-    SIZE_T CWeaverImpl::EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MetadataDispenser const *pDisp, MethodGenerator const *pMethodGen, PrigData &prigData)
-    {
-        using boost::timer::cpu_timer;
-        using boost::timer::default_places;
-
-        CPPANONYM_LOG_FUNCTION();
-
-        auto timer = cpu_timer();
-
-        auto mscorlibFullName = wstring();
-        if (prigData.m_corVersion == L"v2.0.50727")
-            mscorlibFullName = L"mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-        else if (prigData.m_corVersion == L"v4.0.30319")
-            mscorlibFullName = L"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-        _ASSERTE(!mscorlibFullName.empty());
-        
-        auto const *pMSCorLib = pDisp->GetAssembly(mscorlibFullName);
-        auto const *pMSCorLibDll = pMSCorLib->GetMainModule();
-
-        CPPANONYM_V_LOG1("Processing time to find mscorlib: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        auto const *pException = pMSCorLibDll->GetType(L"System.Exception");
-        auto const *pType = pMSCorLibDll->GetType(L"System.Type");
-
-        CPPANONYM_V_LOG1("Processing time to get BCL definitions 1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        auto const *pType_GetTypeFromHandle = pType->GetMethod(L"GetTypeFromHandle");
-
-        CPPANONYM_V_LOG1("Processing time to get BCL definitions 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        CPPANONYM_V_LOG1("Processing time to find Urasandesu.Prig.Framework: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        _ASSERTE(prigData.m_pPrigFrameworkDll);
-        auto const *pPrigFrmwrkDll = prigData.m_pPrigFrameworkDll;
-        auto const *pIndInfo = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionInfo");
-        auto const *pIndHolder1 = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionHolder`1");
-        auto const *pIndDlgtAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionDelegateAttribute");
-        auto const *pLooseCrossDomainAccessor = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.LooseCrossDomainAccessor");
-        auto const *pFlowControlException = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.FlowControlException");
-
-        CPPANONYM_V_LOG1("Processing time to get indirection definitions 1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        auto const *pIndDlgtInst = GetIndirectionDelegateInstance(pMethodGen, pIndDlgtAttrType, prigData);
-
-        CPPANONYM_V_LOG1("Processing time to get indirection delegate instance 1-1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        auto const *pIndHolder1IndDlgtInst = static_cast<IType *>(nullptr);
-        {
-            auto genericArgs = vector<IType const *>();
-            genericArgs.push_back(pIndDlgtInst);
-            pIndHolder1IndDlgtInst = pIndHolder1->MakeGenericType(genericArgs);
-        }
-
-        CPPANONYM_V_LOG1("Processing time to get indirection delegate instance 1-2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        auto const *pIndInfo_set_AssemblyName = pIndInfo->GetMethod(L"set_AssemblyName");
-        auto const *pIndInfo_set_Token = pIndInfo->GetMethod(L"set_Token");
-        auto const *pIndDlgtInst_Invoke = pIndDlgtInst->GetMethod(L"Invoke");
-        auto const *pLooseCrossDomainAccessor_TryGet = pLooseCrossDomainAccessor->GetMethod(L"TryGet");
-        auto const *pLooseCrossDomainAccessor_IsInstanceOfIdentity = pLooseCrossDomainAccessor->GetMethod(L"IsInstanceOfIdentity");
-        auto const *pIndHolder1IndDlgtInst_TryGet = pIndHolder1IndDlgtInst->GetMethod(L"TryGet");
-
-        CPPANONYM_V_LOG1("Processing time to get indirection definitions 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        auto const *pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst = static_cast<IMethod *>(nullptr);
-        {
-            auto genericArgs = vector<IType const *>();
-            genericArgs.push_back(pIndHolder1IndDlgtInst);
-            pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst = pLooseCrossDomainAccessor_TryGet->MakeGenericMethod(genericArgs);
-        }
-
-        CPPANONYM_V_LOG1("Processing time to get indirection delegate instance 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        timer = cpu_timer();
-
-        auto *pLocal0_holder = pNewBodyGen->DefineLocal(pIndHolder1IndDlgtInst);
-        auto *pLocal1_info = pNewBodyGen->DefineLocal(pIndInfo);
-        auto *pLocal2_ind = pNewBodyGen->DefineLocal(pIndDlgtInst);
-        auto *pLocal3_e = pNewBodyGen->DefineLocal(pException);
-        auto *pLocal4 = static_cast<LocalGenerator *>(nullptr);
-        if (pMethodGen->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
-            pLocal4 = pNewBodyGen->DefineLocal(pMethodGen->GetReturnType());
-
-        auto label0 = pNewBodyGen->DefineLabel();
-        auto label1 = pNewBodyGen->DefineLabel();
-        auto label2 = pNewBodyGen->DefineLabel();
-        auto label3 = pNewBodyGen->DefineLabel();
-
-        pNewBodyGen->BeginExceptionBlock();
-        {
-            pNewBodyGen->Emit(OpCodes::Ldnull);
-            pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal0_holder);
-            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal0_holder);
-            pNewBodyGen->Emit(OpCodes::Call, pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst);
-            pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
-
-            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
-            pNewBodyGen->Emit(OpCodes::Initobj, pIndInfo);
-            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
-            pNewBodyGen->Emit(OpCodes::Ldstr, pMethodGen->GetAssembly()->GetFullName());
-            pNewBodyGen->Emit(OpCodes::Call, pIndInfo_set_AssemblyName);
-            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_info);
-            pNewBodyGen->Emit(OpCodes::Ldc_I4, static_cast<INT>(pMethodGen->GetToken()));
-            pNewBodyGen->Emit(OpCodes::Call, pIndInfo_set_Token);
-            pNewBodyGen->Emit(OpCodes::Ldnull);
-            pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal2_ind);
-            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal0_holder);
-            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal1_info);
-            pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal2_ind);
-            pNewBodyGen->Emit(OpCodes::Callvirt, pIndHolder1IndDlgtInst_TryGet);
-            pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
-
-            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal2_ind);
-            EmitIndirectParameters(pNewBodyGen, pMethodGen);
-            pNewBodyGen->Emit(OpCodes::Callvirt, pIndDlgtInst_Invoke);
-            if (pLocal4)
-                pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal4);
-            pNewBodyGen->Emit(OpCodes::Leave_S, label1);
-
-            pNewBodyGen->MarkLabel(label0);
-        }
-        pNewBodyGen->BeginCatchBlock(pException);
-        {
-            pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal3_e);
-            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal3_e);
-            pNewBodyGen->Emit(OpCodes::Ldstr, L"Urasandesu.Prig.Framework.FlowControlException");
-            pNewBodyGen->Emit(OpCodes::Call, pLooseCrossDomainAccessor_IsInstanceOfIdentity);
-            pNewBodyGen->Emit(OpCodes::Brtrue_S, label2);
-            
-            pNewBodyGen->Emit(OpCodes::Rethrow);
-            
-            pNewBodyGen->MarkLabel(label2);
-        }
-        pNewBodyGen->EndExceptionBlock();
-        
-        pNewBodyGen->Emit(OpCodes::Br_S, label3);
-        pNewBodyGen->MarkLabel(label1);
-        if (pLocal4)
-            pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal4);
-        pNewBodyGen->Emit(OpCodes::Ret);
-        pNewBodyGen->MarkLabel(label3);
-
-        auto size = pNewBodyGen->GetInstructions().size();
-
-        CPPANONYM_V_LOG1("Processing time to emit indirect method body details: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-        
-        return size;
-    }
-
-
-    
-    void CWeaverImpl::EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen)
-    {
-        auto isStatic = pMethodGen->IsStatic();
-        auto offset = isStatic ? 1 : 0;
-        if (!isStatic)
-            pNewBodyGen->Emit(OpCodes::Ldarg_0);
-    
-        auto const &params = pMethodGen->GetParameters();
-        BOOST_FOREACH (auto const &pParam, params)
-        {
-            auto position = pParam->GetPosition() - offset;
-        
-            if (position == 0)
-                pNewBodyGen->Emit(OpCodes::Ldarg_0);
-            else if (position == 1)
-                pNewBodyGen->Emit(OpCodes::Ldarg_1);
-            else if (position == 2)
-                pNewBodyGen->Emit(OpCodes::Ldarg_2);
-            else if (position == 3)
-                pNewBodyGen->Emit(OpCodes::Ldarg_3);
-            else if (4 <= position && position <= 255)
-                pNewBodyGen->Emit(OpCodes::Ldarg_S, static_cast<BYTE>(position));
-            else
-                pNewBodyGen->Emit(OpCodes::Ldarg, static_cast<SHORT>(position));
-        }
-    }
-
-
-
-    class ExplicitThis : 
-        public IParameter
-    {
-    public:
-        ExplicitThis() : 
-            m_pParamType(nullptr)
-        { }
-
-        mdToken GetToken() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        ULONG GetPosition() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        std::wstring const &GetName() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        ParameterAttributes GetAttribute() const { return ParameterAttributes::PA_NONE; }
-        IType const *GetParameterType() const { return m_pParamType; }
-        Signature const &GetSignature() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        IMethod const *GetMethod() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        IProperty const *GetProperty() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        ParameterProvider const &GetMember() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        IAssembly const *GetAssembly() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        IParameter const *GetSourceParameter() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        bool Equals(IParameter const *pParam) const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        size_t GetHashCode() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-        void OutDebugInfo() const { BOOST_THROW_EXCEPTION(Urasandesu::CppAnonym::CppAnonymNotImplementedException()); }
-
-        void Set(IType const *pParamType)
-        {
-            _ASSERTE(!m_pParamType);
-            _ASSERTE(pParamType);
-            m_pParamType = pParamType;
-        }
-
-    private:
-        IType const *m_pParamType;
-    };
-
-    class IndirectionDelegateFinder
-    {
-    public:
-        IndirectionDelegateFinder(IMethod const *pTarget) : 
-            m_pTarget(pTarget)
-        { }
-
-        bool operator ()(IType const *pType) const
-        {
-            using Urasandesu::Prig::IMethodSigEqualTo;
-
-            auto pType_Invoke = pType->GetMethod(L"Invoke");
-            _ASSERTE(pType_Invoke);
-            auto params = vector<IParameter const *>();
-            auto explicitThis = ExplicitThis();
-            if (m_pTarget->IsStatic())
-            {
-                params = m_pTarget->GetParameters();
-            }
-            else
-            {
-                auto const *pDeclaringType = m_pTarget->GetDeclaringType();
-                if (pDeclaringType->IsValueType())
-                    pDeclaringType = pDeclaringType->MakeByRefType();
-                explicitThis.Set(pDeclaringType);
-                params.push_back(&explicitThis);
-                params.insert(params.end(), m_pTarget->GetParameters().begin(), m_pTarget->GetParameters().end());
-            }
-
-            return IMethodSigEqualTo::ReturnTypeEqual(pType_Invoke->GetReturnType(), m_pTarget->GetReturnType()) && 
-                   IMethodSigEqualTo::ParametersEqual(pType_Invoke->GetParameters(), params);
-        }
-
-    private:
-        IMethod const *m_pTarget;
-    };
-
-    IType const *CWeaverImpl::GetIndirectionDelegateInstance(IMethod const *pTarget, IType const *pIndDlgtAttrType, PrigData &prigData) const
-    {
-        CPPANONYM_LOG_FUNCTION();
-
-        using boost::adaptors::filtered;
-        using boost::timer::cpu_timer;
-        using boost::timer::default_places;
-        using boost::copy;
-        using std::back_inserter;
-        using Urasandesu::CppAnonym::Collections::FindIf;
-        using Urasandesu::CppAnonym::CppAnonymCOMException;
-
-        auto timer = cpu_timer();
-        
-        auto &dlgtsList = prigData.m_indirectionDelegatesList;
-        BOOST_FOREACH (auto &pDlgts, dlgtsList)
-        {
-            CPPANONYM_V_LOG1("Processing time to check whether the delegate is cached: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-            timer = cpu_timer();
-
-            // enumerate IndirectionDelegate and cache them if needed.
-            if (!pDlgts.m_indirectionDelegatesInit)
-            {
-                CPPANONYM_LOG_NAMED_SCOPE("!pDlgts->m_indirectionDelegatesInit");
-                auto types = pDlgts.m_pIndirectionDelegatesAssembly->GetTypes();
-
-                CPPANONYM_V_LOG1("Processing time to enumerate IndirectionDelegate and cache them 1: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-                timer = cpu_timer();
-
-                auto isIndDlgt = [pIndDlgtAttrType](IType const *pType) { return pType->IsDefined(pIndDlgtAttrType); };
-                auto indDlgts = types | filtered(isIndDlgt);
-                copy(indDlgts, back_inserter(pDlgts.m_indirectionDelegates));
-
-                if (CPPANONYM_D_LOG_ENABLED())
-                {
-                    BOOST_FOREACH (auto const &pIndDlgt, pDlgts.m_indirectionDelegates)
-                        CPPANONYM_D_LOGW1(L"IndirectionDelegate Token: 0x%|1$08X|", pIndDlgt->GetToken());
-                }
-
-                pDlgts.m_indirectionDelegatesInit = true;
-
-                CPPANONYM_V_LOG1("Processing time to enumerate IndirectionDelegate and cache them 2: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-                timer = cpu_timer();
-            }
-            
-            // find IndirectionDelegate which has same signature with the target method.
-            auto const *pIndDlgt = static_cast<IType *>(nullptr);
-            {
-                auto result = FindIf(pDlgts.m_indirectionDelegates, IndirectionDelegateFinder(pTarget));
-                if (!result)
-                    continue;
-                
-                pIndDlgt = *result;
-
-                CPPANONYM_V_LOG1("Processing time to find IndirectionDelegate which has same signature with the target method and cache it: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-                timer = cpu_timer();
-            }
-
-            // if the delegate is a generic type, make Generic Type Instance of IndirectionDelegate.
-            if (!pIndDlgt->IsGenericType())
-            {
-                CPPANONYM_LOG_NAMED_SCOPE("!pIndDlgt->IsGenericType()");
-                return pIndDlgt;
-            }
-            else
-            {
-                CPPANONYM_LOG_NAMED_SCOPE("pIndDlgt->IsGenericType()");
-                auto genericArgs = vector<IType const *>();
-                if (!pTarget->IsStatic())
-                {
-                    auto const *pDeclaringType = pTarget->GetDeclaringType();
-                    if (pDeclaringType->IsGenericType())
-                        pDeclaringType = MakeGenericExplicitThisType(pDeclaringType);
-                    genericArgs.push_back(pDeclaringType);
-                }
-                auto const &params = pTarget->GetParameters();
-                BOOST_FOREACH (auto const &pParam, params)
-                {
-                    auto const *pParamType = pParam->GetParameterType();
-                    genericArgs.push_back(pParamType->IsByRef() ? pParamType->GetDeclaringType() : pParamType);
-                }
-                if (pTarget->GetReturnType()->GetKind() != TypeKinds::TK_VOID)
-                    genericArgs.push_back(pTarget->GetReturnType());
-                auto const *pIndDlgtInst = pIndDlgt->MakeGenericType(genericArgs);
-
-                CPPANONYM_V_LOG1("Processing time to make Generic Type Instance of IndirectionDelegate: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
-                timer = cpu_timer();
-
-                return pIndDlgtInst;
-            }
-        }
-        
-        BOOST_THROW_EXCEPTION(CppAnonymCOMException(CLDB_E_RECORD_NOTFOUND));
-    }
-
-
-
-    IType const *CWeaverImpl::MakeGenericExplicitThisType(IType const *pTarget) const
-    {
-        auto const *pAsm = pTarget->GetAssembly();
-        
-        auto genericParamPos = 0ul;
-        auto genericArgs = vector<IType const *>();
-        BOOST_FOREACH (auto const &_, pTarget->GetGenericArguments())
-            genericArgs.push_back(pAsm->GetGenericTypeParameter(genericParamPos++));
-        
-        return pTarget->MakeGenericType(genericArgs);
-    }
-
 }   // namespace CWeaverDetail {
 
 

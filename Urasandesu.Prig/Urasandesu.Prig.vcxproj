@@ -300,6 +300,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="InstanceGetters.cpp" />
+    <ClCompile Include="PrigData.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -324,7 +325,6 @@
     <ClCompile Include="Urasandesu\Prig\IMethodSigEqualTo.cpp" />
     <ClCompile Include="Urasandesu\Prig\IMethodSigHash.cpp" />
     <ClCompile Include="Urasandesu\Prig\PrigConfig.cpp" />
-    <ClCompile Include="Urasandesu\Prig\PrigData.cpp" />
     <ClCompile Include="Weaver.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseAssemblyInfo.cpp" />
     <ClCompile Include="..\Swathe\Urasandesu.Swathe\Urasandesu\Swathe\AutoGen\Fusion\BaseClass\BaseFusionInfo.cpp" />
@@ -454,6 +454,8 @@
   <ItemGroup>
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="InstanceGetters.h" />
+    <ClInclude Include="PrigData.h" />
+    <ClInclude Include="PrigDataFwd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -464,8 +466,6 @@
     <ClInclude Include="Urasandesu\Prig\IMethodSigHashFwd.h" />
     <ClInclude Include="Urasandesu\Prig\PrigConfig.h" />
     <ClInclude Include="Urasandesu\Prig\PrigConfigFwd.h" />
-    <ClInclude Include="Urasandesu\Prig\PrigData.h" />
-    <ClInclude Include="Urasandesu\Prig\PrigDataFwd.h" />
     <ClInclude Include="Weaver.h" />
   </ItemGroup>
   <ItemGroup>
