@@ -552,6 +552,7 @@ namespace CWeaverDetail {
 
         return S_OK;
     }
+
 }   // namespace CWeaverDetail {
 
 

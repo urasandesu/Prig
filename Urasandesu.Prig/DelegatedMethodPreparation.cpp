@@ -144,45 +144,8 @@ namespace DelegatedMethodPreparationDetail {
 
     void DelegatedMethodPreparation::ResolveIndirectionPreparation(AssemblyGenerator *pAsmGen)
     {
-        using boost::timer::cpu_timer;
-        using boost::timer::default_places;
-
-        auto timer = cpu_timer();
-
-        m_pIndHolder1IndDlgtInst = pAsmGen->Resolve(m_pIndHolder1IndDlgtInst);
-        m_pIndInfo = pAsmGen->Resolve(m_pIndInfo);
-        m_pIndDlgtInst = pAsmGen->Resolve(m_pIndDlgtInst);
-        m_pException = pAsmGen->Resolve(m_pException);
-        m_pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst = pAsmGen->Resolve(m_pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst);
-        m_pIndInfo_set_AssemblyName = pAsmGen->Resolve(m_pIndInfo_set_AssemblyName);
-        m_pIndInfo_set_Token = pAsmGen->Resolve(m_pIndInfo_set_Token);
-        m_pIndHolder1IndDlgtInst_TryGet = pAsmGen->Resolve(m_pIndHolder1IndDlgtInst_TryGet);
-        m_pIndDlgtInst_Invoke = pAsmGen->Resolve(m_pIndDlgtInst_Invoke);
-        m_pLooseCrossDomainAccessor_IsInstanceOfIdentity = pAsmGen->Resolve(m_pLooseCrossDomainAccessor_IsInstanceOfIdentity);
-
-        auto mdt = mdTokenNil;
-        mdt = m_pIndHolder1IndDlgtInst->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for IndirectionHolder<IndirectionDelegate>: 0x%|1$08X|", mdt);
-        mdt = m_pIndInfo->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for IndirectionInfo: 0x%|1$08X|", mdt);
-        mdt = m_pIndDlgtInst->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for IndirectionDelegate: 0x%|1$08X|", mdt);
-        mdt = m_pException->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for Exception: 0x%|1$08X|", mdt);
-        mdt = m_pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for LooseCrossDomainAccessor.TryGet<IndirectionHolder<IndirectionDelegate>>: 0x%|1$08X|", mdt);
-        mdt = m_pIndInfo_set_AssemblyName->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for IndirectionInfo.set_AssemblyName: 0x%|1$08X|", mdt);
-        mdt = m_pIndInfo_set_Token->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for IndirectionInfo.set_Token: 0x%|1$08X|", mdt);
-        mdt = m_pIndHolder1IndDlgtInst_TryGet->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for IndirectionHolder<IndirectionDelegate>.TryGet: 0x%|1$08X|", mdt);
-        mdt = m_pIndDlgtInst_Invoke->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for IndirectionDelegate.Invoke: 0x%|1$08X|", mdt);
-        mdt = m_pLooseCrossDomainAccessor_IsInstanceOfIdentity->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for LooseCrossDomainAccessor.IsInstanceOfIdentity: 0x%|1$08X|", mdt);
-
-        CPPANONYM_V_LOG1("Processing time to resolve the metadata tokens for delegate method preparation: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+        // nop
+        // Essentially, we have to define any metadata excluding `LocalVarSig` until `ModuleLoadFinished`. It's under investigation, but it seems no problem for now.
     }
 
 

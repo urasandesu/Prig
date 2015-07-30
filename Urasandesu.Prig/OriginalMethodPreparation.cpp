@@ -132,12 +132,9 @@ namespace OriginalMethodPreparationDetail {
 
         auto timer = cpu_timer();
 
-        m_pInt32 = pAsmGen->Resolve(m_pInt32);
         m_pTryPrigTarget = pAsmGen->Resolve(m_pTryPrigTarget);
 
         auto mdt = mdTokenNil;
-        mdt = m_pInt32->GetToken();
-        CPPANONYM_D_LOGW1(L"Resolved the Token for Int32: 0x%|1$08X|", mdt);
         mdt = m_pTryPrigTarget->GetToken();
         CPPANONYM_D_LOGW1(L"Resolved the Token for TryPrigTarget: 0x%|1$08X|", mdt);
         m_mdt = mdt;
