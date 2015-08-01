@@ -177,4 +177,12 @@ namespace UntestableLibrary
             throw new NotImplementedException();
         }
     }
+
+    public class ULUnusedGeneric<T1, T2, T3, T4>
+    {
+        public TRet Echo<T5, T6, T7, T8, TRet>(T4 v4, T8 v8)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

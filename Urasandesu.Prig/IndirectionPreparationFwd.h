@@ -1,5 +1,5 @@
 ﻿/* 
- * File: InstanceGetters.h
+ * File: IndirectionPreparationFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,24 +29,30 @@
 
 
 #pragma once
+#ifndef INDIRECTIONPREPARATIONFWD_H
+#define INDIRECTIONPREPARATIONFWD_H
 
-#ifndef INDIRETIONINTERFACES_H
-#define INDIRETIONINTERFACES_H
-
-#ifdef URASANDESU_PRIG_EXPORTS
-#define URASANDESU_PRIG_API __declspec(dllexport)
-#else
-#define URASANDESU_PRIG_API __declspec(dllimport)
+#ifndef PRIGDATAFWD_H
+#include <PrigDataFwd.h>
 #endif
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersEnterDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty();
+namespace IndirectionPreparationDetail {
 
-#endif  // #ifndef INDIRETIONINTERFACES_H
+    using namespace Urasandesu::Swathe::Metadata;
+
+    struct IndirectionPreparation;
+
+    void EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, IMethod const *pMethodGen, INT offset = 0);
+    IType const *MakeGenericExplicitItsInstance(IType const *pTarget);
+    IMethod const *MakeGenericExplicitItsInstance(IMethod const *pTarget);
+    IType const *GetIndirectionDelegateInstance(IMethod const *pTarget, IType const *pIndDlgtAttrType, PrigData &prigData);
+
+}   // namespace IndirectionPreparationDetail {
+    
+using IndirectionPreparationDetail::IndirectionPreparation;
+using IndirectionPreparationDetail::EmitIndirectParameters;
+using IndirectionPreparationDetail::MakeGenericExplicitItsInstance;
+using IndirectionPreparationDetail::GetIndirectionDelegateInstance;
+
+#endif  // INDIRECTIONPREPARATIONFWD_H
+

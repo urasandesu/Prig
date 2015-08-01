@@ -637,9 +637,6 @@
     <ClCompile Include="Urasandesu\Prig\IMethodSigHash.cpp">
       <Filter>Source Files\Urasandesu\Prig</Filter>
     </ClCompile>
-    <ClCompile Include="Urasandesu\Prig\PrigData.cpp">
-      <Filter>Source Files\Urasandesu\Prig</Filter>
-    </ClCompile>
     <ClCompile Include="Urasandesu\Prig\IMethodSigEqualTo.cpp">
       <Filter>Source Files\Urasandesu\Prig</Filter>
     </ClCompile>
@@ -657,6 +654,21 @@
     </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Json.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym</Filter>
+    </ClCompile>
+    <ClCompile Include="PrigData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IndirectionDelegates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IndirectionPreparation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OriginalMethodPreparation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DelegatedMethodPreparation.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -687,12 +699,6 @@
     <ClInclude Include="Urasandesu\Prig\IMethodSigHashFwd.h">
       <Filter>Header Files\Urasandesu\Prig</Filter>
     </ClInclude>
-    <ClInclude Include="Urasandesu\Prig\PrigData.h">
-      <Filter>Header Files\Urasandesu\Prig</Filter>
-    </ClInclude>
-    <ClInclude Include="Urasandesu\Prig\PrigDataFwd.h">
-      <Filter>Header Files\Urasandesu\Prig</Filter>
-    </ClInclude>
     <ClInclude Include="Urasandesu\Prig\IMethodSigEqualTo.h">
       <Filter>Header Files\Urasandesu\Prig</Filter>
     </ClInclude>
@@ -704,6 +710,36 @@
     </ClInclude>
     <ClInclude Include="Urasandesu\Prig\PrigConfigFwd.h">
       <Filter>Header Files\Urasandesu\Prig</Filter>
+    </ClInclude>
+    <ClInclude Include="PrigData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrigDataFwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndirectionDelegates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndirectionDelegatesFwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndirectionPreparation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndirectionPreparationFwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OriginalMethodPreparation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OriginalMethodPreparationFwd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DelegatedMethodPreparation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DelegatedMethodPreparationFwd.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

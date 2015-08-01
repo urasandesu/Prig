@@ -1,5 +1,5 @@
 ﻿/* 
- * File: InstanceGetters.h
+ * File: IndirectionDelegates.cpp
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,25 +28,18 @@
  */
 
 
-#pragma once
 
-#ifndef INDIRETIONINTERFACES_H
-#define INDIRETIONINTERFACES_H
+#include "stdafx.h"
 
-#ifdef URASANDESU_PRIG_EXPORTS
-#define URASANDESU_PRIG_API __declspec(dllexport)
-#else
-#define URASANDESU_PRIG_API __declspec(dllimport)
+#ifndef INDIRECTIONDELEGATES_H
+#include <IndirectionDelegates.h>
 #endif
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersEnterDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty();
+namespace IndirectionDelegatesDetail {
 
-#endif  // #ifndef INDIRETIONINTERFACES_H
+    IndirectionDelegates::IndirectionDelegates() : 
+        m_pIndirectionDelegatesAssembly(nullptr), 
+        m_indirectionDelegatesInit(false)
+    { }
+
+}   // namespace IndirectionDelegatesDetail {

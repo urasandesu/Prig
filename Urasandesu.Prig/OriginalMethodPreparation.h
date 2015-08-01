@@ -1,5 +1,5 @@
 ﻿/* 
- * File: InstanceGetters.h
+ * File: OriginalMethodPreparation.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,24 +29,39 @@
 
 
 #pragma once
+#ifndef ORIGINALMETHODPREPARATION_H
+#define ORIGINALMETHODPREPARATION_H
 
-#ifndef INDIRETIONINTERFACES_H
-#define INDIRETIONINTERFACES_H
-
-#ifdef URASANDESU_PRIG_EXPORTS
-#define URASANDESU_PRIG_API __declspec(dllexport)
-#else
-#define URASANDESU_PRIG_API __declspec(dllimport)
+#ifndef INDIRECTIONPREPARATION_H
+#include <IndirectionPreparation.h>
 #endif
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersEnterDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty();
+#ifndef ORIGINALMETHODPREPARATIONFWD_H
+#include <OriginalMethodPreparationFwd.h>
+#endif
 
-#endif  // #ifndef INDIRETIONINTERFACES_H
+namespace OriginalMethodPreparationDetail {
+
+    using namespace Urasandesu::CppAnonym::Utilities;
+    using namespace Urasandesu::Swathe::Metadata;
+    using namespace Urasandesu::Swathe::Profiling;
+
+    struct OriginalMethodPreparation : 
+        IndirectionPreparation
+    {
+        OriginalMethodPreparation();
+
+        void FillIndirectionPreparation(MetadataDispenser const *pDisp, MethodGenerator *pTarget, PrigData &prigData);
+        void ResolveIndirectionPreparation(AssemblyGenerator *pAsmGen);
+        SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen) const;
+        void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const;
+
+        IType const *m_pInt32;
+        IMethod const *m_pTryPrigTarget;
+        mdToken m_mdt;
+    };
+
+}   // namespace OriginalMethodPreparationDetail {
+
+#endif  // ORIGINALMETHODPREPARATION_H
+

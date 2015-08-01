@@ -1,5 +1,5 @@
 ﻿/* 
- * File: InstanceGetters.h
+ * File: PULUnusedGenericTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,25 +28,31 @@
  */
 
 
-#pragma once
+using NUnit.Framework;
+using UntestableLibrary;
+using UntestableLibrary.Prig;
+using Urasandesu.Prig.Framework;
 
-#ifndef INDIRETIONINTERFACES_H
-#define INDIRETIONINTERFACES_H
+namespace Test.program1.UntestableLibrary.Prig
+{
+    [TestFixture]
+    public class ULUnusedGenericTest
+    {
+        [Test]
+        public void Echo_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PULUnusedGeneric<sbyte, byte, short, ushort>.EchoOfT5OfT6OfT7OfT8OfTRetT4T8<int, uint, long, ulong, decimal>().Body =
+                    (@this, v4, v8) => 42m;
 
-#ifdef URASANDESU_PRIG_EXPORTS
-#define URASANDESU_PRIG_API __declspec(dllexport)
-#else
-#define URASANDESU_PRIG_API __declspec(dllimport)
-#endif
+                // Act
+                var result = new ULUnusedGeneric<sbyte, byte, short, ushort>().Echo<int, uint, long, ulong, decimal>(1, 2);
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersEnterDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty();
-
-#endif  // #ifndef INDIRETIONINTERFACES_H
+                // Assert
+                Assert.AreEqual(42m, result);
+            }
+        }
+    }
+}

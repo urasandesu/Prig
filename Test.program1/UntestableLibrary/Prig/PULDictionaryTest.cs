@@ -64,11 +64,11 @@ namespace Test.program1.UntestableLibrary.Prig
                 // Arrange
                 PULDictionaryOfTKeyOfTValueEnumerator<int, string>.CurrentGet().Body = 
                     (ref ULDictionary<int, string>.Enumerator @this) => new KeyValuePair<int, string>(42, "にゃんぱすー");
-
+                
                 // Act
                 var enumerator = new ULDictionary<int, string>.Enumerator();
                 var actual = enumerator.Current;
-
+                
                 // Assert
                 Assert.AreEqual(42, actual.Key);
                 Assert.AreEqual("にゃんぱすー", actual.Value);

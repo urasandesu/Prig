@@ -46,7 +46,7 @@ nuget pack ([IO.Path]::Combine($nugetPackageFolder, "Prig.nuspec")) -OutputDirec
 
 
 $name = "Prig Source"
-$source = $env:chocolateyPackageFolder
+$source = $chocoToolsPath
 "  Registering the nuget source '$source' as '$name'..."
 if (0 -lt @(nuget sources list | ? { $_ -match 'Prig Source' }).Length) {
     nuget sources update -name $name -source "$source"

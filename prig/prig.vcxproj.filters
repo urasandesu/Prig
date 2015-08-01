@@ -740,9 +740,6 @@
     <ClCompile Include="..\Urasandesu.Prig\Urasandesu\Prig\PrigConfig.cpp">
       <Filter>Source Files\Urasandesu\Prig</Filter>
     </ClCompile>
-    <ClCompile Include="..\Urasandesu.Prig\Urasandesu\Prig\PrigData.cpp">
-      <Filter>Source Files\Urasandesu\Prig</Filter>
-    </ClCompile>
     <ClCompile Include="..\CppAnonym\Urasandesu.CppAnonym\Urasandesu\CppAnonym\Xml.cpp">
       <Filter>Source Files\Urasandesu\CppAnonym</Filter>
     </ClCompile>

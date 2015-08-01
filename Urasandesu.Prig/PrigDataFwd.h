@@ -29,22 +29,16 @@
 
 
 #pragma once
-#ifndef URASANDESU_PRIG_PRIGDATAFWD_H
-#define URASANDESU_PRIG_PRIGDATAFWD_H
+#ifndef PRIGDATAFWD_H
+#define PRIGDATAFWD_H
 
-namespace Urasandesu { namespace Prig { 
+namespace PrigDataDetail {
 
-    namespace PrigDataDetail {
+    struct PrigData;
 
-        struct IndirectionDelegates;
-        struct PrigData;
-
-    }   // namespace PrigDataDetail {
+}   // namespace PrigDataDetail {
     
-    using PrigDataDetail::IndirectionDelegates;
-    using PrigDataDetail::PrigData;
-    
-}}   // namespace Urasandesu { namespace Prig { 
+using PrigDataDetail::PrigData;
 
-#endif  // URASANDESU_PRIG_PRIGDATAFWD_H
+#endif  // PRIGDATAFWD_H
 

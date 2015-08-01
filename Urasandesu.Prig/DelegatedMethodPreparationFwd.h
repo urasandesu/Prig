@@ -1,5 +1,5 @@
 ﻿/* 
- * File: InstanceGetters.h
+ * File: DelegatedMethodPreparationFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,24 +29,16 @@
 
 
 #pragma once
+#ifndef DELEGATEDMETHODPREPARATIONFWD_H
+#define DELEGATEDMETHODPREPARATIONFWD_H
 
-#ifndef INDIRETIONINTERFACES_H
-#define INDIRETIONINTERFACES_H
+namespace DelegatedMethodPreparationDetail {
 
-#ifdef URASANDESU_PRIG_EXPORTS
-#define URASANDESU_PRIG_API __declspec(dllexport)
-#else
-#define URASANDESU_PRIG_API __declspec(dllimport)
-#endif
+    struct DelegatedMethodPreparation;
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersEnterDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty();
+}   // namespace DelegatedMethodPreparationDetail {
+    
+using DelegatedMethodPreparationDetail::DelegatedMethodPreparation;
 
-#endif  // #ifndef INDIRETIONINTERFACES_H
+#endif  // DELEGATEDMETHODPREPARATIONFWD_H
+

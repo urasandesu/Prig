@@ -65,6 +65,7 @@ trap {
 
 Write-Verbose ('ReferenceFrom            : {0}(Type: {1})' -f $ReferenceFrom, ($ReferenceFrom.GetType()))
 Write-Verbose ('Assembly                 : {0}' -f $Assembly)
+Write-Verbose ('AssemblyFrom             : {0}' -f $AssemblyFrom)
 Write-Verbose ('Target Framework Version : {0}' -f $TargetFrameworkVersion)
 Write-Verbose ('Key File                 : {0}' -f $KeyFile)
 Write-Verbose ('Output Path              : {0}' -f $OutputPath)
@@ -90,7 +91,9 @@ if ($null -eq $asmInfo) {
 
 $asmName = ConvertTo-PrigAssemblyName $asmInfo
 $targetInfo = dir ([System.IO.Path]::Combine($OutputPath, $asmName) + ".dll")
-if ($BuildTarget -eq 'BeforeBuild' -and $targetInfo.Exists -and [System.IO.File]::GetLastWriteTime($Settings) -lt $targetInfo.LastWriteTime) {
+if ($BuildTarget -eq 'BeforeBuild' -and 
+    $targetInfo.Exists -and [System.IO.File]::GetLastWriteTime($Settings) -lt $targetInfo.LastWriteTime -and 
+    $targetInfo.Exists -and [System.IO.File]::Exists($asmInfo.Location) -and [System.IO.File]::GetLastWriteTime($asmInfo.Location) -lt $targetInfo.LastWriteTime) {
     Write-Host ('The indirection stub dll "{0}" has been already existed. Skip the processing to make it ...' -f $targetInfo.FullName)
     exit 0
 }

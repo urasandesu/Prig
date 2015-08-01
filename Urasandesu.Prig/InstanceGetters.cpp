@@ -29,7 +29,10 @@
 
 
 #include "StdAfx.h"
-#include "InstanceGetters.h"
+
+#ifndef INDIRETIONINTERFACES_H
+#include <InstanceGetters.h>
+#endif
 
 typedef Urasandesu::CppAnonym::Collections::GlobalSafeDictionary<std::wstring, void const *> InstanceGetters;
 
@@ -111,5 +114,15 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProces
     auto &ing = InstanceGetters::GetInstance();
     auto result = ing.IsDisabledProcessing();
     CPPANONYM_D_LOGW1(L"InstanceGettersIsDisabledProcessing(): %|1$d|", result);
+    return result;
+}
+
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty()
+{
+    CPPANONYM_LOG_FUNCTION();
+
+    auto &ing = InstanceGetters::GetInstance();
+    auto result = ing.Empty();
+    CPPANONYM_D_LOGW1(L"InstanceGettersEmpty(): %|1$d|", result);
     return result;
 }

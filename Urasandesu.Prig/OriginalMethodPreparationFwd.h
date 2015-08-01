@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigData.cpp
+ * File: OriginalMethodPreparationFwd.h
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,13 +28,17 @@
  */
 
 
+#pragma once
+#ifndef ORIGINALMETHODPREPARATIONFWD_H
+#define ORIGINALMETHODPREPARATIONFWD_H
 
-#include "stdafx.h"
+namespace OriginalMethodPreparationDetail {
 
-#ifndef URASANDESU_PRIG_PRIGDATA_H
-#include <Urasandesu/Prig/PrigData.h>
-#endif
+    struct OriginalMethodPreparation;
 
-namespace Urasandesu { namespace Prig { 
+}   // namespace OriginalMethodPreparationDetail {
+    
+using OriginalMethodPreparationDetail::OriginalMethodPreparation;
 
-}}   // namespace Urasandesu { namespace Prig { 
+#endif  // ORIGINALMETHODPREPARATIONFWD_H
+

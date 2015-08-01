@@ -62,11 +62,12 @@ namespace {
         auto const *pMSCorLib = pMetaDisp->GetAssembly(L"mscorlib, Version=2.0.0.0, Culture=neutral, " 
                                                        L"PublicKeyToken=b77a5c561934e089, processorArchitecture=x86");
 
-        auto const *pPrigFramework = pMetaDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=1.0.0.0, Culture=neutral, "
-                                                            L"PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=x86");
+        auto const *pPrigFramework = pMetaDisp->GetAssemblyFrom(L"..\\..\\..\\..\\Debug\\AnyCPU\\Urasandesu.Prig.Framework.dll");
+        auto const *pPrigDelegates = pMetaDisp->GetAssemblyFrom(L"..\\..\\..\\..\\Debug\\AnyCPU\\Urasandesu.Prig.Delegates.dll");
 
         auto const *pMSCorLibDll = pMSCorLib->GetModule(L"CommonLanguageRuntimeLibrary");
         auto const *pPrigFrameworkDll = pPrigFramework->GetModule(L"Urasandesu.Prig.Framework.dll");
+        auto const *pPrigDelegatesDll = pPrigDelegates->GetModule(L"Urasandesu.Prig.Delegates.dll");
 
         auto const *pVoid = pMSCorLibDll->GetType(L"System.Void");
         auto const *pDateTime = pMSCorLibDll->GetType(L"System.DateTime");
@@ -78,7 +79,7 @@ namespace {
         auto const *pIndirectableAttrType = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
         auto const *pIndirectionInfo = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionInfo");
         auto const *pIndirectionHolder1 = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionHolder`1");
-        auto const *pIndirectionFunc1 = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionFunc`1");
+        auto const *pIndirectionFunc1 = pPrigDelegatesDll->GetType(L"Urasandesu.Prig.Delegates.IndirectionFunc`1");
         auto const *pLooseCrossDomainAccessor = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.LooseCrossDomainAccessor");
 
         auto const *pIndirectionFunc1DateTime = static_cast<IType *>(nullptr);
@@ -253,16 +254,18 @@ namespace {
         auto const *pMSCorLib = pMetaDisp->GetAssembly(L"mscorlib, Version=2.0.0.0, Culture=neutral, " 
                                                        L"PublicKeyToken=b77a5c561934e089, processorArchitecture=x86");
 
-        auto const *pPrigFramework = pMetaDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=1.0.0.0, Culture=neutral, "
-                                                            L"PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=x86");
+        auto const *pPrigFramework = pMetaDisp->GetAssemblyFrom(L"..\\..\\..\\..\\Debug\\AnyCPU\\Urasandesu.Prig.Framework.dll");
+        auto const *pPrigDelegates = pMetaDisp->GetAssemblyFrom(L"..\\..\\..\\..\\Debug\\AnyCPU\\Urasandesu.Prig.Delegates.dll");
 
         auto const *pMSCorLibDll = pMSCorLib->GetModule(L"CommonLanguageRuntimeLibrary");
         auto const *pPrigFrameworkDll = pPrigFramework->GetModule(L"Urasandesu.Prig.Framework.dll");
+        auto const *pPrigDelegatesDll = pPrigDelegates->GetModule(L"Urasandesu.Prig.Delegates.dll");
 
+        auto const *pInt32 = pMSCorLibDll->GetType(L"System.Int32");
         auto const *pDateTime = pMSCorLibDll->GetType(L"System.DateTime");
         auto const *pIndirectionInfo = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionInfo");
         auto const *pIndirectionHolder1 = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionHolder`1");
-        auto const *pIndirectionFunc1 = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.IndirectionFunc`1");
+        auto const *pIndirectionFunc1 = pPrigDelegatesDll->GetType(L"Urasandesu.Prig.Delegates.IndirectionFunc`1");
         auto const *pLooseCrossDomainAccessor = pPrigFrameworkDll->GetType(L"Urasandesu.Prig.Framework.LooseCrossDomainAccessor");
 
         auto const *pIndirectionFunc1DateTime = static_cast<IType *>(nullptr);
@@ -337,6 +340,10 @@ namespace {
 
             auto label0 = pNewBodyGen->DefineLabel();
 
+            pNewBodyGen->Emit(OpCodes::Ldc_I4, 0x12345678);
+            pNewBodyGen->EmitCalli(OpCodes::Calli, CallingConventions::UNMANAGED_CC_STDCALL, pInt32, MetadataSpecialValues::EMPTY_TYPES);
+            pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
+            
             pNewBodyGen->Emit(OpCodes::Ldnull);
             pNewBodyGen->Emit(OpCodes::Stloc_S, pLocal1_holder);
             pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal1_holder);
@@ -540,27 +547,26 @@ namespace {
         using boost::filesystem::path;
         
         auto const *pHost = HostInfo::CreateHost();
-        //auto const *pRuntime = pHost->GetRuntime(L"v2.0.50727");
-        auto const *pRuntime = pHost->GetRuntime(L"v4.0.30319");
+        auto const *pRuntime = pHost->GetRuntime(L"v2.0.50727");
+        //auto const *pRuntime = pHost->GetRuntime(L"v4.0.30319");
         auto const *pMetaInfo = pRuntime->GetInfo<MetadataInfo>();
         auto *pMetaDisp = pMetaInfo->CreateDispenser();
 
-        auto const *pPrigFrmwrk = pMetaDisp->GetAssembly(L"Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce");
+        auto const *pPrigFrmwrk = pMetaDisp->GetAssemblyFrom(L"..\\..\\..\\..\\Debug\\AnyCPU\\Urasandesu.Prig.Framework.dll");
         auto const *pPrigFrmwrkDll = pPrigFrmwrk->GetMainModule();
         auto const *pIndAttrInfo = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
         
         auto currentDir = current_path().native();
-        boost::replace_all(currentDir, L"Test.prig", L"mscorlib.Prig");
         auto mscorlibPrigPath = path(currentDir);
         mscorlibPrigPath /= L"mscorlib.Prig.dll";
         auto const *pMSCorLibPrig = pMetaDisp->GetAssemblyFrom(mscorlibPrigPath);
         auto indAttrs = pMSCorLibPrig->GetCustomAttributes(pIndAttrInfo);
-        ASSERT_EQ(10, distance(indAttrs));
+        ASSERT_EQ(1, distance(indAttrs));
         auto const *pIndAttr = *begin(indAttrs);
         auto const &args = pIndAttr->GetConstructorArguments();
         ASSERT_EQ(1, args.size());
         auto mdmdTarget = get<UINT>(args[0]);
-        ASSERT_EQ(0x0600023B, mdmdTarget);
+        ASSERT_EQ(0x060002D2, mdmdTarget);
     }
     
     
