@@ -64,22 +64,11 @@ function Enable-PrigTestAdapter {
         }
     }
 
-    [void][System.Reflection.Assembly]::LoadWithPartialName('Microsoft.Build')
-    $msbProjCollection = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection
-    $allMsbProjs = $msbProjCollection.GetLoadedProjects($envProj.FullName).GetEnumerator()
-    if(!$allMsbProjs.MoveNext()) {
-        throw New-Object System.InvalidOperationException ('"{0}" has not been loaded.' -f $envProj.FullName)
-    }
-
-    $curMsbProj = $allMsbProjs.Current
-    $targetDir = $curMsbProj.ExpandString('$(TargetDir)')
+    $projDir = [System.IO.Path]::GetDirectoryName($envProj.FullName)
+    $outputPath = ($envProj.ConfigurationManager.ActiveConfiguration.Properties | ? { $_.Name -eq 'OutputPath' }).Value
+    $targetDir = [System.IO.Path]::Combine($projDir, $outputPath)
     if ([string]::IsNullOrEmpty($targetDir)) {
-        # Reevaluate $(TargetDir). I have not completely understood the cause of that yet, but it sometimes becomes empty.
-        $envProj.ConfigurationManager | % { $_.OutputGroups } | Out-String | Out-Null
-        $targetDir = $curMsbProj.ExpandString('$(TargetDir)')
-        if ([string]::IsNullOrEmpty($targetDir)) {
-            throw New-Object System.InvalidOperationException '"$(TargetDir)" has not been able to resolve.'
-        }
+        throw New-Object System.InvalidOperationException '"$(TargetDir)" has not been able to resolve.'
     }
 
     [System.Environment]::SetEnvironmentVariable($EnableProfilingKey, $EnableProfilingValueEnabled)
