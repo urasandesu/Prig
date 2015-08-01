@@ -141,10 +141,20 @@ namespace OriginalMethodPreparationDetail {
         {
             auto const *pDeclaringType = m_pTryPrigTarget->GetDeclaringType();
             if (pDeclaringType && pDeclaringType->IsGenericType())
+            {
                 m_mdt = m_pTryPrigTarget->GetSourceMethod()->GetToken();
+            }
             else if (m_pTryPrigTarget->IsGenericMethod())
-                m_mdt = m_pTryPrigTarget->GetDeclaringMethod()->GetToken();
+            {
+                auto const *pDeclaringMethod = m_pTryPrigTarget->GetDeclaringMethod();
+                pDeclaringType = pDeclaringMethod->GetDeclaringType();
+                if (pDeclaringType && pDeclaringType->IsGenericType())
+                    m_mdt = pDeclaringMethod->GetSourceMethod()->GetToken();
+                else
+                    m_mdt = pDeclaringMethod->GetToken();
+            }
         }
+        CPPANONYM_D_LOGW1(L"Resolved the Indirectable Token for TryPrigTarget: 0x%|1$08X|", m_mdt);
 
         CPPANONYM_V_LOG1("Processing time to resolve the metadata tokens for original method preparation: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
     }

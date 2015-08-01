@@ -48,7 +48,7 @@ namespace Test.program1.MyLibrary
             {
                 // Arrange
                 PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
-
+                
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
 
@@ -196,5 +196,5 @@ namespace Test.program1.MyLibrary
                 Assert.DoesNotThrow(() => LifeInfo.IsNowLunchBreak());
             }
         }
-    }
+    }    
 }
