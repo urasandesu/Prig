@@ -293,47 +293,6 @@ namespace CWeaverDetail {
         return targetIndDllName.str();
     }
 
-    void FillIndirectionDelegatesList(PrigPackageConfig const &currentPkg, MetadataDispenser const *pDisp, PrigData &prigData)
-    {
-        using std::regex_search;
-        using std::wregex;
-        using Urasandesu::Prig::PrigConfig;
-
-        BOOST_FOREACH (auto const &additionalDlgt, currentPkg.AdditionalDelegates)
-        {
-            prigData.m_indirectionDelegatesList.push_back(new IndirectionDelegates());
-            auto &indDlgts = prigData.m_indirectionDelegatesList.back();
-                
-            auto patternStr = additionalDlgt.FullName;
-            boost::replace_all(patternStr, L".", L"\\.");
-            auto pattern = wregex(patternStr);
-            BOOST_FOREACH (auto const &pAsm, pDisp->GetAssemblies())
-            {
-                if (!regex_search(pAsm->GetFullName(), pattern))
-                    continue;
-                    
-                indDlgts.m_pIndirectionDelegatesAssembly = pAsm;
-                break;
-            }
-                
-            if (!indDlgts.m_pIndirectionDelegatesAssembly)
-                indDlgts.m_pIndirectionDelegatesAssembly = pDisp->GetAssemblyFrom(additionalDlgt.HintPath);
-        }
-            
-        auto prigDelegatesNames = vector<wstring>(4);
-        prigDelegatesNames[0] = L"Urasandesu.Prig.Delegates.dll";
-        prigDelegatesNames[1] = L"Urasandesu.Prig.Delegates.0404.dll";
-        prigDelegatesNames[2] = L"Urasandesu.Prig.Delegates.0804.dll";
-        prigDelegatesNames[3] = L"Urasandesu.Prig.Delegates.1205.dll";
-        BOOST_FOREACH (auto const &prigDelegatesName, prigDelegatesNames)
-        {
-            prigData.m_indirectionDelegatesList.push_back(new IndirectionDelegates());
-            auto &indDlgts = prigData.m_indirectionDelegatesList.back();
-                
-            indDlgts.m_pIndirectionDelegatesAssembly = pDisp->GetAssemblyFrom(PrigConfig::GetLibPath() / prigDelegatesName);
-        }
-    }
-
     void FillIndirectionPreparationList(MetadataDispenser const *pDisp, AssemblyGenerator *pAsmGen, PrigData &prigData)
     {
         using Urasandesu::Prig::PrigConfig;
@@ -455,7 +414,6 @@ namespace CWeaverDetail {
             
             prigData.m_corVersion = pRuntime->GetCORVersion();
             prigData.m_indDllPath = targetIndDllPath;
-            FillIndirectionDelegatesList(m_currentPkg, pDisp, prigData);
             FillIndirectionPreparationList(pDisp, pAsmGen, prigData);
             
             pDomainProf->SetData(asmId, pData);

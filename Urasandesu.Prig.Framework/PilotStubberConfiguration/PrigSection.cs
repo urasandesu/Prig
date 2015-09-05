@@ -50,7 +50,27 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 
         static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(_ => Regex.IsMatch(_.FullName, args.Name));
+            var existingAsm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(_ => Regex.IsMatch(_.FullName, args.Name));
+            if (existingAsm != null)
+                return existingAsm;
+
+            var asm = default(Assembly);
+            var asmName = new AssemblyName(args.Name);
+            var asmPathWithoutExtension = Path.Combine(Environment.CurrentDirectory, asmName.Name);
+            try
+            {
+                asm = Assembly.LoadFrom(asmPathWithoutExtension + ".dll");
+            }
+            catch
+            {
+                try
+                {
+                    asm = Assembly.LoadFrom(asmPathWithoutExtension + ".exe");
+                }
+                catch { }
+            }
+
+            return asm;
         }
 
         [ConfigurationProperty("stubs", Options = ConfigurationPropertyOptions.IsRequired)]

@@ -34,12 +34,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using Test.Urasandesu.Prig.Framework.TestUtilities;
+using Urasandesu.NAnonym;
 using Urasandesu.NAnonym.Mixins.System;
 using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
+using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 using Assert = Test.Urasandesu.Prig.Framework.TestUtilities.LooseCrossDomainAssert;
 
 namespace Test.Urasandesu.Prig.Framework
@@ -52,11 +54,13 @@ namespace Test.Urasandesu.Prig.Framework
         {
             LooseCrossDomainAccessor.Clear();
             InstanceGetters.NewIndirectionAssemblyRepository = () => new MockIndirectionAssemblyRepository();
+            InstanceGetters.NewAdditionalDelegatesAssemblyRepository = () => new MockAdditionalDelegatesAssemblyRepository();
         }
 
         [TearDown]
         public void TearDown()
         {
+            InstanceGetters.NewAdditionalDelegatesAssemblyRepository = null;
             InstanceGetters.NewIndirectionAssemblyRepository = null;
             LooseCrossDomainAccessor.Clear();
         }
@@ -85,6 +89,49 @@ namespace Test.Urasandesu.Prig.Framework
                 Assert.AreEqual(new DateTime(2014, 1, 1), get_now());
                 CollectionAssert.AreEqual(new int[] { 10, 10 }, addResults);
                 Assert.IsFalse(exists(new int[] { 10, 42 }, _ => _ == 42));
+            });
+        }
+
+
+
+        [Test]
+        public void IndirectionHolder_can_transport_untyped_delegates_to_different_AppDomain()
+        {
+            // Arrange
+            {
+                PULColumns.ValidateStateULTableStatus().Body = args => { throw new NotSupportedException(); };
+
+                #region Prepare JIT. This simulates the behavior during profiling. Actually, it is unnecessary to go that far with that.
+                var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                var zz = new PULColumns.zzValidateStateULTableStatus();
+                var info = zz.Info;
+                info.SetInstantiation(zz.Stub.Target, zz.Stub.IndirectionDelegate, new Type[0], new Type[0]);
+                var dlgt = holder.GetOrDefault(info);
+                var validateStateULTableStatus = LooseCrossDomainAccessor.SafelyCast<Action<ULTableStatus>>(dlgt);
+                try
+                {
+                    validateStateULTableStatus(new ULTableStatus());
+                }
+                catch
+                { }
+                #endregion
+            }
+
+            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
+            {
+                InstanceGetters.NewAdditionalDelegatesAssemblyRepository = () => new MockAdditionalDelegatesAssemblyRepository();
+
+                // Act
+                var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                var zz = new PULColumns.zzValidateStateULTableStatus();
+                var info = zz.Info;
+                info.SetInstantiation(zz.Stub.Target, zz.Stub.IndirectionDelegate, new Type[0], new Type[0]);
+                var dlgt = holder.GetOrDefault(info);
+                var validateStateULTableStatus = LooseCrossDomainAccessor.SafelyCast<Action<ULTableStatus>>(dlgt);
+
+
+                // Assert
+                Assert.Throws<NotSupportedException>(() => validateStateULTableStatus(new ULTableStatus()));
             });
         }
 
@@ -372,14 +419,6 @@ namespace Test.Urasandesu.Prig.Framework
                 Assert.Throws<FallthroughException>(() => getYearInfoTarget(new JapaneseLunisolarCalendar(), 0, 0));
             });
         }
-
-        class MockIndirectionAssemblyRepository : IndirectionAssemblyRepository
-        {
-            public override IEnumerable<Assembly> FindAll()
-            {
-                yield return Assembly.Load("Test.Urasandesu.Prig.Framework");
-            }
-        }
     }
 
     public abstract class PDateTimeBase
@@ -402,12 +441,12 @@ namespace Test.Urasandesu.Prig.Framework
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.DateTime>>>();
-                    return holder.GetOrDefault(Info);
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<System.DateTime>>(holder.GetOrDefault(Info));
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.DateTime>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -485,12 +524,12 @@ namespace Test.Urasandesu.Prig.Framework
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<List<T>, T>>>();
-                    return holder.GetOrDefault(Info);
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                    return LooseCrossDomainAccessor.SafelyCast<IndirectionAction<List<T>, T>>(holder.GetOrDefault(Info));
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionAction<List<T>, T>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -714,12 +753,12 @@ namespace Test.Urasandesu.Prig.Framework
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<T[], System.Predicate<T>, System.Boolean>>>();
-                    return holder.GetOrDefault(Info);
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<T[], System.Predicate<T>, System.Boolean>>(holder.GetOrDefault(Info));
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<T[], System.Predicate<T>, System.Boolean>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -804,12 +843,12 @@ namespace Test.Urasandesu.Prig.Framework
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>();
-                    return holder.GetOrDefault(Info);
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(holder.GetOrDefault(Info));
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -895,12 +934,12 @@ namespace Test.Urasandesu.Prig.Framework
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>();
-                    return holder.GetOrDefault(Info);
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(holder.GetOrDefault(Info));
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>();
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
                     if (value == null)
                     {
                         holder.Remove(Info);
@@ -1129,6 +1168,138 @@ namespace Test.Urasandesu.Prig.Framework
                     m_this.DefaultBehavior = value;
                     foreach (var preparable in Preparables)
                         preparable.Prepare(m_this.DefaultBehavior);
+                }
+            }
+        }
+    }
+
+    class ULTableStatus
+    {
+        internal bool IsOpened = false;
+        internal int RowsCount = 0;
+    }
+
+    public class ULColumns
+    {
+        static void ValidateState(ULTableStatus status)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public abstract class PULColumnsBase
+    {
+        internal const int TokenOfValidateStateULTableStatus = 0x06000009;
+    }
+
+    public class PULColumns : PULColumnsBase
+    {
+        public static IndirectionBehaviors DefaultBehavior { get; internal set; }
+
+        public static zzValidateStateULTableStatus ValidateStateULTableStatus()
+        {
+            return new zzValidateStateULTableStatus();
+        }
+
+        public class zzValidateStateULTableStatus : IBehaviorPreparable
+        {
+            public Work Body
+            {
+                get
+                {
+                    var info = Info;
+                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
+                    var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
+                    return holder.GetOrDefault(info);
+                }
+                set
+                {
+                    var info = Info;
+                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
+                    var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
+                    if (value == null)
+                    {
+                        holder.Remove(info);
+                    }
+                    else
+                    {
+                        holder.AddOrUpdate(info, value);
+                        RuntimeHelpers.PrepareDelegate(value);
+                    }
+                }
+            }
+
+            public void Prepare(IndirectionBehaviors defaultBehavior)
+            {
+                var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
+                var behavior = HelperForUntypedIndirectionDelegate.CreateDelegateOfDefaultBehavior(indDlgt, defaultBehavior);
+                Body = behavior;
+            }
+
+            IndirectionStub m_stub;
+            public IndirectionStub Stub
+            {
+                get
+                {
+                    if (m_stub == null)
+                    {
+                        var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+    <add name=""ValidateStateULTableStatus"" alias=""ValidateStateULTableStatus"">
+        <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
+            <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">ValidateState</Name>
+            <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Test.Urasandesu.Prig.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce</AssemblyName>
+            <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Test.Urasandesu.Prig.Framework.ULColumns</ClassName>
+            <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Void ValidateState(Test.Urasandesu.Prig.Framework.ULTableStatus)</Signature>
+            <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Void ValidateState(Test.Urasandesu.Prig.Framework.ULTableStatus)</Signature2>
+            <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
+            <GenericArguments i:nil=""true"" xmlns="""" />
+        </RuntimeMethodInfo>
+    </add>
+</stubs>";
+                        var section = new PrigSection();
+                        section.DeserializeStubs(stubsXml);
+                        m_stub = section.Stubs.First();
+                    }
+                    return m_stub;
+                }
+            }
+
+            public IndirectionInfo Info
+            {
+                get
+                {
+                    var info = new IndirectionInfo();
+                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+                    info.Token = TokenOfValidateStateULTableStatus;
+                    return info;
+                }
+            }
+        }
+
+
+        public static TypeBehaviorSetting ExcludeGeneric()
+        {
+            var preparables = typeof(PULColumns).GetNestedTypes().
+                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
+                                          Where(_ => !_.IsGenericType).
+                                          Select(_ => Activator.CreateInstance(_)).
+                                          Cast<IBehaviorPreparable>();
+            var setting = new TypeBehaviorSetting();
+            foreach (var preparable in preparables)
+                setting.Include(preparable);
+            return setting;
+        }
+
+        public class TypeBehaviorSetting : BehaviorSetting
+        {
+            public override IndirectionBehaviors DefaultBehavior
+            {
+                set
+                {
+                    PULColumns.DefaultBehavior = value;
+                    foreach (var preparable in Preparables)
+                        preparable.Prepare(PULColumns.DefaultBehavior);
                 }
             }
         }

@@ -155,74 +155,25 @@ namespace Urasandesu.Prig.Framework
 
     public class IndirectionHolderUntyped
     {
-        readonly object m_holder;
-        readonly Definitions m_definitions;
-        Dictionary<string, Work> m_dict = InstanceGetters.DisableProcessing().EnsureDisposalThen(_ => new Dictionary<string, Work>());
+        readonly IndirectionHolder<Delegate> m_holder;
+        readonly Dictionary<string, Work> m_dict = InstanceGetters.DisableProcessing().EnsureDisposalThen(_ => new Dictionary<string, Work>());
 
-        public IndirectionHolderUntyped(object holder)
+        public IndirectionHolderUntyped(IndirectionHolder<Delegate> holder, Type indDlgt)
         {
-            if (holder == null)
-                throw new ArgumentNullException("holder");
-
-            var holderInfo = holder.GetType();
-            if (!holderInfo.IsGenericType ||
-                holderInfo.IsGenericTypeDefinition ||
-                holderInfo.GetGenericTypeDefinition() != typeof(IndirectionHolder<>))
+            using (InstanceGetters.DisableProcessing())
             {
-                var msg = string.Format("The parameter must be an instance of a generic type instance of \"{0}\" but its type is \"{1}\".",
-                                        typeof(IndirectionHolder<>).FullName, holderInfo.GetType().FullName);
-                throw new ArgumentException(msg, "holder");
-            }
+                if (holder == null)
+                    throw new ArgumentNullException("holder");
 
-            m_holder = holder;
-            IndirectionDelegate = holderInfo.GetGenericArguments()[0];
-            m_definitions = new Definitions(holderInfo);
+                if (!indDlgt.IsSubclassOf(typeof(Delegate)))
+                    throw new ArgumentException("The parameter must be a delegate type.", "indDlgt");
+
+                m_holder = holder;
+                IndirectionDelegate = indDlgt;
+            }
         }
 
         public Type IndirectionDelegate { get; private set; }
-
-        class Definitions
-        {
-            readonly Type m_holderInfo;
-
-            public Definitions(Type holderInfo)
-            {
-                m_holderInfo = holderInfo;
-            }
-
-            MethodInfo m_tryGetIndirectionInfoTDelegateRef;
-            public MethodInfo TryGetIndirectionInfoTDelegateRef
-            {
-                get
-                {
-                    if (m_tryGetIndirectionInfoTDelegateRef == null)
-                        m_tryGetIndirectionInfoTDelegateRef = m_holderInfo.GetMethod("TryGet");
-                    return m_tryGetIndirectionInfoTDelegateRef;
-                }
-            }
-
-            MethodInfo m_tryRemoveIndirectionInfoTDelegateRef;
-            public MethodInfo TryRemoveIndirectionInfoTDelegateRef
-            {
-                get
-                {
-                    if (m_tryRemoveIndirectionInfoTDelegateRef == null)
-                        m_tryRemoveIndirectionInfoTDelegateRef = m_holderInfo.GetMethod("TryRemove");
-                    return m_tryRemoveIndirectionInfoTDelegateRef;
-                }
-            }
-
-            MethodInfo m_addOrUpdateIndirectionInfoTDelegate;
-            public MethodInfo AddOrUpdateIndirectionInfoTDelegate
-            {
-                get
-                {
-                    if (m_addOrUpdateIndirectionInfoTDelegate == null)
-                        m_addOrUpdateIndirectionInfoTDelegate = m_holderInfo.GetMethod("AddOrUpdate");
-                    return m_addOrUpdateIndirectionInfoTDelegate;
-                }
-            }
-        }
 
         public bool TryGet(IndirectionInfo info, out Work method)
         {
@@ -234,7 +185,8 @@ namespace Urasandesu.Prig.Framework
             {
                 using (InstanceGetters.DisableProcessing())
                 {
-                    if (!(bool)m_definitions.TryGetIndirectionInfoTDelegateRef.Invoke(m_holder, new object[] { info, null }))
+                    var _ = default(Delegate);
+                    if (!m_holder.TryGet(info, out _))
                         return false;
 
                     var key = info + "";
@@ -268,7 +220,8 @@ namespace Urasandesu.Prig.Framework
             {
                 using (InstanceGetters.DisableProcessing())
                 {
-                    if (!(bool)m_definitions.TryRemoveIndirectionInfoTDelegateRef.Invoke(m_holder, new object[] { info, null }))
+                    var _ = default(Delegate);
+                    if (!m_holder.TryRemove(info, out _))
                         return false;
 
                     var key = info + "";
@@ -296,7 +249,7 @@ namespace Urasandesu.Prig.Framework
                     holder.Source.Value[key] = method;
 
                     var wrapAndInvoke = CreateWrapAndInvokeMethod(IndirectionDelegate, key);
-                    m_definitions.AddOrUpdateIndirectionInfoTDelegate.Invoke(m_holder, new object[] { info, wrapAndInvoke });
+                    m_holder.AddOrUpdate(info, wrapAndInvoke);
 
                     m_dict[key] = method;
                     return method;
@@ -436,64 +389,13 @@ namespace Urasandesu.Prig.Framework
 
         public static Type MakeGenericInstance(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
         {
-            if (target == null)
-                throw new ArgumentNullException("target");
-
-            if (delegateType == null)
-                throw new ArgumentNullException("delegateType");
-
-            if (!delegateType.IsSubclassOf(typeof(MulticastDelegate)))
-                throw new ArgumentException("The parameter must be a delegate type.", "delegateType");
-
-            if (typeGenericArgs != null && 0 < typeGenericArgs.Length)
+            using (InstanceGetters.DisableProcessing())
             {
-                if (!delegateType.IsGenericType)
-                    throw new ArgumentException("\"delegateType\" must be a generic type if the parameter is specified.", "typeGenericArgs");
+                if (!delegateType.IsSubclassOf(typeof(Delegate)))
+                    throw new ArgumentException("The parameter must be a delegate type.", "delegateType");
 
-                var declType = target.DeclaringType;
-                if (!declType.IsGenericType)
-                    throw new ArgumentException("The declaring type of \"target\" must be a generic type if the parameter is specified.", "typeGenericArgs");
-
-                var typeGenericDefArgs = declType.GetGenericTypeDefinition().GetGenericArguments();
-
-                var newGenericArgs = new List<Type>();
-                foreach (var genericArg in delegateType.GetGenericArguments())
-                {
-                    var index = Array.IndexOf(typeGenericDefArgs, genericArg);
-                    newGenericArgs.Add(index < 0 ? genericArg : typeGenericArgs[index]);
-                }
-
-                delegateType = delegateType.GetGenericTypeDefinition().MakeGenericType(newGenericArgs.ToArray());
+                return delegateType.MakeGenericType(target.DeclaringType, typeGenericArgs, target, methodGenericArgs);
             }
-
-            if (methodGenericArgs != null && 0 < methodGenericArgs.Length)
-            {
-                if (!delegateType.IsGenericType)
-                    throw new ArgumentException("\"delegateType\" must be a generic type if the parameter is specified.", "methodGenericArgs");
-
-                var method = target as MethodInfo;
-                if (method == null || !method.IsGenericMethod)
-                    throw new ArgumentException("\"target\" must be a generic method if the parameter is specified.", "methodGenericArgs");
-
-                var methodGenericDefArgs = method.GetGenericMethodDefinition().GetGenericArguments();
-
-                var newGenericArgs = new List<Type>();
-                foreach (var genericArg in delegateType.GetGenericArguments())
-                {
-                    var index = Array.IndexOf(methodGenericDefArgs, genericArg);
-                    newGenericArgs.Add(index < 0 ? genericArg : methodGenericArgs[index]);
-                }
-
-                delegateType = delegateType.GetGenericTypeDefinition().MakeGenericType(newGenericArgs.ToArray());
-            }
-
-            return delegateType;
-        }
-
-        public static Type MakeTypedType(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
-        {
-            var t = typeof(IndirectionHolder<>);
-            return t.MakeGenericType(MakeGenericInstance(target, delegateType, typeGenericArgs, methodGenericArgs));
         }
     }
 }

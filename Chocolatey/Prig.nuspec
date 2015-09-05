@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0-alpha05</version>
+    <version>2.0.0-alpha06</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,12 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.0-alpha05
+    <releaseNotes>Version 2.0.0-alpha06
+* 
+* 
+
+
+Version 2.0.0-alpha05
 * Improve stability for the methods of the classes that are used on the boundary of application domains(e.g. `AppDomain`, `BinaryReader`, `MemoryStream`, `Thread` and so on).
 * Improve usability for the command to manage Prig a little(See also [the Wiki](https://github.com/urasandesu/Prig.V2Docs/wiki/Command-Line-Reference#pfind)).
 * Merge Infrastructure Bug Fix(See also Swathe issues [#2](https://github.com/urasandesu/Swathe/issues/2))

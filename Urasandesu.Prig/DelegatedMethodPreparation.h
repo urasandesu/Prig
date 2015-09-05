@@ -45,6 +45,7 @@ namespace DelegatedMethodPreparationDetail {
     using namespace Urasandesu::CppAnonym::Utilities;
     using namespace Urasandesu::Swathe::Metadata;
     using namespace Urasandesu::Swathe::Profiling;
+    using std::vector;
 
     struct DelegatedMethodPreparation : 
         IndirectionPreparation
@@ -53,20 +54,30 @@ namespace DelegatedMethodPreparationDetail {
 
         void FillIndirectionPreparation(MetadataDispenser const *pDisp, MethodGenerator *pTarget, PrigData &prigData);
         void ResolveIndirectionPreparation(AssemblyGenerator *pAsmGen);
+        void EmitInstantiation(MethodBodyGenerator *pNewBodyGen, ILocal const *pLocal5_0000) const;
         SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen) const;
         void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const;
 
-        IType const *m_pIndHolder1IndDlgtInst;
+        IType const *m_pIndHolder1Delegate;
         IType const *m_pIndInfo;
-        IType const *m_pIndDlgtInst;
+        IType const *m_pIndDlgt;
+        TypeGenerator const *m_pIndDlgtGen;
+        IType const *m_pDelegate;
         IType const *m_pException;
+        IType const *m_pString;
+        IType const *m_pStringArr;
         IMethod const *m_pTarget;
-        IMethod const *m_pLooseCrossDomainAccessor_TryGetIndHolderIndDlgtInst;
+        IMethod const *m_pLooseCrossDomainAccessor_TryGetIndHolder1Delegate;
+        IMethod const *m_pLooseCrossDomainAccessor_SafelyCastIndDlgt;
         IMethod const *m_pIndInfo_set_AssemblyName;
         IMethod const *m_pIndInfo_set_Token;
-        IMethod const *m_pIndHolder1IndDlgtInst_TryGet;
-        IMethod const *m_pIndDlgtInst_Invoke;
+        IMethod const *m_pIndInfo_set_Instantiation;
+        IMethod const *m_pIndHolder1Delegate_TryGet;
+        IMethod const *m_pIndDlgt_Invoke;
         IMethod const *m_pLooseCrossDomainAccessor_IsInstanceOfIdentity;
+        IMethod const *m_pType_GetTypeFromHandle;
+        IMethod const *m_pObject_ToString;
+        vector<IType const *> m_instantiation;
     };
 
 }   // namespace DelegatedMethodPreparationDetail {

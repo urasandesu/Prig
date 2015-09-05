@@ -35,6 +35,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Prig.Framework
 {
@@ -124,6 +125,15 @@ namespace Urasandesu.Prig.Framework
             return false;
         }
 
+        public static TDelegate SafelyCast<TDelegate>(Delegate source) where TDelegate : class
+        {
+            if (source == null)
+                return null;
+
+            using (InstanceGetters.DisableProcessing())
+                return source.Cast<TDelegate>(typeof(InstanceGetters).Module);
+        }
+
         static string ToLooseDomainIdentity(Type type)
         {
             // Don't use AssemblyQualifiedName because the AppDomain may have different permission set from current AppDomain.
@@ -194,7 +204,7 @@ namespace Urasandesu.Prig.Framework
 
         static T GetHolderCore(Type t, IntPtr funcPtr)
         {
-            var extractor = new DynamicMethod("Extractor", t, null, t.Module);
+            var extractor = new DynamicMethod("Extractor", t, null, typeof(InstanceGetters).Module);
             var gen = extractor.GetILGenerator();
             if (IntPtr.Size == 4)
             {
@@ -319,16 +329,11 @@ namespace Urasandesu.Prig.Framework
 
     public class LooseCrossDomainAccessorUntyped
     {
-        class Definitions
-        {
-            public static readonly MethodInfo GetOrRegisterOfT = typeof(LooseCrossDomainAccessor).GetMethod("GetOrRegister");
-        }
-
         public static IndirectionHolderUntyped GetOrRegister(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
         {
-            var ti = IndirectionHolderUntyped.MakeTypedType(target, delegateType, typeGenericArgs, methodGenericArgs);
-            var mi = Definitions.GetOrRegisterOfT.MakeGenericMethod(ti);
-            return new IndirectionHolderUntyped(mi.Invoke(null, null));
+            var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+            var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(target, delegateType, typeGenericArgs, methodGenericArgs);
+            return new IndirectionHolderUntyped(holder, indDlgt);
         }
     }
 }

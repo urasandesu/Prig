@@ -72,19 +72,23 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
             {
                 get
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<$(ConvertTypeToClassName $stub.IndirectionDelegate)>>();
-                    return holder.GetOrDefault(Info);
+                    var info = Info;
+                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+                    return LooseCrossDomainAccessor.SafelyCast<$(ConvertTypeToClassName $stub.IndirectionDelegate)>(holder.GetOrDefault(info));
                 }
                 set
                 {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<$(ConvertTypeToClassName $stub.IndirectionDelegate)>>();
+                    var info = Info;
+                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
+                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
                     if (value == null)
                     {
-                        holder.Remove(Info);
+                        holder.Remove(info);
                     }
                     else
                     {
-                        holder.AddOrUpdate(Info, value);
+                        holder.AddOrUpdate(info, value);
                         RuntimeHelpers.PrepareDelegate(Body);
                     }
                 }
@@ -94,6 +98,22 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
             {
                 var behavior = HelperFor$(ConvertTypeToClassName $stub.IndirectionDelegate).CreateDelegateOfDefaultBehavior(defaultBehavior);
                 Body = behavior;
+            }
+
+            IndirectionStub m_stub;
+            public IndirectionStub Stub
+            {
+                get
+                {
+                    if (m_stub == null)
+                    {
+                        var stubsXml = $(ConvertStubToStubsXml $stub);
+                        var section = new PrigSection();
+                        section.DeserializeStubs(stubsXml);
+                        m_stub = section.Stubs.First();
+                    }
+                    return m_stub;
+                }
             }
 
             public IndirectionInfo Info
@@ -174,19 +194,23 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
             {
                 get
                 {
+                    var info = Info;
+                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
                     var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
-                    return holder.GetOrDefault(Info);
+                    return holder.GetOrDefault(info);
                 }
                 set
                 {
+                    var info = Info;
+                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
                     var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, $(ConvertTypeToGenericParameterArray $declTypeGrouped.Key), $(ConvertStubToGenericParameterArray $stub));
                     if (value == null)
                     {
-                        holder.Remove(Info);
+                        holder.Remove(info);
                     }
                     else
                     {
-                        holder.AddOrUpdate(Info, value);
+                        holder.AddOrUpdate(info, value);
                         RuntimeHelpers.PrepareDelegate(value);
                     }
                 }

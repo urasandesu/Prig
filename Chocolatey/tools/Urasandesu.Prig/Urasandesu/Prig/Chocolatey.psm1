@@ -210,8 +210,10 @@ function ConvertTypeToFullName {
         $defName = (ConvertTypeToFullName $Type.DeclaringType) + '.' + $Type.Name
     } elseif ($Type.IsGenericType -and !$Type.IsGenericTypeDefinition) {
         $defName = $Type.Namespace + "." + $Type.Name
+    } elseif ($Type.HasElementType -and $Type.IsArray) {
+        $defName = (ConvertTypeToFullName $Type.GetElementType()) + "[]"
     } elseif ($Type.HasElementType) {
-        $defName=(ConvertTypeToFullName $Type.GetElementType()) + "[]"
+        $defName = ConvertTypeToFullName $Type.GetElementType()
     }
 
     if ($Type.IsGenericType) {
@@ -610,8 +612,7 @@ function ConvertTypeToGenericParameterConstraints {
 
     $constraintClauses = New-Object 'System.Collections.Generic.List[string]'
     if ($Type.IsGenericType) {
-        foreach ($genericArg in $Type.GetGenericArguments())
-        {
+        foreach ($genericArg in $Type.GetGenericArguments()) {
             $constraintClause = ConvertTypeToGenericParameterConstraintClause $genericArg
             if ($null -eq $constraintClause) { continue }
 
@@ -632,8 +633,7 @@ function ConvertStubToGenericParameterConstraints {
 
     $constraintClauses = New-Object 'System.Collections.Generic.List[string]'
     if ($Stub.Target.IsGenericMethod) {
-        foreach ($genericArg in $Stub.Target.GetGenericArguments())
-        {
+        foreach ($genericArg in $Stub.Target.GetGenericArguments()) {
             $constraintClause = ConvertTypeToGenericParameterConstraintClause $genericArg
             if ($null -eq $constraintClause) { continue }
 
@@ -822,7 +822,11 @@ function ConvertTypeToGenericParameterArray {
     $typeofParams = New-Object 'System.Collections.Generic.List[string]'
     if ($Type.IsGenericType) {
         foreach ($genericArg in $Type.GetGenericArguments()) {
-            $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            if ($genericArg.IsGenericParameter) {
+                $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            } else {
+                $typeofParams.Add('null')
+            }
         }
     }
 
@@ -840,7 +844,11 @@ function ConvertStubToGenericParameterArray {
     $typeofParams = New-Object 'System.Collections.Generic.List[string]'
     if ($Stub.Target.IsGenericMethod) {
         foreach ($genericArg in $Stub.Target.GetGenericArguments()) {
-            $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            if ($genericArg.IsGenericParameter) {
+                $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            } else {
+                $typeofParams.Add('null')
+            }
         }
     }
 
