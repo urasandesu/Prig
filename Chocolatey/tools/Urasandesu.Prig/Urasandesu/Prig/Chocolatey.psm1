@@ -194,7 +194,10 @@ function StripGenericParameterCount {
 function ConvertTypeToFullName {
     param (
         [type]
-        $Type
+        $Type, 
+
+        [System.Collections.ArrayList]
+        $List
     )
     
     $defName = $Type.FullName
@@ -211,7 +214,11 @@ function ConvertTypeToFullName {
     } elseif ($Type.IsGenericType -and !$Type.IsGenericTypeDefinition) {
         $defName = $Type.Namespace + "." + $Type.Name
     } elseif ($Type.HasElementType -and $Type.IsArray) {
-        $defName = (ConvertTypeToFullName $Type.GetElementType()) + "[]"
+        if ($null -eq $List) {
+            $List = New-Object System.Collections.ArrayList
+        }
+        [void]$List.Add(("[{0}]" -f (New-Object string ',', ($Type.GetArrayRank() - 1))))
+        $defName = (ConvertTypeToFullName $Type.GetElementType() $List)
     } elseif ($Type.HasElementType) {
         $defName = ConvertTypeToFullName $Type.GetElementType()
     }
@@ -232,6 +239,10 @@ function ConvertTypeToFullName {
         }
     }
 
+    if (0 -lt $List.Count) {
+        $defName += ($List -join '')
+        $List.Clear()
+    }
     $defName
 }
 
