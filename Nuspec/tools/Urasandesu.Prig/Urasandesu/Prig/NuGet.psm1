@@ -186,22 +186,39 @@ function StripGenericParameterCount {
 function ConvertTypeToFullName {
     param (
         [type]
-        $Type
+        $Type, 
+
+        [System.Collections.ArrayList]
+        $List
     )
     
     $defName = $Type.FullName
-    
-    if (!$Type.IsGenericParameter -and $Type.IsNested) {
+    if ($defName -eq $null) {
+        $defName = $Type.Name
+    }
+        
+    if ($Type.IsGenericParameter -and !$Type.IsNested) {
+        $defName = $Type.Name
+    } elseif ($Type.IsGenericParameter) {
+        $defName = ([string]$defName).Replace("+",".")
+    } elseif (!$Type.IsGenericParameter -and $Type.IsNested) {
         $defName = (ConvertTypeToFullName $Type.DeclaringType) + '.' + $Type.Name
     } elseif ($Type.IsGenericType -and !$Type.IsGenericTypeDefinition) {
         $defName = $Type.Namespace + "." + $Type.Name
+    } elseif ($Type.HasElementType -and $Type.IsArray) {
+        if ($null -eq $List) {
+            $List = New-Object System.Collections.ArrayList
+        }
+        [void]$List.Add(("[{0}]" -f (New-Object string ',', ($Type.GetArrayRank() - 1))))
+        $defName = (ConvertTypeToFullName $Type.GetElementType() $List)
     } elseif ($Type.HasElementType) {
-        $defName = $Type.Name
-    } elseif ($Type.IsGenericParameter) {
-        $defName = $Type.Name
+        $defName = ConvertTypeToFullName $Type.GetElementType()
     }
 
     if ($Type.IsGenericType) {
+        if ($Type.HasElementType -and $Type.IsGenericTypeDefinition) {
+            $defName = $Type.Name
+        }
         $genericArgs = $Type.GetGenericArguments()
         if ($Type.Name -match '`(\d+)') {
             $genericArgs = $genericArgs[($genericArgs.Length - ([int]$Matches[1]))..($genericArgs.Length - 1)]
@@ -214,6 +231,10 @@ function ConvertTypeToFullName {
         }
     }
 
+    if (0 -lt $List.Count) {
+        $defName += ($List -join '')
+        $List.Clear()
+    }
     $defName
 }
 
@@ -355,7 +376,7 @@ function IsSignaturePublic {
 
 
 
-function GetExplicitlyImplementedInterface {
+function GetImplementedInterface {
     param (
         [System.Reflection.MethodInfo]
         $MethodInfo
@@ -378,19 +399,32 @@ function GetExplicitlyImplementedInterface {
             return $null
         }
 
-        $name = ""
         if ($mapping.InterfaceMethods[$index] -ne $null) {
             $interfaceMethod = $mapping.InterfaceMethods[$index]
-            $name = $interfaceMethod.Name
-            if (!$MethodInfo.Name.Equals($name, [System.StringComparison]::Ordinal)) {
-                return New-Object psobject | 
-                            Add-Member NoteProperty 'Interface' $interface -PassThru | 
-                            Add-Member NoteProperty 'InterfaceMethod' $interfaceMethod -PassThru
-            }
+            return New-Object psobject | 
+                        Add-Member NoteProperty 'Interface' $interface -PassThru | 
+                        Add-Member NoteProperty 'InterfaceMethod' $interfaceMethod -PassThru
         }
     }
 
     $null
+}
+
+
+
+function GetExplicitlyImplementedInterface {
+    param (
+        [System.Reflection.MethodInfo]
+        $MethodInfo
+    )
+
+    $result = GetImplementedInterface $MethodInfo
+    if ($null -ne $result) {
+        $name = $result.InterfaceMethod.Name
+        if (!$MethodInfo.Name.Equals($name, [System.StringComparison]::Ordinal)) {
+            $result
+        }
+    }
 }
 
 
@@ -581,8 +615,7 @@ function ConvertTypeToGenericParameterConstraints {
 
     $constraintClauses = New-Object 'System.Collections.Generic.List[string]'
     if ($Type.IsGenericType) {
-        foreach ($genericArg in $Type.GetGenericArguments())
-        {
+        foreach ($genericArg in $Type.GetGenericArguments()) {
             $constraintClause = ConvertTypeToGenericParameterConstraintClause $genericArg
             if ($null -eq $constraintClause) { continue }
 
@@ -603,8 +636,7 @@ function ConvertStubToGenericParameterConstraints {
 
     $constraintClauses = New-Object 'System.Collections.Generic.List[string]'
     if ($Stub.Target.IsGenericMethod) {
-        foreach ($genericArg in $Stub.Target.GetGenericArguments())
-        {
+        foreach ($genericArg in $Stub.Target.GetGenericArguments()) {
             $constraintClause = ConvertTypeToGenericParameterConstraintClause $genericArg
             if ($null -eq $constraintClause) { continue }
 
@@ -793,7 +825,11 @@ function ConvertTypeToGenericParameterArray {
     $typeofParams = New-Object 'System.Collections.Generic.List[string]'
     if ($Type.IsGenericType) {
         foreach ($genericArg in $Type.GetGenericArguments()) {
-            $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            if ($genericArg.IsGenericParameter) {
+                $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            } else {
+                $typeofParams.Add('null')
+            }
         }
     }
 
@@ -811,7 +847,11 @@ function ConvertStubToGenericParameterArray {
     $typeofParams = New-Object 'System.Collections.Generic.List[string]'
     if ($Stub.Target.IsGenericMethod) {
         foreach ($genericArg in $Stub.Target.GetGenericArguments()) {
-            $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            if ($genericArg.IsGenericParameter) {
+                $typeofParams.Add(("typeof({0})" -f $genericArg.Name))
+            } else {
+                $typeofParams.Add('null')
+            }
         }
     }
 

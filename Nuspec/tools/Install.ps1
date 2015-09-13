@@ -49,10 +49,12 @@ if (@($msbProjCollection.LoadedProjects | ? { $msbProj = $_; 0 -lt @($msbProj.It
     regsvr32 /s /i ([System.IO.Path]::Combine($InstallPath, 'tools\x64\Urasandesu.Prig.dll'))
     regsvr32 /s /i ([System.IO.Path]::Combine($InstallPath, 'tools\x86\Urasandesu.Prig.dll'))
 
-    cmd /c ('" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /i "{0}" "' -f [System.IO.Path]::Combine($InstallPath, 'lib\net35\Urasandesu.NAnonym.dll'))
-    cmd /c ('" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /i "{0}" "' -f [System.IO.Path]::Combine($InstallPath, 'lib\net35\Urasandesu.Prig.Framework.dll'))
-    cmd /c ('" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /i "{0}" "' -f [System.IO.Path]::Combine($InstallPath, 'lib\net40\Urasandesu.NAnonym.dll'))
-    cmd /c ('" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /i "{0}" "' -f [System.IO.Path]::Combine($InstallPath, 'lib\net40\Urasandesu.Prig.Framework.dll'))
+    $vscomntoolsPaths = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.value }
+    $vsDevCmdPath = [System.IO.Path]::Combine($vscomntoolsPaths[0], 'VsDevCmd.bat')
+    cmd /c ('" "{0}" & gacutil /i "{1}" "' -f $vsDevCmdPath, [System.IO.Path]::Combine($InstallPath, 'lib\net35\Urasandesu.NAnonym.dll'))
+    cmd /c ('" "{0}" & gacutil /i "{1}" "' -f $vsDevCmdPath, [System.IO.Path]::Combine($InstallPath, 'lib\net35\Urasandesu.Prig.Framework.dll'))
+    cmd /c ('" "{0}" & gacutil /i "{1}" "' -f $vsDevCmdPath, [System.IO.Path]::Combine($InstallPath, 'lib\net40\Urasandesu.NAnonym.dll'))
+    cmd /c ('" "{0}" & gacutil /i "{1}" "' -f $vsDevCmdPath, [System.IO.Path]::Combine($InstallPath, 'lib\net40\Urasandesu.Prig.Framework.dll'))
 
     Copy-Item ([System.IO.Path]::Combine($InstallPath, 'tools\x86\prig.exe')) $ToolsPath
 }

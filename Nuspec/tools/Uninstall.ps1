@@ -49,8 +49,10 @@ if (@($msbProjCollection.LoadedProjects | ? { $msbProj = $_; 0 -lt @($msbProj.It
     regsvr32 /s /u ([System.IO.Path]::Combine($InstallPath, 'tools\x64\Urasandesu.Prig.dll'))
     regsvr32 /s /u ([System.IO.Path]::Combine($InstallPath, 'tools\x86\Urasandesu.Prig.dll'))
 
-    cmd /c '" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /u "Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL" "'
-    cmd /c '" "%VS120COMNTOOLS%VsDevCmd.bat" & gacutil /u "Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL" "'
+    $vscomntoolsPaths = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.value }
+    $vsDevCmdPath = [System.IO.Path]::Combine($vscomntoolsPaths[0], 'VsDevCmd.bat')
+    cmd /c ('" "{0}" & gacutil /u "Urasandesu.NAnonym, Version=0.2.0.0, Culture=neutral, PublicKeyToken=ce9e95b04334d5fb, processorArchitecture=MSIL" "' -f $vsDevCmdPath)
+    cmd /c ('" "{0}" & gacutil /u "Urasandesu.Prig.Framework, Version=0.1.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce, processorArchitecture=MSIL" "' -f $vsDevCmdPath)
 
     Remove-Module Urasandesu.Prig
 }

@@ -104,7 +104,7 @@ function SetStubberPreBuildEventProperty {
     )
 
     $prigPkgName = Get-PackageName
-    $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe' })
+    $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' })
     $argFile = '-File "$(SolutionDir)packages\{0}\tools\Invoke-PilotStubber.ps1"' -f $prigPkgName
     $argAssembly = '-AssemblyFrom "{0}"' -f $AssemblyNameEx.Location
     $argTargetFrameworkVersion = '-TargetFrameworkVersion {0}' -f $TargetFrameworkVersion
@@ -118,7 +118,10 @@ function SetStubberPreBuildEventProperty {
     $argKeyFile = '-KeyFile "$(SolutionDir)packages\{0}\tools\Urasandesu.Prig.snk"' -f $prigPkgName
     $argOutputPath = '-OutputPath "$(TargetDir)."'
     $argSettings = '-Settings "$(ProjectDir){0}.{1}.v{2}.prig"' -f $AssemblyNameEx.Name, $AssemblyNameEx.ImageRuntimeVersion, $AssemblyNameEx.Version
-    $cmd = 'cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" & {0} {1} {2} {3} {4} {5} {6} {7} {8} "' -f 
+    $vscomntoolsPaths = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.value }
+    $vsDevCmdPath = [System.IO.Path]::Combine($vscomntoolsPaths[0], 'VsDevCmd.bat')
+    $cmd = 'cmd /c " "{0}" & {1} {2} {3} {4} {5} {6} {7} {8} {9} "' -f 
+                $vsDevCmdPath, 
                 $powershell, 
                 $argOther, 
                 $argFile, 

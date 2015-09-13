@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;OUTPUT_DEBUG;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm212 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm228 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,7 +110,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;OUTPUT_DEBUG;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm213 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm228 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,7 +129,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm199 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm228 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,7 +150,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;URASANDESU_PRIG_EXPORTS;NOMINMAX;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm199 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm228 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
