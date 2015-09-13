@@ -59,6 +59,9 @@ namespace Urasandesu.Prig.VSPackage
         [Dependency]
         public IVsPackageInstallerEvents InstallerEvents { private get; set; }
 
+        [Dependency]
+        public IVsPackageUninstaller Uninstaller { private get; set; }
+
         public virtual void AddPrigAssemblyForMSCorLib(PrigPackageViewModel viewModel)
         {
             AddPrigAssemblyCore(viewModel, "mscorlib");
@@ -141,8 +144,12 @@ namespace Urasandesu.Prig.VSPackage
 
             viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
             var project = MonitoringSelectionService.GetCurrentProject();
-            if (!InstallerServices.IsPackageInstalled(project, "Prig"))
-                InstallPackage(viewModel, project, "Prig", 50u, 100u);
+            if (!InstallerServices.IsPackageInstalledEx(project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion))
+            {
+                if (InstallerServices.IsPackageInstalled(project, Resources.NuGetRootPackageId))
+                    Uninstaller.UninstallPackage(project, Resources.NuGetRootPackageId, false);
+                InstallPackage(viewModel, project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, 50u, 100u);
+            }
 
             viewModel.Statusbar.ReportProgress("Starting Prig setup session...", 75u, 100u);
             var command = string.Format(
@@ -164,8 +171,12 @@ Start-PrigSetup -NoIntro -AdditionalInclude {0} -Project $Project
 
             viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
             var project = MonitoringSelectionService.GetCurrentProject();
-            if (!InstallerServices.IsPackageInstalled(project, "Prig"))
-                InstallPackage(viewModel, project, "Prig", 50u, 100u);
+            if (!InstallerServices.IsPackageInstalledEx(project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion))
+            {
+                if (InstallerServices.IsPackageInstalled(project, Resources.NuGetRootPackageId))
+                    Uninstaller.UninstallPackage(project, Resources.NuGetRootPackageId, false);
+                InstallPackage(viewModel, project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, 50u, 100u);
+            }
 
             viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
             var command = string.Format(
@@ -189,8 +200,12 @@ Start-PrigSetup -EditorialInclude {0} -Project $Project
 
             viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
             var project = MonitoringSelectionService.GetCurrentProject();
-            if (!InstallerServices.IsPackageInstalled(project, "Prig"))
-                InstallPackage(viewModel, project, "Prig", 50u, 100u);
+            if (!InstallerServices.IsPackageInstalledEx(project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion))
+            {
+                if (InstallerServices.IsPackageInstalled(project, Resources.NuGetRootPackageId))
+                    Uninstaller.UninstallPackage(project, Resources.NuGetRootPackageId, false);
+                InstallPackage(viewModel, project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, 50u, 100u);
+            }
 
             viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
             var command = string.Format(
@@ -257,7 +272,7 @@ Disable-PrigTestAdapter
             }
         }
 
-        void InstallPackage(PrigPackageViewModel viewModel, Project project, string packageId, uint progressValue, uint progressMaximum)
+        void InstallPackage(PrigPackageViewModel viewModel, Project project, string packageId, string version, uint progressValue, uint progressMaximum)
         {
             var onInstalling = new VsPackageEventHandler(metadata => viewModel.Statusbar.ReportProgress(string.Format("Installing '{0}'...", metadata.Id), progressValue, progressMaximum));
             var onInstalled = new VsPackageEventHandler(metadata => viewModel.Statusbar.ReportProgress(string.Format("Installed '{0}'.", metadata.Id), progressValue, progressMaximum));
@@ -269,7 +284,6 @@ Disable-PrigTestAdapter
                 InstallerEvents.PackageReferenceAdded += onReferenceAdded;
 
                 var source = default(string);
-                var version = default(string);
                 var ignoreDependencies = false;
                 Installer.InstallPackage(source, project, packageId, version, ignoreDependencies);
             }

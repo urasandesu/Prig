@@ -71,7 +71,8 @@ foreach ($profiler in $profilers) {
 
 $prig = [IO.Path]::Combine($chocoToolsPath, 'prig.exe')
 $packageName = "TestWindow"
-$source = "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow"
+$msvsdirPaths = dir 'C:\Program Files (x86)\Microsoft Visual Studio *' | ? { $_.name -match 'Microsoft Visual Studio \d+\.\d+' } | sort name -Descending | % { $_.FullName }
+$source = [IO.Path]::Combine($msvsdirPaths[0], "Common7\IDE\CommonExtensions\Microsoft\TestWindow")
 "  Installing the default source '$source' as the package '$packageName'..."
 & $prig install $packageName -source $source
 

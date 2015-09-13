@@ -81,6 +81,19 @@ if (![string]::IsNullOrEmpty($BuildTarget)) {
 
 switch ($PsCmdlet.ParameterSetName) {
     'Package' { 
+        $curDir = $PWD.Path
+        if ($BuildTarget -ne "Clean") {
+            $nuspecPath = [System.IO.Path]::Combine($curDir, 'Chocolatey\tools\NuGet\Prig.nuspec.hedge')
+            $nuspec = [xml](Get-Content $nuspecPath)
+
+            $resxPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage\Resources.resx')
+            $resx = [xml](Get-Content $resxPath)
+
+            ($resx.root.data | ? { $_.name -eq 'NuGetRootPackageId' }).value = $nuspec.package.metadata.id
+            ($resx.root.data | ? { $_.name -eq 'NuGetRootPackageVersion' }).value = $nuspec.package.metadata.version
+            $resx.Save($resxPath)
+        }
+
         $solution = "Prig.sln"
         nuget restore $solution
         $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Urasandesu_Prig_VSPackage$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0404$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0804$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_1205$buildTarget_"
@@ -117,7 +130,6 @@ switch ($PsCmdlet.ParameterSetName) {
             }
         }
 
-        $curDir = $PWD.Path
         if ($BuildTarget -ne "Clean") {
             Set-Location ([System.IO.Path]::Combine($curDir, 'NUnitTestAdapter'))
             [System.Environment]::CurrentDirectory = $PWD

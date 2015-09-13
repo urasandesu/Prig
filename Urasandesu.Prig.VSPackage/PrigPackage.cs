@@ -102,6 +102,9 @@ namespace Urasandesu.Prig.VSPackage
 
             var installerEvents = componentModel.GetService<IVsPackageInstallerEvents>();
             container.RegisterInstance(installerEvents);
+
+            var uninstaller = componentModel.GetService<IVsPackageUninstaller>();
+            container.RegisterInstance(uninstaller);
         }
 
         void RegisterMenuCommandService(IUnityContainer container)

@@ -32,7 +32,17 @@ $chocoToolsPath = [IO.Path]::Combine($env:chocolateyPackageFolder, 'tools')
 
 
 '  Uninstalling Prig.vsix...'
-cmd /c '" "%VS120COMNTOOLS%VsDevCmd.bat" & vsixinstaller /q /u:0a06101d-8de3-40c4-b083-c5c16ca227ae "'
+$vscomntoolsPaths = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.value }
+if (0 -eq $vscomntoolsPaths.Length) {
+    Write-Error "'VsDevCmd.bat' is not found."
+    exit 1805378044
+}
+$vsDevCmdPath = [System.IO.Path]::Combine($vscomntoolsPaths[0], 'VsDevCmd.bat')
+if (![System.IO.File]::Exists($vsDevCmdPath)) {
+    Write-Error "'VsDevCmd.bat' is not found."
+    exit 1805378044
+}
+cmd /c ('" "{0}" & vsixinstaller /q /u:0a06101d-8de3-40c4-b083-c5c16ca227ae "' -f $vsDevCmdPath)
 
 
 $prig = [IO.Path]::Combine($chocoToolsPath, 'prig.exe')

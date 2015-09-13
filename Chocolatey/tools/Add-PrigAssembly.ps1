@@ -105,7 +105,7 @@ function SetStubberPreBuildEventProperty {
 
     $toolsPath = [IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools')
     $libPath = [IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'lib')
-    $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe' })
+    $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' })
     $argFile = '-File "{0}\Invoke-PilotStubber.ps1"' -f $toolsPath
     $argAssembly = '-AssemblyFrom "{0}"' -f $AssemblyNameEx.Location
     $argTargetFrameworkVersion = '-TargetFrameworkVersion {0}' -f $TargetFrameworkVersion
@@ -125,10 +125,13 @@ function SetStubberPreBuildEventProperty {
         $condition = "'`$(Platform)' == '$Platform'"
     }
 
+    $vscomntoolsPaths = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.value }
+    $vsDevCmdPath = [System.IO.Path]::Combine($vscomntoolsPaths[0], 'VsDevCmd.bat')
     $targetNames = 'BeforeBuild', 'BeforeRebuild'
     foreach ($targetName in $targetNames) {
         $argBuildTarget = '-BuildTarget {0}' -f $targetName
-        $cmd = 'cmd /c " "%VS120COMNTOOLS%VsDevCmd.bat" & {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} "' -f 
+        $cmd = 'cmd /c " "{0}" & {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} "' -f 
+                    $vsDevCmdPath, 
                     $powershell, 
                     $argOther, 
                     $argFile, 
