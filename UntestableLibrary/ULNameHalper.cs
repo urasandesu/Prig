@@ -1,5 +1,5 @@
 ﻿/* 
- * File: IndirectionPreparationFwd.h
+ * File: ULNameHalper.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,29 +28,17 @@
  */
 
 
-#pragma once
-#ifndef INDIRECTIONPREPARATIONFWD_H
-#define INDIRECTIONPREPARATIONFWD_H
 
-#ifndef PRIGDATAFWD_H
-#include <PrigDataFwd.h>
-#endif
+using System;
+using System.Linq.Expressions;
 
-namespace IndirectionPreparationDetail {
-
-    using namespace Urasandesu::Swathe::Metadata;
-
-    struct IndirectionPreparation;
-
-    void EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, IMethod const *pMethodGen, INT offset = 0);
-    IType const *MakeGenericExplicitItsInstance(IType const *pTarget);
-    IMethod const *MakeGenericExplicitItsInstance(IMethod const *pTarget);
-
-}   // namespace IndirectionPreparationDetail {
-    
-using IndirectionPreparationDetail::IndirectionPreparation;
-using IndirectionPreparationDetail::EmitIndirectParameters;
-using IndirectionPreparationDetail::MakeGenericExplicitItsInstance;
-
-#endif  // INDIRECTIONPREPARATIONFWD_H
-
+namespace UntestableLibrary
+{
+    public static class ULNameHalper
+    {
+        public static string GetName<T>(Expression<Func<T>> exp)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

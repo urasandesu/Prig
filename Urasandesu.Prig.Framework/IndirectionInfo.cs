@@ -30,7 +30,11 @@
 
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
+using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Prig.Framework
 {
@@ -45,21 +49,41 @@ namespace Urasandesu.Prig.Framework
         {
             AssemblyName = (string)info.GetValue("AssemblyName", typeof(string));
             Token = (uint)info.GetValue("Token", typeof(uint));
+            Instantiation = (string[])info.GetValue("Instantiation", typeof(string[]));
         }
-
 
         public string AssemblyName { get; set; }
         public uint Token { get; set; }
+        public string[] Instantiation { get; set; }
+
+        public void SetInstantiation(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
+        {
+            using (InstanceGetters.DisableProcessing())
+            {
+                if (!delegateType.IsSubclassOf(typeof(Delegate)))
+                    throw new ArgumentException("The parameter must be a delegate type.", "delegateType");
+
+                var indDlgt = delegateType.MakeGenericType(target.DeclaringType, typeGenericArgs, target, methodGenericArgs);
+                var instantiation = new List<string>();
+                var indDlgt_Invoke = indDlgt.GetMethod("Invoke");
+                instantiation.AddRange(indDlgt_Invoke.GetParameters().Select(_ => _.ParameterType.ToString()));
+                instantiation.Add(indDlgt_Invoke.ReturnType.ToString());
+                Instantiation = instantiation.ToArray();
+            }
+        }
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("AssemblyName", AssemblyName, typeof(string));
             info.AddValue("Token", Token, typeof(uint));
+            info.AddValue("Instantiation", Instantiation, typeof(string[]));
         }
 
         public override string ToString()
         {
-            return "IndirectionInfo [AssemblyName=" + AssemblyName + ", Token=" + Token + "]";
+            return "IndirectionInfo [AssemblyName=" + AssemblyName +
+                   ", Token=" + Token +
+                   ", Instantiation={ " + (Instantiation == null ? "(null)" : string.Join(";", Instantiation)) + " }]";
         }
 
         public override bool Equals(object obj)
@@ -72,12 +96,17 @@ namespace Urasandesu.Prig.Framework
             var hashCode = 0;
             hashCode ^= AssemblyName == null ? 0 : AssemblyName.GetHashCode();
             hashCode ^= Token.GetHashCode();
+            hashCode ^= Instantiation == null ? 0 : Instantiation.Aggregate(0, (result, next) => result ^ (next == null ? 0 : next.GetHashCode()));
             return hashCode;
         }
 
         public bool Equals(IndirectionInfo other)
         {
-            return AssemblyName == other.AssemblyName && Token == other.Token;
+            return AssemblyName == other.AssemblyName &&
+                   Token == other.Token &&
+                   (Instantiation == null ? 
+                        other.Instantiation == null :
+                        other.Instantiation != null && Instantiation.SequenceEqual(other.Instantiation));
         }
 
         public static bool operator ==(IndirectionInfo lhs, IndirectionInfo rhs)

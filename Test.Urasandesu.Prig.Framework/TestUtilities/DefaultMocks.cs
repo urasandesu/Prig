@@ -1,5 +1,5 @@
 ﻿/* 
- * File: IndirectionPreparationFwd.h
+ * File: DefaultMocks.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,29 +28,28 @@
  */
 
 
-#pragma once
-#ifndef INDIRECTIONPREPARATIONFWD_H
-#define INDIRECTIONPREPARATIONFWD_H
+using System.Collections.Generic;
+using System.Reflection;
+using Urasandesu.Prig.Framework;
 
-#ifndef PRIGDATAFWD_H
-#include <PrigDataFwd.h>
-#endif
+namespace Test.Urasandesu.Prig.Framework.TestUtilities
+{
+    public class MockIndirectionAssemblyRepository : IndirectionAssemblyRepository
+    {
+        public override IEnumerable<Assembly> FindAll()
+        {
+            yield return Assembly.Load("Test.Urasandesu.Prig.Framework");
+        }
+    }
 
-namespace IndirectionPreparationDetail {
-
-    using namespace Urasandesu::Swathe::Metadata;
-
-    struct IndirectionPreparation;
-
-    void EmitIndirectParameters(MethodBodyGenerator *pNewBodyGen, IMethod const *pMethodGen, INT offset = 0);
-    IType const *MakeGenericExplicitItsInstance(IType const *pTarget);
-    IMethod const *MakeGenericExplicitItsInstance(IMethod const *pTarget);
-
-}   // namespace IndirectionPreparationDetail {
-    
-using IndirectionPreparationDetail::IndirectionPreparation;
-using IndirectionPreparationDetail::EmitIndirectParameters;
-using IndirectionPreparationDetail::MakeGenericExplicitItsInstance;
-
-#endif  // INDIRECTIONPREPARATIONFWD_H
-
+    public class MockAdditionalDelegatesAssemblyRepository : AdditionalDelegatesAssemblyRepository
+    {
+        public override IEnumerable<Assembly> FindAll()
+        {
+            yield return Assembly.Load("Urasandesu.Prig.Delegates");
+            yield return Assembly.Load("Urasandesu.Prig.Delegates.0404");
+            yield return Assembly.Load("Urasandesu.Prig.Delegates.0804");
+            yield return Assembly.Load("Urasandesu.Prig.Delegates.1205");
+        }
+    }
+}

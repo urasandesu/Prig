@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0-alpha05</version>
+    <version>2.0.0-alpha06</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,16 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.0-alpha05
+    <releaseNotes>Version 2.0.0-alpha06
+* Fixed #45: Support Visual Studio 2015
+* Fixed #44: Namespace reference not added for parameter that is array type
+  [NOTICE] This issue has already been fixed in the family of V2. We just applied the fix to the family of V1.
+* Improve installation robustness. The `ExecutionPolicy` of PowerShell that is invoked during build tasks was sometimes unexpected, so modify to set explicit value.
+* Enhance supported signature. The unusual types that appear on the interface of a method is almost supported. For example, `T[,][]`(`T` is a generic type parameter), `List<DateTime[]>[,]`, `out M[][,]`(`M` is a generic method parameter) and so on.
+* Prepare to support three or more out/ref parameters. By decreasing the dependencies of an indirection stub that profiler used, performance is also improved.
+
+
+Version 2.0.0-alpha05
 * Improve stability for the methods of the classes that are used on the boundary of application domains(e.g. `AppDomain`, `BinaryReader`, `MemoryStream`, `Thread` and so on).
 * Improve usability for the command to manage Prig a little(See also [the Wiki](https://github.com/urasandesu/Prig.V2Docs/wiki/Command-Line-Reference#pfind)).
 * Merge Infrastructure Bug Fix(See also Swathe issues [#2](https://github.com/urasandesu/Swathe/issues/2))

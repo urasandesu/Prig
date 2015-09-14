@@ -37,6 +37,7 @@ using System.Collections.Generic;
 using Urasandesu.NAnonym.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using System.Reflection.Emit;
 
 namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
@@ -207,12 +208,56 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             throw new KeyNotFoundException(""); // TODO: 
         }
 
+        static ModuleBuilder NewTemporaryModuleBuilder()
+        {
+            var asmName = new AssemblyName(Guid.NewGuid().ToString("N"));
+            var asmBldr = AppDomain.CurrentDomain.DefineDynamicAssembly(asmName, AssemblyBuilderAccess.ReflectionOnly);
+            return asmBldr.DefineDynamicModule(asmName.Name + ".dll");
+        }
+        static ModuleBuilder ms_modBldr = NewTemporaryModuleBuilder();
+        static Dictionary<Type, Type[]> ms_tempGenericArgsCache = new Dictionary<Type, Type[]>();
+
         static Type MakeGenericExplicitThisType(Type target)
         {
-            var genericArgs = new List<Type>();
-            foreach (var genericArg in target.GetGenericArguments())
-                genericArgs.Add(genericArg);
-            return target.MakeGenericType(genericArgs.ToArray());
+            // In the managed code, `typeof(Nullable<>).MakeGenericType(typeof(Nullable<>).GetGenericArguments()[0])` is treated same as `Nullable<>`.
+            // Therefore, we have to generate the generic parameter that have the constraints same as it, to express the generic type that is instantiated by its generic parameter.
+            lock (ms_tempGenericArgsCache)
+            {
+                if (!ms_tempGenericArgsCache.ContainsKey(target))
+                {
+                    var typeBldr = ms_modBldr.DefineType(Path.GetFileNameWithoutExtension(ms_modBldr.ScopeName) + "." + target.FullName);
+                    var genericParams = target.GetGenericArguments();
+                    var names = genericParams.Select(_ => _.Name).ToArray();
+                    var genericParamBldrs = typeBldr.DefineGenericParameters(names);
+                    for (int i = 0; i < genericParams.Length; i++)
+                    {
+                        var genericParam = genericParams[i];
+                        var genericParamBldr = genericParamBldrs[i];
+
+                        genericParamBldr.SetGenericParameterAttributes(genericParam.GenericParameterAttributes);
+                        
+                        var baseTypeConstraint = default(Type);
+                        var interfaceConstraints = new List<Type>();
+                        foreach (var genericParamConstraint in genericParam.GetGenericParameterConstraints())
+                        {
+                            if (genericParamConstraint.IsInterface)
+                            {
+                                interfaceConstraints.Add(genericParamConstraint);
+                            }
+                            else
+                            {
+                                Debug.Assert(baseTypeConstraint == null, "`baseTypeConstraint` should be initialized only once.");
+                                baseTypeConstraint = genericParamConstraint;
+                            }
+                        }
+                        genericParamBldr.SetBaseTypeConstraint(baseTypeConstraint);
+                        genericParamBldr.SetInterfaceConstraints(interfaceConstraints.ToArray());
+                    }
+                    
+                    ms_tempGenericArgsCache.Add(target, typeBldr.CreateType().GetGenericArguments());
+                }
+                return target.MakeGenericType(ms_tempGenericArgsCache[target]);
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 ## STATUS
 As of July 30, 2015, Developing V2.0.0(Since this version, Prig is going to support Visual Studio integrated environment. More details can be found [here](https://github.com/urasandesu/Prig.V2Docs/blob/master/README.md)).  
-As of Dec 31, 2014, Released V1.1.0.
+As of Sep 14, 2015, Released V1.1.1. As the release note indicates, this family will be obsolete soon. We strongly recommend migrating to the family of the v2. About the way of the migration, please see [our Wiki](https://github.com/urasandesu/Prig/wiki/Migration-from-v1-to-v2).
 
 
 

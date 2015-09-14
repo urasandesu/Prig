@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Variations.cs" />
+    <Compile Include="ULUnusedGeneric.cs" />
+    <Compile Include="ULNameHalper.cs" />
     <Compile Include="ULConfigurationManager.cs" />
     <Compile Include="ULDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

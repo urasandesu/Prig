@@ -32,7 +32,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq.Expressions;
 using System.Threading;
 
 namespace UntestableLibrary
@@ -168,21 +167,5 @@ namespace UntestableLibrary
 
 
         protected ULConfigurationManager() { }
-    }
-
-    public static class ULNameHalper
-    {
-        public static string GetName<T>(Expression<Func<T>> exp)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class ULUnusedGeneric<T1, T2, T3, T4>
-    {
-        public TRet Echo<T5, T6, T7, T8, TRet>(T4 v4, T8 v8)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
