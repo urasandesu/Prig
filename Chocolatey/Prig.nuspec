@@ -23,7 +23,7 @@
 * Fixed #44: Namespace reference not added for parameter that is array type
   [NOTICE] This issue has already been fixed in the family of V2. We just applied the fix to the family of V1.
 * Improve installation robustness. The `ExecutionPolicy` of PowerShell that is invoked during build tasks was sometimes unexpected, so modify to set explicit value.
-* Enhance supported signature. The unusual types that appear on the interface of a method is almost supported. For example, `T[,][]`(`T` is a generic type parameter), `List<DateTime[]>[,]`, `out M[][,]`(`M` is a generic method parameter) and so on.
+* Enhance supported signature. The unusual types that appear on the interface of a method is almost supported. For example, `T[,][]`(`T` is a generic type parameter), `List&lt;DateTime[]&gt;[,]`, `out M[][,]`(`M` is a generic method parameter) and so on.
 * Prepare to support three or more out/ref parameters. By decreasing the dependencies of an indirection stub that profiler used, performance is also improved.
 
 
