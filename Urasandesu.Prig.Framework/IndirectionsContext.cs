@@ -71,15 +71,15 @@ namespace Urasandesu.Prig.Framework
         {
             var repository = InstanceGetters.NewIndirectionAssemblyRepository();
             var indAsmInfos = repository.FindAll();
-            var preparables = indAsmInfos.SelectMany(_ => _.GetTypes()).
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Where(_ => _.GetConstructor(Type.EmptyTypes) != null).
-                                          Select(_ => Activator.CreateInstance(_)).
-                                          Cast<IBehaviorPreparable>(); ;
+            var preps = indAsmInfos.SelectMany(_ => _.GetTypes()).
+                                    Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
+                                    Where(_ => !_.IsGenericType).
+                                    Where(_ => _.GetConstructor(Type.EmptyTypes) != null).
+                                    Select(_ => Activator.CreateInstance(_)).
+                                    Cast<IBehaviorPreparable>(); ;
             var setting = new BehaviorSetting();
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
+            foreach (var prep in preps)
+                setting.Include(prep);
             return setting;
         }
 

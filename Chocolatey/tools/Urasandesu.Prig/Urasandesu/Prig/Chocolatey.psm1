@@ -293,26 +293,6 @@ function ConvertTypeToBaseName {
 
 
 
-function ConvertTypeToName {
-    param (
-        [type]
-        $Type
-    )
-    
-    if (!$Type.IsGenericParameter -and $Type.IsNested) {
-        $defName = (ConvertTypeToStubName $Type.DeclaringType) + $Type.Name
-    } else {
-        $defName = $Type.Name
-    }
-
-    if ($Type.IsGenericType) {
-        $defName = StripGenericParameterCount $defName
-    }
-    $defName
-}
-
-
-
 function ConvertStubToClassName {
     param (
         [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
@@ -384,6 +364,17 @@ function IsSignaturePublic {
 
 
 
+function ExistsIndirectionDelegate {
+    param (
+        [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
+        $Stub
+    )
+
+    $null -ne $Stub.IndirectionDelegate
+}
+
+
+
 function GetImplementedInterface {
     param (
         [System.Reflection.MethodInfo]
@@ -433,144 +424,6 @@ function GetExplicitlyImplementedInterface {
             $result
         }
     }
-}
-
-
-
-function GetDelegateParameters {
-    param (
-        [type]
-        $Delegate
-    )
-
-    $invokeInfo = $Delegate.GetMethod('Invoke')
-    if ($null -ne $invokeInfo) {
-        $invokeInfo.GetParameters()
-    }
-}
-
-
-
-function GetDelegateReturnType {
-    param (
-        [type]
-        $Delegate
-    )
-    
-    $invokeInfo = $Delegate.GetMethod('Invoke')
-    if ($null -ne $invokeInfo) {
-        $invokeInfo.ReturnType
-    }
-}
-
-
-
-function DefineParameter {
-    param (
-        [System.Reflection.ParameterInfo]
-        $ParameterInfo
-    )
-    
-    $paramType = $ParameterInfo.ParameterType
-    if ($paramType.HasElementType) {
-        $elemType = $paramType.GetElementType()
-        if ($paramType.IsByRef) {
-            if (($ParameterInfo.Attributes -band [System.Reflection.ParameterAttributes]::Out) -ne 0) {
-                "out $(ConvertTypeToFullName $elemType) $($ParameterInfo.Name)"
-            } else {
-                "ref $(ConvertTypeToFullName $elemType) $($ParameterInfo.Name)"
-            }
-        } else {
-            "$(ConvertTypeToFullName $elemType)[] $($ParameterInfo.Name)"
-        }
-    } else {
-        "$(ConvertTypeToFullName $paramType) $($ParameterInfo.Name)"
-    }
-}
-
-
-
-function DefineAllParameters {
-    param (
-        [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
-        $Stub
-    )
-    
-    $paramInfos = GetDelegateParameters $Stub.IndirectionDelegate
-    $paramNames = @()
-    foreach ($paramInfo in $paramInfos) {
-        $paramNames += DefineParameter $paramInfo
-    }
-    "($($paramNames -join ', '))"
-}
-
-
-
-function LoadParameter {
-    param (
-        [System.Reflection.ParameterInfo]
-        $ParameterInfo
-    )
-    
-    $paramType = $ParameterInfo.ParameterType
-    if ($paramType.HasElementType) {
-        $elemType = $paramType.GetElementType()
-        if ($paramType.IsByRef) {
-            if (($ParameterInfo.Attributes -band [System.Reflection.ParameterAttributes]::Out) -ne 0) {
-                "out $($ParameterInfo.Name)"
-            } else {
-                "ref $($ParameterInfo.Name)"
-            }
-        } else {
-            "$($ParameterInfo.Name)"
-        }
-    } else {
-        "$($ParameterInfo.Name)"
-    }
-}
-
-
-
-function LoadAllParameters {
-    param (
-        [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
-        $Stub
-    )
-    
-    $paramInfos = GetDelegateParameters $Stub.IndirectionDelegate
-    $paramNames = @()
-    foreach ($paramInfo in $paramInfos) {
-        $paramNames += LoadParameter $paramInfo
-    }
-    $paramNames -join ', '
-}
-
-
-
-function Load1stParameter {
-    param (
-        [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
-        $Stub
-    )
-    
-    $paramInfos = GetDelegateParameters $Stub.IndirectionDelegate
-    $paramNames = @()
-    foreach ($paramInfo in $paramInfos) {
-        $paramNames += LoadParameter $paramInfo
-    }
-    $paramNames[0]
-}
-
-
-
-function HasReturnType {
-    param (
-        [Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStub]
-        $Stub
-    )
-    
-    $retType = GetDelegateReturnType $Stub.IndirectionDelegate
-    $retType -ne [void]
 }
 
 
@@ -900,7 +753,9 @@ function ConvertStubToStubsXml {
 . $(Join-Path $here Chocolatey.Get-PackageToolsPath.ps1)
 . $(Join-Path $here Chocolatey.New-PrigCsproj.ps1)
 . $(Join-Path $here Chocolatey.New-PrigProxiesCs.ps1)
+. $(Join-Path $here Chocolatey.New-PrigProxyTypeIntroducersCs.ps1)
 . $(Join-Path $here Chocolatey.New-PrigStubsCs.ps1)
+. $(Join-Path $here Chocolatey.New-PrigTypeIntroducersCs.ps1)
 . $(Join-Path $here Chocolatey.New-PrigTokensCs.ps1)
 . $(Join-Path $here Chocolatey.Start-PrigSetup.ps1)
 

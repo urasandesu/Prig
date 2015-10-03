@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0-alpha06</version>
+    <version>2.0.0-alpha07</version>
     <title>Prig: Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,12 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.0-alpha06
+    <releaseNotes>Version 2.0.0-alpha07
+* 
+* 
+
+
+Version 2.0.0-alpha06
 * Fixed #45: Support Visual Studio 2015
 * Fixed #44: Namespace reference not added for parameter that is array type
   [NOTICE] This issue has already been fixed in the family of V2. We just applied the fix to the family of V1.

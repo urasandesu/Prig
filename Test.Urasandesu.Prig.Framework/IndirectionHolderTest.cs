@@ -31,13 +31,10 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using Test.Urasandesu.Prig.Framework.TestUtilities;
-using Urasandesu.NAnonym;
 using Urasandesu.NAnonym.Mixins.System;
 using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
@@ -72,17 +69,17 @@ namespace Test.Urasandesu.Prig.Framework
         {
             // Arrange
             PDateTime.NowGet().Body = () => new DateTime(2014, 1, 1);
-            PList<int>.Add().Body = (@this, item) => { @this.Add(item); @this.Add(item); };
-            PArray.Exists<int>().Body = (array, match) => match(array[0]);
+            PList<int>.AddT().Body = (@this, item) => { @this.Add(item); @this.Add(item); };
+            PArray.ExistsOfTTArrayPredicateOfT<int>().Body = (array, match) => match(array[0]);
 
             AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
             {
                 // Act
                 var get_now = PDateTime.NowGet().Body;
-                var add = PList<int>.Add().Body;
+                var add = PList<int>.AddT().Body;
                 var addResults = new List<int>();
                 add(addResults, 10);
-                var exists = PArray.Exists<int>().Body;
+                var exists = PArray.ExistsOfTTArrayPredicateOfT<int>().Body;
 
 
                 // Assert
@@ -100,20 +97,9 @@ namespace Test.Urasandesu.Prig.Framework
             // Arrange
             {
                 PULColumns.ValidateStateULTableStatus().Body = args => { throw new NotSupportedException(); };
-
                 #region Prepare JIT. This simulates the behavior during profiling. Actually, it is unnecessary to go that far with that.
-                var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                var zz = new PULColumns.zzValidateStateULTableStatus();
-                var info = zz.Info;
-                info.SetInstantiation(zz.Stub.Target, zz.Stub.IndirectionDelegate, new Type[0], new Type[0]);
-                var dlgt = holder.GetOrDefault(info);
-                var validateStateULTableStatus = LooseCrossDomainAccessor.SafelyCast<Action<ULTableStatus>>(dlgt);
-                try
-                {
-                    validateStateULTableStatus(new ULTableStatus());
-                }
-                catch
-                { }
+                var validateStateULTableStatus = PULColumns.ValidateStateULTableStatus().Body;
+                Assert.Throws<NotSupportedException>(() => validateStateULTableStatus(new object[] { new ULTableStatus() }));
                 #endregion
             }
 
@@ -122,16 +108,11 @@ namespace Test.Urasandesu.Prig.Framework
                 InstanceGetters.NewAdditionalDelegatesAssemblyRepository = () => new MockAdditionalDelegatesAssemblyRepository();
 
                 // Act
-                var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                var zz = new PULColumns.zzValidateStateULTableStatus();
-                var info = zz.Info;
-                info.SetInstantiation(zz.Stub.Target, zz.Stub.IndirectionDelegate, new Type[0], new Type[0]);
-                var dlgt = holder.GetOrDefault(info);
-                var validateStateULTableStatus = LooseCrossDomainAccessor.SafelyCast<Action<ULTableStatus>>(dlgt);
+                var validateStateULTableStatus = PULColumns.ValidateStateULTableStatus().Body;
 
 
                 // Assert
-                Assert.Throws<NotSupportedException>(() => validateStateULTableStatus(new ULTableStatus()));
+                Assert.Throws<NotSupportedException>(() => validateStateULTableStatus(new object[] { new ULTableStatus() }));
             });
         }
 
@@ -143,23 +124,21 @@ namespace Test.Urasandesu.Prig.Framework
             // Arrange
             IndirectionsContext.
                 ExcludeGeneric().
-                Include(PList<int>.Add()).
-                Include(PArray.Exists<int>()).
+                Include(PList<int>.AddT()).
+                Include(PArray.ExistsOfTTArrayPredicateOfT<int>()).
                 DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var get_now = PDateTime.NowGet().Body;
-                var add = PList<int>.Add().Body;
-                var exists = PArray.Exists<int>().Body;
+            
+            // Act
+            var get_now = PDateTime.NowGet().Body;
+            var add = PList<int>.AddT().Body;
+            var exists = PArray.ExistsOfTTArrayPredicateOfT<int>().Body;
 
 
-                // Assert
-                Assert.Throws<NotImplementedException>(() => get_now());
-                Assert.Throws<NotImplementedException>(() => add(null, 0));
-                Assert.Throws<NotImplementedException>(() => exists(null, null));
-            });
+            // Assert
+            Assert.Throws<NotImplementedException>(() => get_now());
+            Assert.Throws<NotImplementedException>(() => add(null, 0));
+            Assert.Throws<NotImplementedException>(() => exists(null, null));
         }
 
 
@@ -170,23 +149,21 @@ namespace Test.Urasandesu.Prig.Framework
             // Arrange
             IndirectionsContext.
                 ExcludeGeneric().
-                Include(PList<int>.Add()).
-                Include(PArray.Exists<int>()).
+                Include(PList<int>.AddT()).
+                Include(PArray.ExistsOfTTArrayPredicateOfT<int>()).
                 DefaultBehavior = IndirectionBehaviors.DefaultValue;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var get_now = PDateTime.NowGet().Body;
-                var add = PList<int>.Add().Body;
-                var exists = PArray.Exists<int>().Body;
+
+            // Act
+            var get_now = PDateTime.NowGet().Body;
+            var add = PList<int>.AddT().Body;
+            var exists = PArray.ExistsOfTTArrayPredicateOfT<int>().Body;
 
 
-                // Assert
-                Assert.AreEqual(default(DateTime), get_now());
-                Assert.DoesNotThrow(() => add(null, 10));
-                Assert.IsFalse(exists(null, null));
-            });
+            // Assert
+            Assert.AreEqual(default(DateTime), get_now());
+            Assert.DoesNotThrow(() => add(null, 10));
+            Assert.IsFalse(exists(null, null));
         }
 
 
@@ -197,23 +174,21 @@ namespace Test.Urasandesu.Prig.Framework
             // Arrange
             IndirectionsContext.
                 ExcludeGeneric().
-                Include(PList<int>.Add()).
-                Include(PArray.Exists<int>()).
+                Include(PList<int>.AddT()).
+                Include(PArray.ExistsOfTTArrayPredicateOfT<int>()).
                 DefaultBehavior = IndirectionBehaviors.Fallthrough;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var get_now = PDateTime.NowGet().Body;
-                var add = PList<int>.Add().Body;
-                var exists = PArray.Exists<int>().Body;
+
+            // Act
+            var get_now = PDateTime.NowGet().Body;
+            var add = PList<int>.AddT().Body;
+            var exists = PArray.ExistsOfTTArrayPredicateOfT<int>().Body;
 
 
-                // Assert
-                Assert.Throws<FallthroughException>(() => get_now());
-                Assert.Throws<FallthroughException>(() => add(null, 0));
-                Assert.Throws<FallthroughException>(() => exists(null, null));
-            });
+            // Assert
+            Assert.Throws<FallthroughException>(() => get_now());
+            Assert.Throws<FallthroughException>(() => add(null, 0));
+            Assert.Throws<FallthroughException>(() => exists(null, null));
         }
 
 
@@ -224,20 +199,18 @@ namespace Test.Urasandesu.Prig.Framework
             // Arrange
             PArray.
                 ExcludeGeneric().
-                IncludeExists<int>().
+                IncludeExistsOfTTArrayPredicateOfT<int>().
                 DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var get_now = PDateTime.NowGet().Body;
-                var exists = PArray.Exists<int>().Body;
+
+            // Act
+            var get_now = PDateTime.NowGet().Body;
+            var exists = PArray.ExistsOfTTArrayPredicateOfT<int>().Body;
 
 
-                // Assert
-                Assert.IsNull(get_now);
-                Assert.Throws<NotImplementedException>(() => exists(null, null));
-            });
+            // Assert
+            Assert.IsNull(get_now);
+            Assert.Throws<NotImplementedException>(() => exists(null, null));
         }
 
 
@@ -248,20 +221,18 @@ namespace Test.Urasandesu.Prig.Framework
             // Arrange
             PArray.
                 ExcludeGeneric().
-                IncludeExists<int>().
+                IncludeExistsOfTTArrayPredicateOfT<int>().
                 DefaultBehavior = IndirectionBehaviors.DefaultValue;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var get_now = PDateTime.NowGet().Body;
-                var exists = PArray.Exists<int>().Body;
+
+            // Act
+            var get_now = PDateTime.NowGet().Body;
+            var exists = PArray.ExistsOfTTArrayPredicateOfT<int>().Body;
 
 
-                // Assert
-                Assert.IsNull(get_now);
-                Assert.IsFalse(exists(null, null));
-            });
+            // Assert
+            Assert.IsNull(get_now);
+            Assert.IsFalse(exists(null, null));
         }
 
 
@@ -276,20 +247,18 @@ namespace Test.Urasandesu.Prig.Framework
 
             PArray.
                 ExcludeGeneric().
-                IncludeExists<int>().
+                IncludeExistsOfTTArrayPredicateOfT<int>().
                 DefaultBehavior = IndirectionBehaviors.Fallthrough;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var get_now = PDateTime.NowGet().Body;
-                var exists = PArray.Exists<int>().Body;
+
+            // Act
+            var get_now = PDateTime.NowGet().Body;
+            var exists = PArray.ExistsOfTTArrayPredicateOfT<int>().Body;
 
 
-                // Assert
-                Assert.Throws<NotImplementedException>(() => get_now());
-                Assert.Throws<FallthroughException>(() => exists(null, null));
-            });
+            // Assert
+            Assert.Throws<NotImplementedException>(() => get_now());
+            Assert.Throws<FallthroughException>(() => exists(null, null));
         }
 
 
@@ -301,24 +270,22 @@ namespace Test.Urasandesu.Prig.Framework
             var proxy = new PProxyList<int>();
             proxy.
                 ExcludeGeneric().
-                IncludeAdd().
+                IncludeAddT().
                 DefaultBehavior = IndirectionBehaviors.NotImplemented;
-            LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source = proxy.Add().Body;
+            LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source = proxy.AddT().Body;
             LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source = (List<int>)proxy;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var addTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source;
-                var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source;
-                var addOther = PList<int>.Add().Body;
+
+            // Act
+            var addTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source;
+            var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source;
+            var addOther = PList<int>.AddT().Body;
 
 
-                // Assert
-                Assert.Throws<NotImplementedException>(() => addTarget(target, 0));
-                Assert.Throws<FallthroughException>(() => addTarget(new List<int>(), 0));
-                Assert.Throws<FallthroughException>(() => addOther(null, 0));
-            });
+            // Assert
+            Assert.Throws<NotImplementedException>(() => addTarget(target, 0));
+            Assert.Throws<FallthroughException>(() => addTarget(new List<int>(), 0));
+            Assert.Throws<FallthroughException>(() => addOther(null, 0));
         }
 
 
@@ -330,24 +297,22 @@ namespace Test.Urasandesu.Prig.Framework
             var proxy = new PProxyList<int>();
             proxy.
                 ExcludeGeneric().
-                IncludeAdd().
+                IncludeAddT().
                 DefaultBehavior = IndirectionBehaviors.DefaultValue;
-            LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source = proxy.Add().Body;
+            LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source = proxy.AddT().Body;
             LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source = (List<int>)proxy;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var addTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source;
-                var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source;
-                var addOther = PList<int>.Add().Body;
+
+            // Act
+            var addTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source;
+            var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source;
+            var addOther = PList<int>.AddT().Body;
 
 
-                // Assert
-                Assert.DoesNotThrow(() => addTarget(target, 0));
-                Assert.Throws<FallthroughException>(() => addTarget(new List<int>(), 0));
-                Assert.Throws<FallthroughException>(() => addOther(null, 0));
-            });
+            // Assert
+            Assert.DoesNotThrow(() => addTarget(target, 0));
+            Assert.Throws<FallthroughException>(() => addTarget(new List<int>(), 0));
+            Assert.Throws<FallthroughException>(() => addOther(null, 0));
         }
 
 
@@ -358,30 +323,28 @@ namespace Test.Urasandesu.Prig.Framework
             // Arrange
             IndirectionsContext.
                 ExcludeGeneric().
-                Include(PList<int>.Add()).
+                Include(PList<int>.AddT()).
                 DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
             var proxy = new PProxyList<int>();
             proxy.
                 ExcludeGeneric().
-                IncludeAdd().
+                IncludeAddT().
                 DefaultBehavior = IndirectionBehaviors.Fallthrough;
-            LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source = proxy.Add().Body;
+            LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source = proxy.AddT().Body;
             LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source = (List<int>)proxy;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var addTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source;
-                var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source;
-                var addOther = PList<int>.Add().Body;
+
+            // Act
+            var addTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<IndirectionAction<List<int>, int>>>().Source;
+            var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<List<int>>>().Source;
+            var addOther = PList<int>.AddT().Body;
 
 
-                // Assert
-                Assert.Throws<FallthroughException>(() => addTarget(target, 0));
-                Assert.Throws<NotImplementedException>(() => addTarget(new List<int>(), 0));
-                Assert.Throws<NotImplementedException>(() => addOther(null, 0));
-            });
+            // Assert
+            Assert.Throws<FallthroughException>(() => addTarget(target, 0));
+            Assert.Throws<NotImplementedException>(() => addTarget(new List<int>(), 0));
+            Assert.Throws<NotImplementedException>(() => addOther(null, 0));
         }
 
 
@@ -394,30 +357,29 @@ namespace Test.Urasandesu.Prig.Framework
             proxy.
                 ExcludeGeneric().
                 DefaultBehavior = IndirectionBehaviors.NotImplemented;
+
             {
-                var bag = TaggedBagFactory<PJapaneseLunisolarCalendar.zzGetGregorianYear>.Make(proxy.GetGregorianYear().Body);
-                LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<PJapaneseLunisolarCalendar.zzGetGregorianYear, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source = bag;
+                var bag = TaggedBagFactory<OfPJapaneseLunisolarCalendar.GetYearInfoInt32Int32Impl>.Make(proxy.GetYearInfoInt32Int32().Body);
+                LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<OfPJapaneseLunisolarCalendar.GetYearInfoInt32Int32Impl, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source = bag;
             }
             {
-                var bag = TaggedBagFactory<PJapaneseLunisolarCalendar.zzGetYearInfo>.Make(proxy.GetYearInfo().Body);
-                LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<PJapaneseLunisolarCalendar.zzGetYearInfo, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source = bag;
+                var bag = TaggedBagFactory<OfPJapaneseLunisolarCalendar.GetGregorianYearInt32Int32Impl>.Make(proxy.GetGregorianYearInt32Int32().Body);
+                LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<OfPJapaneseLunisolarCalendar.GetGregorianYearInt32Int32Impl, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source = bag;
             }
             LooseCrossDomainAccessor.GetOrRegister<GenericHolder<JapaneseLunisolarCalendar>>().Source = (JapaneseLunisolarCalendar)proxy;
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                // Act
-                var getGregorianYearTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<PJapaneseLunisolarCalendar.zzGetGregorianYear, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source.Value;
-                var getYearInfoTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<PJapaneseLunisolarCalendar.zzGetYearInfo, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source.Value;
-                var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<JapaneseLunisolarCalendar>>().Source;
+
+            // Act
+            var getYearInfoTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<OfPJapaneseLunisolarCalendar.GetYearInfoInt32Int32Impl, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source.Value;
+            var getGregorianYearTarget = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<OfPJapaneseLunisolarCalendar.GetGregorianYearInt32Int32Impl, IndirectionFunc<JapaneseLunisolarCalendar, int, int, int>>>>().Source.Value;
+            var target = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<JapaneseLunisolarCalendar>>().Source;
 
 
-                // Assert
-                Assert.Throws<NotImplementedException>(() => getGregorianYearTarget(target, 0, 0));
-                Assert.Throws<FallthroughException>(() => getGregorianYearTarget(new JapaneseLunisolarCalendar(), 0, 0));
-                Assert.Throws<NotImplementedException>(() => getYearInfoTarget(target, 0, 0));
-                Assert.Throws<FallthroughException>(() => getYearInfoTarget(new JapaneseLunisolarCalendar(), 0, 0));
-            });
+            // Assert
+            Assert.Throws<NotImplementedException>(() => getGregorianYearTarget(target, 0, 0));
+            Assert.Throws<FallthroughException>(() => getGregorianYearTarget(new JapaneseLunisolarCalendar(), 0, 0));
+            Assert.Throws<NotImplementedException>(() => getYearInfoTarget(target, 0, 0));
+            Assert.Throws<FallthroughException>(() => getYearInfoTarget(new JapaneseLunisolarCalendar(), 0, 0));
         }
     }
 
@@ -426,70 +388,65 @@ namespace Test.Urasandesu.Prig.Framework
         internal const int TokenOfNowGet = 0x060002D5;
     }
 
+    public class OfPDateTime : PDateTimeBase, IPrigTypeIntroducer
+    {
+        public NowGetImpl NowGet() 
+        {
+            return new NowGetImpl();
+        }
+
+        static readonly IndirectionStub ms_stubNowGet = NewStubNowGet();
+        static IndirectionStub NewStubNowGet()
+        {
+            var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+  <add name=""NowGet"" alias=""NowGet"">
+    <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
+          <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">get_Now</Name>
+          <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
+          <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.DateTime</ClassName>
+          <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.DateTime get_Now()</Signature>
+          <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.DateTime get_Now()</Signature2>
+          <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
+          <GenericArguments i:nil=""true"" xmlns="""" />
+        </RuntimeMethodInfo>
+  </add>
+</stubs>";
+            var section = new PrigSection();
+            section.DeserializeStubs(stubsXml);
+            return section.Stubs.First();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class NowGetImpl : TypedBehaviorPreparableImpl
+        {
+            public NowGetImpl()
+                : base(ms_stubNowGet, new Type[] { }, new Type[] { })
+            { }
+        }
+
+        public static Type Type
+        {
+            get { return ms_stubNowGet.GetDeclaringTypeInstance(new Type[] { }); }
+            // When generating stub, this property returns the property that is the first indirection stub.
+        }
+    }
+
     public class PDateTime : PDateTimeBase
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzNowGet NowGet()
+        public static TypedBehaviorPreparable<IndirectionFunc<System.DateTime>> NowGet()
         {
-            return new zzNowGet();
-        }
-
-        public class zzNowGet : IBehaviorPreparable
-        {
-            public IndirectionFunc<System.DateTime> Body
-            {
-                get
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<System.DateTime>>(holder.GetOrDefault(Info));
-                }
-                set
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    if (value == null)
-                    {
-                        holder.Remove(Info);
-                    }
-                    else
-                    {
-                        holder.AddOrUpdate(Info, value);
-                        RuntimeHelpers.PrepareDelegate(Body);
-                    }
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionFunc<System.DateTime>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
-
-            public IndirectionInfo Info
-            {
-                get
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfNowGet;
-                    return info;
-                }
-            }
+            return Stub<OfPDateTime>.Setup<IndirectionFunc<System.DateTime>>(_ => _.NowGet());
         }
 
         public static TypeBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PDateTime).GetNestedTypes().
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Select(_ => Activator.CreateInstance(_)).
-                                          Cast<IBehaviorPreparable>();
-            var setting = new TypeBehaviorSetting();
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
-            return setting;
+            return Stub<OfPDateTime>.ExcludeGeneric(new TypeBehaviorSetting());
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
             public override IndirectionBehaviors DefaultBehavior
@@ -506,122 +463,73 @@ namespace Test.Urasandesu.Prig.Framework
 
     public abstract class PListBase
     {
-        internal const int TokenOfAdd_T = 0x06001A4B;
+        internal const int TokenOfAddT = 0x0600224E;
+    }
+
+    public class OfPList<T> : PListBase, IPrigTypeIntroducer
+    {
+        public virtual AddTImpl AddT()
+        {
+            return new AddTImpl();
+        }
+
+        static IndirectionStub ms_stubAddT = NewStubAddT();
+        static IndirectionStub NewStubAddT()
+        {
+            var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+  <add name=""AddT"" alias=""AddT"">
+    <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
+          <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Add</Name>
+          <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
+          <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Collections.Generic.List`1</ClassName>
+          <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Void Add(T)</Signature>
+          <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Void Add(!T)</Signature2>
+          <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
+          <GenericArguments i:nil=""true"" xmlns="""" />
+        </RuntimeMethodInfo>
+  </add>
+</stubs>";
+            var section = new PrigSection();
+            section.DeserializeStubs(stubsXml);
+            return section.Stubs.First();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class AddTImpl : TypedBehaviorPreparableImpl
+        {
+            public AddTImpl()
+                : base(ms_stubAddT, new Type[] { typeof(T) }, new Type[] { })
+            { }
+        }
+
+        public static Type Type
+        {
+            get { return ms_stubAddT.GetDeclaringTypeInstance(new Type[] { typeof(T) }); }
+            // When generating stub, this property returns the property that is the first indirection stub.
+        }
     }
 
     public class PList<T> : PListBase
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzAdd Add()
+        public static TypedBehaviorPreparable<IndirectionAction<System.Collections.Generic.List<T>, T>> AddT()
         {
-            return new zzAdd();
-        }
-
-        public class zzAdd : IBehaviorPreparable
-        {
-            public IndirectionAction<List<T>, T> Body
-            {
-                get
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    return LooseCrossDomainAccessor.SafelyCast<IndirectionAction<List<T>, T>>(holder.GetOrDefault(Info));
-                }
-                set
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    if (value == null)
-                    {
-                        holder.Remove(Info);
-                    }
-                    else
-                    {
-                        holder.AddOrUpdate(Info, value);
-                        RuntimeHelpers.PrepareDelegate(Body);
-                    }
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionAction<List<T>, T>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
-
-            public IndirectionInfo Info
-            {
-                get
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfAdd_T;
-                    return info;
-                }
-            }
-            internal void SetTargetInstanceBody(List<T> target, IndirectionAction<List<T>, T> value)
-            {
-                RuntimeHelpers.PrepareDelegate(value);
-
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAdd, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
-                if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzAdd>.Make(new Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>());
-
-                if (holder.Source.Value.Count == 0)
-                {
-                    var behavior = Body == null ? HelperForIndirectionAction<List<T>, T>.CreateDelegateOfDefaultBehavior(IndirectionBehaviors.Fallthrough) : Body;
-                    RuntimeHelpers.PrepareDelegate(behavior);
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionAction<List<T>, T>>(behavior, value);
-                    {
-                        // Prepare JIT
-                        var original = holder.Source.Value[target].Original;
-                        var indirection = holder.Source.Value[target].Indirection;
-                    }
-                    Body = HelperForIndirectionAction<List<T>, T>.CreateDelegateExecutingDefaultOr(behavior, holder.Source.Value);
-                }
-                else
-                {
-                    Debug.Assert(Body != null);
-                    var before = holder.Source.Value[target];
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionAction<List<T>, T>>(before.Original, value);
-                }
-            }
-
-            internal void RemoveTargetInstanceBody(List<T> target)
-            {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzAdd, Dictionary<List<T>, TargetSettingValue<IndirectionAction<List<T>, T>>>>>>();
-                if (holder.Source.Value == null)
-                    return;
-
-                if (holder.Source.Value.Count == 0)
-                    return;
-
-                var before = default(TargetSettingValue<IndirectionAction<List<T>, T>>);
-                if (holder.Source.Value.ContainsKey(target))
-                    before = holder.Source.Value[target];
-                holder.Source.Value.Remove(target);
-                if (holder.Source.Value.Count == 0)
-                    Body = before.Original;
-            }
+            return Stub<OfPList<T>>.Setup<IndirectionAction<System.Collections.Generic.List<T>, T>>(_ => _.AddT());
         }
 
         public static TypeBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PList<T>).GetNestedTypes().
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Select(_ => Activator.CreateInstance(_)).
-                                          Cast<IBehaviorPreparable>();
-            var setting = new TypeBehaviorSetting();
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
-            return setting;
+            return Stub<OfPList<T>>.ExcludeGeneric(new TypeBehaviorSetting());
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeAdd()
+            public TypeBehaviorSetting IncludeAddT()
             {
-                Include(PList<T>.Add());
+                Include(PList<T>.AddT());
                 return this;
             }
 
@@ -637,74 +545,64 @@ namespace Test.Urasandesu.Prig.Framework
         }
     }
 
-    public class PProxyList<T>
+    public class OfPProxyList<T> : OfPList<T>, IPrigProxyTypeIntroducer
     {
-        List<T> m_target;
-
-        public PProxyList()
+        object m_target;
+        
+        void IPrigProxyTypeIntroducer.Initialize(object target)
         {
-            m_target = (List<T>)FormatterServices.GetUninitializedObject(typeof(List<T>));
+            m_target = target;
         }
 
-        public IndirectionBehaviors DefaultBehavior { get; internal set; }
-
-        public zzAdd Add()
+        public override OfPList<T>.AddTImpl AddT()
         {
-            return new zzAdd(m_target);
+            return new AddTImpl(m_target);
         }
 
-        public class zzAdd : IBehaviorPreparable
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new class AddTImpl : OfPList<T>.AddTImpl
         {
-            List<T> m_target;
+            object m_target;
 
-            public zzAdd(List<T> target)
+            public AddTImpl(object target)
+                : base()
             {
                 m_target = target;
             }
 
-            public IndirectionAction<List<T>, T> Body
+            public override Delegate Body
             {
-                get
-                {
-                    return PList<T>.Add().Body;
-                }
+                get { return base.Body; }
                 set
                 {
                     if (value == null)
-                        PList<T>.Add().RemoveTargetInstanceBody(m_target);
+                        RemoveTargetInstanceBody<AddTImpl>(m_target);
                     else
-                        PList<T>.Add().SetTargetInstanceBody(m_target, value);
+                        SetTargetInstanceBody<AddTImpl>(m_target, value);
                 }
             }
+        }
+    }
 
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionAction<List<T>, T>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
+    public class PProxyList<T>
+    {
+        Proxy<OfPProxyList<T>> m_proxy = new Proxy<OfPProxyList<T>>(OfPProxyList<T>.Type);
 
-            public IndirectionInfo Info
-            {
-                get { return PList<T>.Add().Info; }
-            }
+        public IndirectionBehaviors DefaultBehavior { get; internal set; }
+
+        public TypedBehaviorPreparable<IndirectionAction<System.Collections.Generic.List<T>, T>> AddT()
+        {
+            return m_proxy.Setup<IndirectionAction<System.Collections.Generic.List<T>, T>>(_ => _.AddT());
         }
 
         public static implicit operator List<T>(PProxyList<T> @this)
         {
-            return @this.m_target;
+            return (List<T>)@this.m_proxy.Target;
         }
 
         public InstanceBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PProxyList<T>).GetNestedTypes().
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Select(_ => Activator.CreateInstance(_, new object[] { m_target })).
-                                          Cast<IBehaviorPreparable>();
-            var setting = new InstanceBehaviorSetting(this);
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
-            return setting;
+            return m_proxy.ExcludeGeneric(new InstanceBehaviorSetting(this));
         }
 
         public class InstanceBehaviorSetting : BehaviorSetting
@@ -715,9 +613,9 @@ namespace Test.Urasandesu.Prig.Framework
             {
                 m_this = @this;
             }
-            public InstanceBehaviorSetting IncludeAdd()
+            public InstanceBehaviorSetting IncludeAddT()
             {
-                Include(m_this.Add());
+                Include(m_this.AddT());
                 return this;
             }
 
@@ -735,78 +633,72 @@ namespace Test.Urasandesu.Prig.Framework
 
     public abstract class PArrayBase
     {
-        internal const int TokenOfExists_T_TArray_Predicate_T = 0x06000068;
+        internal const int TokenOfExistsOfTTArrayPredicateOfT = 0x060001D0; 
+    }
+
+    public class OfPArray : PArrayBase, IPrigTypeIntroducer
+    {
+        public ExistsOfTTArrayPredicateOfTImpl<T> ExistsOfTTArrayPredicateOfT<T>()
+        {
+            return new ExistsOfTTArrayPredicateOfTImpl<T>();
+        }
+
+        static readonly IndirectionStub ms_stubExistsOfTTArrayPredicateOfT = NewStubExistsOfTTArrayPredicateOfT();
+        static IndirectionStub NewStubExistsOfTTArrayPredicateOfT()
+        {
+            var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+  <add name=""ExistsOfTTArrayPredicateOfT"" alias=""ExistsOfTTArrayPredicateOfT"">
+    <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
+          <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Exists</Name>
+          <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
+          <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Array</ClassName>
+          <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Boolean Exists[T](T[], System.Predicate`1[T])</Signature>
+          <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Boolean Exists[T](!!T[], System.Predicate`1[T])</Signature2>
+          <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
+          <GenericArguments i:nil=""true"" xmlns="""" />
+        </RuntimeMethodInfo>
+  </add>
+</stubs>";
+            var section = new PrigSection();
+            section.DeserializeStubs(stubsXml);
+            return section.Stubs.First();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class ExistsOfTTArrayPredicateOfTImpl<T> : TypedBehaviorPreparableImpl
+        {
+            public ExistsOfTTArrayPredicateOfTImpl()
+                : base(ms_stubExistsOfTTArrayPredicateOfT, new Type[] { }, new Type[] { typeof(T) })
+            { }
+        }
+
+        public static Type Type
+        {
+            get { return ms_stubExistsOfTTArrayPredicateOfT.GetDeclaringTypeInstance(new Type[] { }); }
+            // When generating stub, this property returns the property that is the first indirection stub.
+        }
     }
 
     public class PArray : PArrayBase
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzExists<T> Exists<T>()
+        public static TypedBehaviorPreparable<IndirectionFunc<T[], System.Predicate<T>, System.Boolean>> ExistsOfTTArrayPredicateOfT<T>()
         {
-            return new zzExists<T>();
-        }
-
-        public class zzExists<T> : IBehaviorPreparable
-        {
-            public IndirectionFunc<T[], System.Predicate<T>, System.Boolean> Body
-            {
-                get
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<T[], System.Predicate<T>, System.Boolean>>(holder.GetOrDefault(Info));
-                }
-                set
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    if (value == null)
-                    {
-                        holder.Remove(Info);
-                    }
-                    else
-                    {
-                        holder.AddOrUpdate(Info, value);
-                        RuntimeHelpers.PrepareDelegate(Body);
-                    }
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionFunc<T[], System.Predicate<T>, System.Boolean>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
-
-            public IndirectionInfo Info
-            {
-                get
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfExists_T_TArray_Predicate_T;
-                    return info;
-                }
-            }
+            return Stub<OfPArray>.Setup<IndirectionFunc<T[], System.Predicate<T>, System.Boolean>>(_ => _.ExistsOfTTArrayPredicateOfT<T>());
         }
 
         public static TypeBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PArray).GetNestedTypes().
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Select(_ => Activator.CreateInstance(_)).
-                                          Cast<IBehaviorPreparable>();
-            var setting = new TypeBehaviorSetting();
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
-            return setting;
+            return Stub<OfPArray>.ExcludeGeneric(new TypeBehaviorSetting());
         }
 
         public class TypeBehaviorSetting : BehaviorSetting
         {
-            public TypeBehaviorSetting IncludeExists<T>()
+            public TypeBehaviorSetting IncludeExistsOfTTArrayPredicateOfT<T>()
             {
-                Include(PArray.Exists<T>());
+                Include(PArray.ExistsOfTTArrayPredicateOfT<T>());
                 return this;
             }
 
@@ -828,204 +720,102 @@ namespace Test.Urasandesu.Prig.Framework
         internal const int TokenOfGetGregorianYear = 0x0600266B;
     }
 
+    public class OfPJapaneseLunisolarCalendar : PJapaneseLunisolarCalendarBase, IPrigTypeIntroducer
+    {
+        public virtual GetYearInfoInt32Int32Impl GetYearInfoInt32Int32()
+        {
+            return new GetYearInfoInt32Int32Impl();
+        }
+
+        static readonly IndirectionStub ms_stubGetYearInfoInt32Int32 = NewStubGetYearInfoInt32Int32();
+        static IndirectionStub NewStubGetYearInfoInt32Int32()
+        {
+            var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+  <add name=""GetYearInfoInt32Int32"" alias=""GetYearInfoInt32Int32"">
+    <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
+          <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">GetYearInfo</Name>
+          <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
+          <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Globalization.JapaneseLunisolarCalendar</ClassName>
+          <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Int32 GetYearInfo(Int32, Int32)</Signature>
+          <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Int32 GetYearInfo(System.Int32, System.Int32)</Signature2>
+          <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
+          <GenericArguments i:nil=""true"" xmlns="""" />
+        </RuntimeMethodInfo>
+  </add>
+</stubs>";
+            var section = new PrigSection();
+            section.DeserializeStubs(stubsXml);
+            return section.Stubs.First();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class GetYearInfoInt32Int32Impl : TypedBehaviorPreparableImpl
+        {
+            public GetYearInfoInt32Int32Impl()
+                : base(ms_stubGetYearInfoInt32Int32, new Type[] { }, new Type[] { })
+            { }
+        }
+
+        public virtual GetGregorianYearInt32Int32Impl GetGregorianYearInt32Int32()
+        {
+            return new GetGregorianYearInt32Int32Impl();
+        }
+
+        static readonly IndirectionStub ms_stubGetGregorianYearInt32Int32 = NewStubGetGregorianYearInt32Int32();
+        static IndirectionStub NewStubGetGregorianYearInt32Int32()
+        {
+            var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+  <add name=""GetGregorianYearInt32Int32"" alias=""GetGregorianYearInt32Int32"">
+    <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
+          <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">GetGregorianYear</Name>
+          <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</AssemblyName>
+          <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Globalization.JapaneseLunisolarCalendar</ClassName>
+          <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Int32 GetGregorianYear(Int32, Int32)</Signature>
+          <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Int32 GetGregorianYear(System.Int32, System.Int32)</Signature2>
+          <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
+          <GenericArguments i:nil=""true"" xmlns="""" />
+        </RuntimeMethodInfo>
+  </add>
+</stubs>";
+            var section = new PrigSection();
+            section.DeserializeStubs(stubsXml);
+            return section.Stubs.First();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class GetGregorianYearInt32Int32Impl : TypedBehaviorPreparableImpl
+        {
+            public GetGregorianYearInt32Int32Impl()
+                : base(ms_stubGetGregorianYearInt32Int32, new Type[] { }, new Type[] { })
+            { }
+        }
+
+        public static Type Type
+        {
+            get { return ms_stubGetYearInfoInt32Int32.GetDeclaringTypeInstance(new Type[] { }); }
+            // When generating stub, this property returns the property that is the first indirection stub.
+        }
+    }
+
     public class PJapaneseLunisolarCalendar : PJapaneseLunisolarCalendarBase
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzGetYearInfo GetYearInfo()
+        public static TypedBehaviorPreparable<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>> GetYearInfoInt32Int32()
         {
-            return new zzGetYearInfo();
+            return Stub<OfPJapaneseLunisolarCalendar>.Setup<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(_ => _.GetYearInfoInt32Int32());
         }
 
-        public class zzGetYearInfo : IBehaviorPreparable
+        public static TypedBehaviorPreparable<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>> GetGregorianYearInt32Int32()
         {
-            public IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> Body
-            {
-                get
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(holder.GetOrDefault(Info));
-                }
-                set
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    if (value == null)
-                    {
-                        holder.Remove(Info);
-                    }
-                    else
-                    {
-                        holder.AddOrUpdate(Info, value);
-                        RuntimeHelpers.PrepareDelegate(Body);
-                    }
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
-
-            public IndirectionInfo Info
-            {
-                get
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfGetYearInfo_int_int;
-                    return info;
-                }
-            }
-            internal void SetTargetInstanceBody(JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> value)
-            {
-                RuntimeHelpers.PrepareDelegate(value);
-
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetYearInfo, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
-                if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzGetYearInfo>.Make(new Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>());
-
-                if (holder.Source.Value.Count == 0)
-                {
-                    var behavior = Body == null ? HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(IndirectionBehaviors.Fallthrough) : Body;
-                    RuntimeHelpers.PrepareDelegate(behavior);
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(behavior, value);
-                    {
-                        // Prepare JIT
-                        var original = holder.Source.Value[target].Original;
-                        var indirection = holder.Source.Value[target].Indirection;
-                    }
-                    Body = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateExecutingDefaultOr(behavior, holder.Source.Value);
-                }
-                else
-                {
-                    Debug.Assert(Body != null);
-                    var before = holder.Source.Value[target];
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(before.Original, value);
-                }
-            }
-
-            internal void RemoveTargetInstanceBody(JapaneseLunisolarCalendar target)
-            {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetYearInfo, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
-                if (holder.Source.Value == null)
-                    return;
-
-                if (holder.Source.Value.Count == 0)
-                    return;
-
-                var before = default(TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>);
-                if (holder.Source.Value.ContainsKey(target))
-                    before = holder.Source.Value[target];
-                holder.Source.Value.Remove(target);
-                if (holder.Source.Value.Count == 0)
-                    Body = before.Original;
-            }
+            return Stub<OfPJapaneseLunisolarCalendar>.Setup<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(_ => _.GetGregorianYearInt32Int32());
         }
-
-        public static zzGetGregorianYear GetGregorianYear()
-        {
-            return new zzGetGregorianYear();
-        }
-
-        public class zzGetGregorianYear : IBehaviorPreparable
-        {
-            public IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> Body
-            {
-                get
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    return LooseCrossDomainAccessor.SafelyCast<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(holder.GetOrDefault(Info));
-                }
-                set
-                {
-                    var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-                    if (value == null)
-                    {
-                        holder.Remove(Info);
-                    }
-                    else
-                    {
-                        holder.AddOrUpdate(Info, value);
-                        RuntimeHelpers.PrepareDelegate(Body);
-                    }
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
-
-            public IndirectionInfo Info
-            {
-                get
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
-                    info.Token = TokenOfGetGregorianYear;
-                    return info;
-                }
-            }
-            internal void SetTargetInstanceBody(JapaneseLunisolarCalendar target, IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> value)
-            {
-                RuntimeHelpers.PrepareDelegate(value);
-
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetGregorianYear, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
-                if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<zzGetGregorianYear>.Make(new Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>());
-
-                if (holder.Source.Value.Count == 0)
-                {
-                    var behavior = Body == null ? HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(IndirectionBehaviors.Fallthrough) : Body;
-                    RuntimeHelpers.PrepareDelegate(behavior);
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(behavior, value);
-                    {
-                        // Prepare JIT
-                        var original = holder.Source.Value[target].Original;
-                        var indirection = holder.Source.Value[target].Indirection;
-                    }
-                    Body = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateExecutingDefaultOr(behavior, holder.Source.Value);
-                }
-                else
-                {
-                    Debug.Assert(Body != null);
-                    var before = holder.Source.Value[target];
-                    holder.Source.Value[target] = new TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(before.Original, value);
-                }
-            }
-
-            internal void RemoveTargetInstanceBody(JapaneseLunisolarCalendar target)
-            {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<zzGetGregorianYear, Dictionary<JapaneseLunisolarCalendar, TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>>>>>();
-                if (holder.Source.Value == null)
-                    return;
-
-                if (holder.Source.Value.Count == 0)
-                    return;
-
-                var before = default(TargetSettingValue<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>);
-                if (holder.Source.Value.ContainsKey(target))
-                    before = holder.Source.Value[target];
-                holder.Source.Value.Remove(target);
-                if (holder.Source.Value.Count == 0)
-                    Body = before.Original;
-            }
-        }
-
 
         public static TypeBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PJapaneseLunisolarCalendar).GetNestedTypes().
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Select(_ => Activator.CreateInstance(_)).
-                                          Cast<IBehaviorPreparable>();
-            var setting = new TypeBehaviorSetting();
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
-            return setting;
+            return Stub<OfPJapaneseLunisolarCalendar>.ExcludeGeneric(new TypeBehaviorSetting());
         }
 
         public class TypeBehaviorSetting : BehaviorSetting
@@ -1042,115 +832,98 @@ namespace Test.Urasandesu.Prig.Framework
         }
     }
 
+    public class OfPProxyJapaneseLunisolarCalendar : OfPJapaneseLunisolarCalendar, IPrigProxyTypeIntroducer
+    {
+        object m_target;
+
+        void IPrigProxyTypeIntroducer.Initialize(object target)
+        {
+            m_target = target;
+        }
+
+        public override OfPJapaneseLunisolarCalendar.GetYearInfoInt32Int32Impl GetYearInfoInt32Int32()
+        {
+            return new GetYearInfoInt32Int32Impl(m_target);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new class GetYearInfoInt32Int32Impl : OfPJapaneseLunisolarCalendar.GetYearInfoInt32Int32Impl
+        {
+            object m_target;
+
+            public GetYearInfoInt32Int32Impl(object target)
+                : base()
+            {
+                m_target = target;
+            }
+
+            public override Delegate Body
+            {
+                get { return base.Body; }
+                set
+                {
+                    if (value == null)
+                        RemoveTargetInstanceBody<GetYearInfoInt32Int32Impl>(m_target);
+                    else
+                        SetTargetInstanceBody<GetYearInfoInt32Int32Impl>(m_target, value);
+                }
+            }
+        }
+
+        public override OfPJapaneseLunisolarCalendar.GetGregorianYearInt32Int32Impl GetGregorianYearInt32Int32()
+        {
+            return new GetGregorianYearInt32Int32Impl(m_target);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new class GetGregorianYearInt32Int32Impl : OfPJapaneseLunisolarCalendar.GetGregorianYearInt32Int32Impl
+        {
+            object m_target;
+
+            public GetGregorianYearInt32Int32Impl(object target)
+                : base()
+            {
+                m_target = target;
+            }
+
+            public override Delegate Body
+            {
+                get { return base.Body; }
+                set
+                {
+                    if (value == null)
+                        RemoveTargetInstanceBody<GetGregorianYearInt32Int32Impl>(m_target);
+                    else
+                        SetTargetInstanceBody<GetGregorianYearInt32Int32Impl>(m_target, value);
+                }
+            }
+        }
+    }
+
     public class PProxyJapaneseLunisolarCalendar
     {
-        System.Globalization.JapaneseLunisolarCalendar m_target;
-
-        public PProxyJapaneseLunisolarCalendar()
-        {
-            m_target = (System.Globalization.JapaneseLunisolarCalendar)FormatterServices.GetUninitializedObject(typeof(System.Globalization.JapaneseLunisolarCalendar));
-        }
+        Proxy<OfPProxyJapaneseLunisolarCalendar> m_proxy = new Proxy<OfPProxyJapaneseLunisolarCalendar>(OfPProxyJapaneseLunisolarCalendar.Type);
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public zzGetYearInfo GetYearInfo()
+        public TypedBehaviorPreparable<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>> GetYearInfoInt32Int32()
         {
-            return new zzGetYearInfo(m_target);
+            return m_proxy.Setup<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(_ => _.GetYearInfoInt32Int32());
         }
 
-        public class zzGetYearInfo : IBehaviorPreparable
+        public TypedBehaviorPreparable<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>> GetGregorianYearInt32Int32()
         {
-            System.Globalization.JapaneseLunisolarCalendar m_target;
-
-            public zzGetYearInfo(System.Globalization.JapaneseLunisolarCalendar target)
-            {
-                m_target = target;
-            }
-
-            public IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> Body
-            {
-                get
-                {
-                    return PJapaneseLunisolarCalendar.GetYearInfo().Body;
-                }
-                set
-                {
-                    if (value == null)
-                        PJapaneseLunisolarCalendar.GetYearInfo().RemoveTargetInstanceBody(m_target);
-                    else
-                        PJapaneseLunisolarCalendar.GetYearInfo().SetTargetInstanceBody(m_target, value);
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
-
-            public IndirectionInfo Info
-            {
-                get { return PJapaneseLunisolarCalendar.GetYearInfo().Info; }
-            }
-        }
-
-        public zzGetGregorianYear GetGregorianYear()
-        {
-            return new zzGetGregorianYear(m_target);
-        }
-
-        public class zzGetGregorianYear : IBehaviorPreparable
-        {
-            System.Globalization.JapaneseLunisolarCalendar m_target;
-
-            public zzGetGregorianYear(System.Globalization.JapaneseLunisolarCalendar target)
-            {
-                m_target = target;
-            }
-
-            public IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32> Body
-            {
-                get
-                {
-                    return PJapaneseLunisolarCalendar.GetGregorianYear().Body;
-                }
-                set
-                {
-                    if (value == null)
-                        PJapaneseLunisolarCalendar.GetGregorianYear().RemoveTargetInstanceBody(m_target);
-                    else
-                        PJapaneseLunisolarCalendar.GetGregorianYear().SetTargetInstanceBody(m_target, value);
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var behavior = HelperForIndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>.CreateDelegateOfDefaultBehavior(defaultBehavior);
-                Body = behavior;
-            }
-
-            public IndirectionInfo Info
-            {
-                get { return PJapaneseLunisolarCalendar.GetGregorianYear().Info; }
-            }
+            return m_proxy.Setup<IndirectionFunc<System.Globalization.JapaneseLunisolarCalendar, System.Int32, System.Int32, System.Int32>>(_ => _.GetGregorianYearInt32Int32());
         }
 
         public static implicit operator System.Globalization.JapaneseLunisolarCalendar(PProxyJapaneseLunisolarCalendar @this)
         {
-            return @this.m_target;
+            return (System.Globalization.JapaneseLunisolarCalendar)@this.m_proxy.Target;
         }
 
         public InstanceBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PProxyJapaneseLunisolarCalendar).GetNestedTypes().
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Select(_ => Activator.CreateInstance(_, new object[] { m_target })).
-                                          Cast<IBehaviorPreparable>();
-            var setting = new InstanceBehaviorSetting(this);
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
-            return setting;
+            return m_proxy.ExcludeGeneric(new InstanceBehaviorSetting(this));
         }
 
         public class InstanceBehaviorSetting : BehaviorSetting
@@ -1192,103 +965,64 @@ namespace Test.Urasandesu.Prig.Framework
         internal const int TokenOfValidateStateULTableStatus = 0x06000009;
     }
 
+    public class OfPULColumns : PULColumnsBase, IPrigTypeIntroducer
+    {
+        public static IndirectionBehaviors DefaultBehavior { get; internal set; }
+
+        public virtual ValidateStateULTableStatusImpl ValidateStateULTableStatus()
+        {
+            return new ValidateStateULTableStatusImpl();
+        }
+
+        static IndirectionStub ms_stubValidateStateULTableStatus = NewStubValidateStateULTableStatus();
+        static IndirectionStub NewStubValidateStateULTableStatus()
+        {
+            var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<stubs>
+  <add name=""ValidateStateULTableStatus"" alias=""ValidateStateULTableStatus"">
+    <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
+      <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">ValidateState</Name>
+      <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Test.Urasandesu.Prig.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce</AssemblyName>
+      <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Test.Urasandesu.Prig.Framework.ULColumns</ClassName>
+      <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Void ValidateState(Test.Urasandesu.Prig.Framework.ULTableStatus)</Signature>
+      <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Void ValidateState(Test.Urasandesu.Prig.Framework.ULTableStatus)</Signature2>
+      <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
+      <GenericArguments i:nil=""true"" xmlns="""" />
+    </RuntimeMethodInfo>
+  </add>
+</stubs>";
+            var section = new PrigSection();
+            section.DeserializeStubs(stubsXml);
+            return section.Stubs.First();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public class ValidateStateULTableStatusImpl : UntypedBehaviorPreparableImpl
+        {
+            public ValidateStateULTableStatusImpl()
+                : base(ms_stubValidateStateULTableStatus, new Type[] { }, new Type[] { })
+            { }
+        }
+
+        public static Type Type
+        {
+            get { return ms_stubValidateStateULTableStatus.GetDeclaringTypeInstance(new Type[] { }); }
+            // When generating stub, this property returns the property that is the first indirection stub.
+        }
+    }
+
     public class PULColumns : PULColumnsBase
     {
         public static IndirectionBehaviors DefaultBehavior { get; internal set; }
 
-        public static zzValidateStateULTableStatus ValidateStateULTableStatus()
+        public static UntypedBehaviorPreparable ValidateStateULTableStatus()
         {
-            return new zzValidateStateULTableStatus();
+            return Stub<OfPULColumns>.Setup(_ => _.ValidateStateULTableStatus());
         }
-
-        public class zzValidateStateULTableStatus : IBehaviorPreparable
-        {
-            public Work Body
-            {
-                get
-                {
-                    var info = Info;
-                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
-                    var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
-                    return holder.GetOrDefault(info);
-                }
-                set
-                {
-                    var info = Info;
-                    info.SetInstantiation(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
-                    var holder = LooseCrossDomainAccessorUntyped.GetOrRegister(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
-                    if (value == null)
-                    {
-                        holder.Remove(info);
-                    }
-                    else
-                    {
-                        holder.AddOrUpdate(info, value);
-                        RuntimeHelpers.PrepareDelegate(value);
-                    }
-                }
-            }
-
-            public void Prepare(IndirectionBehaviors defaultBehavior)
-            {
-                var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(Stub.Target, Stub.IndirectionDelegate, new Type[] { }, new Type[] { });
-                var behavior = HelperForUntypedIndirectionDelegate.CreateDelegateOfDefaultBehavior(indDlgt, defaultBehavior);
-                Body = behavior;
-            }
-
-            IndirectionStub m_stub;
-            public IndirectionStub Stub
-            {
-                get
-                {
-                    if (m_stub == null)
-                    {
-                        var stubsXml = @"<?xml version=""1.0"" encoding=""utf-8""?>
-<stubs>
-    <add name=""ValidateStateULTableStatus"" alias=""ValidateStateULTableStatus"">
-        <RuntimeMethodInfo xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:x=""http://www.w3.org/2001/XMLSchema"" z:Id=""1"" z:FactoryType=""MemberInfoSerializationHolder"" z:Type=""System.Reflection.MemberInfoSerializationHolder"" z:Assembly=""0"" xmlns:z=""http://schemas.microsoft.com/2003/10/Serialization/"" xmlns=""http://schemas.datacontract.org/2004/07/System.Reflection"">
-            <Name z:Id=""2"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">ValidateState</Name>
-            <AssemblyName z:Id=""3"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Test.Urasandesu.Prig.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=acabb3ef0ebf69ce</AssemblyName>
-            <ClassName z:Id=""4"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Test.Urasandesu.Prig.Framework.ULColumns</ClassName>
-            <Signature z:Id=""5"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">Void ValidateState(Test.Urasandesu.Prig.Framework.ULTableStatus)</Signature>
-            <Signature2 z:Id=""6"" z:Type=""System.String"" z:Assembly=""0"" xmlns="""">System.Void ValidateState(Test.Urasandesu.Prig.Framework.ULTableStatus)</Signature2>
-            <MemberType z:Id=""7"" z:Type=""System.Int32"" z:Assembly=""0"" xmlns="""">8</MemberType>
-            <GenericArguments i:nil=""true"" xmlns="""" />
-        </RuntimeMethodInfo>
-    </add>
-</stubs>";
-                        var section = new PrigSection();
-                        section.DeserializeStubs(stubsXml);
-                        m_stub = section.Stubs.First();
-                    }
-                    return m_stub;
-                }
-            }
-
-            public IndirectionInfo Info
-            {
-                get
-                {
-                    var info = new IndirectionInfo();
-                    info.AssemblyName = "UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-                    info.Token = TokenOfValidateStateULTableStatus;
-                    return info;
-                }
-            }
-        }
-
 
         public static TypeBehaviorSetting ExcludeGeneric()
         {
-            var preparables = typeof(PULColumns).GetNestedTypes().
-                                          Where(_ => _.GetInterface(typeof(IBehaviorPreparable).FullName) != null).
-                                          Where(_ => !_.IsGenericType).
-                                          Select(_ => Activator.CreateInstance(_)).
-                                          Cast<IBehaviorPreparable>();
-            var setting = new TypeBehaviorSetting();
-            foreach (var preparable in preparables)
-                setting.Include(preparable);
-            return setting;
+            return Stub<OfPULColumns>.ExcludeGeneric(new TypeBehaviorSetting());
         }
 
         public class TypeBehaviorSetting : BehaviorSetting

@@ -56,19 +56,15 @@ namespace Urasandesu.Prig.Framework
         public uint Token { get; set; }
         public string[] Instantiation { get; set; }
 
-        public void SetInstantiation(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
+        public void SetInstantiation(MethodBase target, Type[] sig, Type[] typeGenericArgs, Type[] methodGenericArgs)
         {
             using (InstanceGetters.DisableProcessing())
             {
-                if (!delegateType.IsSubclassOf(typeof(Delegate)))
-                    throw new ArgumentException("The parameter must be a delegate type.", "delegateType");
+                if (target == null)
+                    throw new ArgumentNullException("target");
 
-                var indDlgt = delegateType.MakeGenericType(target.DeclaringType, typeGenericArgs, target, methodGenericArgs);
-                var instantiation = new List<string>();
-                var indDlgt_Invoke = indDlgt.GetMethod("Invoke");
-                instantiation.AddRange(indDlgt_Invoke.GetParameters().Select(_ => _.ParameterType.ToString()));
-                instantiation.Add(indDlgt_Invoke.ReturnType.ToString());
-                Instantiation = instantiation.ToArray();
+                sig = sig.ReplaceGenericParameter(target.DeclaringType, typeGenericArgs, target, methodGenericArgs);
+                Instantiation = sig.Select(_ => _.ToString()).ToArray();
             }
         }
 
@@ -104,7 +100,7 @@ namespace Urasandesu.Prig.Framework
         {
             return AssemblyName == other.AssemblyName &&
                    Token == other.Token &&
-                   (Instantiation == null ? 
+                   (Instantiation == null ?
                         other.Instantiation == null :
                         other.Instantiation != null && Instantiation.SequenceEqual(other.Instantiation));
         }

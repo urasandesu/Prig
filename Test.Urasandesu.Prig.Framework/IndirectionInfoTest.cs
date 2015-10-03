@@ -71,7 +71,7 @@ namespace Test.Urasandesu.Prig.Framework
 
 
             // Act
-            info.SetInstantiation(target, stub.IndirectionDelegate, typeGenericArgs, methodGenericArgs);
+            info.SetInstantiation(target, stub.Signature, typeGenericArgs, methodGenericArgs);
 
 
             // Assert
@@ -102,7 +102,7 @@ namespace Test.Urasandesu.Prig.Framework
 
 
             // Act
-            info.SetInstantiation(target, stub.IndirectionDelegate, typeGenericArgs, methodGenericArgs);
+            info.SetInstantiation(target, stub.Signature, typeGenericArgs, methodGenericArgs);
 
 
             // Assert

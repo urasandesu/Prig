@@ -55,6 +55,15 @@
     <Compile Include="BehaviorSetting.cs" />
     <Compile Include="IndirectionBehaviors.cs" />
     <Compile Include="IndirectionAssemblyRepository.cs" />
+    <Compile Include="Proxy.cs" />
+    <Compile Include="IndirectionInfo.cs" />
+    <Compile Include="UntypedBehaviorPreparable.cs" />
+    <Compile Include="TypedBehaviorPreparable.cs" />
+    <Compile Include="UntypedBehaviorPreparableImpl.cs" />
+    <Compile Include="TypedBehaviorPreparableImpl.cs" />
+    <Compile Include="Stub.cs" />
+    <Compile Include="IPrigProxyTypeIntroducer.cs" />
+    <Compile Include="IPrigTypeIntroducer.cs" />
     <Compile Include="PrigConfig.cs" />
     <Compile Include="TaggedBagFactory.cs" />
     <Compile Include="TaggedBag.cs" />
@@ -69,7 +78,7 @@
     <Compile Include="IndirectionDelegateAttribute.cs" />
     <Compile Include="IndirectionsContext.cs" />
     <Compile Include="IndirectionHolder.cs" />
-    <Compile Include="IndirectionInfo.cs" />
+    <Compile Include="BehaviorPreparableImpl.cs" />
     <Compile Include="InstanceGetters.cs" />
     <Compile Include="InstanceHolder.cs" />
     <Compile Include="LooseCrossDomainAccessor.cs" />

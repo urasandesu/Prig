@@ -156,7 +156,6 @@ namespace Urasandesu.Prig.Framework
     public class IndirectionHolderUntyped
     {
         readonly IndirectionHolder<Delegate> m_holder;
-        readonly Dictionary<string, Work> m_dict = InstanceGetters.DisableProcessing().EnsureDisposalThen(_ => new Dictionary<string, Work>());
 
         public IndirectionHolderUntyped(IndirectionHolder<Delegate> holder, Type indDlgt)
         {
@@ -181,19 +180,20 @@ namespace Urasandesu.Prig.Framework
             if (InstanceGetters.IsDisabledProcessing())
                 return false;
 
-            lock (m_dict)
+            var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<BodyOfNonPublicMethod, Dictionary<string, Work>>>>();
+            if (holder.Source.Value == null)
+                return false;
+
+            var dict = holder.Source.Value;
+            lock (dict)
             {
                 using (InstanceGetters.DisableProcessing())
                 {
-                    var _ = default(Delegate);
-                    if (!m_holder.TryGet(info, out _))
-                        return false;
-
                     var key = info + "";
-                    if (!m_dict.ContainsKey(key))
+                    if (!dict.ContainsKey(key))
                         return false;
 
-                    method = m_dict[key];
+                    method = dict[key];
                     return true;
                 }
             }
@@ -216,7 +216,12 @@ namespace Urasandesu.Prig.Framework
         {
             method = default(Work);
 
-            lock (m_dict)
+            var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<BodyOfNonPublicMethod, Dictionary<string, Work>>>>();
+            if (holder.Source.Value == null)
+                return false;
+
+            var dict = holder.Source.Value;
+            lock (dict)
             {
                 using (InstanceGetters.DisableProcessing())
                 {
@@ -225,11 +230,11 @@ namespace Urasandesu.Prig.Framework
                         return false;
 
                     var key = info + "";
-                    if (!m_dict.ContainsKey(key))
+                    if (!dict.ContainsKey(key))
                         return false;
 
-                    method = m_dict[key];
-                    m_dict.Remove(key);
+                    method = dict[key];
+                    dict.Remove(key);
                     return true;
                 }
             }
@@ -237,12 +242,13 @@ namespace Urasandesu.Prig.Framework
 
         public Work AddOrUpdate(IndirectionInfo info, Work method)
         {
-            lock (m_dict)
-            {
-                var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<BodyOfNonPublicMethod, Dictionary<string, Work>>>>();
-                if (holder.Source.Value == null)
-                    holder.Source = TaggedBagFactory<BodyOfNonPublicMethod>.Make(new Dictionary<string, Work>());
+            var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<BodyOfNonPublicMethod, Dictionary<string, Work>>>>();
+            if (holder.Source.Value == null)
+                holder.Source = TaggedBagFactory<BodyOfNonPublicMethod>.Make(new Dictionary<string, Work>());
 
+            var dict = holder.Source.Value;
+            lock (dict)
+            {
                 using (InstanceGetters.DisableProcessing())
                 {
                     var key = info + "";
@@ -251,7 +257,7 @@ namespace Urasandesu.Prig.Framework
                     var wrapAndInvoke = CreateWrapAndInvokeMethod(IndirectionDelegate, key);
                     m_holder.AddOrUpdate(info, wrapAndInvoke);
 
-                    m_dict[key] = method;
+                    dict[key] = method;
                     return method;
                 }
             }
@@ -385,17 +391,6 @@ namespace Urasandesu.Prig.Framework
             gen.Emit(OpCodes.Ret);
 
             return method.CreateDelegate(indDlgt);
-        }
-
-        public static Type MakeGenericInstance(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
-        {
-            using (InstanceGetters.DisableProcessing())
-            {
-                if (!delegateType.IsSubclassOf(typeof(Delegate)))
-                    throw new ArgumentException("The parameter must be a delegate type.", "delegateType");
-
-                return delegateType.MakeGenericType(target.DeclaringType, typeGenericArgs, target, methodGenericArgs);
-            }
         }
     }
 }
