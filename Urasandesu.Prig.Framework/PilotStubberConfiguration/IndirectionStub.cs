@@ -945,7 +945,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 
             public static int GetParameterHashCode(ParameterInfo param)
             {
-                var attr = param.Attributes & (ParameterAttributes.In | ParameterAttributes.Out);
+                var attr = param.Attributes & ParameterAttributes.Out;
                 var isByRef = param.ParameterType.IsByRef;
                 return attr.GetHashCode() ^ isByRef.GetHashCode();
             }
@@ -975,9 +975,9 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 
             public static bool ParameterEquals(ParameterInfo paramX, ParameterInfo paramY)
             {
-                var attrX = paramX.Attributes & (ParameterAttributes.In | ParameterAttributes.Out);
+                var attrX = paramX.Attributes & ParameterAttributes.Out;
                 var isByRefX = paramX.ParameterType.IsByRef;
-                var attrY = paramY.Attributes & (ParameterAttributes.In | ParameterAttributes.Out);
+                var attrY = paramY.Attributes & ParameterAttributes.Out;
                 var isByRefY = paramY.ParameterType.IsByRef;
                 return attrX == attrY && isByRefX == isByRefY;
             }

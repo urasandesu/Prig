@@ -548,6 +548,11 @@ namespace Test.Urasandesu.Prig.Framework
     public class OfPProxyList<T> : OfPList<T>, IPrigProxyTypeIntroducer
     {
         object m_target;
+
+        Type IPrigProxyTypeIntroducer.Type
+        {
+            get { return Type; }
+        }
         
         void IPrigProxyTypeIntroducer.Initialize(object target)
         {
@@ -586,7 +591,7 @@ namespace Test.Urasandesu.Prig.Framework
 
     public class PProxyList<T>
     {
-        Proxy<OfPProxyList<T>> m_proxy = new Proxy<OfPProxyList<T>>(OfPProxyList<T>.Type);
+        Proxy<OfPProxyList<T>> m_proxy = new Proxy<OfPProxyList<T>>();
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
@@ -836,6 +841,11 @@ namespace Test.Urasandesu.Prig.Framework
     {
         object m_target;
 
+        Type IPrigProxyTypeIntroducer.Type
+        {
+            get { return Type; }
+        }
+
         void IPrigProxyTypeIntroducer.Initialize(object target)
         {
             m_target = target;
@@ -902,7 +912,7 @@ namespace Test.Urasandesu.Prig.Framework
 
     public class PProxyJapaneseLunisolarCalendar
     {
-        Proxy<OfPProxyJapaneseLunisolarCalendar> m_proxy = new Proxy<OfPProxyJapaneseLunisolarCalendar>(OfPProxyJapaneseLunisolarCalendar.Type);
+        Proxy<OfPProxyJapaneseLunisolarCalendar> m_proxy = new Proxy<OfPProxyJapaneseLunisolarCalendar>();
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 

@@ -43,7 +43,6 @@ function New-PrigTypeIntroducersCs {
 using System;
 using System.ComponentModel;
 using System.Linq;
-using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 

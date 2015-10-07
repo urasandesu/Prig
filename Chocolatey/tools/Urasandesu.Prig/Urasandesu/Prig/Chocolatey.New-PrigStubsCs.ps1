@@ -43,7 +43,6 @@ function New-PrigStubsCs {
 using System;
 using System.ComponentModel;
 using System.Linq;
-using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
@@ -56,9 +55,9 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 "@ + $(foreach ($stub in $declTypeGrouped | ? { (IsSignaturePublic $_) -and (ExistsIndirectionDelegate $_) }) {
 @"
 
-        public static TypedBehaviorPreparable<$(ConvertTypeToClassName $stub.IndirectionDelegate)> $(ConvertStubToClassName $stub)() $(ConvertStubToGenericParameterConstraints $stub)
+        public static TypedBehaviorPreparable<$(ConvertTypeToFullName $stub.IndirectionDelegate)> $(ConvertStubToClassName $stub)() $(ConvertStubToGenericParameterConstraints $stub)
         {
-            return Stub<OfP$(ConvertTypeToClassName $declTypeGrouped.Key)>.Setup<$(ConvertTypeToClassName $stub.IndirectionDelegate)>(_ => _.$(ConvertStubToClassName $stub)());
+            return Stub<OfP$(ConvertTypeToClassName $declTypeGrouped.Key)>.Setup<$(ConvertTypeToFullName $stub.IndirectionDelegate)>(_ => _.$(ConvertStubToClassName $stub)());
         }
 
 "@}) + @"

@@ -30,6 +30,8 @@
 
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
 namespace Urasandesu.Prig.Framework
@@ -68,6 +70,75 @@ namespace Urasandesu.Prig.Framework
                 info.SetInstantiation(IndirectionStub.Target, IndirectionStub.Signature, TypeGenericArguments, MethodGenericArguments);
                 return info;
             }
+        }
+
+        protected void SetTargetInstanceBody<TBehaviorPreparableImpl, TBody>(
+            object target, TBody value, Func<TBody> getBodyOfDefaultBehavior, Action<TBody, Dictionary<object, TargetSettingValue<TBody>>> setBodyExecutingDefaultOr) 
+            where TBehaviorPreparableImpl : BehaviorPreparableImpl
+            where TBody : class
+        {
+            if (!typeof(Delegate).IsAssignableFrom(typeof(TBody)))
+                throw new ArgumentException("The generic parameter must be a delegate type.", "TBody");
+
+            if (target == null)
+                throw new ArgumentNullException("target");
+
+            if (value == null)
+                throw new ArgumentNullException("value");
+
+            RuntimeHelpers.PrepareDelegate(value as Delegate);
+
+            var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<TBehaviorPreparableImpl, Dictionary<object, TargetSettingValue<TBody>>>>>();
+            if (holder.Source.Value == null)
+                holder.Source = TaggedBagFactory<TBehaviorPreparableImpl>.Make(new Dictionary<object, TargetSettingValue<TBody>>());
+
+            var dic = holder.Source.Value;
+            if (!dic.ContainsKey(target))
+            {
+                var behavior = getBodyOfDefaultBehavior();
+                RuntimeHelpers.PrepareDelegate(behavior as Delegate);
+                dic[target] = new TargetSettingValue<TBody>(behavior, value);
+                {
+                    // Prepare JIT
+                    var original = dic[target].Original;
+                    var indirection = dic[target].Indirection;
+                }
+
+                setBodyExecutingDefaultOr(behavior, dic);
+            }
+            else
+            {
+                var before = dic[target];
+                dic[target] = new TargetSettingValue<TBody>(before.Original, value);
+            }
+        }
+
+        protected void RemoveTargetInstanceBody<TBehaviorPreparableImpl, TBody>(object target, Action<TBody> setBodyToOriginal) 
+            where TBehaviorPreparableImpl : BehaviorPreparableImpl
+            where TBody : class
+        {
+            if (!typeof(Delegate).IsAssignableFrom(typeof(TBody)))
+                throw new ArgumentException("The generic parameter must be a delegate type.", "TBody");
+
+            if (target == null)
+                throw new ArgumentNullException("target");
+
+            var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<TBehaviorPreparableImpl, Dictionary<object, TargetSettingValue<TBody>>>>>();
+            if (holder.Source.Value == null)
+                return;
+
+            var dic = holder.Source.Value;
+            if (dic.Count == 0)
+                return;
+
+            var before = default(TargetSettingValue<TBody>);
+            if (dic.ContainsKey(target))
+            {
+                before = dic[target];
+                dic.Remove(target);
+            }
+            if (dic.Count == 0)
+                setBodyToOriginal(before.Original);
         }
     }
 }

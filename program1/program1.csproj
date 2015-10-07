@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Mixins\UntestableLibrary\ULTableMixin.cs" />
     <Compile Include="MyLibrary\FarmRoad.cs" />
+    <Compile Include="MyLibrary\ChatRoom.cs" />
     <Compile Include="MyLibrary\Route.cs" />
     <Compile Include="MyLibrary\RicePaddy.cs" />
     <Compile Include="MyLibrary\Village.cs" />

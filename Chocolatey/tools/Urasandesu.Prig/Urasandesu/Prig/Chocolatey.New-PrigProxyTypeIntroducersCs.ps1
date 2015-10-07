@@ -45,7 +45,6 @@ function New-PrigProxyTypeIntroducersCs {
 using System;
 using System.ComponentModel;
 using Urasandesu.NAnonym;
-using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
@@ -55,6 +54,11 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
     {
         object m_target;
         
+        Type IPrigProxyTypeIntroducer.Type
+        {
+            get { return Type; }
+        }
+
         void IPrigProxyTypeIntroducer.Initialize(object target)
         {
             m_target = target;

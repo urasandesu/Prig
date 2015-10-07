@@ -44,7 +44,6 @@ function New-PrigProxiesCs {
 
 using System;
 using System.ComponentModel;
-using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 
@@ -52,7 +51,7 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
 {
     public class PProxy$(ConvertTypeToClassName $declTypeGrouped.Key) $(ConvertTypeToGenericParameterConstraints $declTypeGrouped.Key)
     {
-        Proxy<OfPProxy$(ConvertTypeToClassName $declTypeGrouped.Key)> m_proxy = new Proxy<OfPProxy$(ConvertTypeToClassName $declTypeGrouped.Key)>(OfPProxy$(ConvertTypeToClassName $declTypeGrouped.Key).Type);
+        Proxy<OfPProxy$(ConvertTypeToClassName $declTypeGrouped.Key)> m_proxy = new Proxy<OfPProxy$(ConvertTypeToClassName $declTypeGrouped.Key)>();
 
         public IndirectionBehaviors DefaultBehavior { get; internal set; }
 
@@ -60,9 +59,9 @@ namespace $(ConcatIfNonEmpty $namespaceGrouped.Key '.')Prig
         $hasAnyInstanceMember = $true
 @"
 
-        public TypedBehaviorPreparable<$(ConvertTypeToClassName $stub.IndirectionDelegate)> $(ConvertStubToClassName $stub)() $(ConvertStubToGenericParameterConstraints $stub)
+        public TypedBehaviorPreparable<$(ConvertTypeToFullName $stub.IndirectionDelegate)> $(ConvertStubToClassName $stub)() $(ConvertStubToGenericParameterConstraints $stub)
         {
-            return m_proxy.Setup<$(ConvertTypeToClassName $stub.IndirectionDelegate)>(_ => _.$(ConvertStubToClassName $stub)());
+            return m_proxy.Setup<$(ConvertTypeToFullName $stub.IndirectionDelegate)>(_ => _.$(ConvertStubToClassName $stub)());
         }
 
 "@}) + @"

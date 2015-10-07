@@ -39,13 +39,10 @@ namespace Urasandesu.Prig.Framework
     {
         OfPrigProxyType m_introducer;
 
-        public Proxy(Type type)
+        public Proxy()
         {
-            if (type == null)
-                throw new ArgumentNullException("type");
-
-            Target = FormatterServices.GetUninitializedObject(type);
             m_introducer = new OfPrigProxyType();
+            Target = FormatterServices.GetUninitializedObject(m_introducer.Type);
             m_introducer.Initialize(Target);
         }
 

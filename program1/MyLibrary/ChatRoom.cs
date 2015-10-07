@@ -1,5 +1,5 @@
 ﻿/* 
- * File: IPrigProxyTypeIntroducer.cs
+ * File: ChatRoom.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,13 +28,31 @@
  */
 
 
-using System;
+using System.Text;
+using UntestableLibrary;
 
-namespace Urasandesu.Prig.Framework
+namespace program1.MyLibrary
 {
-    public interface IPrigProxyTypeIntroducer
+    public class ChatRoom
     {
-        Type Type { get; }
-        void Initialize(object target);
+        public string Log { get; private set; }
+
+        public void Start(ULTypeOfFeedback input, ULChatBot bot1, ULChatBot bot2)
+        {
+            var reply = default(string);
+            var action = default(ULActions);
+            var recommendation = default(ULTypeOfFeedback);
+            var result = default(bool);
+
+            var sb = new StringBuilder(Log);
+
+            result = bot1.ReplyInformation(input, out reply, ref action, out recommendation);
+            sb.AppendFormat("Reply: {0} Action: {1} return? {2}\r\n", reply, action, result);
+
+            result = bot2.ReplyInformation(recommendation, out reply, ref action, out recommendation);
+            sb.AppendFormat("Reply: {0} Action: {1} return? {2}\r\n", reply, action, result);
+
+            Log = sb.ToString();
+        }
     }
 }

@@ -58,6 +58,8 @@ namespace OriginalMethodPreparationDetail {
 
         IType const *m_pInt32;
         IMethod const *m_pTryPrigTarget;
+        IMethod const *m_pPInvokedTarget;
+        IMethod const *m_pNewPInvokeTarget;
         mdToken m_mdt;
     };
 

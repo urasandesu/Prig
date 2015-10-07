@@ -593,7 +593,91 @@
           <GenericArguments i:nil="true" xmlns="" />
         </RuntimeMethodInfo>
       </add>
-      
+
+      <add name="GetCurrentThread" alias="GetCurrentThread">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">GetCurrentThread</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.ULDllImport</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">IntPtr GetCurrentThread()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.IntPtr GetCurrentThread()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="GetThreadTimesIntPtrInt64RefInt64RefInt64RefInt64Ref" alias="GetThreadTimesIntPtrInt64RefInt64RefInt64RefInt64Ref">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">GetThreadTimes</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.ULDllImport</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean GetThreadTimes(IntPtr, Int64 ByRef, Int64 ByRef, Int64 ByRef, Int64 ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean GetThreadTimes(System.IntPtr, System.Int64&amp;, System.Int64&amp;, System.Int64&amp;, System.Int64&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="GetCurrentProcessId" alias="GetCurrentProcessId">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">GetCurrentProcessId</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.ULDllImport</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int32 GetCurrentProcessId()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int32 GetCurrentProcessId()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="MessageBoxIntPtrStringStringUInt32" alias="MessageBoxIntPtrStringStringUInt32">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">MessageBox</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.ULDllImport</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Int32 MessageBox(IntPtr, System.String, System.String, UInt32)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Int32 MessageBox(System.IntPtr, System.String, System.String, System.UInt32)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="GetCurrentProcess" alias="GetCurrentProcess">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">GetCurrentProcess</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.ULDllImport</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">IntPtr GetCurrentProcess()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.IntPtr GetCurrentProcess()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="IsWow64ProcessIntPtrBooleanRef" alias="IsWow64ProcessIntPtrBooleanRef">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">IsWow64Process</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.ULDllImport</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean IsWow64Process(IntPtr, Boolean ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean IsWow64Process(System.IntPtr, System.Boolean&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <add name="ReplyInformationULTypeOfFeedbackStringRefULActionsRefULTypeOfFeedbackRef" alias="ReplyInformationULTypeOfFeedbackStringRefULActionsRefULTypeOfFeedbackRef">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">ReplyInformation</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.ULChatBot</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean ReplyInformation(UntestableLibrary.ULTypeOfFeedback, System.String ByRef, UntestableLibrary.ULActions ByRef, UntestableLibrary.ULTypeOfFeedback ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean ReplyInformation(UntestableLibrary.ULTypeOfFeedback, System.String&amp;, UntestableLibrary.ULActions&amp;, UntestableLibrary.ULTypeOfFeedback&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
     </stubs>
 
   </prig>

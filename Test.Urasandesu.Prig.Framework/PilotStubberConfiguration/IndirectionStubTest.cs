@@ -31,12 +31,14 @@
 using NUnit.Framework;
 using System;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using Test.Urasandesu.Prig.Framework.TestUtilities;
+using Urasandesu.NAnonym.Mixins.System;
 using Urasandesu.Prig.Delegates;
 using Urasandesu.Prig.Framework;
 using Urasandesu.Prig.Framework.PilotStubberConfiguration;
 using Assert = Test.Urasandesu.Prig.Framework.TestUtilities.LooseCrossDomainAssert;
-using Urasandesu.NAnonym.Mixins.System;
 
 namespace Test.Urasandesu.Prig.Framework.PilotStubberConfiguration
 {
@@ -138,6 +140,33 @@ namespace Test.Urasandesu.Prig.Framework.PilotStubberConfiguration
 
             // Assert
             Assert.IsNull(indDlgt);
+        }
+
+        [Repeat(50)]
+        [Test]
+        public void IndirectionDelegate_should_get_the_delegate_type_that_indicates_the_pinvoke_method_of_a_class()
+        {
+            // Arrange
+            var name = "IsWow64ProcessIntPtrBooleanRef";
+            var alias = "IsWow64ProcessIntPtrBooleanRef";
+            var xml = string.Empty;
+            var target = typeof(Foo).GetMethods(BindingFlags.NonPublic | BindingFlags.Static).First();
+            var stub = new IndirectionStub(name, alias, xml, target);
+
+
+            // Act
+            var indDlgt = stub.IndirectionDelegate;
+
+
+            // Assert
+            Assert.AreEqual("Urasandesu.Prig.Delegates.IndirectionOutFunc`3[System.IntPtr,System.Boolean,System.Boolean]", indDlgt.ToString());
+        }
+
+        public class Foo
+        {
+            [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            static extern bool IsWow64Process([In] IntPtr processHandle, [Out, MarshalAs(UnmanagedType.Bool)] out bool wow64Process);
         }
 
 

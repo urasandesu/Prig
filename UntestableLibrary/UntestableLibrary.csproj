@@ -65,6 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ULChatBot.cs" />
+    <Compile Include="ULDllImport.cs" />
     <Compile Include="Variations.cs" />
     <Compile Include="ULUnusedGeneric.cs" />
     <Compile Include="ULNameHalper.cs" />

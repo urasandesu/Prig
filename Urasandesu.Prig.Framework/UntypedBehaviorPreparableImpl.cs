@@ -72,60 +72,31 @@ namespace Urasandesu.Prig.Framework
             Body = behavior;
         }
 
-        protected void SetTargetInstanceBody<TBehaviorPreparableImpl>(object target, Work value) where TBehaviorPreparableImpl : BehaviorPreparableImpl
+        Work GetBodyOfDefaultBehavior()
         {
-            if (target == null)
-                throw new ArgumentNullException("target");
-
-            if (value == null)
-                throw new ArgumentNullException("value");
-
-            RuntimeHelpers.PrepareDelegate(value);
-
-            var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<TBehaviorPreparableImpl, Dictionary<object, TargetSettingValue<Work>>>>>();
-            if (holder.Source.Value == null)
-                holder.Source = TaggedBagFactory<TBehaviorPreparableImpl>.Make(new Dictionary<object, TargetSettingValue<Work>>());
-
-            if (holder.Source.Value.Count == 0)
-            {
-                var behavior = BodyCore == null ?
-                                    IndirectionStub.CreateWorkOfDefaultBehavior(IndirectionBehaviors.Fallthrough, TypeGenericArguments, MethodGenericArguments) :
-                                    BodyCore;
-                RuntimeHelpers.PrepareDelegate(behavior);
-                holder.Source.Value[target] = new TargetSettingValue<Work>(behavior, value);
-                {
-                    // Prepare JIT
-                    var original = holder.Source.Value[target].Original;
-                    var indirection = holder.Source.Value[target].Indirection;
-                }
-
-                BodyCore = IndirectionStub.CreateWorkExecutingDefaultOr(behavior, holder.Source.Value, TypeGenericArguments, MethodGenericArguments);
-            }
-            else
-            {
-                var before = holder.Source.Value[target];
-                holder.Source.Value[target] = new TargetSettingValue<Work>(before.Original, value);
-            }
+            return BodyCore == null ?
+                        IndirectionStub.CreateWorkOfDefaultBehavior(IndirectionBehaviors.Fallthrough, TypeGenericArguments, MethodGenericArguments) :
+                        BodyCore;
         }
 
-        protected void RemoveTargetInstanceBody<TBehaviorPreparableImpl>(object target)
+        void SetBodyExecutingDefaultOr(Work defaultBehavior, Dictionary<object, TargetSettingValue<Work>> indirections)
         {
-            if (target == null)
-                throw new ArgumentNullException("target");
+            BodyCore = IndirectionStub.CreateWorkExecutingDefaultOr(defaultBehavior, indirections, TypeGenericArguments, MethodGenericArguments);
+        }
 
-            var holder = LooseCrossDomainAccessor.GetOrRegister<GenericHolder<TaggedBag<TBehaviorPreparableImpl, Dictionary<object, TargetSettingValue<Work>>>>>();
-            if (holder.Source.Value == null)
-                return;
+        protected void SetTargetInstanceBody<TBehaviorPreparableImpl>(object target, Work value) where TBehaviorPreparableImpl : BehaviorPreparableImpl
+        {
+            SetTargetInstanceBody<TBehaviorPreparableImpl, Work>(target, value, GetBodyOfDefaultBehavior, SetBodyExecutingDefaultOr);
+        }
 
-            if (holder.Source.Value.Count == 0)
-                return;
+        void SetBodyToOriginal(Work original)
+        {
+            BodyCore = original;
+        }
 
-            var before = default(TargetSettingValue<Work>);
-            if (holder.Source.Value.ContainsKey(target))
-                before = holder.Source.Value[target];
-            holder.Source.Value.Remove(target);
-            if (holder.Source.Value.Count == 0)
-                BodyCore = before.Original;
+        protected void RemoveTargetInstanceBody<TBehaviorPreparableImpl>(object target) where TBehaviorPreparableImpl : BehaviorPreparableImpl
+        {
+            RemoveTargetInstanceBody<TBehaviorPreparableImpl, Work>(target, SetBodyToOriginal);
         }
     }
 }
