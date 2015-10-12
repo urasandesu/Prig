@@ -7,7 +7,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of MM dd, yyyy, Released V2.0.0.
+As of Oct 12, 2015, Released V2.0.0.
 
 
 
@@ -34,7 +34,7 @@ You probably can't test this code, because `DateTime.Now` returns the value that
 ### Step 1: Install From Chocolatey
 Install Chocolatey in accordance with [the top page](https://chocolatey.org/). Then, run Developer Command Prompt for VS2013 as Administrator, execute the following command: 
 ```dos
-CMD C:\> choco install prig -Pre -y
+CMD C:\> choco install prig -y
 ```
 
 **NOTE:** Prig requires PowerShell v3.0+. If you want to use Prig in Windows 7, please install [Windows Management Framework 3.0+](https://www.microsoft.com/en-us/download/details.aspx?id=34595) beforehand. [See also this issue](https://github.com/urasandesu/Prig/issues/41).
@@ -46,19 +46,19 @@ Run Visual Studio 2013(Community or more) as Administrator, add test project(e.g
 
 
 ### Step 3: Modify Stub Settings
-You can find the indirection stub setting file `<assembly name>.<runtime version>.v<assembly version>.prig` in the project(in this case, it is `mscorlib.v4.0.30319.v4.0.0.0.prig`). So, right click the file and select `Edit Prig Indirection Settings`:  
+You can find the [Stub Settings File](https://github.com/urasandesu/Prig.V2Docs/wiki/Cheat-Sheet#stub_settings_file) `<assembly name>.<runtime version>.v<assembly version>.prig` in the project(in this case, it is `mscorlib.v4.0.30319.v4.0.0.0.prig`). So, right click the file and select `Edit Prig Indirection Settings`:  
 ![Edit Prig Indirection Settings](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2001.png)
 
 
-Then, Prig setup session will start:  
+Then, [Prig Setup Session](https://github.com/urasandesu/Prig.V2Docs/wiki/Cheat-Sheet#prig_setup_session) will start:  
 ![Prig Setup Session](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2002.png)
 
 
 ```powershell
-Welcome to Prig setup session!!
+Welcome to Prig Setup Session!!
 
 
-You can add the indirection settings from here. In this session, you can use `$ReferencedAssemblies` that contains all
+You can add the Stub Settings File from here. In this session, you can use `$ReferencedAssemblies` that contains all
 referenced assemblies information of current project. For example, if you want to get the indirection settings for all
 members of the type `Foo` that belongs to the referenced assembly `UntestableLibrary`, the following commands will achi
 eve it:
@@ -75,7 +75,7 @@ UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 
 PS> padd -ra $ReferencedAssemblies[-1]
 PS> $ReferencedAssemblies[-1].GetTypes() | ? { $_.Name -eq 'Foo' } | pfind | pget | clip
-PS> exit   # Then, paste the content on the clipboard to the stub setting file(e.g. `UntestableLibrary.v4.0.30319.v1.0.
+PS> exit   # Then, paste the content on the clipboard to the Stub Settings File(e.g. `UntestableLibrary.v4.0.30319.v1.0.
 0.0.prig`).
 
 
@@ -108,7 +108,7 @@ PS 01.QuickTour> $TargetReferencedAssembly.GetTypes() | ? { $_.Name -eq 'datetim
 PS 01.QuickTour> exit
 ```
 
-Exit the Prig setup session, and paste the copied information to the setting file:  
+Exit the [Prig Setup Session](https://github.com/urasandesu/Prig.V2Docs/wiki/Cheat-Sheet#prig_setup_session), and paste the copied information to the [Stub Settings File](https://github.com/urasandesu/Prig.V2Docs/wiki/Cheat-Sheet#stub_settings_file):  
 ![Indirection Setting File](https://github.com/urasandesu/Prig.V2Docs/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2003.png)
 
 
