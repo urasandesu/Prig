@@ -281,7 +281,7 @@ foreach ($platformTarget in $platformTargets.GetEnumerator()) {
         exit -1786925265
     }
     if (!$isPlatformMatched -and (HasAlreadyExistedStubSettingNoneItem $curMsbProj $actualNames[0])) {
-        $Host.UI.WriteErrorLine(("The Prig assembly for {0} has already been added." -f $actualNames[0].Name))
+        $Host.UI.WriteErrorLine(("The Prig Assembly for {0} has already been added." -f $actualNames[0].Name))
         exit -1863575335
     }
         

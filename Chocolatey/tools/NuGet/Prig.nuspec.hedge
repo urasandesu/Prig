@@ -19,8 +19,9 @@
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
     <releaseNotes>Version 2.0.0
-* 
-* 
+* Fixed #31: Issue with out parameters.
+* Fixed #46: Support mocking DLL imports.
+* Against the comment-based help of Prig management commands, unified the definition of word because they were defined. See also our [wiki](https://github.com/urasandesu/Prig/wiki/Cheat-Sheet).
 
 
 Version 2.0.0-alpha06
@@ -32,16 +33,22 @@ Version 2.0.0-alpha06
 * Prepare to support three or more out/ref parameters. By decreasing the dependencies of an indirection stub that profiler used, performance is also improved.
 
 
+Version 1.1.1
+* [NOTICE] The family of v1 will be obsolete soon. We strongly recommend migrating to the family of the v2. About the way of the migration, please see [our Wiki](https://github.com/urasandesu/Prig/wiki/Migration-from-v1-to-v2).
+* Support Visual Studio 2015.
+* Merge the fixes that were applied to the family of the v2.
+
+
 Version 2.0.0-alpha05
 * Improve stability for the methods of the classes that are used on the boundary of application domains(e.g. `AppDomain`, `BinaryReader`, `MemoryStream`, `Thread` and so on).
-* Improve usability for the command to manage Prig a little(See also [the Wiki](https://github.com/urasandesu/Prig.V2Docs/wiki/Command-Line-Reference#pfind)).
+* Improve usability for the command to manage Prig a little(See also [the Wiki](https://github.com/urasandesu/Prig/wiki/Command-Line-Reference#pfind)).
 * Merge Infrastructure Bug Fix(See also Swathe issues [#2](https://github.com/urasandesu/Swathe/issues/2))
 * Make the sequence that builds the indirection stub dll more efficient.
 
 
 Version 2.0.0-alpha04
 * Update NUnit Test Adapter for Prig from based on 1.2.0 to based on 2.0.0.
-* [BREAKING CHANGE] To fix the following issues, alpha04 has lost compatibility with alpha03. Also, `choco upgrade` command cannot even work. I will publish the migration steps in [this page](https://github.com/urasandesu/Prig.V2Docs/wiki/Migration-from-alpha03-to-alpha04) as soon as possible.
+* [BREAKING CHANGE] To fix the following issues, alpha04 has lost compatibility with alpha03. Also, `choco upgrade` command cannot even work. I will publish the migration steps in [this page](https://github.com/urasandesu/Prig/wiki/Migration-from-alpha03-to-alpha04) as soon as possible.
 * Fixed #41: Error in remove prig assembly
 * Fixed #40: Test engine crashes while trying to execute a unit test without indirections context even when it doesn't use any stubs
 * Fixed #37: Suggestion add prig files as Copy If Newer to output directory
@@ -74,11 +81,6 @@ Version 1.1.0
 * Fixed #27: Test stalled if adding the indirection settings for all members of DateTime.
 * Fixed #28: The indirect tests sometimes fail.
 * Supported the feature "Prig setup session" that makes adding the indirection stub settings more easier.
-
-
-Version 1.0.0
-* Release 1.
-* Fixed #25: Default parameterized method can't call indirectly.
 
 
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.

@@ -30,29 +30,32 @@
 function Get-IndirectionStubSetting {
 <#
     .SYNOPSIS
-        Gets the indirection stub settings on the Package Manager Console, PowerShell or the Prig setup session.
+        Gets the Indirection Stub Setting on the Package Manager Console, PowerShell or the Prig Setup Session.
 
     .DESCRIPTION
-        This command creates XML tags that can be used as the indirection settings for the target method on the Package Manager Console, PowerShell or the Prig setup session, and gets them.
+        This command creates XML tags that can be used as the Indirection Stub Setting for the target method on the Package Manager Console, PowerShell or the Prig Setup Session, and gets them.
 
-        The indirection stub settings mean the tags that can be added to the stub setting file(`*.prig`) that is set up by the command `Add-PrigAssembly`. In particular, the tag is `add`. You can insert it to between the tag `<stubs>...</stubs>` of the file.
+        The Indirection Stub Setting mean the tag that can be added to the Stub Settings File(`*.prig`) that is set up by the command `Add-PrigAssembly`. In particular, the tag is `add`. You can insert it to between the tag `<stubs>...</stubs>` of the file.
 
         Note that you have to typically generate unique name, and set to the tag(its attribute `name` and `alias`) in the type the target method is declared. However, you can get easily such name by using this command.
 
-        The naming convention is similar to Microsoft Fakes's, but there is also a little different: 
-        * The namespace that the stubs are located is the original namespace + `.Prig`.  
-          For example, the stubs for the types under `System` are located at the namespace `System.Prig`.
+        These generated types are called Prig Type or Prig Type Introducer. Prig Type is a stub type to set the dummy method body as replacement target method, and Prig Type Introducer is the type that defines the identifier list to specify the target method. Their naming convention is similar to Microsoft Fakes's, but there is also a little different:  
+        * The namespace that the Prig Types are located is the original namespace + `.Prig`.  
+          For example, the Prig Types for the types under `System` are located at the namespace `System.Prig`.
 
-        * The prefix of the stub is `P`(no conditions) or `PProxy`(specified instance of a class).  
-          For example, the stub for `System.DateTime` is `System.Prig.PDateTime`. However, the stub `PProxyDateTime` isn't generated, because it is a structure.
-          The stub for `System.Net.HttpWebRequest` is `System.Net.Prig.PHttpWebRequest`. Also, `System.Net.Prig.PProxyHttpWebRequest` is generated, because it is a class.
+        * The prefix of the Prig Type is `P`(no conditions) or `PProxy`(specified instance of a class).  
+          For example, the Prig Type for `System.DateTime` is `System.Prig.PDateTime`. However, the Prig Type `PProxyDateTime` isn't generated, because it is a structure.
+          The Prig Type for `System.Net.HttpWebRequest` is `System.Net.Prig.PHttpWebRequest`. Also, `System.Net.Prig.PProxyHttpWebRequest` is generated, because it is a class.
+
+        * The prefix of the Prig Type Introducer is `OfP`(no conditions) or `OfPProxy`(specified instance of a class).  
+          The difference between a class and a structure is same as Prig Type.
 
         See also [Code generation, compilation, and naming conventions in Microsoft Fakes](http://msdn.microsoft.com/en-us/library/hh708916.aspx).
 
         The results are output as plain text, so I recommend that you use in combination with `clip` command.
 
     .PARAMETER  InputObject
-        A array of `System.Reflection.MethodBase` object which is target to get the indirection settings.
+        A array of `System.Reflection.MethodBase` object which is target to get the Indirection Stub Setting.
 
     .EXAMPLE
         PS C:\>pfind datetime _now | pget
@@ -72,7 +75,8 @@ function Get-IndirectionStubSetting {
         
         DESCRIPTION
         -----------
-        This is the example that is used in combination with `Find-IndirectionTarget`. Search the members that are matched to the regular expression `_now` from the type `System.DateTime`, and get the indirection stub settings. When confirmed that, it has no problem. So, copy it to clipboard, and paste it to the stub settings file.
+        This is the example that is used in combination with `Find-IndirectionTarget`. Search the members that are matched to the regular expression `_now` from the type `System.DateTime`, and get the Indirection Stub Setting. When confirmed that, it has no problem. So, copy it to clipboard.
+        Usually, paste it to the Stub Settings File thereafter.
 
     .INPUTS
         System.Reflection.MethodBase, System.Reflection.MethodBase[]
@@ -81,7 +85,7 @@ function Get-IndirectionStubSetting {
         System.String
 
     .NOTES
-        You have to import the module `Urasandesu.Prig` explicitly if you use this command on PowerShell directly. The module `Urasandesu.Prig` is placed the directory `tools` of the package directory by NuGet when you installed Prig. So, execute `Import-Module` from there. By the way, this step requires a little labor. Using the Prig setup session would be more easier. See also the help for `Start-PrigSetup` for more details.
+        You have to import the module `Urasandesu.Prig` explicitly if you use this command on PowerShell directly. The module `Urasandesu.Prig` is placed the directory `tools` of the package directory by NuGet when you installed Prig. So, execute `Import-Module` from there. By the way, this step requires a little labor. Using the Prig Setup Session would be more easier. See also the help for `Start-PrigSetup` for more details.
         
         You can also refer to the Get-IndirectionStubSetting command by its built-in alias, "PGet".
 

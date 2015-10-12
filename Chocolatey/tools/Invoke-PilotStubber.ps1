@@ -94,7 +94,7 @@ $targetInfo = dir ([System.IO.Path]::Combine($OutputPath, $asmName) + ".dll")
 if ($BuildTarget -eq 'BeforeBuild' -and 
     $targetInfo.Exists -and [System.IO.File]::GetLastWriteTime($Settings) -lt $targetInfo.LastWriteTime -and 
     $targetInfo.Exists -and [System.IO.File]::Exists($asmInfo.Location) -and [System.IO.File]::GetLastWriteTime($asmInfo.Location) -lt $targetInfo.LastWriteTime) {
-    Write-Host ('The indirection stub dll "{0}" has been already existed. Skip the processing to make it ...' -f $targetInfo.FullName)
+    Write-Host ('The Prig Assembly "{0}" has been already existed. Skip the processing to make it ...' -f $targetInfo.FullName)
     exit 0
 }
  
