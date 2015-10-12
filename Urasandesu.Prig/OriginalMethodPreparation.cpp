@@ -48,6 +48,8 @@ namespace OriginalMethodPreparationDetail {
     OriginalMethodPreparation::OriginalMethodPreparation() : 
         m_pInt32(nullptr), 
         m_pTryPrigTarget(nullptr), 
+        m_pPInvokedTarget(nullptr), 
+        m_pNewPInvokeTarget(nullptr), 
         m_mdt(mdTokenNil)
     { }
 
@@ -115,12 +117,26 @@ namespace OriginalMethodPreparationDetail {
             if (pTryPrigTarget->IsGenericMethod())
                 pTryPrigTarget = MakeGenericExplicitItsInstance(pTryPrigTarget);
         }
-            
+        
         CPPANONYM_V_LOG1("Processing time to define the wrapper to suppress generic instantiation too early: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
         timer = cpu_timer();
-            
+        
         m_pInt32 = pInt32;
         m_pTryPrigTarget = pTryPrigTarget;
+        
+        if (pTarget->GetAttribute() & MethodAttributes::MA_PINVOKE_IMPL)
+        {
+            auto *pNewPInvokeTarget = pTarget->CloneShell(L"Prig" + pTarget->GetName());
+            
+            pTarget->SetAttributes(pTarget->GetAttribute() & ~MethodAttributes::MA_PINVOKE_IMPL);
+            pTarget->SetImplementationFlags(pTarget->GetMethodImplementationFlags() & ~MethodImplAttributes::MIA_PRESERVE_SIG);
+            
+            CPPANONYM_V_LOG1("Processing time to update method properties and define new P/Invoke: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
+            timer = cpu_timer();
+            
+            m_pPInvokedTarget = pTarget;
+            m_pNewPInvokeTarget = pNewPInvokeTarget;
+        }
     }
 
 
@@ -155,6 +171,13 @@ namespace OriginalMethodPreparationDetail {
             }
         }
         CPPANONYM_D_LOGW1(L"Resolved the Indirectable Token for TryPrigTarget: 0x%|1$08X|", m_mdt);
+        if (m_pPInvokedTarget)
+        {
+            mdt = m_pPInvokedTarget->GetToken();
+            CPPANONYM_D_LOGW1(L"Resolved the Token for P/Invoked target: 0x%|1$08X|", mdt);
+            mdt = m_pNewPInvokeTarget->GetToken();
+            CPPANONYM_D_LOGW1(L"Resolved the Token for new P/Invoke target: 0x%|1$08X|", mdt);
+        }
 
         CPPANONYM_V_LOG1("Processing time to resolve the metadata tokens for original method preparation: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
     }
@@ -187,7 +210,7 @@ namespace OriginalMethodPreparationDetail {
 #endif
         pNewBodyGen->EmitCalli(OpCodes::Calli, CallingConventions::UNMANAGED_CC_STDCALL, m_pInt32, MetadataSpecialValues::EMPTY_TYPES);
         pNewBodyGen->Emit(OpCodes::Brtrue_S, label0);
-            
+        
         if (pRetType->GetKind() != TypeKinds::TK_VOID)
         {
             pNewBodyGen->Emit(OpCodes::Ldloca_S, pLocal0_result);
@@ -198,12 +221,19 @@ namespace OriginalMethodPreparationDetail {
         EmitIndirectParameters(pNewBodyGen, pMethodGen);
         pNewBodyGen->Emit(OpCodes::Call, m_pTryPrigTarget);
         pNewBodyGen->Emit(OpCodes::Brfalse_S, label0);
-            
+        
         if (pRetType->GetKind() != TypeKinds::TK_VOID)
             pNewBodyGen->Emit(OpCodes::Ldloc_S, pLocal0_result);
         pNewBodyGen->Emit(OpCodes::Ret);
-            
+        
         pNewBodyGen->MarkLabel(label0);
+        
+        if (m_pNewPInvokeTarget)
+        {
+            EmitIndirectParameters(pNewBodyGen, pMethodGen);
+            pNewBodyGen->Emit(OpCodes::Call, m_pNewPInvokeTarget);
+            pNewBodyGen->Emit(OpCodes::Ret);
+        }
 
         auto size = pNewBodyGen->GetInstructions().size();
 

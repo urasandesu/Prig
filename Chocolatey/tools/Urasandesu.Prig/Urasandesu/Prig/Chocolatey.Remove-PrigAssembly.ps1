@@ -30,19 +30,19 @@
 function Remove-PrigAssembly {
 <#
     .SYNOPSIS
-        Removes the stub settings file for the specified assembly on the Package Manager Console or the Prig setup session.
+        Removes the Stub Settings File for the specified assembly on the Package Manager Console or the Prig Setup Session.
 
     .DESCRIPTION
-        This command removes the stub setting file that is added by `Add-PrigAssembly` from a project on the Package Manager Console or the Prig setup session.
+        This command removes the Stub Settings File that is added by `Add-PrigAssembly` from a project on the Package Manager Console or the Prig Setup Session.
         Target project is the value that is selected as `Default project: ` on the Package Manager Console. After the file is removed, you will get the confirmation message that the project has been modified externally, so reload the project.
 
     .PARAMETER  PrigAssembly
-        A Prig assembly name.
-        If it can't recognize uniquely, the error "Ambiguous match found" will be occurred. So, you have to specify a more detailed Prig assembly name.
+        A Prig Assembly name.
+        If it can't recognize uniquely, the error "Ambiguous match found" will be occurred. So, you have to specify a more detailed Prig Assembly name.
         You can also refer to the PrigAssembly parameter by its built-in alias, "pa".
 
     .PARAMETER  Project
-        A `EnvDTE.DTE` object that removes Prig assembly.
+        A `EnvDTE.DTE` object that removes Prig Assembly.
         This API supports the Prig infrastructure and is not intended to be used directly from your code.
 
     .EXAMPLE
@@ -50,7 +50,7 @@ function Remove-PrigAssembly {
         
         DESCRIPTION
         -----------
-        This command removes the stub setting file for the assembly `mscorlib` from the target project.
+        This command removes the Stub Settings File for the assembly `mscorlib` from the target project.
 
     .INPUTS
         System.String
@@ -79,7 +79,7 @@ function Remove-PrigAssembly {
         $Project
     )
 
-    # $ProjectFullName are only enabled in Prig setup session. See also `Import-PrigSetupSession.ps1`.
+    # $ProjectFullName are only enabled in Prig Setup Session. See also `Import-PrigSetupSession.ps1`.
     $projFullName = $ProjectFullName
     if ($null -eq $projFullName) {
         $envProj = $(if ($null -eq $Project) { (Get-Project).Object.Project } else { $Project.Object.Project })

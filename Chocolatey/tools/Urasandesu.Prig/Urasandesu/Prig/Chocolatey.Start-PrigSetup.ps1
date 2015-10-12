@@ -32,10 +32,10 @@
 function Start-PrigSetup {
 <#
     .SYNOPSIS
-        Starts the Prig setup session.
+        Starts the Prig Setup Session.
 
     .DESCRIPTION
-        The Prig setup session is a special PowerShell session to add the indirection stub settings and analyze target assemblies. In this session, you can access all information of the assemblies that are referenced from current project through the global variable `$ReferencedAssemblies`.
+        The Prig Setup Session is a special PowerShell session to add the Stub Settings File and analyze target assemblies. In this session, you can access all information of the assemblies that are referenced from current project through the global variable `$ReferencedAssemblies`.
 
     .PARAMETER  NoIntro
         Omits the introduction help that is displayed when startup the session.
@@ -53,17 +53,17 @@ function Start-PrigSetup {
         This API supports the Prig infrastructure and is not intended to be used directly from your code.
 
     .PARAMETER  Project
-        A `EnvDTE.DTE` object that adds Prig assembly.
+        A `EnvDTE.DTE` object that adds Prig Assembly.
         This API supports the Prig infrastructure and is not intended to be used directly from your code.
 
     .EXAMPLE
         PM> Start-PrigSetup
         
         ------- (The following commands are executed in new PowerShell window)
-        Welcome to Prig setup session!!
+        Welcome to Prig Setup Session!!
         
         
-        You can add the indirection settings from here. In this session, you can use `$ReferencedAssemblies` that contains all referenced assemblies information of current project. For example, if you want to get the indirection settings for all members of the type `Foo` that belongs to the referenced assembly `UntestableLibrary`, the following commands will achieve it:
+        You can add the stub settings from here. In this session, you can use `$ReferencedAssemblies` that contains all referenced assemblies information of current project. For example, if you want to get the Indirection Stub Settings for all members of the type `Foo` that belongs to the referenced assembly `UntestableLibrary`, the following commands will achieve it:
         
         PS> $ReferencedAssemblies
         
@@ -77,7 +77,7 @@ function Start-PrigSetup {
         
         PS> padd -ra $ReferencedAssemblies[-1]
         PS> $ReferencedAssemblies[-1].GetTypes() | ? { $_.Name -eq 'Foo' } | pfind | pget | clip
-        PS> exit   # Then, paste the content on the clipboard to the stub setting file(e.g. `UntestableLibrary.v4.0.30319.v1.0.0.0.prig`).
+        PS> exit   # Then, paste the content on the clipboard to the Stub Settings File(e.g. `UntestableLibrary.v4.0.30319.v1.0.0.0.prig`).
         
         
         
@@ -93,7 +93,7 @@ function Start-PrigSetup {
 
         DESCRIPTION
         -----------
-        In this example, start the Prig setup session from the Package Manager Console. When the Prig setup session is started, new PowerShell window is opened with the introduction help like the above.
+        In this example, start the Prig Setup Session from the Package Manager Console. When the Prig Setup Session is started, new PowerShell window is opened with the introduction help like the above.
 
     .EXAMPLE
         PM> pstart -NoIntro
@@ -131,7 +131,7 @@ function Start-PrigSetup {
 
         DESCRIPTION
         -----------
-        In this example, start the Prig setup session without the introduction help when opened. Then, confirm the assemblies that are referenced from current project, choose `System.Configuration` from those assemblies, and add the indirection stub setting.
+        In this example, start the Prig Setup Session without the introduction help when opened. Then, confirm the assemblies that are referenced from current project, choose `System.Configuration` from those assemblies, and add the Indirection Stub Setting.
 
     .INPUTS
         None

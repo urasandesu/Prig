@@ -329,10 +329,9 @@ namespace Urasandesu.Prig.Framework
 
     public class LooseCrossDomainAccessorUntyped
     {
-        public static IndirectionHolderUntyped GetOrRegister(MethodBase target, Type delegateType, Type[] typeGenericArgs, Type[] methodGenericArgs)
+        public static IndirectionHolderUntyped GetOrRegister(Type indDlgt)
         {
             var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-            var indDlgt = IndirectionHolderUntyped.MakeGenericInstance(target, delegateType, typeGenericArgs, methodGenericArgs);
             return new IndirectionHolderUntyped(holder, indDlgt);
         }
     }

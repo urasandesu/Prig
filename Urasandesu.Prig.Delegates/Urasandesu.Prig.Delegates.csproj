@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HelperForUntypedIndirectionDelegate.cs" />
     <Compile Include="IndirectionDelegates.g.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

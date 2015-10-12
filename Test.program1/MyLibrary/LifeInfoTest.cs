@@ -32,7 +32,9 @@ using NUnit.Framework;
 using program1.MyLibrary;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Prig;
+using UntestableLibrary;
 using UntestableLibrary.Prig;
 using Urasandesu.Prig.Framework;
 
@@ -196,5 +198,51 @@ namespace Test.program1.MyLibrary
                 Assert.DoesNotThrow(() => LifeInfo.IsNowLunchBreak());
             }
         }
-    }    
+    }
+
+
+    [TestFixture]
+    public class ChatRoomTest
+    {
+        delegate bool ReplyInformationFunc(ULChatBot @this, ULTypeOfFeedback input, out string reply, ref ULActions action, out ULTypeOfFeedback recommendation);
+
+        [Test]
+        public void Start_on_execute_should_return_expected()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                var actualInputs = new List<ULTypeOfFeedback>();
+
+                var proxy1 = new Proxy<OfPProxyULChatBot>();
+                proxy1.Setup<ReplyInformationFunc>(_ => _.ReplyInformationULTypeOfFeedbackStringRefULActionsRefULTypeOfFeedbackRef()).Body =
+                    (ULChatBot @this, ULTypeOfFeedback input, out string reply, ref ULActions action, out ULTypeOfFeedback recommendation) =>
+                    {
+                        actualInputs.Add(input);
+                        reply = "1";
+                        recommendation = ULTypeOfFeedback.Suggestion;
+                        return true;
+                    };
+
+                var proxy2 = new Proxy<OfPProxyULChatBot>();
+                proxy2.Setup<ReplyInformationFunc>(_ => _.ReplyInformationULTypeOfFeedbackStringRefULActionsRefULTypeOfFeedbackRef()).Body =
+                    (ULChatBot @this, ULTypeOfFeedback input, out string reply, ref ULActions action, out ULTypeOfFeedback recommendation) =>
+                    {
+                        actualInputs.Add(input);
+                        reply = "2";
+                        recommendation = ULTypeOfFeedback.Incomprehensible;
+                        return true;
+                    };
+
+
+                // Act
+                new ChatRoom().Start(ULTypeOfFeedback.Praise, (ULChatBot)proxy1.Target, (ULChatBot)proxy2.Target);
+
+
+                // Assert
+                var expectedInputs = new[] { ULTypeOfFeedback.Praise, ULTypeOfFeedback.Suggestion };
+                CollectionAssert.AreEqual(expectedInputs, actualInputs);
+            }
+        }
+    }
 }

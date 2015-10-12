@@ -52,7 +52,6 @@
     <Compile Include="IndirectionInfoTest.cs" />
     <Compile Include="IndirectionHolderTest.cs" />
     <Compile Include="DelegateTest.cs" />
-    <Compile Include="IndirectionDelegatesTest.cs" />
     <Compile Include="InstanceGettersTest.cs" />
     <Compile Include="PilotStubberConfiguration\IndirectionStubTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

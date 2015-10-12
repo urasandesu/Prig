@@ -94,7 +94,7 @@ $targetInfo = dir ([System.IO.Path]::Combine($OutputPath, $asmName) + ".dll")
 if ($BuildTarget -eq 'BeforeBuild' -and 
     $targetInfo.Exists -and [System.IO.File]::GetLastWriteTime($Settings) -lt $targetInfo.LastWriteTime -and 
     $targetInfo.Exists -and [System.IO.File]::Exists($asmInfo.Location) -and [System.IO.File]::GetLastWriteTime($asmInfo.Location) -lt $targetInfo.LastWriteTime) {
-    Write-Host ('The indirection stub dll "{0}" has been already existed. Skip the processing to make it ...' -f $targetInfo.FullName)
+    Write-Host ('The Prig Assembly "{0}" has been already existed. Skip the processing to make it ...' -f $targetInfo.FullName)
     exit 0
 }
  
@@ -173,7 +173,7 @@ if (0 -lt $unintendedSettings.Length) {
 
 $additionalAsmInfos = @($section.Stubs | % { $_.IndirectionDelegate.Module.Assembly })
 foreach ($additionalAsmInfo in $additionalAsmInfos) {
-    if ($refAsmInfos -notcontains $additionalAsmInfo) {
+    if ($null -ne $additionalAsmInfo -and $refAsmInfos -notcontains $additionalAsmInfo) {
         $refAsmInfos.Add($additionalAsmInfo)
     }
 }
@@ -212,6 +212,21 @@ foreach ($stubsCsInfo in $stubsCsInfos) {
 }
 
 
+$typeIntroducersCsInfos = New-PrigTypeIntroducersCs $workDir $asmInfo $section $TargetFrameworkVersion
+Write-Verbose ('Generate type introducers *.g.cs(Count: {0}) ...' -f $typeIntroducersCsInfos.Count)
+foreach ($typeIntroducersCsInfo in $typeIntroducersCsInfos) {
+    $typeIntroducersCsDir = [System.IO.Path]::GetDirectoryName($typeIntroducersCsInfo.Path)
+    Write-Verbose ('    Check Directory existence {0} ...' -f $typeIntroducersCsDir)
+    if (![string]::IsNullOrEmpty($typeIntroducersCsDir) -and ![IO.Directory]::Exists($typeIntroducersCsDir)) {
+        New-Item $typeIntroducersCsDir -ItemType Directory -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
+        Write-Verbose ('    Make Directory to {0} ...' -f $typeIntroducersCsDir)
+    }
+    Write-Verbose ('    Check File existence {0} ...' -f $typeIntroducersCsInfo.Path)
+    $typeIntroducersCsInfo.Content | Out-File $typeIntroducersCsInfo.Path -Encoding utf8 -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
+    Write-Verbose ('    Output to {0} ...' -f $typeIntroducersCsInfo.Path)
+}
+
+
 $proxiesCsInfos = New-PrigProxiesCs $workDir $asmInfo $section $TargetFrameworkVersion
 Write-Verbose ('Generate proxies *.g.cs(Count: {0}) ...' -f $proxiesCsInfos.Count)
 foreach ($proxiesCsInfo in $proxiesCsInfos) {
@@ -224,6 +239,21 @@ foreach ($proxiesCsInfo in $proxiesCsInfos) {
     Write-Verbose ('    Check File existence {0} ...' -f $proxiesCsInfo.Path)
     $proxiesCsInfo.Content | Out-File $proxiesCsInfo.Path -Encoding utf8 -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
     Write-Verbose ('    Output to {0} ...' -f $proxiesCsInfo.Path)
+}
+
+
+$proxyTypeIntroducersCsInfos = New-PrigProxyTypeIntroducersCs $workDir $asmInfo $section $TargetFrameworkVersion
+Write-Verbose ('Generate proxy type introducers *.g.cs(Count: {0}) ...' -f $proxyTypeIntroducersCsInfos.Count)
+foreach ($proxyTypeIntroducersCsInfo in $proxyTypeIntroducersCsInfos) {
+    $proxyTypeIntroducersCsDir = [System.IO.Path]::GetDirectoryName($proxyTypeIntroducersCsInfo.Path)
+    Write-Verbose ('    Check Directory existence {0} ...' -f $proxyTypeIntroducersCsDir)
+    if (![string]::IsNullOrEmpty($proxyTypeIntroducersCsDir) -and ![IO.Directory]::Exists($proxyTypeIntroducersCsDir)) {
+        New-Item $proxyTypeIntroducersCsDir -ItemType Directory -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
+        Write-Verbose ('    Make Directory to {0} ...' -f $proxyTypeIntroducersCsDir)
+    }
+    Write-Verbose ('    Check File existence {0} ...' -f $proxyTypeIntroducersCsInfo.Path)
+    $proxyTypeIntroducersCsInfo.Content | Out-File $proxyTypeIntroducersCsInfo.Path -Encoding utf8 -WhatIf:$WhatIf -ErrorAction Stop | Out-Null
+    Write-Verbose ('    Output to {0} ...' -f $proxyTypeIntroducersCsInfo.Path)
 }
 
 

@@ -81,10 +81,10 @@ Write-Verbose ('DeletionalInclude        : {0}' -f $DeletionalInclude)
 
 if (!$NoIntro) {
 @'
-Welcome to Prig setup session!!
+Welcome to Prig Setup Session!!
 
 
-You can add the indirection settings from here. In this session, you can use `$ReferencedAssemblies` that contains all referenced assemblies information of current project. For example, if you want to get the indirection settings for all members of the type `Foo` that belongs to the referenced assembly `UntestableLibrary`, the following commands will achieve it: 
+You can add the Stub Settings File from here. In this session, you can use `$ReferencedAssemblies` that contains all referenced assemblies information of current project. For example, if you want to get the indirection settings for all members of the type `Foo` that belongs to the referenced assembly `UntestableLibrary`, the following commands will achieve it: 
 
 PS> $ReferencedAssemblies
 
@@ -98,7 +98,7 @@ UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 
 PS> padd -ra $ReferencedAssemblies[-1]
 PS> $ReferencedAssemblies[-1].GetTypes() | ? { $_.Name -eq 'Foo' } | pfind | pget | clip
-PS> exit   # Then, paste the content on the clipboard to the stub setting file(e.g. `UntestableLibrary.v4.0.30319.v1.0.0.0.prig`).
+PS> exit   # Then, paste the content on the clipboard to the Stub Settings File(e.g. `UntestableLibrary.v4.0.30319.v1.0.0.0.prig`).
 
 
 
