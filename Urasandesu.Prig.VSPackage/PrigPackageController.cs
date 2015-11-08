@@ -33,13 +33,12 @@ using EnvDTE;
 using Microsoft.Practices.Unity;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using NuGet.VisualStudio;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
+using Urasandesu.NAnonym.Mixins.System.Diagnostics;
+using Urasandesu.NAnonym.Mixins.System.Security.Principal;
 using Urasandesu.Prig.VSPackage.Infrastructure;
 using VSLangProj110;
 
@@ -51,16 +50,13 @@ namespace Urasandesu.Prig.VSPackage
         public MonitoringSelectionService MonitoringSelectionService { private get; set; }
 
         [Dependency]
-        public IVsPackageInstallerServices InstallerServices { private get; set; }
+        public IProjectWideInstaller ProjectWideInstaller { private get; set; }
 
         [Dependency]
-        public IVsPackageInstaller Installer { private get; set; }
+        public IMachineWideInstaller MachineWideInstaller { private get; set; }
 
         [Dependency]
-        public IVsPackageInstallerEvents InstallerEvents { private get; set; }
-
-        [Dependency]
-        public IVsPackageUninstaller Uninstaller { private get; set; }
+        public IManagementCommandExecutor ManagementCommandExecutor { private get; set; }
 
         public virtual void AddPrigAssemblyForMSCorLib(PrigPackageViewModel viewModel)
         {
@@ -125,70 +121,166 @@ namespace Urasandesu.Prig.VSPackage
 
         public virtual void OnProjectRemoved(PrigPackageViewModel viewModel, Project project)
         {
-            if (!viewModel.IsTestAdapterEnabled.Value || 
-                viewModel.CurrentProject.Value == null || 
+            if (!viewModel.IsTestAdapterEnabled.Value ||
+                viewModel.CurrentProject.Value == null ||
                 viewModel.CurrentProject.Value.Name != project.Name)
                 return;
 
             DisableTestAdapter(viewModel);
         }
 
-        protected virtual Runspace NewRunspace()
+        public virtual void PrepareRegisteringPrig(PrigPackageViewModel viewModel)
         {
-            return RunspaceFactory.CreateRunspace();
+            viewModel.Statusbar.BeginProgress();
+
+            var machinePreq = new MachinePrerequisite(Resources.NuGetRootPackageVersion);
+            machinePreq.ProfilerRegistrationStatusChecking += 
+                profLoc => viewModel.Statusbar.ReportProgress(string.Format("Checking the installation status for the profiler '{0}'...", profLoc.PathOfInstalling), 50u, 100u);
+
+            if (MachineWideInstaller.HasBeenInstalled(machinePreq))
+            {
+                viewModel.Statusbar.ReportProgress("Skipped Prig registration processes because Prig has been already registered.", 100u, 100u);
+                viewModel.ShowMessageBox("Skipped Prig registration processes because Prig has been already registered.", OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
+                viewModel.Statusbar.EndProgress();
+                viewModel.Statusbar.Text.Value = "Skipped Prig registration processes because Prig has been already registered.";
+                return;
+            }
+
+
+            if (!WindowsIdentity.GetCurrent().IsElevated())
+            {
+                // TODO: 確認メッセージ。
+                ProcessMixin.RestartCurrentProcessWith(_ =>
+                {
+                    _.Verb = "runas";
+                });
+            }
+            else
+            {
+                RegisterPrig(viewModel);
+            }
+        }
+
+        public virtual void PrepareUnregisteringPrig(PrigPackageViewModel viewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        void RegisterPrig(PrigPackageViewModel viewModel)
+        {
+            var mwPkg = new MachineWidePackage(Resources.NuGetRootPackageVersion);
+            mwPkg.RegistrationPreparing += 
+                () => viewModel.Statusbar.BeginProgress();
+            mwPkg.ProfilerRegistrationStatusChecking += 
+                profLoc => viewModel.Statusbar.ReportProgress(string.Format("Checking the installation status for the profiler '{0}'...", profLoc.PathOfInstalling), 25u, 100u);
+            mwPkg.NuGetPackageCreating += 
+                packageName => viewModel.Statusbar.ReportProgress(string.Format("Creating the nuget package '{0}'...", packageName), 25u, 100u);
+            mwPkg.NuGetPackageCreated += 
+                stdout => viewModel.Statusbar.ReportProgress(stdout, 25u, 100u);
+            mwPkg.NuGetSourceRegistering += 
+                (path, name) => viewModel.Statusbar.ReportProgress(string.Format("Registering the nuget source '{0}' as '{1}'...", path, name), 25u, 100u);
+            mwPkg.NuGetSourceRegistered += 
+                stdout => viewModel.Statusbar.ReportProgress(stdout, 25u, 100u);
+            mwPkg.EnvironmentVariableRegistering += 
+                (variableValue, variableName) => viewModel.Statusbar.ReportProgress(string.Format("Registering the environment variable '{0}' as '{1}'...", variableValue, variableName), 25u, 100u);
+            mwPkg.EnvironmentVariableRegistered += 
+                (variableValue, variableName) => viewModel.Statusbar.ReportProgress("Registered the environment variable.", 25u, 100u);
+            mwPkg.ProfilerRegistering += 
+                profLoc => viewModel.Statusbar.ReportProgress(string.Format("Registering the profiler '{0}' to Registry...", profLoc.PathOfInstalling), 25u, 100u);
+            mwPkg.ProfilerRegistered += 
+                stdout => viewModel.Statusbar.ReportProgress(stdout, 25u, 100u);
+            mwPkg.DefaultSourceInstalling += 
+                (source, packageName) => viewModel.Statusbar.ReportProgress(string.Format("Installing the default source '{0}' as the package '{1}'...", source, packageName), 25u, 100u);
+            mwPkg.DefaultSourceInstalled += 
+                stdout => viewModel.Statusbar.ReportProgress(stdout, 25u, 100u);
+            mwPkg.RegistrationCompleted += 
+                result =>
+                {
+                    viewModel.Statusbar.EndProgress();
+                    switch (result)
+                    {
+                        case RegistrationResults.Skipped:
+                            viewModel.Statusbar.Text.Value = "Skipped Prig installation processes.";
+                            break;
+                        case RegistrationResults.Completed:
+                            viewModel.Statusbar.Text.Value = "Completed Prig installation processes.";
+                            break;
+                    }
+                };
+
+            MachineWideInstaller.Install(mwPkg);
+        }
+
+        public virtual void UnregisterPrig(PrigPackageViewModel viewModel)
+        {
+            throw new NotImplementedException();
         }
 
         void AddPrigAssemblyCore(PrigPackageViewModel viewModel, string additionalInclude)
         {
-            viewModel.Statusbar.BeginProgress();
-
-            viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
             var project = MonitoringSelectionService.GetCurrentProject();
-            if (!InstallerServices.IsPackageInstalledEx(project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion))
-            {
-                if (InstallerServices.IsPackageInstalled(project, Resources.NuGetRootPackageId))
-                    Uninstaller.UninstallPackage(project, Resources.NuGetRootPackageId, false);
-                InstallPackage(viewModel, project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, 50u, 100u);
-            }
 
-            viewModel.Statusbar.ReportProgress("Starting Prig setup session...", 75u, 100u);
+
+            var pwPkg = new ProjectWidePackage(Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, project);
+            pwPkg.PackagePreparing += () => 
+            { 
+                viewModel.Statusbar.BeginProgress(); 
+                viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u); 
+            };
+            pwPkg.PackageInstalling += metadata => viewModel.Statusbar.ReportProgress(string.Format("Installing '{0}'...", metadata.Id), 50u, 100u);
+            pwPkg.PackageInstalled += metadata => viewModel.Statusbar.ReportProgress(string.Format("Installed '{0}'.", metadata.Id), 50u, 100u);
+            pwPkg.PackageReferenceAdded += metadata => viewModel.Statusbar.ReportProgress(string.Format("Reference Added '{0}'.", metadata.Id), 50u, 100u);
+            ProjectWideInstaller.Install(pwPkg);
+
+
             var command = string.Format(
 @"
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
 Start-PrigSetup -NoIntro -AdditionalInclude {0} -Project $Project
 ", additionalInclude);
-            ExecuteCommand(command, project);
-
-            viewModel.Statusbar.ReportProgress(string.Format("Completed adding Prig assembly for {0}.", additionalInclude), 100u, 100u);
-            viewModel.ShowMessageBox(string.Format("Completed adding Prig assembly for {0}.", additionalInclude), OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
-            viewModel.Statusbar.EndProgress();
-            viewModel.Statusbar.Text.Value = string.Format("Completed adding Prig assembly for {0}.", additionalInclude);
+            var mci = new ManagementCommandInfo(command, project);
+            mci.CommandExecuting += () => viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
+            mci.CommandExecuted += () =>
+            {
+                viewModel.Statusbar.ReportProgress(string.Format("Completed adding Prig assembly for {0}.", additionalInclude), 100u, 100u);
+                viewModel.ShowMessageBox(string.Format("Completed adding Prig assembly for {0}.", additionalInclude), OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
+                viewModel.Statusbar.EndProgress();
+                viewModel.Statusbar.Text.Value = string.Format("Completed adding Prig assembly for {0}.", additionalInclude);
+            };
+            ManagementCommandExecutor.Execute(mci);
         }
 
         void EditPrigIndirectionSettingsCore(PrigPackageViewModel viewModel, string editorialInclude)
         {
-            viewModel.Statusbar.BeginProgress();
-
-            viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
             var project = MonitoringSelectionService.GetCurrentProject();
-            if (!InstallerServices.IsPackageInstalledEx(project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion))
-            {
-                if (InstallerServices.IsPackageInstalled(project, Resources.NuGetRootPackageId))
-                    Uninstaller.UninstallPackage(project, Resources.NuGetRootPackageId, false);
-                InstallPackage(viewModel, project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, 50u, 100u);
-            }
 
-            viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
+
+            var pwPkg = new ProjectWidePackage(Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, project);
+            pwPkg.PackagePreparing += () =>
+            {
+                viewModel.Statusbar.BeginProgress();
+                viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
+            };
+            pwPkg.PackageInstalling += metadata => viewModel.Statusbar.ReportProgress(string.Format("Installing '{0}'...", metadata.Id), 50u, 100u);
+            pwPkg.PackageInstalled += metadata => viewModel.Statusbar.ReportProgress(string.Format("Installed '{0}'.", metadata.Id), 50u, 100u);
+            pwPkg.PackageReferenceAdded += metadata => viewModel.Statusbar.ReportProgress(string.Format("Reference Added '{0}'.", metadata.Id), 50u, 100u);
+            ProjectWideInstaller.Install(pwPkg);
+
+
             var command = string.Format(
 @"
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
 Start-PrigSetup -EditorialInclude {0} -Project $Project
 ", editorialInclude);
-            ExecuteCommand(command, project);
-
-            viewModel.Statusbar.ReportProgress(string.Format("Completed editing Prig assembly for {0}.", editorialInclude), 100u, 100u);
-            viewModel.Statusbar.EndProgress();
-            viewModel.Statusbar.Text.Value = string.Format("Completed editing Prig assembly for {0}.", editorialInclude);
+            var mci = new ManagementCommandInfo(command, project);
+            mci.CommandExecuting += () => viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
+            mci.CommandExecuted += () =>
+            {
+                viewModel.Statusbar.ReportProgress(string.Format("Completed editing Prig assembly for {0}.", editorialInclude), 100u, 100u);
+                viewModel.Statusbar.EndProgress();
+                viewModel.Statusbar.Text.Value = string.Format("Completed editing Prig assembly for {0}.", editorialInclude);
+            };
+            ManagementCommandExecutor.Execute(mci);
         }
 
         void RemovePrigAssemblyCore(PrigPackageViewModel viewModel, string deletionalInclude)
@@ -196,103 +288,85 @@ Start-PrigSetup -EditorialInclude {0} -Project $Project
             if (viewModel.ShowMessageBox(string.Format("Are you sure you want to remove Prig assembly {0}?", deletionalInclude), OLEMSGBUTTON.OLEMSGBUTTON_YESNO, OLEMSGICON.OLEMSGICON_QUERY) != VSConstants.MessageBoxResult.IDYES)
                 return;
 
-            viewModel.Statusbar.BeginProgress();
-
-            viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
             var project = MonitoringSelectionService.GetCurrentProject();
-            if (!InstallerServices.IsPackageInstalledEx(project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion))
-            {
-                if (InstallerServices.IsPackageInstalled(project, Resources.NuGetRootPackageId))
-                    Uninstaller.UninstallPackage(project, Resources.NuGetRootPackageId, false);
-                InstallPackage(viewModel, project, Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, 50u, 100u);
-            }
 
-            viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
+
+            var pwPkg = new ProjectWidePackage(Resources.NuGetRootPackageId, Resources.NuGetRootPackageVersion, project);
+            pwPkg.PackagePreparing += () =>
+            {
+                viewModel.Statusbar.BeginProgress();
+                viewModel.Statusbar.ReportProgress("Checking current project's packages...", 25u, 100u);
+            };
+            pwPkg.PackageInstalling += metadata => viewModel.Statusbar.ReportProgress(string.Format("Installing '{0}'...", metadata.Id), 50u, 100u);
+            pwPkg.PackageInstalled += metadata => viewModel.Statusbar.ReportProgress(string.Format("Installed '{0}'.", metadata.Id), 50u, 100u);
+            pwPkg.PackageReferenceAdded += metadata => viewModel.Statusbar.ReportProgress(string.Format("Reference Added '{0}'.", metadata.Id), 50u, 100u);
+            ProjectWideInstaller.Install(pwPkg);
+
+
             var command = string.Format(
 @"
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
 Start-PrigSetup -DeletionalInclude {0} -Project $Project
 ", deletionalInclude);
-            ExecuteCommand(command, project);
-
-            viewModel.Statusbar.ReportProgress(string.Format("Completed removing Prig assembly {0}.", deletionalInclude), 100u, 100u);
-            viewModel.ShowMessageBox(string.Format("Completed removing Prig assembly {0}.", deletionalInclude), OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
-            viewModel.Statusbar.EndProgress();
-            viewModel.Statusbar.Text.Value = string.Format("Completed removing Prig assembly {0}.", deletionalInclude);
+            var mci = new ManagementCommandInfo(command, project);
+            mci.CommandExecuting += () => viewModel.Statusbar.ReportProgress("Starting the Prig setup session...", 75u, 100u);
+            mci.CommandExecuted += () =>
+            {
+                viewModel.Statusbar.ReportProgress(string.Format("Completed removing Prig assembly {0}.", deletionalInclude), 100u, 100u);
+                viewModel.ShowMessageBox(string.Format("Completed removing Prig assembly {0}.", deletionalInclude), OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
+                viewModel.Statusbar.EndProgress();
+                viewModel.Statusbar.Text.Value = string.Format("Completed removing Prig assembly {0}.", deletionalInclude);
+            };
+            ManagementCommandExecutor.Execute(mci);
         }
 
         void EnableTestAdapterCore(PrigPackageViewModel viewModel)
         {
-            viewModel.Statusbar.BeginProgress();
-
-            viewModel.Statusbar.ReportProgress("Enabling Prig test adapter...", 50u, 100u);
             var project = viewModel.CurrentProject.Value;
             if (project == null)
                 throw new InvalidOperationException("Current project isn't selected.");
+
+
             var command =
 @"
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
 Enable-PrigTestAdapter -Project $Project
-";
-            ExecuteCommand(command, project);
-
-            viewModel.Statusbar.ReportProgress(string.Format("Completed enabling Prig test adapter for {0}.", project.Name), 100u, 100u);
-            viewModel.Statusbar.EndProgress();
-            viewModel.Statusbar.Text.Value = string.Format("Completed enabling Prig test adapter for {0}.", project.Name);
+"; 
+            var mci = new ManagementCommandInfo(command, project);
+            mci.CommandExecuting += () =>
+            {
+                viewModel.Statusbar.BeginProgress();
+                viewModel.Statusbar.ReportProgress("Enabling Prig test adapter...", 50u, 100u);
+            };
+            mci.CommandExecuted += () =>
+            {
+                viewModel.Statusbar.ReportProgress(string.Format("Completed enabling Prig test adapter for {0}.", project.Name), 100u, 100u);
+                viewModel.Statusbar.EndProgress();
+                viewModel.Statusbar.Text.Value = string.Format("Completed enabling Prig test adapter for {0}.", project.Name);
+            };
+            ManagementCommandExecutor.Execute(mci);
         }
 
         void DisableTestAdapterCore(PrigPackageViewModel viewModel)
         {
-            viewModel.Statusbar.BeginProgress();
-
-            viewModel.Statusbar.ReportProgress("Disabling Prig test adapter...", 50u, 100u);
             var command =
 @"
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
 Disable-PrigTestAdapter
-";
-            ExecuteCommand(command);
-
-            viewModel.Statusbar.ReportProgress("Completed disabling Prig test adapter.", 100u, 100u);
-            viewModel.Statusbar.EndProgress();
-            viewModel.Statusbar.Text.Value = "Completed disabling Prig test adapter.";
-        }
-
-        void ExecuteCommand(string command, Project project = null)
-        {
-            using (var runspace = NewRunspace())
+"; 
+            var mci = new ManagementCommandInfo(command);
+            mci.CommandExecuting += () =>
             {
-                runspace.Open();
-                if (project != null)
-                    runspace.SessionStateProxy.SetVariable("Project", project);
-                var results = default(Collection<PSObject>);
-                command = "Set-ExecutionPolicy RemoteSigned -Scope Process -Force\r\n" + command;
-                using (var pipeline = runspace.CreatePipeline(command, false))
-                    results = pipeline.Invoke();
-            }
-        }
-
-        void InstallPackage(PrigPackageViewModel viewModel, Project project, string packageId, string version, uint progressValue, uint progressMaximum)
-        {
-            var onInstalling = new VsPackageEventHandler(metadata => viewModel.Statusbar.ReportProgress(string.Format("Installing '{0}'...", metadata.Id), progressValue, progressMaximum));
-            var onInstalled = new VsPackageEventHandler(metadata => viewModel.Statusbar.ReportProgress(string.Format("Installed '{0}'.", metadata.Id), progressValue, progressMaximum));
-            var onReferenceAdded = new VsPackageEventHandler(metadata => viewModel.Statusbar.ReportProgress(string.Format("Reference Added '{0}'.", metadata.Id), progressValue, progressMaximum));
-            try
+                viewModel.Statusbar.BeginProgress();
+                viewModel.Statusbar.ReportProgress("Disabling Prig test adapter...", 50u, 100u);
+            };
+            mci.CommandExecuted += () =>
             {
-                InstallerEvents.PackageInstalling += onInstalling;
-                InstallerEvents.PackageInstalled += onInstalled;
-                InstallerEvents.PackageReferenceAdded += onReferenceAdded;
-
-                var source = default(string);
-                var ignoreDependencies = false;
-                Installer.InstallPackage(source, project, packageId, version, ignoreDependencies);
-            }
-            finally
-            {
-                InstallerEvents.PackageInstalling -= onInstalling;
-                InstallerEvents.PackageInstalled -= onInstalled;
-                InstallerEvents.PackageReferenceAdded -= onReferenceAdded;
-            }
+                viewModel.Statusbar.ReportProgress("Completed disabling Prig test adapter.", 100u, 100u);
+                viewModel.Statusbar.EndProgress();
+                viewModel.Statusbar.Text.Value = "Completed disabling Prig test adapter.";
+            };
+            ManagementCommandExecutor.Execute(mci);
         }
 
         static bool IsSupportedProject(Project project)

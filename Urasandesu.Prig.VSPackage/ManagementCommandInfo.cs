@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PkgCmdID.cs
+ * File: ManagementCommandInfo.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,33 +29,55 @@
 
 
 
-// PkgCmdID.cs
-// MUST match PkgCmdID.h
+using EnvDTE;
 using System;
 
 namespace Urasandesu.Prig.VSPackage
 {
-    static class PkgCmdIDList
+    class ManagementCommandInfo
     {
-        public const uint MainMenu = 0x1001;
+        public ManagementCommandInfo(string command)
+        {
+            if (string.IsNullOrEmpty(command))
+                throw new ArgumentNullException("command");
 
-        public const uint MainMenuGroup = 0x1101;
-        public const uint EnableTestAdapterCommand = 0x1102;
-        public const uint DisableTestAdapterCommand = 0x1103;
+            Command = command;
+        }
 
-        public const uint RegistrationMenuGroup = 0x1104;
-        public const uint RegisterPrigCommand = 0x1105;
-        public const uint UnregisterPrigCommand = 0x1106;
+        public ManagementCommandInfo(string command, Project targetProj)
+        {
+            if (string.IsNullOrEmpty(command))
+                throw new ArgumentNullException("command");
 
-        public const uint AddPrigAssemblyForMSCorLibGroup = 0x1011;
-        public const uint AddPrigAssemblyForMSCorLibCommand = 0x1012;
+            if (targetProj == null)
+                throw new ArgumentNullException("targetProj");
 
-        public const uint AddPrigAssemblyGroup = 0x1021;
-        public const uint AddPrigAssemblyCommand = 0x1022;
+            Command = command;
+            TargetProject = targetProj;
+        }
 
-        public const uint EditPrigIndirectionSettingsGroup = 0x1031;
-        public const uint EditPrigIndirectionSettingsCommand = 0x1032;
-        public const uint RemovePrigAssemblyCommand = 0x1033;
+        public string Command { get; private set; }
+        public Project TargetProject { get; private set; }
 
-    };
+        public event Action CommandExecuting;
+        public event Action CommandExecuted;
+
+        protected internal virtual void OnCommandExecuting()
+        {
+            var handler = CommandExecuting;
+            if (handler == null)
+                return;
+
+            handler();
+        }
+
+        protected internal virtual void OnCommandExecuted()
+        {
+            var handler = CommandExecuted;
+            if (handler == null)
+                return;
+
+            handler();
+        }
+    }
 }

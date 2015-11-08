@@ -59,6 +59,10 @@
         <Parent guid="MainMenu" id="MainMenu" />
       </Group>
 
+      <Group guid="RegistrationMenuGroup" id="RegistrationMenuGroup" priority="0x0601">
+        <Parent guid="MainMenu" id="MainMenu" />
+      </Group>
+
       <Group guid="EditPrigIndirectionSettingsGroup" id="EditPrigIndirectionSettingsGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
       </Group>
@@ -99,6 +103,22 @@
         </Strings>
       </Button>
 
+      <Button guid="RegistrationMenuGroup" id="RegisterPrigCommand" priority="0x0100" type="Button">
+        <Parent guid="RegistrationMenuGroup" id="RegistrationMenuGroup" />
+        <Icon guid="RegistrationMenuImages" id="ShieldIcon" />
+        <Strings>
+          <ButtonText>&amp;Register Prig (Needs Restarting)</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="RegistrationMenuGroup" id="UnregisterPrigCommand" priority="0x0101" type="Button">
+        <Parent guid="RegistrationMenuGroup" id="RegistrationMenuGroup" />
+        <Icon guid="RegistrationMenuImages" id="ShieldIcon" />
+        <Strings>
+          <ButtonText>&amp;Unregister Prig (Needs Restarting)</ButtonText>
+        </Strings>
+      </Button>
+
       <Button guid="EditPrigIndirectionSettingsGroup" id="EditPrigIndirectionSettingsCommand" priority="0x0100" type="Button">
         <Parent guid="EditPrigIndirectionSettingsGroup" id="EditPrigIndirectionSettingsGroup" />
         <CommandFlag>DefaultInvisible</CommandFlag>
@@ -118,6 +138,10 @@
       </Button>
 
     </Buttons>
+   
+    <Bitmaps>
+      <Bitmap guid="RegistrationMenuImages" href="Resources\ShieldIcon.png" usedList="ShieldIcon"/>
+    </Bitmaps>
 
   </Commands>
 
@@ -139,6 +163,12 @@
       <IDSymbol name="DisableTestAdapterCommand" value="0x1103" />
     </GuidSymbol>
 
+    <GuidSymbol name="RegistrationMenuGroup" value="{b635358f-b28c-4dac-b31a-7dccddfe7b0a}">
+      <IDSymbol name="RegistrationMenuGroup" value="0x1104" />
+      <IDSymbol name="RegisterPrigCommand" value="0x1105" />
+      <IDSymbol name="UnregisterPrigCommand" value="0x1106" />
+    </GuidSymbol>
+
     <GuidSymbol name="AddPrigAssemblyForMSCorLibGroup" value="{b99f3bdd-fee9-42ac-a943-303620e0ce53}">
       <IDSymbol name="AddPrigAssemblyForMSCorLibGroup" value="0x1011" />
       <IDSymbol name="AddPrigAssemblyForMSCorLibCommand" value="0x1012" />
@@ -153,6 +183,10 @@
       <IDSymbol name="EditPrigIndirectionSettingsGroup" value="0x1031" />
       <IDSymbol name="EditPrigIndirectionSettingsCommand" value="0x1032" />
       <IDSymbol name="RemovePrigAssemblyCommand" value="0x1033" />
+    </GuidSymbol>
+    
+    <GuidSymbol name="RegistrationMenuImages" value="{502f7178-c06f-472a-94b5-cd9a5b1e6eb2}" >
+      <IDSymbol name="ShieldIcon" value="1" />
     </GuidSymbol>
     
   </Symbols>

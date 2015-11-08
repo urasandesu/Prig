@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PkgCmdID.cs
+ * File: PrigExecutor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,33 +29,20 @@
 
 
 
-// PkgCmdID.cs
-// MUST match PkgCmdID.h
-using System;
+using Microsoft.Practices.Unity;
 
 namespace Urasandesu.Prig.VSPackage
 {
-    static class PkgCmdIDList
+    class PrigExecutor : ProcessExecutor, IPrigExecutor
     {
-        public const uint MainMenu = 0x1001;
+        [Dependency]
+        public IEnvironmentRepository EnvironmentRepository { private get; set; }
 
-        public const uint MainMenuGroup = 0x1101;
-        public const uint EnableTestAdapterCommand = 0x1102;
-        public const uint DisableTestAdapterCommand = 0x1103;
-
-        public const uint RegistrationMenuGroup = 0x1104;
-        public const uint RegisterPrigCommand = 0x1105;
-        public const uint UnregisterPrigCommand = 0x1106;
-
-        public const uint AddPrigAssemblyForMSCorLibGroup = 0x1011;
-        public const uint AddPrigAssemblyForMSCorLibCommand = 0x1012;
-
-        public const uint AddPrigAssemblyGroup = 0x1021;
-        public const uint AddPrigAssemblyCommand = 0x1022;
-
-        public const uint EditPrigIndirectionSettingsGroup = 0x1031;
-        public const uint EditPrigIndirectionSettingsCommand = 0x1032;
-        public const uint RemovePrigAssemblyCommand = 0x1033;
-
-    };
+        public string StartInstalling(string name, string source)
+        {
+            var prig = EnvironmentRepository.GetPrigPath();
+            var arguments = string.Format("install \"{0}\" -source \"{1}\"", name, source);
+            return StartProcessWithoutShell(prig, arguments, p => p.StandardOutput.ReadToEnd());
+        }
+    }
 }

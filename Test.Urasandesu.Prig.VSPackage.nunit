@@ -1,0 +1,7 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" processModel="Default" domainUsage="Default" />
+  <Config name="Debug" binpathtype="Auto" appbase="C:\Users\Akira\Prig\Test.Urasandesu.Prig.VSPackage\bin\Debug">
+    <assembly path="Test.Urasandesu.Prig.VSPackage.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto" />
+</NUnitProject>

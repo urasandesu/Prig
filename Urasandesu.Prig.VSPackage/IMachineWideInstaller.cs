@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PkgCmdID.cs
+ * File: IMachineWideInstaller.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,33 +29,11 @@
 
 
 
-// PkgCmdID.cs
-// MUST match PkgCmdID.h
-using System;
-
 namespace Urasandesu.Prig.VSPackage
 {
-    static class PkgCmdIDList
+    interface IMachineWideInstaller
     {
-        public const uint MainMenu = 0x1001;
-
-        public const uint MainMenuGroup = 0x1101;
-        public const uint EnableTestAdapterCommand = 0x1102;
-        public const uint DisableTestAdapterCommand = 0x1103;
-
-        public const uint RegistrationMenuGroup = 0x1104;
-        public const uint RegisterPrigCommand = 0x1105;
-        public const uint UnregisterPrigCommand = 0x1106;
-
-        public const uint AddPrigAssemblyForMSCorLibGroup = 0x1011;
-        public const uint AddPrigAssemblyForMSCorLibCommand = 0x1012;
-
-        public const uint AddPrigAssemblyGroup = 0x1021;
-        public const uint AddPrigAssemblyCommand = 0x1022;
-
-        public const uint EditPrigIndirectionSettingsGroup = 0x1031;
-        public const uint EditPrigIndirectionSettingsCommand = 0x1032;
-        public const uint RemovePrigAssemblyCommand = 0x1033;
-
-    };
+        bool HasBeenInstalled(MachinePrerequisite machinePreq);
+        void Install(MachineWidePackage mwPkg);
+    }
 }

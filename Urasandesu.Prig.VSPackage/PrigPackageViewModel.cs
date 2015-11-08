@@ -133,6 +133,28 @@ namespace Urasandesu.Prig.VSPackage
             }
         }
 
+        RegisterPrigCommand m_registerPrigCommand;
+        public ICommand RegisterPrigCommand
+        {
+            get
+            {
+                if (m_registerPrigCommand == null)
+                    m_registerPrigCommand = BuildUpPackageCommand(new RegisterPrigCommand(this));
+                return m_registerPrigCommand;
+            }
+        }
+
+        UnregisterPrigCommand m_unregisterPrigCommand;
+        public ICommand UnregisterPrigCommand
+        {
+            get
+            {
+                if (m_unregisterPrigCommand == null)
+                    m_unregisterPrigCommand = BuildUpPackageCommand(new UnregisterPrigCommand(this));
+                return m_unregisterPrigCommand;
+            }
+        }
+
         EditPrigIndirectionSettingsCommand m_editPrigIndirectionSettingsCommand;
         public ICommand EditPrigIndirectionSettingsCommand
         {

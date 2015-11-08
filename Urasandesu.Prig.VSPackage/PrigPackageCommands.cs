@@ -116,6 +116,30 @@ namespace Urasandesu.Prig.VSPackage
         }
     }
 
+    class RegisterPrigCommand : PrigPackageCommand
+    {
+        public RegisterPrigCommand(PrigPackageViewModel viewModel)
+            : base(viewModel)
+        { }
+
+        protected override void InvokeCore(object parameter)
+        {
+            Controller.PrepareRegisteringPrig(ViewModel);
+        }
+    }
+
+    class UnregisterPrigCommand : PrigPackageCommand
+    {
+        public UnregisterPrigCommand(PrigPackageViewModel viewModel)
+            : base(viewModel)
+        { }
+
+        protected override void InvokeCore(object parameter)
+        {
+            Controller.PrepareUnregisteringPrig(ViewModel);
+        }
+    }
+
     class EditPrigIndirectionSettingsCommand : PrigPackageCommand
     {
         public EditPrigIndirectionSettingsCommand(PrigPackageViewModel viewModel)

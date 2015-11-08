@@ -54,7 +54,9 @@ namespace Urasandesu.Prig.VSPackage
     {
         public PrigPackage()
         {
-            //System.Diagnostics.Debugger.Launch();
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
 
             Debug.WriteLine(string.Format("Entering constructor for: {0}", this));
         }
@@ -65,6 +67,7 @@ namespace Urasandesu.Prig.VSPackage
             base.Initialize();
 
             RegisterNuGetComponent(Container);
+            RegisterPrigComponent(Container);
             RegisterMenuCommandService(Container);
             RegisterDTE(Container);
         }
@@ -107,6 +110,17 @@ namespace Urasandesu.Prig.VSPackage
             container.RegisterInstance(uninstaller);
         }
 
+        void RegisterPrigComponent(IUnityContainer container)
+        {
+            container.RegisterType<IProjectWideInstaller, ProjectWideInstaller>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IEnvironmentRepository, EnvironmentRepository>(new ContainerControlledLifetimeManager());
+            container.RegisterType<INuGetExecutor, NuGetExecutor>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IRegsvr32Executor, Regsvr32Executor>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IPrigExecutor, PrigExecutor>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IMachineWideInstaller, MachineWideInstaller>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IManagementCommandExecutor, ManagementCommandExecutor>(new ContainerControlledLifetimeManager());
+        }
+
         void RegisterMenuCommandService(IUnityContainer container)
         {
             var menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
@@ -114,6 +128,8 @@ namespace Urasandesu.Prig.VSPackage
             menuCommandService.AddCommand(NewAddPrigAssemblyCommand(ViewModel));
             menuCommandService.AddCommand(NewEnableTestAdapterCommand(ViewModel));
             menuCommandService.AddCommand(NewDisableTestAdapterCommand(ViewModel));
+            menuCommandService.AddCommand(NewRegisterPrigCommand(ViewModel));
+            menuCommandService.AddCommand(NewUnregisterPrigCommand(ViewModel));
             menuCommandService.AddCommand(NewEditPrigIndirectionSettingsCommand(ViewModel));
             menuCommandService.AddCommand(NewRemovePrigAssemblyCommand(ViewModel));
             container.RegisterInstance(menuCommandService);
@@ -156,6 +172,22 @@ namespace Urasandesu.Prig.VSPackage
             menuCommand.Enabled = false;
             var text = "&Disable Test Adapter";
             viewModel.CurrentProject.Subscribe(project => menuCommand.Text = project == null ? text : text + " for " + project.Name);
+            return menuCommand;
+        }
+
+        static MenuCommand NewRegisterPrigCommand(PrigPackageViewModel viewModel)
+        {
+            var commandId = new CommandID(GuidList.RegistrationMenuGroup, (int)PkgCmdIDList.RegisterPrigCommand);
+            var handler = new EventHandler((sender, e) => viewModel.RegisterPrigCommand.Execute(sender));
+            var menuCommand = new MenuCommand(handler, commandId);
+            return menuCommand;
+        }
+
+        static MenuCommand NewUnregisterPrigCommand(PrigPackageViewModel viewModel)
+        {
+            var commandId = new CommandID(GuidList.RegistrationMenuGroup, (int)PkgCmdIDList.UnregisterPrigCommand);
+            var handler = new EventHandler((sender, e) => viewModel.UnregisterPrigCommand.Execute(sender));
+            var menuCommand = new MenuCommand(handler, commandId);
             return menuCommand;
         }
 

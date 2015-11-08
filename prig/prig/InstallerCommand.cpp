@@ -52,6 +52,7 @@ namespace prig {
             using boost::filesystem::exists;
             using boost::filesystem::recursive_directory_iterator;
             using boost::filesystem::remove;
+            using boost::system::error_code;
 
             if (!exists(source))
                 return false;
@@ -62,8 +63,8 @@ namespace prig {
                     continue;
                 
                 auto symlink = source / i->path().filename();
-                if (exists(symlink))
-                    remove(symlink);
+                auto ec = error_code();
+                remove(symlink, ec);
                 create_symlink(i->path(), symlink);
             }
 

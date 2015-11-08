@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PkgCmdID.cs
+ * File: ProfilerLocation.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,33 +29,27 @@
 
 
 
-// PkgCmdID.cs
-// MUST match PkgCmdID.h
-using System;
+using Microsoft.Win32;
 
 namespace Urasandesu.Prig.VSPackage
 {
-    static class PkgCmdIDList
+    class ProfilerLocation
     {
-        public const uint MainMenu = 0x1001;
+        public static readonly string InprocServer32Path = @"CLSID\{532C1F05-F8F3-4FBA-8724-699A31756ABD}\InprocServer32";
+        public static readonly string ExpectedFileDescriptionFormat = "Prig Profiler {0} Type Library";
 
-        public const uint MainMenuGroup = 0x1101;
-        public const uint EnableTestAdapterCommand = 0x1102;
-        public const uint DisableTestAdapterCommand = 0x1103;
+        public ProfilerLocation(RegistryView registryView, string pathOfInstalling)
+        {
+            RegistryView = registryView;
+            PathOfInstalling = pathOfInstalling;
+        }
 
-        public const uint RegistrationMenuGroup = 0x1104;
-        public const uint RegisterPrigCommand = 0x1105;
-        public const uint UnregisterPrigCommand = 0x1106;
+        public RegistryView RegistryView { get; private set; }
+        public string PathOfInstalling { get; private set; }
 
-        public const uint AddPrigAssemblyForMSCorLibGroup = 0x1011;
-        public const uint AddPrigAssemblyForMSCorLibCommand = 0x1012;
-
-        public const uint AddPrigAssemblyGroup = 0x1021;
-        public const uint AddPrigAssemblyCommand = 0x1022;
-
-        public const uint EditPrigIndirectionSettingsGroup = 0x1031;
-        public const uint EditPrigIndirectionSettingsCommand = 0x1032;
-        public const uint RemovePrigAssemblyCommand = 0x1033;
-
-    };
+        public static string GetExpectedFileDescription(string ver)
+        {
+            return string.Format(ExpectedFileDescriptionFormat, ver);
+        }
+    }
 }
