@@ -34,6 +34,7 @@ namespace Urasandesu.Prig.VSPackage
     interface IMachineWideInstaller
     {
         bool HasBeenInstalled(MachinePrerequisite machinePreq);
-        void Install(MachineWidePackage mwPkg);
+        void Install(MachineWideInstallation mwInstl);
+        void Uninstall(MachineWideUninstallation umwPkg);
     }
 }

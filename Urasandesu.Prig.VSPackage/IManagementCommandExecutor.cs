@@ -29,10 +29,13 @@
 
 
 
+using System.Collections.ObjectModel;
+using System.Management.Automation;
+
 namespace Urasandesu.Prig.VSPackage
 {
     interface IManagementCommandExecutor
     {
-        void Execute(ManagementCommandInfo mci);
+        Collection<PSObject> Execute(ManagementCommandInfo mci);
     }
 }

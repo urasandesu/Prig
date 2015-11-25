@@ -44,16 +44,16 @@ namespace Urasandesu.Prig.VSPackage
             Command = command;
         }
 
-        public ManagementCommandInfo(string command, Project targetProj)
+        public ManagementCommandInfo(string command, Project targetProject)
         {
             if (string.IsNullOrEmpty(command))
                 throw new ArgumentNullException("command");
 
-            if (targetProj == null)
-                throw new ArgumentNullException("targetProj");
+            if (targetProject == null)
+                throw new ArgumentNullException("targetProject");
 
             Command = command;
-            TargetProject = targetProj;
+            TargetProject = targetProject;
         }
 
         public string Command { get; private set; }

@@ -41,31 +41,47 @@ namespace Urasandesu.Prig.VSPackage
         [Dependency]
         public IEnvironmentRepository EnvironmentRepository { private get; set; }
 
+        // NOTE: The last space of `OutputDirectory` parameter and `source` parameter is intended. 
+        //       See also the following question: [msbuild - Illegal characters in path for nuget pack - Stack Overflow](http://stackoverflow.com/questions/17322147/illegal-characters-in-path-for-nuget-pack).
+
         public string StartPacking(string nuspec, string outputDirectory)
         {
             var nuget = EnvironmentRepository.GetNuGetPath();
-            var arguments = string.Format("pack \"{0}\" -OutputDirectory \"{1}\"", nuspec, outputDirectory);
-            return StartProcessWithoutShell(nuget, arguments, p => p.StandardOutput.ReadToEnd());
+            var args = string.Format("pack \"{0}\" -OutputDirectory \"{1} \"", nuspec, outputDirectory);
+            return StartProcessWithoutShell(nuget, args, p => p.StandardOutput.ReadToEnd());
         }
 
         public string StartSourcing(string name, string source)
         {
             var nuget = EnvironmentRepository.GetNuGetPath();
-            var haveSourcesBeenAdded = false;
+            if (HaveAddedSources(name))
             {
-                var arguments = "sources list";
-                haveSourcesBeenAdded = StartProcessWithoutShell(nuget, arguments, p => p.StandardOutput.ReadLines().Any(_ => Regex.IsMatch(_, name)));
-            }
-            if (haveSourcesBeenAdded)
-            {
-                var arguments = string.Format("sources update -name \"{0}\" -source \"{1}\"", name, source);
-                return StartProcessWithoutShell(nuget, arguments, p => p.StandardOutput.ReadToEnd());
+                var args = string.Format("sources update -name \"{0}\" -source \"{1} \"", name, source);
+                return StartProcessWithoutShell(nuget, args, p => p.StandardOutput.ReadToEnd());
             }
             else
             {
-                var arguments = string.Format("sources add -name \"{0}\" -source \"{1}\"", name, source);
-                return StartProcessWithoutShell(nuget, arguments, p => p.StandardOutput.ReadToEnd());
+                var args = string.Format("sources add -name \"{0}\" -source \"{1} \"", name, source);
+                return StartProcessWithoutShell(nuget, args, p => p.StandardOutput.ReadToEnd());
             }
+        }
+
+        public bool HaveAddedSources(string name)
+        {
+            var nuget = EnvironmentRepository.GetNuGetPath();
+            var args = "sources list";
+            return StartProcessWithoutShell(nuget, args, 
+                p => p.StandardOutput.ReadLines().Any(_ => Regex.IsMatch(_, name, RegexOptions.IgnoreCase)));
+        }
+
+        public string StartUnsourcing(string name)
+        {
+            if (!HaveAddedSources(name))
+                return string.Format("The specified sources '{0}' don't exist.", name);
+
+            var nuget = EnvironmentRepository.GetNuGetPath();
+            var args = string.Format("sources remove -name \"{0}\"", name);
+            return StartProcessWithoutShell(nuget, args, p => p.StandardOutput.ReadToEnd());
         }
     }
 }

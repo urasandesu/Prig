@@ -56,17 +56,24 @@ namespace Urasandesu.Prig.VSPackage
         
         public bool HasBeenInstalled(MachinePrerequisite machinePreq)
         {
-            var isProfInstalled = true;
-            foreach (var profLoc in EnvironmentRepository.GetProfilerLocations())
+            if (machinePreq == null)
+                throw new ArgumentNullException("machinePreq");
+
+            var profLocs = EnvironmentRepository.GetProfilerLocations();
+            if (profLocs == null || profLocs.Length == 0)
+                return false;
+
+            foreach (var profLoc in profLocs)
             {
                 using (var classesRootKey = EnvironmentRepository.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLoc.RegistryView))
                 using (var inprocServer32Key = EnvironmentRepository.OpenRegistrySubKey(classesRootKey, ProfilerLocation.InprocServer32Path))
                 {
-                    machinePreq.OnProfilerInstallationStatusChecking(profLoc);
-                    isProfInstalled &= IsProfilerInstalled(inprocServer32Key, ProfilerLocation.GetExpectedFileDescription(machinePreq.PackageVersion));
+                    machinePreq.OnProfilerStatusChecking(profLoc);
+                    if (!IsProfilerInstalled(inprocServer32Key, ProfilerLocation.GetExpectedFileDescription(machinePreq.PackageVersion)))
+                        return false;
                 }
             }
-            return isProfInstalled;
+            return true;
         }
 
         bool IsProfilerInstalled(RegistryKey inprocServer32Key, string expectedFileDesc)
@@ -75,88 +82,150 @@ namespace Urasandesu.Prig.VSPackage
                 return false;
 
             var profPath = (string)EnvironmentRepository.GetRegistryValue(inprocServer32Key, null);
-            if (!File.Exists(profPath))
+            if (!EnvironmentRepository.ExistsFile(profPath))
                 return false;
 
-            return FileVersionInfo.GetVersionInfo(profPath).FileDescription == expectedFileDesc;
+            return EnvironmentRepository.GetFileDescription(profPath) == expectedFileDesc;
         }
 
 
-        public void Install(MachineWidePackage mwPkg)
+        public void Install(MachineWideInstallation mwInstl)
         {
-            if (mwPkg == null)
-                throw new ArgumentNullException("mwPkg");
+            if (mwInstl == null)
+                throw new ArgumentNullException("mwInstl");
 
-            mwPkg.OnRegistrationPreparing();
+            mwInstl.OnPreparing();
 
-            if (HasBeenInstalled(mwPkg.Prerequisite))
+            if (HasBeenInstalled(mwInstl.Prerequisite))
             {
-                mwPkg.OnRegistrationCompleted(RegistrationResults.Skipped);
+                mwInstl.OnCompleted(MachineWideProcessResults.Skipped);
                 return;
             }
 
-            CreateNuspec(mwPkg);
-            RegisterNuGetSource(mwPkg);
-            RegisterEnvironmentVariables(mwPkg);
-            RegisterProfiler(mwPkg);
-            InstallDefaultSource(mwPkg);
+            CreateNupkg(mwInstl);
+            RegisterNuGetSource(mwInstl);
+            RegisterEnvironmentVariables(mwInstl);
+            RegisterProfiler(mwInstl);
+            InstallDefaultSource(mwInstl);
+
+            mwInstl.OnCompleted(MachineWideProcessResults.Completed);
         }
 
-        void CreateNuspec(MachineWidePackage mwPkg)
+        void CreateNupkg(MachineWideInstallation mwInstl)
         {
             var toolsPath = EnvironmentRepository.GetToolsPath();
-            var packageName = "Prig";
-            mwPkg.OnNuGetPackageCreating(packageName);
+            var pkgName = "Prig";
+            mwInstl.OnNuGetPackageCreating(pkgName);
             var nugetPackageFolder = Path.Combine(toolsPath, "NuGet");
             var stdout = NuGetExecutor.StartPacking(Path.Combine(nugetPackageFolder, "Prig.nuspec"), toolsPath);
-            mwPkg.OnNuGetPackageCreated(stdout);
+            mwInstl.OnNuGetPackageCreated(stdout);
         }
 
-        void RegisterNuGetSource(MachineWidePackage mwPkg)
+        void RegisterNuGetSource(MachineWideInstallation mwInstl)
         {
             var toolsPath = EnvironmentRepository.GetToolsPath();
             var name = "Prig Source";
-            mwPkg.OnNuGetSourceRegistering(toolsPath, name);
+            mwInstl.OnNuGetSourceRegistering(name, toolsPath);
             var stdout = NuGetExecutor.StartSourcing(name, toolsPath);
-            mwPkg.OnNuGetSourceRegistered(stdout);
+            mwInstl.OnNuGetSourceRegistered(stdout);
         }
 
-        void RegisterEnvironmentVariables(MachineWidePackage mwPkg)
+        void RegisterEnvironmentVariables(MachineWideInstallation mwInstl)
         {
             var pkgDir = EnvironmentRepository.GetPackageFolder();
-            var variableName = EnvironmentRepository.GetPackageFolderKey();
-            var variableValue = pkgDir;
-            mwPkg.OnEnvironmentVariableRegistering(variableValue, variableName);
-            EnvironmentRepository.SetPackageFolder(variableValue);
-            mwPkg.OnEnvironmentVariableRegistered(variableValue, variableName);
+            var name = EnvironmentRepository.GetPackageFolderKey();
+            var value = pkgDir;
+            mwInstl.OnEnvironmentVariableRegistering(name, value);
+            EnvironmentRepository.SetPackageFolder(value);
+            mwInstl.OnEnvironmentVariableRegistered(name, value);
         }
 
-        void RegisterProfiler(MachineWidePackage mwPkg)
+        void RegisterProfiler(MachineWideInstallation mwInstl)
         {
+            var profLocs = EnvironmentRepository.GetProfilerLocations();
+            if (profLocs == null || profLocs.Length == 0)
+                return;
+
             foreach (var profLoc in EnvironmentRepository.GetProfilerLocations())
             {
-                using (var classesRootKey = EnvironmentRepository.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLoc.RegistryView))
-                using (var inprocServer32Key = EnvironmentRepository.OpenRegistrySubKey(classesRootKey, ProfilerLocation.InprocServer32Path))
-                {
-                    mwPkg.OnProfilerRegistering(profLoc);
-                    var stdout = Regsvr32Executor.StartInstalling(profLoc.PathOfInstalling);
-                    mwPkg.OnProfilerRegistered(stdout);
-                }
+                mwInstl.OnProfilerRegistering(profLoc);
+                var stdout = Regsvr32Executor.StartInstalling(profLoc.PathOfInstalling);
+                mwInstl.OnProfilerRegistered(stdout);
             }
         }
 
-        void InstallDefaultSource(MachineWidePackage mwPkg)
+        void InstallDefaultSource(MachineWideInstallation mwInstl)
         {
-            var packageName = "TestWindow";
+            var pkgName = "TestWindow";
             var msvsdirPath = new DirectoryInfo(@"C:\Program Files (x86)").EnumerateDirectories("Microsoft Visual Studio *").
                                                                            Where(_ => Regex.IsMatch(_.Name, @"Microsoft Visual Studio \d+\.\d+")).
                                                                            OrderByDescending(_ => _.Name).
                                                                            Select(_ => _.FullName).
                                                                            First();
-            var source = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");
-            mwPkg.OnDefaultSourceInstalling(source, packageName);
-            var stdout = PrigExecutor.StartInstalling(packageName, source);
-            mwPkg.OnDefaultSourceInstalled(stdout);
+            var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");
+            mwInstl.OnDefaultSourceInstalling(pkgName, src);
+            var stdout = PrigExecutor.StartInstalling(pkgName, src);
+            mwInstl.OnDefaultSourceInstalled(stdout);
+        }
+
+
+        public void Uninstall(MachineWideUninstallation umwPkg)
+        {
+            if (umwPkg == null)
+                throw new ArgumentNullException("umwPkg");
+
+            umwPkg.OnPreparing();
+
+            if (!HasBeenInstalled(umwPkg.Prerequisite))
+            {
+                umwPkg.OnCompleted(MachineWideProcessResults.Skipped);
+                return;
+            }
+
+            UninstallDefaultSource(umwPkg);
+            UnregisterProfiler(umwPkg);
+            UnregisterEnvironmentVariables(umwPkg);
+            UnregisterNuGetSource(umwPkg);
+
+            umwPkg.OnCompleted(MachineWideProcessResults.Completed);
+        }
+
+        void UninstallDefaultSource(MachineWideUninstallation umwPkg)
+        {
+            var pkgName = "All";
+            umwPkg.OnDefaultSourceUninstalling(pkgName);
+            var stdout = PrigExecutor.StartUninstalling(pkgName);
+            umwPkg.OnDefaultSourceUninstalled(stdout);
+        }
+
+        void UnregisterProfiler(MachineWideUninstallation umwPkg)
+        {
+            var profLocs = EnvironmentRepository.GetProfilerLocations();
+            if (profLocs == null || profLocs.Length == 0)
+                return;
+
+            foreach (var profLoc in EnvironmentRepository.GetProfilerLocations())
+            {
+                umwPkg.OnProfilerUnregistering(profLoc);
+                var stdout = Regsvr32Executor.StartUninstalling(profLoc.PathOfInstalling);
+                umwPkg.OnProfilerUnregistered(stdout);
+            }
+        }
+
+        void UnregisterEnvironmentVariables(MachineWideUninstallation umwPkg)
+        {
+            var name = EnvironmentRepository.GetPackageFolderKey();
+            umwPkg.OnEnvironmentVariableUnregistering(name);
+            EnvironmentRepository.RemovePackageFolder();
+            umwPkg.OnEnvironmentVariableUnregistered(name);
+        }
+
+        void UnregisterNuGetSource(MachineWideUninstallation umwPkg)
+        {
+            var name = "Prig Source";
+            umwPkg.OnNuGetSourceUnregistering(name);
+            var stdout = NuGetExecutor.StartUnsourcing(name);
+            umwPkg.OnNuGetSourceUnregistered(stdout);
         }
     }
 }

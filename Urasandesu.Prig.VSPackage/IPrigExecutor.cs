@@ -34,5 +34,6 @@ namespace Urasandesu.Prig.VSPackage
     interface IPrigExecutor : IProcessExecutor
     {
         string StartInstalling(string name, string source);
+        string StartUninstalling(string packageName);
     }
 }

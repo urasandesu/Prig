@@ -44,5 +44,12 @@ namespace Urasandesu.Prig.VSPackage
             var arguments = string.Format("/s /i \"{0}\"", path);
             return StartProcessWithoutShell(regsvr32, arguments, p => p.StandardOutput.ReadToEnd());
         }
+
+        public string StartUninstalling(string path)
+        {
+            var regsvr32 = EnvironmentRepository.GetRegsvr32Path();
+            var arguments = string.Format("/s /u \"{0}\"", path);
+            return StartProcessWithoutShell(regsvr32, arguments, p => p.StandardOutput.ReadToEnd());
+        }
     }
 }

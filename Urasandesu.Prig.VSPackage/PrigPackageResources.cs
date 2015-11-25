@@ -1,5 +1,5 @@
 ﻿/* 
- * File: MachinePrerequisite.cs
+ * File: PrigPackageResources.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,41 +29,33 @@
 
 
 
-using System;
+using System.Globalization;
+using System.Resources;
 
 namespace Urasandesu.Prig.VSPackage
 {
-    class MachinePrerequisite
-    {
-        public MachinePrerequisite(string packageVersion)
-        {
-            if (string.IsNullOrEmpty(packageVersion))
-                throw new ArgumentNullException("packageVersion");
+    class PrigPackageResources 
+    {        
+        static ResourceManager m_resourceManager;        
 
-            PackageVersion = packageVersion;
+        public PrigPackageResources()
+        { }
+        
+        public static ResourceManager ResourceManager 
+        {
+            get 
+            {
+                if (object.ReferenceEquals(m_resourceManager, null))
+                    m_resourceManager = new ResourceManager("Urasandesu.Prig.VSPackage.PrigPackageResources", typeof(PrigPackageResources).Assembly);
+                return m_resourceManager;
+            }
         }
 
-        public string PackageVersion { get; private set; }
+        public static CultureInfo Culture { get; set; }
 
-        public event Action Preparing;
-        public event Action<ProfilerLocation> ProfilerStatusChecking;
-
-        protected internal virtual void OnPreparing()
+        public static string GetString(string name)
         {
-            var handler = Preparing;
-            if (handler == null)
-                return;
-
-            handler();
-        }
-
-        protected internal virtual void OnProfilerStatusChecking(ProfilerLocation profLoc)
-        {
-            var handler = ProfilerStatusChecking;
-            if (handler == null)
-                return;
-
-            handler(profLoc);
+            return ResourceManager.GetString(name, Culture);
         }
     }
 }

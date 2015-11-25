@@ -41,8 +41,15 @@ namespace Urasandesu.Prig.VSPackage
         public string StartInstalling(string name, string source)
         {
             var prig = EnvironmentRepository.GetPrigPath();
-            var arguments = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, arguments, p => p.StandardOutput.ReadToEnd());
+            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
+            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+        }
+
+        public string StartUninstalling(string name)
+        {
+            var prig = EnvironmentRepository.GetPrigPath();
+            var args = string.Format("uninstall \"{0}\"", name);
+            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
         }
     }
 }

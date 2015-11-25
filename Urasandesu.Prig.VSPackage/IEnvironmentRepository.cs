@@ -38,6 +38,7 @@ namespace Urasandesu.Prig.VSPackage
         string GetPackageFolder();
         string GetPackageFolderKey();
         void SetPackageFolder(string variableValue);
+        void RemovePackageFolder();
         string GetToolsPath();
         ProfilerLocation[] GetProfilerLocations();
         string GetNuGetPath();
@@ -46,5 +47,7 @@ namespace Urasandesu.Prig.VSPackage
         RegistryKey OpenRegistryBaseKey(RegistryHive hKey, RegistryView view);
         RegistryKey OpenRegistrySubKey(RegistryKey key, string name);
         object GetRegistryValue(RegistryKey key, string name);
+        bool ExistsFile(string path);
+        string GetFileDescription(string path);
     }
 }

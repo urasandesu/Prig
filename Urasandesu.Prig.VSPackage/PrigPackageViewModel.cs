@@ -30,6 +30,12 @@
 
 
 using EnvDTE;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using NuGet.VisualStudio;
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -208,6 +214,278 @@ namespace Urasandesu.Prig.VSPackage
                     m_projectRemovedCommand = BuildUpPackageCommand(new ProjectRemovedCommand(this));
                 return m_projectRemovedCommand;
             }
+        }
+
+
+        
+        public void SetToCurrentProjectIfSupported(Project proj)
+        {
+            CurrentProject.Value = IsSupportedProject(proj) ? proj : null;
+        }
+
+        static bool IsSupportedProject(Project proj)
+        {
+            return proj != null &&
+                   (proj.Kind == VSConstantsAlternative.UICONTEXT.CSharpProject_string ||
+                    proj.Kind == VSConstantsAlternative.UICONTEXT.FSharpProject_string ||
+                    proj.Kind == VSConstantsAlternative.UICONTEXT.VBProject_string);
+        }
+
+        public void SetEditPrigIndirectionSettingsCommandVisibility(ProjectItem projItem)
+        {
+            if (projItem == null)
+            {
+                IsEditPrigIndirectionSettingsCommandVisible.Value = false;
+                return;
+            }
+
+            var ext = Path.GetExtension(projItem.Name);
+            IsEditPrigIndirectionSettingsCommandVisible.Value = string.Equals(ext, ".prig", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public bool HasEnabledTestAdapter()
+        {
+            return IsTestAdapterEnabled.Value && CurrentProject.Value != null;
+        }
+
+        public bool HasEnabledTestAdapter(Project proj)
+        {
+            return HasEnabledTestAdapter() && CurrentProject.Value.Name == proj.Name;
+        }
+
+        public Project GetCurrentProjectOrException()
+        {
+            var proj = CurrentProject.Value;
+            if (proj == null)
+                throw new InvalidOperationException(PrigPackageResources.GetString("CurrentProjectIsntSelectedMessage"));
+            return proj;
+        }
+
+
+
+        MachineWideProcesses m_mwProc;
+
+        internal void BeginMachineWideProcessProgress(MachineWideProcesses mwProc)
+        {
+            m_mwProc = mwProc;
+            Statusbar.BeginProgress(100u);
+        }
+
+        internal void ReportProfilerStatusCheckingProgress(uint prog, ProfilerLocation profLoc)
+        {
+            var msg = string.Format(PrigPackageResources.GetString("CheckingInstallationStatusForProfiler_0_MessageFormat"), profLoc.PathOfInstalling);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportNuGetPackageCreatingProgress(uint prog, string pkgName)
+        {
+            var msg = string.Format(PrigPackageResources.GetString("CreatingNugetPackage_0_MessageFormat"), pkgName);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportNuGetPackageCreatedProgress(uint prog, string stdout)
+        {
+            Statusbar.ReportProgress(stdout, prog);
+        }
+
+        internal void ReportNuGetSourceProcessingProgress(uint prog, string path, string name)
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var resName = string.Format("ProcessingNugetSource_0_As_1_{0}_MessageFormat", m_mwProc);
+            var msg = string.Format(PrigPackageResources.GetString(resName), path, name);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportNuGetSourceProcessedProgress(uint prog, string stdout)
+        {
+            Statusbar.ReportProgress(stdout, prog);
+        }
+
+        internal void ReportEnvironmentVariableProcessingProgress(uint prog, string name, string value)
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var resName = string.Format("ProcessingEnvironmentVariable_0_As_1_{0}_MessageFormat", m_mwProc);
+            var msg = string.Format(PrigPackageResources.GetString(resName), value, name);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportEnvironmentVariableProcessedProgress(uint prog)
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var resName = string.Format("ProcessedEnvironmentVariable_{0}_Message", m_mwProc);
+            var msg = PrigPackageResources.GetString(resName);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportProfilerProcessingProgress(uint prog, ProfilerLocation profLoc)
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var resName = string.Format("ProcessingProfiler_0_ToRegistry_{0}_MessageFormat", m_mwProc);
+            var msg = string.Format(PrigPackageResources.GetString(resName), profLoc.PathOfInstalling);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportProfilerProcessedProgress(uint prog, string stdout)
+        {
+            Statusbar.ReportProgress(stdout, prog);
+        }
+
+        internal void ReportDefaultSourceProcessingProgress(uint prog, string pkgName, string src)
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var resName = string.Format("ProcessingDefaultSource_0_AsPackage_1_{0}_MessageFormat", m_mwProc);
+            var msg = string.Format(PrigPackageResources.GetString(resName), src, pkgName);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportDefaultSourceProcessedProgress(uint prog, string stdout)
+        {
+            Statusbar.ReportProgress(stdout, prog);
+        }
+
+        static string GetSkippedMachineWideProcessMessage(MachineWideProcesses mwProc, SkippedReasons reason)
+        {
+            var resName = string.Format("SkippedMachineWideProcess_{0}_{1}_Message", mwProc, reason);
+            return PrigPackageResources.GetString(resName);
+        }
+
+        internal void ShowSkippedMachineWideProcessMessage(SkippedReasons reason)
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var msg = GetSkippedMachineWideProcessMessage(m_mwProc, reason);
+            ShowMessageBox(msg, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
+        }
+
+        internal void EndSkippedMachineWideProcessProgress(SkippedReasons reason)
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var msg = GetSkippedMachineWideProcessMessage(m_mwProc, reason);
+            Statusbar.EndProgress();
+            Statusbar.Text.Value = msg;
+            m_mwProc = MachineWideProcesses.None;
+        }
+
+        static string GetCompletedMachineWideProcessMessage(MachineWideProcesses mwProc)
+        {
+            var resName = string.Format("CompletedMachineWideProcess_{0}_Message", mwProc);
+            return PrigPackageResources.GetString(resName);
+        }
+
+        internal bool ConfirmRestartingVisualStudioToTakeEffect()
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var msg = GetCompletedMachineWideProcessMessage(m_mwProc);
+            var cfmMsg = string.Format(PrigPackageResources.GetString("_0_YouMustRestartVisualStudioForTheseChangesToTakeEffectMessageFormat"), msg);
+            var ret = ShowMessageBox(cfmMsg, OLEMSGBUTTON.OLEMSGBUTTON_YESNO, OLEMSGICON.OLEMSGICON_WARNING);
+            return ret == VSConstants.MessageBoxResult.IDYES;
+        }
+
+        internal void EndCompletedMachineWideProcessProgress()
+        {
+            Debug.Assert(m_mwProc != MachineWideProcesses.None);
+            var msg = GetCompletedMachineWideProcessMessage(m_mwProc);
+            Statusbar.EndProgress();
+            Statusbar.Text.Value = msg;
+            m_mwProc = MachineWideProcesses.None;
+        }
+
+        internal void ShowVisualStudioHasNotBeenElevatedYetMessage()
+        {
+            var msg = PrigPackageResources.GetString("VisualStudioHasNotBeenElevatedYetMessage");
+            ShowMessageBox(msg, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
+        }
+
+
+
+        ProjectWideProcesses m_pwProc;
+
+        internal void BeginProjectWideProcessProgress(ProjectWideProcesses pwProc)
+        {
+            m_pwProc = pwProc;
+            Statusbar.BeginProgress(100u);
+        }
+
+        internal void ReportPackagePreparingProgress(uint prog)
+        {
+            var msg = PrigPackageResources.GetString("CheckingCurrentProjectsPackagesMessage");
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportPackageInstallingProgress(uint prog, IVsPackageMetadata metadata)
+        {
+            var msg = string.Format(PrigPackageResources.GetString("Installing_0_MessageFormat"), metadata.Id);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportPackageInstalledProgress(uint prog, IVsPackageMetadata metadata)
+        {
+            var msg = string.Format(PrigPackageResources.GetString("Installed_0_MessageFormat"), metadata.Id);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportPackageReferenceAddedProgress(uint prog, IVsPackageMetadata metadata)
+        {
+            var msg = string.Format(PrigPackageResources.GetString("ReferenceAdded_0_MessageFormat"), metadata.Id);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        internal void ReportProcessingProjectWideProcessProgress(uint prog, string include)
+        {
+            Debug.Assert(m_pwProc != ProjectWideProcesses.None);
+            var resName = string.Format("ProcessingProjectWideProcess_0_{0}_MessageFormat", m_pwProc);
+            var msg = string.Format(PrigPackageResources.GetString(resName), include);
+            Statusbar.ReportProgress(msg, prog);
+        }
+
+        static string GetSkippedProjectWideProcessMessage(ProjectWideProcesses pwProc, SkippedReasons reason, string include)
+        {
+            var resName = string.Format("SkippedProjectWideProcessFor_0_{0}_{1}_MessageFormat", pwProc, reason);
+            return string.Format(PrigPackageResources.GetString(resName), include);
+        }
+
+        internal void EndSkippedProjectWideProcessProgress(SkippedReasons reason, string include)
+        {
+            Debug.Assert(m_pwProc != ProjectWideProcesses.None);
+            var msg = GetSkippedProjectWideProcessMessage(m_pwProc, reason, include);
+            Statusbar.EndProgress();
+            Statusbar.Text.Value = msg;
+            m_pwProc = ProjectWideProcesses.None;
+        }
+
+        internal void ShowSkippedProjectWideProcessMessage(SkippedReasons reason, string include)
+        {
+            Debug.Assert(m_pwProc != ProjectWideProcesses.None);
+            var msg = GetSkippedProjectWideProcessMessage(m_pwProc, reason, include);
+            ShowMessageBox(msg, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_WARNING);
+        }
+
+        static string GetCompletedProjectWideProcessMessage(ProjectWideProcesses pwProc, string include)
+        {
+            var resName = string.Format("CompletedProjectWideProcessFor_0_{0}_MessageFormat", pwProc);
+            return string.Format(PrigPackageResources.GetString(resName), include);
+        }
+
+        internal void EndCompletedProjectWideProcessProgress(string include)
+        {
+            Debug.Assert(m_pwProc != ProjectWideProcesses.None);
+            var msg = GetCompletedProjectWideProcessMessage(m_pwProc, include);
+            Statusbar.EndProgress();
+            Statusbar.Text.Value = msg;
+            m_pwProc = ProjectWideProcesses.None;
+        }
+
+        internal void ShowCompletedProjectWideProcessMessage(string include)
+        {
+            Debug.Assert(m_pwProc != ProjectWideProcesses.None);
+            var msg = GetCompletedProjectWideProcessMessage(m_pwProc, include);
+            ShowMessageBox(msg, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGICON.OLEMSGICON_INFO);
+        }
+
+        internal bool ConfirmRemovingPrigAssembly(string deletionalInclude)
+        {
+            var msg = string.Format(PrigPackageResources.GetString("AreYouSureYouWantToRemovePrigAssembly_0_MessageFormat"), deletionalInclude);
+            var ret = ShowMessageBox(msg, OLEMSGBUTTON.OLEMSGBUTTON_YESNO, OLEMSGICON.OLEMSGICON_QUERY);
+            return ret == VSConstants.MessageBoxResult.IDYES;
         }
     }
 }

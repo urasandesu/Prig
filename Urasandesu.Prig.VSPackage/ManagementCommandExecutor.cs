@@ -39,7 +39,7 @@ namespace Urasandesu.Prig.VSPackage
 {
     class ManagementCommandExecutor : IManagementCommandExecutor
     {
-        public void Execute(ManagementCommandInfo mci)
+        public Collection<PSObject> Execute(ManagementCommandInfo mci)
         {
             if (mci == null)
                 throw new ArgumentNullException("mci");
@@ -48,9 +48,11 @@ namespace Urasandesu.Prig.VSPackage
 
             var command = mci.Command;
             var targetProj = mci.TargetProject;
-            ExecuteCommand(command, targetProj);
+            var results = ExecuteCommand(command, targetProj);
 
             mci.OnCommandExecuted();
+
+            return results;
         }
 
         protected virtual Runspace NewRunspace()
@@ -58,17 +60,16 @@ namespace Urasandesu.Prig.VSPackage
             return RunspaceFactory.CreateRunspace();
         }
 
-        void ExecuteCommand(string command, Project proj)
+        Collection<PSObject> ExecuteCommand(string command, Project proj)
         {
             using (var runspace = NewRunspace())
             {
                 runspace.Open();
                 if (proj != null)
                     runspace.SessionStateProxy.SetVariable("Project", proj);
-                var results = default(Collection<PSObject>);
                 command = "Set-ExecutionPolicy RemoteSigned -Scope Process -Force\r\n" + command;
                 using (var pipeline = runspace.CreatePipeline(command, false))
-                    results = pipeline.Invoke();
+                    return pipeline.Invoke();
             }
         }
     }

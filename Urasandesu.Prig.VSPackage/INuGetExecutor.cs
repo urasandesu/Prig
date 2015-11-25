@@ -34,6 +34,8 @@ namespace Urasandesu.Prig.VSPackage
     interface INuGetExecutor : IProcessExecutor
     {
         string StartPacking(string nuspec, string outputDirectory);
+        bool HaveAddedSources(string name);
         string StartSourcing(string name, string source);
+        string StartUnsourcing(string name);
     }
 }

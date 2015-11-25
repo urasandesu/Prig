@@ -43,19 +43,19 @@ namespace Urasandesu.Prig.VSPackage
 
         protected PrigPackageViewModel ViewModel { get { return (PrigPackageViewModel)PackageViewModel; } }
 
-        protected PrigPackageCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        protected PrigPackageCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
-        protected PrigPackageCommand(PrigPackageViewModel viewModel, IObservable<bool> canExecuteSource)
-            : base(viewModel, canExecuteSource)
+        protected PrigPackageCommand(PrigPackageViewModel vm, IObservable<bool> canExecuteSource)
+            : base(vm, canExecuteSource)
         { }
     }
 
     class AddPrigAssemblyForMSCorLibCommand : PrigPackageCommand
     {
-        public AddPrigAssemblyForMSCorLibCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public AddPrigAssemblyForMSCorLibCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -66,8 +66,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class AddPrigAssemblyCommand : PrigPackageCommand
     {
-        public AddPrigAssemblyCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public AddPrigAssemblyCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -78,8 +78,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class EnableTestAdapterCommand : PrigPackageCommand
     {
-        public EnableTestAdapterCommand(PrigPackageViewModel viewModel, IObservable<bool> canExecuteSource)
-            : base(viewModel, canExecuteSource)
+        public EnableTestAdapterCommand(PrigPackageViewModel vm, IObservable<bool> canExecuteSource)
+            : base(vm, canExecuteSource)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -90,8 +90,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class TestAdapterBeforeQueryStatusCommand : PrigPackageCommand
     {
-        public TestAdapterBeforeQueryStatusCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public TestAdapterBeforeQueryStatusCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void OnBegin(object parameter) { }
@@ -106,8 +106,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class DisableTestAdapterCommand : PrigPackageCommand
     {
-        public DisableTestAdapterCommand(PrigPackageViewModel viewModel, IObservable<bool> canExecuteSource)
-            : base(viewModel, canExecuteSource)
+        public DisableTestAdapterCommand(PrigPackageViewModel vm, IObservable<bool> canExecuteSource)
+            : base(vm, canExecuteSource)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -118,8 +118,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class RegisterPrigCommand : PrigPackageCommand
     {
-        public RegisterPrigCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public RegisterPrigCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -130,8 +130,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class UnregisterPrigCommand : PrigPackageCommand
     {
-        public UnregisterPrigCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public UnregisterPrigCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -142,8 +142,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class EditPrigIndirectionSettingsCommand : PrigPackageCommand
     {
-        public EditPrigIndirectionSettingsCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public EditPrigIndirectionSettingsCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -154,8 +154,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class RemovePrigAssemblyCommand : PrigPackageCommand
     {
-        public RemovePrigAssemblyCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public RemovePrigAssemblyCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -166,8 +166,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class EditPrigIndirectionSettingsBeforeQueryStatusCommand : PrigPackageCommand
     {
-        public EditPrigIndirectionSettingsBeforeQueryStatusCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public EditPrigIndirectionSettingsBeforeQueryStatusCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -178,8 +178,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class OnBuildDoneCommand : PrigPackageCommand
     {
-        public OnBuildDoneCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public OnBuildDoneCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)
@@ -190,8 +190,8 @@ namespace Urasandesu.Prig.VSPackage
 
     class ProjectRemovedCommand : PrigPackageCommand
     {
-        public ProjectRemovedCommand(PrigPackageViewModel viewModel)
-            : base(viewModel)
+        public ProjectRemovedCommand(PrigPackageViewModel vm)
+            : base(vm)
         { }
 
         protected override void InvokeCore(object parameter)

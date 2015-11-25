@@ -34,5 +34,6 @@ namespace Urasandesu.Prig.VSPackage
     interface IRegsvr32Executor : IProcessExecutor
     {
         string StartInstalling(string path);
+        string StartUninstalling(string path);
     }
 }

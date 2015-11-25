@@ -31,6 +31,7 @@
 
 using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -52,6 +53,12 @@ namespace Urasandesu.Prig.VSPackage
         {
             Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue);
             Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue, EnvironmentVariableTarget.User);
+        }
+
+        public void RemovePackageFolder()
+        {
+            Environment.SetEnvironmentVariable(GetPackageFolderKey(), null, EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable(GetPackageFolderKey(), null);
         }
 
         public string GetToolsPath()
@@ -79,7 +86,7 @@ namespace Urasandesu.Prig.VSPackage
         public string GetNuGetPath()
         {
             var toolsPath = GetToolsPath();
-            return Path.Combine(toolsPath, "nuget.exe");
+            return Path.Combine(toolsPath, "NuGet.exe");
         }
 
         public string GetRegsvr32Path()
@@ -106,6 +113,16 @@ namespace Urasandesu.Prig.VSPackage
         public object GetRegistryValue(RegistryKey key, string name)
         {
             return key.GetValue(name);
+        }
+
+        public bool ExistsFile(string path)
+        {
+            return File.Exists(path);
+        }
+
+        public string GetFileDescription(string path)
+        {
+            return FileVersionInfo.GetVersionInfo(path).FileDescription;
         }
     }
 }

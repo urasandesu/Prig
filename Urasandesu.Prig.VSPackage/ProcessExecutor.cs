@@ -65,8 +65,9 @@ namespace Urasandesu.Prig.VSPackage
             if (p.ExitCode == 0)
                 return;
 
-            var msg = string.Format("The process '{0}' exited with unsuccessful status. Code:'{1}', Message:'{2}', Error:'{3}'",
+            var msg = string.Format("The process '{0}' with arguments '{1}' exited with unsuccessful status. Code:'{2}', Message:'{3}', Error:'{4}'",
                                     p.StartInfo.FileName,
+                                    p.StartInfo.Arguments,
                                     p.ExitCode,
                                     p.StandardOutput.ReadToEnd(),
                                     p.StandardError.ReadToEnd());

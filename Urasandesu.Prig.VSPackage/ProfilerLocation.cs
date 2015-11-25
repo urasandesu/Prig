@@ -30,10 +30,12 @@
 
 
 using Microsoft.Win32;
+using System;
+using System.Text;
 
 namespace Urasandesu.Prig.VSPackage
 {
-    class ProfilerLocation
+    class ProfilerLocation : IEquatable<ProfilerLocation>
     {
         public static readonly string InprocServer32Path = @"CLSID\{532C1F05-F8F3-4FBA-8724-699A31756ABD}\InprocServer32";
         public static readonly string ExpectedFileDescriptionFormat = "Prig Profiler {0} Type Library";
@@ -50,6 +52,48 @@ namespace Urasandesu.Prig.VSPackage
         public static string GetExpectedFileDescription(string ver)
         {
             return string.Format(ExpectedFileDescriptionFormat, ver);
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append("ProfilerLocation [");
+            sb.Append("RegistryView="); sb.Append(RegistryView);
+            sb.Append(", "); sb.Append("PathOfInstalling="); sb.Append(PathOfInstalling);
+            sb.Append("]");
+            return sb.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ((IEquatable<ProfilerLocation>)this).Equals(obj as ProfilerLocation);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 0;
+            hashCode ^= RegistryView.GetHashCode();
+            hashCode ^= PathOfInstalling == null ? 0 : PathOfInstalling.GetHashCode();
+            return hashCode;
+        }
+
+        public bool Equals(ProfilerLocation other)
+        {
+            if (object.ReferenceEquals(other, null))
+                return false;
+
+            return RegistryView == other.RegistryView && 
+                   PathOfInstalling == other.PathOfInstalling;
+        }
+
+        public static bool operator ==(ProfilerLocation lhs, ProfilerLocation rhs)
+        {
+            return object.ReferenceEquals(lhs, null) ? false : lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(ProfilerLocation lhs, ProfilerLocation rhs)
+        {
+            return !(lhs == rhs);
         }
     }
 }

@@ -36,18 +36,21 @@ namespace Urasandesu.Prig.VSPackage.Infrastructure
 {
     public class StatusbarViewModel
     {
-        public void BeginProgress()
+        uint m_maximum;
+
+        public void BeginProgress(uint maximum)
         {
-            ReportProgress(string.Empty, 0u, 0u);
+            m_maximum = maximum;
+            ReportProgress(string.Empty, 0u);
         }
 
-        public void ReportProgress(string label, uint value, uint maximum)
+        public void ReportProgress(string label, uint value)
         {
             var progressState = new ProgressState();
             progressState.IsInProgress = true;
             progressState.Label = label;
             progressState.Value = value;
-            progressState.Maximum = maximum;
+            progressState.Maximum = m_maximum;
             ProgressState.Value = progressState;
         }
 

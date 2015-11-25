@@ -1,5 +1,5 @@
 ﻿/* 
- * File: MachinePrerequisite.cs
+ * File: SkippedReasons.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,41 +29,12 @@
 
 
 
-using System;
-
 namespace Urasandesu.Prig.VSPackage
 {
-    class MachinePrerequisite
+    enum SkippedReasons
     {
-        public MachinePrerequisite(string packageVersion)
-        {
-            if (string.IsNullOrEmpty(packageVersion))
-                throw new ArgumentNullException("packageVersion");
-
-            PackageVersion = packageVersion;
-        }
-
-        public string PackageVersion { get; private set; }
-
-        public event Action Preparing;
-        public event Action<ProfilerLocation> ProfilerStatusChecking;
-
-        protected internal virtual void OnPreparing()
-        {
-            var handler = Preparing;
-            if (handler == null)
-                return;
-
-            handler();
-        }
-
-        protected internal virtual void OnProfilerStatusChecking(ProfilerLocation profLoc)
-        {
-            var handler = ProfilerStatusChecking;
-            if (handler == null)
-                return;
-
-            handler(profLoc);
-        }
+        AlreadyRegistered,
+        CanceledByUser,
+        NotRegisteredYet
     }
 }

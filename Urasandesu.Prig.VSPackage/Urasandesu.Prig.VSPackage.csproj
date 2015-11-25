@@ -210,7 +210,10 @@
     <Compile Include="IProcessExecutor.cs" />
     <Compile Include="INuGetExecutor.cs" />
     <Compile Include="IPrigExecutor.cs" />
+    <Compile Include="MachineWideProcesses.cs" />
     <Compile Include="PrigExecutor.cs" />
+    <Compile Include="PrigPackageResources.cs" />
+    <Compile Include="ProjectWideProcesses.cs" />
     <Compile Include="Regsvr32Executor.cs" />
     <Compile Include="IRegsvr32Executor.cs" />
     <Compile Include="NuGetExecutor.cs" />
@@ -221,7 +224,7 @@
     <Compile Include="MachineWideInstaller.cs" />
     <Compile Include="MachineWidePackage.cs" />
     <Compile Include="MachinePrerequisite.cs" />
-    <Compile Include="RegistrationResults.cs" />
+    <Compile Include="MachineWideProcessResults.cs" />
     <Compile Include="ProfilerLocation.cs" />
     <Compile Include="ProjectWideInstaller.cs" />
     <Compile Include="PrigActivityLog.cs" />
@@ -229,21 +232,23 @@
     <Compile Include="PrigPackageController.cs" />
     <Compile Include="IProjectWideInstaller.cs" />
     <Compile Include="PrigPackageViewModel.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="PrigPackage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PkgCmdID.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="PrigPackage.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PkgCmdID.cs" />
+    <Compile Include="SkippedReasons.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="PrigPackageResources.resx" />
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
@@ -392,8 +397,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="tools\NUnitVisualStudioTestAdapter-2.0.0.nupkg">
+    <Content Include="tools\NUnitTestAdapterForPrig.2.0.0.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

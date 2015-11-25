@@ -60,14 +60,6 @@ try {
 
 
 try {
-    cpack | Out-Null
-} catch [System.Management.Automation.CommandNotFoundException] {
-    Write-Error "You have to install Chocolatey. For more information, please see also README.md."
-    exit -915763295
-}
-
-
-try {
     nant -help | Out-Null
 } catch [System.Management.Automation.CommandNotFoundException] {
     Write-Error "You have to install NAnt. For more information, please see also README.md."
@@ -83,7 +75,7 @@ switch ($PsCmdlet.ParameterSetName) {
     'Package' { 
         $curDir = $PWD.Path
         if ($BuildTarget -ne "Clean") {
-            $nuspecPath = [System.IO.Path]::Combine($curDir, 'Chocolatey\tools\NuGet\Prig.nuspec.hedge')
+            $nuspecPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage\tools\NuGet\Prig.nuspec')
             $nuspec = [xml](Get-Content $nuspecPath)
 
             $resxPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage\Resources.resx')
@@ -182,13 +174,25 @@ switch ($PsCmdlet.ParameterSetName) {
             Set-Location ([System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage'))
             [System.Environment]::CurrentDirectory = $PWD
 
+            if (![IO.Directory]::Exists("lib")) {
+                New-Item "lib" -ItemType Directory
+            }
+            if (![IO.Directory]::Exists("tools")) {
+                New-Item "tools" -ItemType Directory
+            }
+            if (![IO.Directory]::Exists("tools\x64")) {
+                New-Item "tools\x64" -ItemType Directory
+            }
+            if (![IO.Directory]::Exists("tools\x86")) {
+                New-Item "tools\x86" -ItemType Directory
+            }
             Copy-Item "..\Release\AnyCPU\Urasandesu.NAnonym.dll" "lib" -Force
             Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.0404.dll" "lib" -Force
             Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.0804.dll" "lib" -Force
             Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.1205.dll" "lib" -Force
             Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.dll" "lib" -Force
             Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Framework.dll" "lib" -Force
-            Copy-Item "..\NUnitTestAdapter\package\NUnitVisualStudioTestAdapter-*.nupkg" "tools" -Force
+            Copy-Item "..\NUnitTestAdapter\package\NUnitTestAdapterForPrig.*.nupkg" "tools" -Force
             Copy-Item "..\Release\x64\Urasandesu.Prig.dll" "tools\x64" -Force
             Copy-Item "..\Release\x86\Urasandesu.Prig.dll" "tools\x86" -Force
             Copy-Item "..\Release\x86\prig.exe" "tools" -Force

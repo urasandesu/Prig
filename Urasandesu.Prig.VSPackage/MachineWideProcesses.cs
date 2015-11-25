@@ -1,5 +1,5 @@
 ﻿/* 
- * File: RegistrationResults.cs
+ * File: MachineWideProcesses.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -31,10 +31,10 @@
 
 namespace Urasandesu.Prig.VSPackage
 {
-    public enum RegistrationResults
+    enum MachineWideProcesses
     {
         None,
-        Skipped,
-        Completed
+        Installing,
+        Uninstalling
     }
 }

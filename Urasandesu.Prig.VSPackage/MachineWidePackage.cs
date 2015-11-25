@@ -33,14 +33,14 @@ using System;
 
 namespace Urasandesu.Prig.VSPackage
 {
-    class MachineWidePackage
+    abstract class MachineWidePackage
     {
-        public MachineWidePackage(string pkgVer)
+        public MachineWidePackage(string packageVersion)
         {
-            if (string.IsNullOrEmpty(pkgVer))
-                throw new ArgumentNullException("pkgVer");
+            if (string.IsNullOrEmpty(packageVersion))
+                throw new ArgumentNullException("packageVersion");
 
-            PackageVersion = pkgVer;
+            PackageVersion = packageVersion;
         }
 
         public string PackageVersion { get; private set; }
@@ -56,16 +56,44 @@ namespace Urasandesu.Prig.VSPackage
             }
         }
 
-        public event Action RegistrationPreparing
+        public event Action Preparing
         {
-            add { Prerequisite.RegistrationPreparing += value; }
-            remove { Prerequisite.RegistrationPreparing -= value; }
+            add { Prerequisite.Preparing += value; }
+            remove { Prerequisite.Preparing -= value; }
         }
-        public event Action<ProfilerLocation> ProfilerRegistrationStatusChecking
+        public event Action<ProfilerLocation> ProfilerStatusChecking
         {
-            add { Prerequisite.ProfilerRegistrationStatusChecking += value; }
-            remove { Prerequisite.ProfilerRegistrationStatusChecking -= value; }
+            add { Prerequisite.ProfilerStatusChecking += value; }
+            remove { Prerequisite.ProfilerStatusChecking -= value; }
         }
+        public event Action<MachineWideProcessResults> Completed;
+
+        protected internal virtual void OnPreparing()
+        {
+            Prerequisite.OnPreparing();
+        }
+
+        protected internal virtual void OnProfilerStatusChecking(ProfilerLocation profLoc)
+        {
+            Prerequisite.OnProfilerStatusChecking(profLoc);
+        }
+
+        protected internal virtual void OnCompleted(MachineWideProcessResults result)
+        {
+            var handler = Completed;
+            if (handler == null)
+                return;
+
+            handler(result);
+        }
+    }
+
+    class MachineWideInstallation : MachineWidePackage
+    {
+        public MachineWideInstallation(string packageVersion)
+            : base(packageVersion)
+        { }
+
         public event Action<string> NuGetPackageCreating;
         public event Action<string> NuGetPackageCreated;
         public event Action<string, string> NuGetSourceRegistering;
@@ -76,17 +104,6 @@ namespace Urasandesu.Prig.VSPackage
         public event Action<string> ProfilerRegistered;
         public event Action<string, string> DefaultSourceInstalling;
         public event Action<string> DefaultSourceInstalled;
-        public event Action<RegistrationResults> RegistrationCompleted;
-
-        protected internal virtual void OnRegistrationPreparing()
-        {
-            Prerequisite.OnRegistrationPreparing();
-        }
-
-        protected internal virtual void OnProfilerInstallationStatusChecking(ProfilerLocation profLoc)
-        {
-            Prerequisite.OnProfilerInstallationStatusChecking(profLoc);
-        }
 
         protected internal virtual void OnNuGetPackageCreating(string packageName)
         {
@@ -106,13 +123,13 @@ namespace Urasandesu.Prig.VSPackage
             handler(stdout);
         }
 
-        protected internal virtual void OnNuGetSourceRegistering(string toolsPath, string name)
+        protected internal virtual void OnNuGetSourceRegistering(string name, string toolsPath)
         {
             var handler = NuGetSourceRegistering;
             if (handler == null)
                 return;
 
-            handler(toolsPath, name);
+            handler(name, toolsPath);
         }
 
         protected internal virtual void OnNuGetSourceRegistered(string stdout)
@@ -124,22 +141,22 @@ namespace Urasandesu.Prig.VSPackage
             handler(stdout);
         }
 
-        protected internal virtual void OnEnvironmentVariableRegistering(string variableValue, string variableName)
+        protected internal virtual void OnEnvironmentVariableRegistering(string variableName, string variableValue)
         {
             var handler = EnvironmentVariableRegistering;
             if (handler == null)
                 return;
 
-            handler(variableValue, variableName);
+            handler(variableName, variableValue);
         }
 
-        protected internal virtual void OnEnvironmentVariableRegistered(string variableValue, string variableName)
+        protected internal virtual void OnEnvironmentVariableRegistered(string variableName, string variableValue)
         {
             var handler = EnvironmentVariableRegistered;
             if (handler == null)
                 return;
 
-            handler(variableValue, variableName);
+            handler(variableName, variableValue);
         }
 
         protected internal virtual void OnProfilerRegistering(ProfilerLocation profLoc)
@@ -160,13 +177,13 @@ namespace Urasandesu.Prig.VSPackage
             handler(stdout);
         }
 
-        protected internal virtual void OnDefaultSourceInstalling(string source, string packageName)
+        protected internal virtual void OnDefaultSourceInstalling(string packageName, string source)
         {
             var handler = DefaultSourceInstalling;
             if (handler == null)
                 return;
 
-            handler(source, packageName);
+            handler(packageName, source);
         }
 
         protected internal virtual void OnDefaultSourceInstalled(string stdout)
@@ -177,14 +194,93 @@ namespace Urasandesu.Prig.VSPackage
 
             handler(stdout);
         }
+    }
 
-        protected internal virtual void OnRegistrationCompleted(RegistrationResults result)
+    class MachineWideUninstallation : MachineWidePackage
+    {
+        public MachineWideUninstallation(string packageVersion)
+            : base(packageVersion)
+        { }
+
+        public event Action<string> DefaultSourceUninstalling;
+        public event Action<string> DefaultSourceUninstalled;
+        public event Action<ProfilerLocation> ProfilerUnregistering;
+        public event Action<string> ProfilerUnregistered;
+        public event Action<string> EnvironmentVariableUnregistering;
+        public event Action<string> EnvironmentVariableUnregistered;
+        public event Action<string> NuGetSourceUnregistering;
+        public event Action<string> NuGetSourceUnregistered;
+
+        protected internal virtual void OnDefaultSourceUninstalling(string packageName)
         {
-            var handler = RegistrationCompleted;
+            var handler = DefaultSourceUninstalling;
             if (handler == null)
                 return;
 
-            handler(result);
+            handler(packageName);
+        }
+
+        protected internal virtual void OnDefaultSourceUninstalled(string stdout)
+        {
+            var handler = DefaultSourceUninstalled;
+            if (handler == null)
+                return;
+
+            handler(stdout);
+        }
+
+        protected internal virtual void OnProfilerUnregistering(ProfilerLocation profLoc)
+        {
+            var handler = ProfilerUnregistering;
+            if (handler == null)
+                return;
+
+            handler(profLoc);
+        }
+
+        protected internal virtual void OnProfilerUnregistered(string stdout)
+        {
+            var handler = ProfilerUnregistered;
+            if (handler == null)
+                return;
+
+            handler(stdout);
+        }
+
+        protected internal virtual void OnEnvironmentVariableUnregistering(string variableName)
+        {
+            var handler = EnvironmentVariableUnregistering;
+            if (handler == null)
+                return;
+
+            handler(variableName);
+        }
+
+        protected internal virtual void OnEnvironmentVariableUnregistered(string variableName)
+        {
+            var handler = EnvironmentVariableUnregistered;
+            if (handler == null)
+                return;
+
+            handler(variableName);
+        }
+
+        protected internal virtual void OnNuGetSourceUnregistering(string name)
+        {
+            var handler = NuGetSourceUnregistering;
+            if (handler == null)
+                return;
+
+            handler(name);
+        }
+
+        protected internal virtual void OnNuGetSourceUnregistered(string stdout)
+        {
+            var handler = NuGetSourceUnregistered;
+            if (handler == null)
+                return;
+
+            handler(stdout);
         }
     }
 }
