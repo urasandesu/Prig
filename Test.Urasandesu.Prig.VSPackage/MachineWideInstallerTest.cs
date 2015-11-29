@@ -38,22 +38,16 @@ using Ploeh.AutoFixture.AutoMoq;
 using System;
 using System.Collections;
 using System.Linq;
-using Test.Urasandesu.Prig.VSPackage.Mixins.Moq;
-using Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Moq;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture;
 using Urasandesu.Prig.VSPackage;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Microsoft.Win32;
 
 namespace Test.Urasandesu.Prig.VSPackage
 {
     [TestFixture]
     class MachineWideInstallerTest
     {
-        static readonly RegistryKey DummyX86ClassesRootKey = Registry.Users;
-        static readonly RegistryKey DummyX86InProcServer32Key = Registry.LocalMachine;
-        static readonly RegistryKey DummyX64ClassesRootKey = Registry.CurrentUser;
-        static readonly RegistryKey DummyX64InProcServer32Key = Registry.CurrentConfig;
-
-
-
         [TestCaseSource(typeof(TestSourceForHasBeenInstalled), "TestCases")]
         [Test]
         public bool HasBeenInstalled_(MachinePrerequisite machinePreq, IFixture fixture)
@@ -102,8 +96,8 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[0].RegistryView, 
-                                ClassesRootKey = DummyX86ClassesRootKey, 
-                                InProcServer32Key = DummyX86InProcServer32Key, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX86ClassesRootKey, 
+                                InProcServer32Key = RegistryKeyMixin.DummyX86InProcServer32Key, 
                                 ProfilerPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\x86\Urasandesu.Prig.dll", 
                                 ProfilerExistence = true, 
                                 ProfilerFileDescription = "Prig Profiler 2.0.0 Type Library" 
@@ -111,14 +105,14 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[1].RegistryView, 
-                                ClassesRootKey = DummyX64ClassesRootKey, 
-                                InProcServer32Key = DummyX64InProcServer32Key, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX64ClassesRootKey, 
+                                InProcServer32Key = RegistryKeyMixin.DummyX64InProcServer32Key, 
                                 ProfilerPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\x64\Urasandesu.Prig.dll", 
                                 ProfilerExistence = true, 
                                 ProfilerFileDescription = "Prig Profiler 2.0.0 Type Library" 
                             } 
                         };
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(true).SetName("should_return_true_if_all_profilers_have_already_been_installed");
             }
@@ -132,7 +126,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                 {
                     var profLocs = default(ProfilerLocation[]);
                     var @params = new ParameterForHasBeenInstalled[0];
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(false).SetName("should_return_false_if_profiler_locations_are_null");
             }
@@ -146,7 +140,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                 {
                     var profLocs = new ProfilerLocation[0];
                     var @params = new ParameterForHasBeenInstalled[0];
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(false).SetName("should_return_false_if_profiler_locations_are_empty");
             }
@@ -171,7 +165,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[0].RegistryView, 
-                                ClassesRootKey = DummyX86ClassesRootKey, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX86ClassesRootKey, 
                                 InProcServer32Key = null, 
                                 SetupGetRegistryValue = DoesNotCall, 
                                 SetupExistsFile = DoesNotCall, 
@@ -186,7 +180,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                                 SetupGetFileDescription = DoesNotCall
                             } 
                         };
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(false).SetName("should_return_false_if_profiler_is_not_registered_to_regstry");
             }
@@ -211,8 +205,8 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[0].RegistryView, 
-                                ClassesRootKey = DummyX86ClassesRootKey, 
-                                InProcServer32Key = DummyX86InProcServer32Key, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX86ClassesRootKey, 
+                                InProcServer32Key = RegistryKeyMixin.DummyX86InProcServer32Key, 
                                 ProfilerPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\x86\Urasandesu.Prig.dll", 
                                 ProfilerExistence = false, 
                                 SetupGetFileDescription = DoesNotCall
@@ -226,7 +220,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                                 SetupGetFileDescription = DoesNotCall
                             } 
                         };
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(false).SetName("should_return_false_if_profiler_is_not_found_in_the_location_that_is_specified_by_the_registry");
             }
@@ -251,8 +245,8 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[0].RegistryView, 
-                                ClassesRootKey = DummyX86ClassesRootKey, 
-                                InProcServer32Key = DummyX86InProcServer32Key, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX86ClassesRootKey, 
+                                InProcServer32Key = RegistryKeyMixin.DummyX86InProcServer32Key, 
                                 ProfilerPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\x86\Urasandesu.Prig.dll", 
                                 ProfilerExistence = true, 
                                 ProfilerFileDescription = "Prig Profiler 1.0.0 Type Library" 
@@ -266,7 +260,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                                 SetupGetFileDescription = DoesNotCall
                             } 
                         };
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(false).SetName("should_return_false_if_the_file_description_of_the_profiler_is_mismatch_with_expected");
             }
@@ -291,8 +285,8 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[0].RegistryView, 
-                                ClassesRootKey = DummyX86ClassesRootKey, 
-                                InProcServer32Key = DummyX86InProcServer32Key, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX86ClassesRootKey, 
+                                InProcServer32Key = RegistryKeyMixin.DummyX86InProcServer32Key, 
                                 ProfilerPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\x86\Urasandesu.Prig.dll", 
                                 ProfilerExistence = true, 
                                 ProfilerFileDescription = "Prig Profiler 1.0.0 Type Library" 
@@ -306,7 +300,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                                 SetupGetFileDescription = DoesNotCall
                             } 
                         };
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(false).SetName("should_return_false_if_there_is_mismatch_between_registered_profilers_x86");
             }
@@ -330,8 +324,8 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[0].RegistryView, 
-                                ClassesRootKey = DummyX86ClassesRootKey, 
-                                InProcServer32Key = DummyX86InProcServer32Key, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX86ClassesRootKey, 
+                                InProcServer32Key = RegistryKeyMixin.DummyX86InProcServer32Key, 
                                 ProfilerPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\x86\Urasandesu.Prig.dll", 
                                 ProfilerExistence = true, 
                                 ProfilerFileDescription = "Prig Profiler 2.0.0 Type Library" 
@@ -339,14 +333,14 @@ namespace Test.Urasandesu.Prig.VSPackage
                             new ParameterForHasBeenInstalled() 
                             { 
                                 RegistryView = profLocs[1].RegistryView, 
-                                ClassesRootKey = DummyX64ClassesRootKey, 
-                                InProcServer32Key = DummyX64InProcServer32Key, 
+                                ClassesRootKey = RegistryKeyMixin.DummyX64ClassesRootKey, 
+                                InProcServer32Key = RegistryKeyMixin.DummyX64InProcServer32Key, 
                                 ProfilerPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\x64\Urasandesu.Prig.dll", 
                                 ProfilerExistence = true, 
                                 ProfilerFileDescription = "Prig Profiler 1.0.0 Type Library" 
                             } 
                         };
-                    fixture.Inject(MockEnvironmentRepositoryForHasBeenInstalled(profLocs, @params));
+                    fixture.Inject(MockEnvironmentRepository(profLocs, @params));
                 }
                 return new TestCaseData(machinePreq, fixture).Returns(false).SetName("should_return_false_if_there_is_mismatch_between_registered_profilers_x64");
             }
@@ -378,7 +372,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                 public static readonly Action<Mock<IEnvironmentRepository>, ParameterForHasBeenInstalled> DoesNotCall = (m, param) => { };
             }
 
-            static Mock<IEnvironmentRepository> MockEnvironmentRepositoryForHasBeenInstalled(ProfilerLocation[] profLocs, ParameterForHasBeenInstalled[] @params)
+            static Mock<IEnvironmentRepository> MockEnvironmentRepository(ProfilerLocation[] profLocs, ParameterForHasBeenInstalled[] @params)
             {
                 var m = new Mock<IEnvironmentRepository>(MockBehavior.Strict);
                 m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
@@ -406,8 +400,8 @@ namespace Test.Urasandesu.Prig.VSPackage
             {
                 var m = new Mock<IEnvironmentRepository>(MockBehavior.Strict);
                 m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
-                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(DummyX86ClassesRootKey);
-                m.Setup(_ => _.OpenRegistrySubKey(DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(default(RegistryKey));
+                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(RegistryKeyMixin.DummyX86ClassesRootKey);
+                m.Setup(_ => _.OpenRegistrySubKey(RegistryKeyMixin.DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(default(RegistryKey));
                 fixture.Inject(m);
             }
             {
@@ -448,20 +442,30 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            var profLocs = new[] { new ProfilerLocation(RegistryView.Registry32, fixture.Create<string>()) };
-            {
-                var m = new Mock<IEnvironmentRepository>();
-                m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
-                m.Setup(_ => _.OpenRegistryBaseKey(It.IsAny<RegistryHive>(), It.IsAny<RegistryView>())).Returns(DummyX86ClassesRootKey);
-                m.Setup(_ => _.OpenRegistrySubKey(It.IsAny<RegistryKey>(), It.IsAny<string>())).Returns(DummyX86InProcServer32Key);
-                m.Setup(_ => _.GetRegistryValue(It.IsAny<RegistryKey>(), It.IsAny<string>())).Returns(fixture.Create<string>());
-                m.Setup(_ => _.ExistsFile(It.IsAny<string>())).Returns(true);
-                m.Setup(_ => _.GetFileDescription(It.IsAny<string>())).Returns("Prig Profiler 2.0.0 Type Library");
-                fixture.Inject(m);
-            }
+            fixture.FreezeInstalledEnvironment();
             fixture.Inject(new Mock<INuGetExecutor>(MockBehavior.Strict));
             fixture.Inject(new Mock<IRegsvr32Executor>(MockBehavior.Strict));
             fixture.Inject(new Mock<IPrigExecutor>(MockBehavior.Strict));
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act, Assert
+            mwInstllr.Install(mwInstl);
+        }
+
+        [Test]
+        public void Install_should_register_package_folder()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.RegisterPackageFolder()).Verifiable();
+            }
 
             var mwInstllr = fixture.NewMachineWideInstaller();
 
@@ -471,7 +475,7 @@ namespace Test.Urasandesu.Prig.VSPackage
 
 
             // Assert
-            fixture.Freeze<Mock<IEnvironmentRepository>>().VerifyAll();
+            fixture.Freeze<Mock<IEnvironmentRepository>>().Verify();
         }
 
         [Test]
@@ -481,14 +485,10 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment(toolsPath: @"C:\ProgramData\chocolatey\lib\Prig\tools");
             {
-                var toolsPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools";
-                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).Returns(toolsPath);
-            }
-            {
-                var nuspec = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools\NuGet\Prig.nuspec";
-                var outputDirectory = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools";
+                var nuspec = @"C:\ProgramData\chocolatey\lib\Prig\tools\NuGet\Prig.nuspec";
+                var outputDirectory = @"C:\ProgramData\chocolatey\lib\Prig\tools";
                 var m = fixture.Freeze<Mock<INuGetExecutor>>();
                 m.Setup(_ => _.StartPacking(nuspec, outputDirectory)).Returns(fixture.Create<string>());
             }
@@ -511,10 +511,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            {
-                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
-            }
+            fixture.FreezeUninstalledEnvironment();
             var stdout = fixture.Create<string>();
             {
                 var m = fixture.Freeze<Mock<INuGetExecutor>>();
@@ -543,14 +540,10 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            {
-                var toolsPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools";
-                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).Returns(toolsPath);
-            }
+            fixture.FreezeUninstalledEnvironment(toolsPath: @"C:\ProgramData\chocolatey\lib\Prig\tools");
             {
                 var name = @"Prig Source";
-                var source = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools";
+                var source = @"C:\ProgramData\chocolatey\lib\Prig\tools";
                 var m = fixture.Freeze<Mock<INuGetExecutor>>();
                 m.Setup(_ => _.StartSourcing(name, source)).Returns(fixture.Create<string>());
             }
@@ -573,11 +566,8 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            var toolsPath = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld\tools";
-            {
-                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).Returns(toolsPath);
-            }
+            var toolsPath = @"C:\ProgramData\chocolatey\lib\Prig\tools";
+            fixture.FreezeUninstalledEnvironment(toolsPath);
             var stdout = fixture.Create<string>();
             {
                 var m = fixture.Freeze<Mock<INuGetExecutor>>();
@@ -606,14 +596,14 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
             {
-                var pkgDir = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld";
+                var pkgDir = @"C:\ProgramData\chocolatey\lib\Prig";
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
-                m.Setup(_ => _.GetPackageFolder()).Returns(pkgDir);
-                m.Setup(_ => _.GetPackageFolderKey()).ReturnsUsingFixture(fixture);
+                m.Setup(_ => _.GetPackageFolder()).Returns(pkgDir).Verifiable();
+                m.Setup(_ => _.GetPackageFolderKey()).ReturnsUsingFixture(fixture).Verifiable();
                 var variableValue = pkgDir;
-                m.Setup(_ => _.SetPackageFolder(variableValue));
+                m.Setup(_ => _.StorePackageFolder(variableValue)).Verifiable();
             }
 
             var mwInstllr = fixture.NewMachineWideInstaller();
@@ -624,7 +614,7 @@ namespace Test.Urasandesu.Prig.VSPackage
 
 
             // Assert
-            fixture.Freeze<Mock<IEnvironmentRepository>>().VerifyAll();
+            fixture.Freeze<Mock<IEnvironmentRepository>>().Verify();
         }
 
         [Test]
@@ -634,15 +624,15 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            var pkgDir = @"C:\Users\Akira\AppData\Local\Microsoft\VisualStudio\12.0\Extensions\jvtxkz2r.sld";
+            fixture.FreezeUninstalledEnvironment();
+            var pkgDir = @"C:\ProgramData\chocolatey\lib\Prig";
             var variableName = "URASANDESU_PRIG_PACKAGE_FOLDER";
             var variableValue = pkgDir;
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
                 m.Setup(_ => _.GetPackageFolder()).Returns(pkgDir);
                 m.Setup(_ => _.GetPackageFolderKey()).Returns(variableName);
-                m.Setup(_ => _.SetPackageFolder(variableValue));
+                m.Setup(_ => _.StorePackageFolder(variableValue));
             }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();
@@ -667,6 +657,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
             var profLocs =
                 new[] 
                 { 
@@ -675,11 +666,10 @@ namespace Test.Urasandesu.Prig.VSPackage
                 };
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
                 m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
-                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(DummyX86ClassesRootKey);
-                m.Setup(_ => _.OpenRegistrySubKey(DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(DummyX86InProcServer32Key);
-                m.Setup(_ => _.GetRegistryValue(DummyX86InProcServer32Key, null)).Returns(fixture.Create<string>());
+                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(RegistryKeyMixin.DummyX86ClassesRootKey);
+                m.Setup(_ => _.OpenRegistrySubKey(RegistryKeyMixin.DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(RegistryKeyMixin.DummyX86InProcServer32Key);
+                m.Setup(_ => _.GetRegistryValue(RegistryKeyMixin.DummyX86InProcServer32Key, null)).Returns(fixture.Create<string>());
             }
             {
                 var m = fixture.Freeze<Mock<IRegsvr32Executor>>();
@@ -699,7 +689,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
                 m.Verify(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView), Times.Once());
-                m.Verify(_ => _.OpenRegistrySubKey(DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path), Times.Once());
+                m.Verify(_ => _.OpenRegistrySubKey(RegistryKeyMixin.DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path), Times.Once());
             }
         }
 
@@ -710,10 +700,10 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
             var profLocs = default(ProfilerLocation[]);
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
                 m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
             }
             fixture.Inject(new Mock<IRegsvr32Executor>());
@@ -739,10 +729,10 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
             var profLocs = new ProfilerLocation[0];
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
                 m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
             }
             fixture.Inject(new Mock<IRegsvr32Executor>());
@@ -768,6 +758,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
             var profLocs =
                 new[] 
                 { 
@@ -776,14 +767,13 @@ namespace Test.Urasandesu.Prig.VSPackage
                 };
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
                 m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
-                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(DummyX86ClassesRootKey);
-                m.Setup(_ => _.OpenRegistrySubKey(DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(DummyX86InProcServer32Key);
-                m.Setup(_ => _.GetRegistryValue(DummyX86InProcServer32Key, null)).Returns(fixture.Create<string>());
-                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[1].RegistryView)).Returns(DummyX64ClassesRootKey);
-                m.Setup(_ => _.OpenRegistrySubKey(DummyX64ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(DummyX64InProcServer32Key);
-                m.Setup(_ => _.GetRegistryValue(DummyX64InProcServer32Key, null)).Returns(fixture.Create<string>());
+                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(RegistryKeyMixin.DummyX86ClassesRootKey);
+                m.Setup(_ => _.OpenRegistrySubKey(RegistryKeyMixin.DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(RegistryKeyMixin.DummyX86InProcServer32Key);
+                m.Setup(_ => _.GetRegistryValue(RegistryKeyMixin.DummyX86InProcServer32Key, null)).Returns(fixture.Create<string>());
+                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[1].RegistryView)).Returns(RegistryKeyMixin.DummyX64ClassesRootKey);
+                m.Setup(_ => _.OpenRegistrySubKey(RegistryKeyMixin.DummyX64ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(RegistryKeyMixin.DummyX64InProcServer32Key);
+                m.Setup(_ => _.GetRegistryValue(RegistryKeyMixin.DummyX64InProcServer32Key, null)).Returns(fixture.Create<string>());
             }
             var stdouts = fixture.CreateMany<string>(2).ToArray();
             {
@@ -794,12 +784,14 @@ namespace Test.Urasandesu.Prig.VSPackage
             var mocks = new MockRepository(MockBehavior.Strict);
             var order1 = new MockOrder();
             var order2 = new MockOrder();
-            mwInstl.ProfilerRegistering += mocks.Create<Action<ProfilerLocation>>().
-                                               InOrder(order1, m => m.Setup(_ => _(profLocs[0]))).
-                                               InOrder(order2, m => m.Setup(_ => _(profLocs[1]))).Object;
-            mwInstl.ProfilerRegistered += mocks.Create<Action<string>>().
-                                              InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
-                                              InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
+            mwInstl.ProfilerRegistering += 
+                mocks.Create<Action<ProfilerLocation>>().
+                      InOrder(order1, m => m.Setup(_ => _(profLocs[0]))).
+                      InOrder(order2, m => m.Setup(_ => _(profLocs[1]))).Object;
+            mwInstl.ProfilerRegistered += 
+                mocks.Create<Action<string>>().
+                      InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
+                      InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
 
             var mwInstllr = fixture.NewMachineWideInstaller();
 
@@ -819,10 +811,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            {
-                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
-            }
+            fixture.FreezeUninstalledEnvironment();
             {
                 var m = fixture.Freeze<Mock<IPrigExecutor>>();
                 m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(@"C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"))).ReturnsUsingFixture(fixture);
@@ -846,10 +835,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            {
-                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
-            }
+            fixture.FreezeUninstalledEnvironment();
             var stdout = fixture.Create<string>();
             {
                 var m = fixture.Freeze<Mock<IPrigExecutor>>();
@@ -878,14 +864,14 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
             var profLocs = new[] { new ProfilerLocation(RegistryView.Registry32, fixture.Create<string>()) };
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
                 m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
-                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(DummyX86ClassesRootKey);
-                m.Setup(_ => _.OpenRegistrySubKey(DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(DummyX86InProcServer32Key);
-                m.Setup(_ => _.GetRegistryValue(DummyX86InProcServer32Key, null)).Returns(fixture.Create<string>());
+                m.Setup(_ => _.OpenRegistryBaseKey(RegistryHive.ClassesRoot, profLocs[0].RegistryView)).Returns(RegistryKeyMixin.DummyX86ClassesRootKey);
+                m.Setup(_ => _.OpenRegistrySubKey(RegistryKeyMixin.DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(RegistryKeyMixin.DummyX86InProcServer32Key);
+                m.Setup(_ => _.GetRegistryValue(RegistryKeyMixin.DummyX86InProcServer32Key, null)).Returns(fixture.Create<string>());
             }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();
@@ -921,17 +907,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            var profLocs = new[] { new ProfilerLocation(RegistryView.Registry32, fixture.Create<string>()) };
-            {
-                var m = new Mock<IEnvironmentRepository>();
-                m.Setup(_ => _.GetProfilerLocations()).Returns(profLocs);
-                m.Setup(_ => _.OpenRegistryBaseKey(It.IsAny<RegistryHive>(), It.IsAny<RegistryView>())).Returns(DummyX86ClassesRootKey);
-                m.Setup(_ => _.OpenRegistrySubKey(It.IsAny<RegistryKey>(), It.IsAny<string>())).Returns(DummyX86InProcServer32Key);
-                m.Setup(_ => _.GetRegistryValue(It.IsAny<RegistryKey>(), It.IsAny<string>())).Returns(fixture.Create<string>());
-                m.Setup(_ => _.ExistsFile(It.IsAny<string>())).Returns(true);
-                m.Setup(_ => _.GetFileDescription(It.IsAny<string>())).Returns("Prig Profiler 2.0.0 Type Library");
-                fixture.Inject(m);
-            }
+            fixture.FreezeInstalledEnvironment();
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();
             mwInstl.Completed += mocks.InOrder<Action<MachineWideProcessResults>>(order, m => m.Setup(_ => _(MachineWideProcessResults.Skipped))).Object;
@@ -955,10 +931,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
-            {
-                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetToolsPath()).ReturnsUsingFixture(fixture);
-            }
+            fixture.FreezeUninstalledEnvironment();
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();
             mwInstl.Completed += mocks.InOrder<Action<MachineWideProcessResults>>(order, m => m.Setup(_ => _(MachineWideProcessResults.Completed))).Object;
@@ -973,50 +946,365 @@ namespace Test.Urasandesu.Prig.VSPackage
             // Assert
             mocks.VerifyAll();
         }
-    }
-}
 
-namespace Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture
-{
-    static partial class IFixtureMixin
-    {
-        public static MachineWideInstaller NewMachineWideInstaller(this IFixture fixture)
+
+
+        [Test]
+        public void Uninstall_should_skip_uninstallation_if_it_has_been_already_uninstalled()
         {
-            var mwInstllr = new MachineWideInstaller();
-            mwInstllr.EnvironmentRepository = fixture.Freeze<IEnvironmentRepository>();
-            mwInstllr.NuGetExecutor = fixture.Freeze<INuGetExecutor>();
-            mwInstllr.Regsvr32Executor = fixture.Freeze<IRegsvr32Executor>();
-            mwInstllr.PrigExecutor = fixture.Freeze<IPrigExecutor>();
-            return mwInstllr;
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
+            fixture.Inject(new Mock<INuGetExecutor>(MockBehavior.Strict));
+            fixture.Inject(new Mock<IRegsvr32Executor>(MockBehavior.Strict));
+            fixture.Inject(new Mock<IPrigExecutor>(MockBehavior.Strict));
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act, Assert
+            mwInstllr.Uninstall(mwUninstl);
         }
-    }
-}
 
-namespace Test.Urasandesu.Prig.VSPackage.Mixins.Moq
-{
-    // `MockSequence` does not support the combination with same type and different parameter like the following case. Also, it makes `VerifyAll` function unavailable.
-    // See also, [c# - Using Moq to verify calls are made in the correct order - Stack Overflow](http://stackoverflow.com/questions/10602264/using-moq-to-verify-calls-are-made-in-the-correct-order).
-    class MockOrder
-    {
-        public int Expected { get; internal set; }
-        public int Actual { get; internal set; }
-    }
-
-    static class MockRepositoryMixin
-    {
-        public static Mock<TMock> InOrder<TMock>(this MockRepository repo, MockOrder order, Func<Mock<TMock>, ISetup<TMock>> setup) where TMock : class
+        [Test]
+        public void Uninstall_should_uninstall_all_sources()
         {
-            return repo.Create<TMock>().InOrder(order, setup);
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            {
+                var m = fixture.Freeze<Mock<IPrigExecutor>>();
+                m.Setup(_ => _.StartUninstalling("All")).ReturnsUsingFixture(fixture);
+            }
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            fixture.Freeze<Mock<IPrigExecutor>>().VerifyAll();
         }
-    }
 
-    static class MockMixin
-    {
-        public static Mock<TMock> InOrder<TMock>(this Mock<TMock> mock, MockOrder order, Func<Mock<TMock>, ISetup<TMock>> setup) where TMock : class
+        [Test]
+        public void Uninstall_should_raise_the_event_to_uninstall_all_sources_before_and_after()
         {
-            var expected = order.Expected++;
-            setup(mock).Callback(() => Assert.AreEqual(expected, order.Actual++, "Check the call order."));
-            return mock;
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            var stdout = fixture.Create<string>();
+            {
+                var m = fixture.Freeze<Mock<IPrigExecutor>>();
+                m.Setup(_ => _.StartUninstalling(It.IsAny<string>())).Returns(stdout);
+            }
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order = new MockOrder();
+            mwUninstl.DefaultSourceUninstalling += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _("All"))).Object;
+            mwUninstl.DefaultSourceUninstalled += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(stdout))).Object;
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_unregister_profiler()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            var profLocs =
+                new[] 
+                { 
+                    new ProfilerLocation(RegistryView.Registry32, fixture.Create<string>()), 
+                    new ProfilerLocation(RegistryView.Registry64, fixture.Create<string>()) 
+                };
+            fixture.FreezeInstalledEnvironment(profLocs);
+            {
+                var m = fixture.Freeze<Mock<IRegsvr32Executor>>();
+                m.Setup(_ => _.StartUninstalling(profLocs[0].PathOfInstalling)).ReturnsUsingFixture(fixture);
+                m.Setup(_ => _.StartUninstalling(profLocs[1].PathOfInstalling)).ReturnsUsingFixture(fixture);
+            }
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            fixture.Freeze<Mock<IRegsvr32Executor>>().VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_raise_the_event_to_unregister_profiler_before_and_after()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            var profLocs =
+                new[] 
+                { 
+                    new ProfilerLocation(RegistryView.Registry32, fixture.Create<string>()), 
+                    new ProfilerLocation(RegistryView.Registry64, fixture.Create<string>()) 
+                };
+            fixture.FreezeInstalledEnvironment(profLocs);
+            var stdouts = fixture.CreateMany<string>(2).ToArray();
+            {
+                var m = fixture.Freeze<Mock<IRegsvr32Executor>>();
+                m.Setup(_ => _.StartUninstalling(profLocs[0].PathOfInstalling)).Returns(stdouts[0]);
+                m.Setup(_ => _.StartUninstalling(profLocs[1].PathOfInstalling)).Returns(stdouts[1]);
+            }
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order1 = new MockOrder();
+            var order2 = new MockOrder();
+            mwUninstl.ProfilerUnregistering += 
+                mocks.Create<Action<ProfilerLocation>>().
+                      InOrder(order1, m => m.Setup(_ => _(profLocs[0]))).
+                      InOrder(order2, m => m.Setup(_ => _(profLocs[1]))).Object;
+            mwUninstl.ProfilerUnregistered += 
+                mocks.Create<Action<string>>().
+                      InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
+                      InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_unregister_environment_variables()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.GetPackageFolderKey()).ReturnsUsingFixture(fixture).Verifiable();
+                m.Setup(_ => _.RemovePackageFolder()).Verifiable();
+            }
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            fixture.Freeze<Mock<IEnvironmentRepository>>().Verify();
+        }
+
+        [Test]
+        public void Uninstall_should_raise_the_event_to_unregister_environment_variables_before_and_after()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            var variableName = "URASANDESU_PRIG_PACKAGE_FOLDER";
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.GetPackageFolderKey()).Returns(variableName);
+            }
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order = new MockOrder();
+            mwUninstl.EnvironmentVariableUnregistering += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(variableName))).Object;
+            mwUninstl.EnvironmentVariableUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(variableName))).Object;
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_unregister_NuGet_source()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            {
+                var name = @"Prig Source";
+                var m = fixture.Freeze<Mock<INuGetExecutor>>();
+                m.Setup(_ => _.StartUnsourcing(name)).Returns(fixture.Create<string>());
+            }
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            fixture.Freeze<Mock<INuGetExecutor>>().VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_raise_the_event_to_unregister_NuGet_source_before_and_after()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            var stdout = fixture.Create<string>();
+            {
+                var m = fixture.Freeze<Mock<INuGetExecutor>>();
+                m.Setup(_ => _.StartUnsourcing(It.IsAny<string>())).Returns(stdout);
+            }
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order = new MockOrder();
+            mwUninstl.NuGetSourceUnregistering += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _("Prig Source"))).Object;
+            mwUninstl.NuGetSourceUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(stdout))).Object;
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_unregister_package_folder()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.UnregisterPackageFolder()).Verifiable();
+            }
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            fixture.Freeze<Mock<IEnvironmentRepository>>().Verify();
+        }
+
+        [Test]
+        public void Uninstall_should_call_uninstallation_steps_by_a_fixed_sequence()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order = new MockOrder();
+            mwUninstl.Preparing += mocks.InOrder<Action>(order, m => m.Setup(_ => _())).Object;
+            mwUninstl.ProfilerStatusChecking += mocks.InOrder<Action<ProfilerLocation>>(order, m => m.Setup(_ => _(It.IsAny<ProfilerLocation>()))).Object;
+            mwUninstl.DefaultSourceUninstalling += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            mwUninstl.DefaultSourceUninstalled += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            mwUninstl.ProfilerUnregistering += mocks.InOrder<Action<ProfilerLocation>>(order, m => m.Setup(_ => _(It.IsAny<ProfilerLocation>()))).Object;
+            mwUninstl.ProfilerUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            mwUninstl.EnvironmentVariableUnregistering += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            mwUninstl.EnvironmentVariableUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            mwUninstl.NuGetSourceUnregistering += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            mwUninstl.NuGetSourceUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            mwUninstl.Completed += mocks.InOrder<Action<MachineWideProcessResults>>(order, m => m.Setup(_ => _(It.IsAny<MachineWideProcessResults>()))).Object;
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_raise_the_events_for_the_uninstallation_steps_if_skipped()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order = new MockOrder();
+            mwUninstl.Completed += mocks.InOrder<Action<MachineWideProcessResults>>(order, m => m.Setup(_ => _(MachineWideProcessResults.Skipped))).Object;
+
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Uninstall_should_raise_the_events_for_the_uninstallation_steps_if_completed()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwUninstl = new MachineWideUninstallation("2.0.0");
+            fixture.FreezeInstalledEnvironment();
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order = new MockOrder();
+            mwUninstl.Completed += mocks.InOrder<Action<MachineWideProcessResults>>(order, m => m.Setup(_ => _(MachineWideProcessResults.Completed))).Object;
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Uninstall(mwUninstl);
+
+
+            // Assert
+            mocks.VerifyAll();
         }
     }
 }

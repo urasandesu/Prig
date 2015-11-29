@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigExecutor.cs
+ * File: RegistryKeyMixin.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,34 +29,15 @@
 
 
 
-using Microsoft.Practices.Unity;
+using Microsoft.Win32;
 
-namespace Urasandesu.Prig.VSPackage
+namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Microsoft.Win32
 {
-    class PrigExecutor : ProcessExecutor, IPrigExecutor
+    static class RegistryKeyMixin
     {
-        [Dependency]
-        public IEnvironmentRepository EnvironmentRepository { private get; set; }
-
-        public string StartInstalling(string name, string source)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUninstalling(string name)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("uninstall \"{0}\"", name);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUpdatingDelegate(string @delegate)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("update All -delegate \"{0}\"", @delegate);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
+        public static readonly RegistryKey DummyX86ClassesRootKey = Registry.Users;
+        public static readonly RegistryKey DummyX86InProcServer32Key = Registry.LocalMachine;
+        public static readonly RegistryKey DummyX64ClassesRootKey = Registry.CurrentUser;
+        public static readonly RegistryKey DummyX64InProcServer32Key = Registry.CurrentConfig;
     }
 }

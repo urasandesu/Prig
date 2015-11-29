@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigExecutor.cs
+ * File: MockOrder.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,34 +29,13 @@
 
 
 
-using Microsoft.Practices.Unity;
-
-namespace Urasandesu.Prig.VSPackage
+namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Moq
 {
-    class PrigExecutor : ProcessExecutor, IPrigExecutor
+    // `MockSequence` does not support the combination with same type and different parameter like the following case. Also, it makes `VerifyAll` function unavailable.
+    // See also, [c# - Using Moq to verify calls are made in the correct order - Stack Overflow](http://stackoverflow.com/questions/10602264/using-moq-to-verify-calls-are-made-in-the-correct-order).
+    class MockOrder
     {
-        [Dependency]
-        public IEnvironmentRepository EnvironmentRepository { private get; set; }
-
-        public string StartInstalling(string name, string source)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUninstalling(string name)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("uninstall \"{0}\"", name);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUpdatingDelegate(string @delegate)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("update All -delegate \"{0}\"", @delegate);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
+        public int Expected { get; internal set; }
+        public int Actual { get; internal set; }
     }
 }

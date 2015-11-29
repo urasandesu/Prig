@@ -44,6 +44,7 @@
       <HintPath>..\packages\AutoFixture.AutoMoq.3.36.10\lib\net40\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.VisualStudio.ComponentModelHost" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
@@ -175,6 +176,16 @@
     <Compile Include="EnvironmentRepositoryTest.cs" />
     <Compile Include="MachineWideInstallerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUtilities\Mixins\Microsoft\Win32\RegistryKeyMixin.cs" />
+    <Compile Include="TestUtilities\Mixins\Moq\MockMixin.cs" />
+    <Compile Include="TestUtilities\Mixins\Moq\MockOrder.cs" />
+    <Compile Include="TestUtilities\Mixins\Moq\MockRepositoryMixin.cs" />
+    <Compile Include="TestUtilities\Mixins\Ploeh\AutoFixture\IFixtureMixin.cs" />
+    <Compile Include="TestUtilities\Mixins\System\AppDomainMixin.cs" />
+    <Compile Include="TestUtilities\Mixins\System\IO\DirectoryInfoMixin.cs" />
+    <Compile Include="TestUtilities\Mixins\System\IO\DirectoryInfoModifyingBegun.cs" />
+    <Compile Include="TestUtilities\Mixins\System\IO\FileInfoMixin.cs" />
+    <Compile Include="TestUtilities\Mixins\System\IO\FileInfoModifyingBegun.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
@@ -189,6 +200,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

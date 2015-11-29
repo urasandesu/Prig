@@ -29,6 +29,8 @@
 
 
 
+using Microsoft.VisualBasic.Devices;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
@@ -39,9 +41,47 @@ namespace Urasandesu.Prig.VSPackage
 {
     class EnvironmentRepository : IEnvironmentRepository
     {
-        public string GetPackageFolder()
+        public string GetVsixPackageFolder()
         {
             return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        }
+
+        public string GetVsixToolsPath()
+        {
+            var pkgDir = GetVsixPackageFolder();
+            return Path.Combine(pkgDir, "tools");
+        }
+
+        public string GetVsixLibPath()
+        {
+            var pkgDir = GetVsixPackageFolder();
+            return Path.Combine(pkgDir, "lib");
+        }
+
+        readonly Computer Computer = new Computer();
+
+        public void RegisterPackageFolder()
+        {
+            if (Computer.FileSystem.DirectoryExists(GetToolsPath()))
+                Computer.FileSystem.DeleteDirectory(GetToolsPath(), DeleteDirectoryOption.DeleteAllContents);
+            if (Computer.FileSystem.DirectoryExists(GetLibPath()))
+                Computer.FileSystem.DeleteDirectory(GetLibPath(), DeleteDirectoryOption.DeleteAllContents);
+            Computer.FileSystem.CopyDirectory(GetVsixToolsPath(), GetToolsPath());
+            Computer.FileSystem.CopyDirectory(GetVsixLibPath(), GetLibPath());
+        }
+        
+        public void UnregisterPackageFolder()
+        {
+            if (Computer.FileSystem.DirectoryExists(GetToolsPath()))
+                Computer.FileSystem.DeleteDirectory(GetToolsPath(), DeleteDirectoryOption.DeleteAllContents);
+            if (Computer.FileSystem.DirectoryExists(GetLibPath()))
+                Computer.FileSystem.DeleteDirectory(GetLibPath(), DeleteDirectoryOption.DeleteAllContents);
+        }
+
+        public string GetPackageFolder()
+        {
+            var programDataPath = Environment.GetEnvironmentVariable("ALLUSERSPROFILE");
+            return Path.Combine(programDataPath, @"chocolatey\lib\Prig");
         }
 
         public string GetPackageFolderKey()
@@ -49,12 +89,12 @@ namespace Urasandesu.Prig.VSPackage
             return "URASANDESU_PRIG_PACKAGE_FOLDER";
         }
 
-        public void SetPackageFolder(string variableValue)
+        public void StorePackageFolder(string variableValue)
         {
             Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue);
             Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue, EnvironmentVariableTarget.User);
         }
-
+        
         public void RemovePackageFolder()
         {
             Environment.SetEnvironmentVariable(GetPackageFolderKey(), null, EnvironmentVariableTarget.User);
@@ -65,6 +105,12 @@ namespace Urasandesu.Prig.VSPackage
         {
             var pkgDir = GetPackageFolder();
             return Path.Combine(pkgDir, "tools");
+        }
+
+        public string GetLibPath()
+        {
+            var pkgDir = GetPackageFolder();
+            return Path.Combine(pkgDir, "lib");
         }
 
         ProfilerLocation[] m_profLocs;

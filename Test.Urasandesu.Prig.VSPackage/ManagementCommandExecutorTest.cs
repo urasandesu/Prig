@@ -33,7 +33,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Management.Automation;
-using Test.Urasandesu.Prig.VSPackage.Mixins.Moq;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Moq;
 using Urasandesu.Prig.VSPackage;
 
 namespace Test.Urasandesu.Prig.VSPackage

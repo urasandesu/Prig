@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigExecutor.cs
+ * File: FileInfoModifyingBegun.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,34 +29,48 @@
 
 
 
-using Microsoft.Practices.Unity;
+using System;
+using System.IO;
 
-namespace Urasandesu.Prig.VSPackage
+namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO
 {
-    class PrigExecutor : ProcessExecutor, IPrigExecutor
+    public struct FileInfoModifyingBegun : IDisposable
     {
-        [Dependency]
-        public IEnvironmentRepository EnvironmentRepository { private get; set; }
+        readonly FileInfo m_orgInfo;
+        readonly string m_bakPath;
+        readonly string m_modPath;
 
-        public string StartInstalling(string name, string source)
+        public FileInfoModifyingBegun(FileInfo orgInfo, string bakPath, string modPath)
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            m_orgInfo = orgInfo;
+            m_bakPath = bakPath;
+            m_modPath = modPath;
         }
 
-        public string StartUninstalling(string name)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("uninstall \"{0}\"", name);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
+        public FileInfo Info { get { return m_orgInfo; } }
 
-        public string StartUpdatingDelegate(string @delegate)
+        public void Dispose()
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("update All -delegate \"{0}\"", @delegate);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            try
+            {
+                if (File.Exists(m_modPath))
+                    File.Delete(m_modPath);
+                if (m_orgInfo.Exists)
+                {
+                    m_orgInfo.CopyTo(m_modPath, true);
+                    m_orgInfo.Delete();
+                }
+            }
+            catch
+            { }
+
+            try
+            {
+                if (File.Exists(m_bakPath))
+                    File.Copy(m_bakPath, m_orgInfo.FullName, true);
+            }
+            catch
+            { }
         }
     }
 }

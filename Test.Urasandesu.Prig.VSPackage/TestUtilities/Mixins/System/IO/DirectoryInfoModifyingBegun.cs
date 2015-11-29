@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigExecutor.cs
+ * File: DirectoryInfoModifyingBegun.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,34 +29,40 @@
 
 
 
-using Microsoft.Practices.Unity;
+using System;
+using System.IO;
 
-namespace Urasandesu.Prig.VSPackage
+namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO
 {
-    class PrigExecutor : ProcessExecutor, IPrigExecutor
+    public struct DirectoryInfoModifyingBegun : IDisposable
     {
-        [Dependency]
-        public IEnvironmentRepository EnvironmentRepository { private get; set; }
+        DirectoryInfo m_orgInfo;
+        string m_bakPath;
 
-        public string StartInstalling(string name, string source)
+        public DirectoryInfoModifyingBegun(DirectoryInfo orgInfo, string bakPath)
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            m_orgInfo = orgInfo;
+            m_bakPath = bakPath;
         }
+        public DirectoryInfo Info { get { return m_orgInfo; } }
 
-        public string StartUninstalling(string name)
+        public void Dispose()
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("uninstall \"{0}\"", name);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
+            try
+            {
+                if (m_orgInfo.Exists)
+                    m_orgInfo.Delete(true);
+            }
+            catch
+            { }
 
-        public string StartUpdatingDelegate(string @delegate)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("update All -delegate \"{0}\"", @delegate);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            try
+            {
+                if (Directory.Exists(m_bakPath))
+                    Directory.Move(m_bakPath, m_orgInfo.FullName);
+            }
+            catch
+            { }
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigExecutor.cs
+ * File: FileInfoMixin.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,34 +29,27 @@
 
 
 
-using Microsoft.Practices.Unity;
+using System;
+using System.IO;
 
-namespace Urasandesu.Prig.VSPackage
+namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO
 {
-    class PrigExecutor : ProcessExecutor, IPrigExecutor
+    public static class FileInfoMixin
     {
-        [Dependency]
-        public IEnvironmentRepository EnvironmentRepository { private get; set; }
-
-        public string StartInstalling(string name, string source)
+        public static FileInfoModifyingBegun BeginModifying(this FileInfo orgInfo)
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUninstalling(string name)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("uninstall \"{0}\"", name);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUpdatingDelegate(string @delegate)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("update All -delegate \"{0}\"", @delegate);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            var id = Guid.NewGuid().ToString("N");
+            var bakPath = orgInfo.FullName + "." + id + ".bak";
+            var modPath = orgInfo.FullName + "." + id + ".mod";
+            try
+            {
+                File.Delete(bakPath);
+            }
+            catch
+            { }
+            if (orgInfo.Exists)
+                orgInfo.CopyTo(bakPath, true);
+            return new FileInfoModifyingBegun(orgInfo, bakPath, modPath);
         }
     }
 }

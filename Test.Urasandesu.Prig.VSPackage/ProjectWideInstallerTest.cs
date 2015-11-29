@@ -38,8 +38,8 @@ using Ploeh.AutoFixture.AutoMoq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Test.Urasandesu.Prig.VSPackage.Mixins.Moq;
-using Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Moq;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture;
 using Urasandesu.Prig.VSPackage;
 
 namespace Test.Urasandesu.Prig.VSPackage
@@ -192,55 +192,6 @@ namespace Test.Urasandesu.Prig.VSPackage
 
             // Assert
             mocks.VerifyAll();
-        }
-    }
-}
-
-namespace Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture
-{
-    static partial class IFixtureMixin
-    {
-        public static ProjectWideInstaller NewProjectWideInstaller(this IFixture fixture)
-        {
-            var pwInstllr = new ProjectWideInstaller();
-            pwInstllr.InstallerServices = fixture.Freeze<IVsPackageInstallerServices>();
-            pwInstllr.Installer = fixture.Freeze<IVsPackageInstaller>();
-            pwInstllr.InstallerEvents = fixture.Freeze<IVsPackageInstallerEvents>();
-            pwInstllr.Uninstaller = fixture.Freeze<IVsPackageUninstaller>();
-            return pwInstllr;
-        }
-        // We have to access all members that we want to mock in advance, because Embed Interop Types is set to true against NuGet.VisualStudio. 
-        // See also the following issues: 
-        // * [A COM type can't make its mock by same procedure as usual. · Issue #215 · Moq-moq4](https://github.com/Moq/moq4/issues/215)
-        // * [A COM type can't make its proxy by same procedure as usual. · Issue #117 · castleproject-Core](https://github.com/castleproject/Core/issues/117)
-        static void Realize(IVsPackageInstallerServices installerServices)
-        {
-            installerServices.GetInstalledPackages();
-            installerServices.GetInstalledPackages(default(Project));
-            installerServices.IsPackageInstalled(default(Project), default(string));
-            installerServices.IsPackageInstalledEx(default(Project), default(string), default(string));
-        }
-        static void Realize(IVsPackageInstaller installer)
-        {
-            installer.InstallPackage(default(string), default(Project), default(string), default(string), default(bool));
-            installer.InstallPackage(default(string), default(Project), default(string), default(Version), default(bool));
-            installer.InstallPackagesFromRegistryRepository(default(string), default(bool), default(bool), default(Project), default(IDictionary<string, string>));
-            installer.InstallPackagesFromRegistryRepository(default(string), default(bool), default(bool), default(bool), default(Project), default(IDictionary<string, string>));
-            installer.InstallPackagesFromVSExtensionRepository(default(string), default(bool), default(bool), default(Project), default(IDictionary<string, string>));
-            installer.InstallPackagesFromVSExtensionRepository(default(string), default(bool), default(bool), default(bool), default(Project), default(IDictionary<string, string>));
-        }
-        static void Realize(IVsPackageInstallerEvents installerEvents)
-        {
-            installerEvents.PackageInstalled += metadata => { };
-            installerEvents.PackageInstalling += metadata => { };
-            installerEvents.PackageReferenceAdded += metadata => { };
-            installerEvents.PackageReferenceRemoved += metadata => { };
-            installerEvents.PackageUninstalled += metadata => { };
-            installerEvents.PackageUninstalling += metadata => { };
-        }
-        static void Realize(IVsPackageUninstaller uninstaller)
-        {
-            uninstaller.UninstallPackage(default(Project), default(string), default(bool));
         }
     }
 }

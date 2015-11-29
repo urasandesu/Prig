@@ -35,11 +35,17 @@ namespace Urasandesu.Prig.VSPackage
 {
     interface IEnvironmentRepository
     {
+        string GetVsixPackageFolder();
+        string GetVsixToolsPath();
+        string GetVsixLibPath();
+        void RegisterPackageFolder();
+        void UnregisterPackageFolder();
         string GetPackageFolder();
         string GetPackageFolderKey();
-        void SetPackageFolder(string variableValue);
+        void StorePackageFolder(string variableValue);
         void RemovePackageFolder();
         string GetToolsPath();
+        string GetLibPath();
         ProfilerLocation[] GetProfilerLocations();
         string GetNuGetPath();
         string GetRegsvr32Path();

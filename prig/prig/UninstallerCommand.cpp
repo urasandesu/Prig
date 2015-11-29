@@ -63,27 +63,31 @@ namespace prig {
 
         void RemoveSymLinkForPrigLib(PrigPackageConfig const &pkg, vector<wstring> const &prigDllNames)
         {
+            using boost::system::error_code;
+
             if (!exists(pkg.Source))
                 return;
             
             BOOST_FOREACH (auto const &prigDllName, prigDllNames)
             {
                 auto symlink = pkg.Source / prigDllName;
-                if (exists(symlink))
-                    remove(symlink);
+                auto ec = error_code();
+                remove(symlink, ec);
             }
         }
 
         void RemoveSymLinkForAdditionalDelegates(PrigPackageConfig const &pkg)
         {
+            using boost::system::error_code;
+
             if (!exists(pkg.Source))
                 return;
             
             BOOST_FOREACH (auto const &additionalDlgt, pkg.AdditionalDelegates)
             {
                 auto symlink = pkg.Source / additionalDlgt.HintPath.filename();
-                if (exists(symlink))
-                    remove(symlink);
+                auto ec = error_code();
+                remove(symlink, ec);
             }
         }
 

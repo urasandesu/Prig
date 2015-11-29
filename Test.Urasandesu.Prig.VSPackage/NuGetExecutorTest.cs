@@ -36,9 +36,9 @@ using Ploeh.AutoFixture.AutoMoq;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture;
-using Test.Urasandesu.Prig.VSPackage.Mixins.System;
-using Test.Urasandesu.Prig.VSPackage.Mixins.System.IO;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO;
 using Urasandesu.Prig.VSPackage;
 
 namespace Test.Urasandesu.Prig.VSPackage
@@ -80,11 +80,10 @@ namespace Test.Urasandesu.Prig.VSPackage
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void StartSourcing_should_add_the_specified_source_if_it_has_not_existed_yet()
         {
-            var nugetConfigInfo = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config"));
-            using (nugetConfigInfo.BeginModifying())
+            using (var nugetConfig = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config")).BeginModifying())
             {
                 // Arrange
-                nugetConfigInfo.Delete();
+                nugetConfig.Info.Delete();
 
                 var fixture = new Fixture().Customize(new AutoMoqCustomization());
                 {
@@ -111,8 +110,7 @@ namespace Test.Urasandesu.Prig.VSPackage
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void StartSourcing_should_update_the_specified_source_if_it_has_already_existed()
         {
-            var nugetConfigInfo = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config"));
-            using (nugetConfigInfo.BeginModifying())
+            using (var nugetConfig = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config")).BeginModifying())
             {
                 // Arrange
                 var xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -124,7 +122,7 @@ namespace Test.Urasandesu.Prig.VSPackage
   <disabledPackageSources />
 </configuration>
 ";
-                using (var fs = nugetConfigInfo.Open(FileMode.Create))
+                using (var fs = nugetConfig.Info.Open(FileMode.Create))
                 using (var sw = new StreamWriter(fs))
                     sw.Write(xml);
 
@@ -153,8 +151,7 @@ namespace Test.Urasandesu.Prig.VSPackage
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void StartSourcing_should_update_the_specified_source_if_only_letter_case_is_unmatched()
         {
-            var nugetConfigInfo = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config"));
-            using (nugetConfigInfo.BeginModifying())
+            using (var nugetConfig = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config")).BeginModifying())
             {
                 // Arrange
                 var xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -166,7 +163,7 @@ namespace Test.Urasandesu.Prig.VSPackage
   <disabledPackageSources />
 </configuration>
 ";
-                using (var fs = nugetConfigInfo.Open(FileMode.Create))
+                using (var fs = nugetConfig.Info.Open(FileMode.Create))
                 using (var sw = new StreamWriter(fs))
                     sw.Write(xml);
 
@@ -188,78 +185,64 @@ namespace Test.Urasandesu.Prig.VSPackage
                 Assert.That(result, Is.StringMatching("Prig Source"));
             }
         }
-    }
-}
 
-namespace Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture
-{
-    static partial class IFixtureMixin
-    {
-        public static NuGetExecutor NewNuGetExecutor(this IFixture fixture)
-        {
-            var nugetExecutor = new NuGetExecutor();
-            nugetExecutor.EnvironmentRepository = fixture.Freeze<IEnvironmentRepository>();
-            return nugetExecutor;
-        }
-    }
-}
 
-namespace Test.Urasandesu.Prig.VSPackage.Mixins.System.IO
-{
-    public static class FileInfoMixin
-    {
-        public static FileInfoModifyingBegun BeginModifying(this FileInfo orgInfo)
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void StartUnsourcing_should_remove_the_specified_source_if_it_has_already_existed()
         {
-            var id = Guid.NewGuid().ToString("N");
-            var bakPath = orgInfo.FullName + "." + id + ".bak";
-            var modPath = orgInfo.FullName + "." + id + ".mod";
-            try
+            using (var nugetConfig = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config")).BeginModifying())
             {
-                File.Delete(bakPath);
-            }
-            catch
-            { }
-            if (orgInfo.Exists)
-                orgInfo.CopyTo(bakPath, true);
-            return new FileInfoModifyingBegun(orgInfo, bakPath, modPath);
-        }
-    }
+                // Arrange
+                nugetConfig.Info.Delete();
 
-    public struct FileInfoModifyingBegun : IDisposable
-    {
-        readonly FileInfo m_orgInfo;
-        readonly string m_bakPath;
-        readonly string m_modPath;
-
-        public FileInfoModifyingBegun(FileInfo orgInfo, string bakPath, string modPath)
-        {
-            m_orgInfo = orgInfo;
-            m_bakPath = bakPath;
-            m_modPath = modPath;
-        }
-
-        public void Dispose()
-        {
-            try
-            {
-                if (File.Exists(m_modPath))
-                    File.Delete(m_modPath);
-                if (m_orgInfo.Exists)
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
                 {
-                    m_orgInfo.CopyTo(m_modPath, true);
-                    m_orgInfo.Delete();
+                    var m = new Mock<IEnvironmentRepository>(MockBehavior.Strict);
+                    m.Setup(_ => _.GetNuGetPath()).Returns(AppDomain.CurrentDomain.GetPathInBaseDirectory(@"tools\NuGet.exe"));
+                    fixture.Inject(m);
                 }
-            }
-            catch
-            { }
 
-            try
-            {
-                if (File.Exists(m_bakPath))
-                    File.Copy(m_bakPath, m_orgInfo.FullName, true);
+                var nugetExecutor = fixture.NewNuGetExecutor();
+                nugetExecutor.StartSourcing("Prig Source", AppDomain.CurrentDomain.BaseDirectory);
+
+
+                // Act
+                var result = nugetExecutor.StartUnsourcing("Prig Source");
+
+
+                // Assert
+                Assert.That(result, Is.StringMatching("Prig Source"));
             }
-            catch
-            { }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void StartUnsourcing_should_do_nothing_if_it_has_already_removed()
+        {
+            using (var nugetConfig = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config")).BeginModifying())
+            {
+                // Arrange
+                nugetConfig.Info.Delete();
+
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+                {
+                    var m = new Mock<IEnvironmentRepository>(MockBehavior.Strict);
+                    m.Setup(_ => _.GetNuGetPath()).Returns(AppDomain.CurrentDomain.GetPathInBaseDirectory(@"tools\NuGet.exe"));
+                    fixture.Inject(m);
+                }
+
+                var nugetExecutor = fixture.NewNuGetExecutor();
+
+
+                // Act
+                var result = nugetExecutor.StartUnsourcing("Prig Source");
+
+
+                // Assert
+                Assert.That(result, Is.StringMatching("Prig Source"));
+            }
         }
     }
 }

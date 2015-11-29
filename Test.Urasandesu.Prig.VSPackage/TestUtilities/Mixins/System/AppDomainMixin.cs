@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigExecutor.cs
+ * File: AppDomainMixin.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,34 +29,21 @@
 
 
 
-using Microsoft.Practices.Unity;
+using System;
+using System.IO;
 
-namespace Urasandesu.Prig.VSPackage
+namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System
 {
-    class PrigExecutor : ProcessExecutor, IPrigExecutor
+    public static class AppDomainMixin
     {
-        [Dependency]
-        public IEnvironmentRepository EnvironmentRepository { private get; set; }
-
-        public string StartInstalling(string name, string source)
+        public static string GetShadowCopyTargetDirectory(this AppDomain domain)
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            return Path.Combine(domain.SetupInformation.CachePath, domain.SetupInformation.ApplicationName);
         }
 
-        public string StartUninstalling(string name)
+        public static string GetPathInBaseDirectory(this AppDomain domain, string relativePathInApplicationBase)
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("uninstall \"{0}\"", name);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUpdatingDelegate(string @delegate)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("update All -delegate \"{0}\"", @delegate);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            return Path.Combine(domain.BaseDirectory, relativePathInApplicationBase);
         }
     }
 }

@@ -102,6 +102,7 @@ namespace Urasandesu.Prig.VSPackage
                 return;
             }
 
+            EnvironmentRepository.RegisterPackageFolder();
             CreateNupkg(mwInstl);
             RegisterNuGetSource(mwInstl);
             RegisterEnvironmentVariables(mwInstl);
@@ -136,7 +137,7 @@ namespace Urasandesu.Prig.VSPackage
             var name = EnvironmentRepository.GetPackageFolderKey();
             var value = pkgDir;
             mwInstl.OnEnvironmentVariableRegistering(name, value);
-            EnvironmentRepository.SetPackageFolder(value);
+            EnvironmentRepository.StorePackageFolder(value);
             mwInstl.OnEnvironmentVariableRegistered(name, value);
         }
 
@@ -169,36 +170,37 @@ namespace Urasandesu.Prig.VSPackage
         }
 
 
-        public void Uninstall(MachineWideUninstallation umwPkg)
+        public void Uninstall(MachineWideUninstallation mwUninstl)
         {
-            if (umwPkg == null)
-                throw new ArgumentNullException("umwPkg");
+            if (mwUninstl == null)
+                throw new ArgumentNullException("mwUninstl");
 
-            umwPkg.OnPreparing();
+            mwUninstl.OnPreparing();
 
-            if (!HasBeenInstalled(umwPkg.Prerequisite))
+            if (!HasBeenInstalled(mwUninstl.Prerequisite))
             {
-                umwPkg.OnCompleted(MachineWideProcessResults.Skipped);
+                mwUninstl.OnCompleted(MachineWideProcessResults.Skipped);
                 return;
             }
 
-            UninstallDefaultSource(umwPkg);
-            UnregisterProfiler(umwPkg);
-            UnregisterEnvironmentVariables(umwPkg);
-            UnregisterNuGetSource(umwPkg);
+            UninstallAllSources(mwUninstl);
+            UnregisterProfiler(mwUninstl);
+            UnregisterEnvironmentVariables(mwUninstl);
+            UnregisterNuGetSource(mwUninstl);
+            EnvironmentRepository.UnregisterPackageFolder();
 
-            umwPkg.OnCompleted(MachineWideProcessResults.Completed);
+            mwUninstl.OnCompleted(MachineWideProcessResults.Completed);
         }
 
-        void UninstallDefaultSource(MachineWideUninstallation umwPkg)
+        void UninstallAllSources(MachineWideUninstallation mwUninstl)
         {
             var pkgName = "All";
-            umwPkg.OnDefaultSourceUninstalling(pkgName);
+            mwUninstl.OnDefaultSourceUninstalling(pkgName);
             var stdout = PrigExecutor.StartUninstalling(pkgName);
-            umwPkg.OnDefaultSourceUninstalled(stdout);
+            mwUninstl.OnDefaultSourceUninstalled(stdout);
         }
 
-        void UnregisterProfiler(MachineWideUninstallation umwPkg)
+        void UnregisterProfiler(MachineWideUninstallation mwUninstl)
         {
             var profLocs = EnvironmentRepository.GetProfilerLocations();
             if (profLocs == null || profLocs.Length == 0)
@@ -206,26 +208,26 @@ namespace Urasandesu.Prig.VSPackage
 
             foreach (var profLoc in EnvironmentRepository.GetProfilerLocations())
             {
-                umwPkg.OnProfilerUnregistering(profLoc);
+                mwUninstl.OnProfilerUnregistering(profLoc);
                 var stdout = Regsvr32Executor.StartUninstalling(profLoc.PathOfInstalling);
-                umwPkg.OnProfilerUnregistered(stdout);
+                mwUninstl.OnProfilerUnregistered(stdout);
             }
         }
 
-        void UnregisterEnvironmentVariables(MachineWideUninstallation umwPkg)
+        void UnregisterEnvironmentVariables(MachineWideUninstallation mwUninstl)
         {
             var name = EnvironmentRepository.GetPackageFolderKey();
-            umwPkg.OnEnvironmentVariableUnregistering(name);
+            mwUninstl.OnEnvironmentVariableUnregistering(name);
             EnvironmentRepository.RemovePackageFolder();
-            umwPkg.OnEnvironmentVariableUnregistered(name);
+            mwUninstl.OnEnvironmentVariableUnregistered(name);
         }
 
-        void UnregisterNuGetSource(MachineWideUninstallation umwPkg)
+        void UnregisterNuGetSource(MachineWideUninstallation mwUninstl)
         {
             var name = "Prig Source";
-            umwPkg.OnNuGetSourceUnregistering(name);
+            mwUninstl.OnNuGetSourceUnregistering(name);
             var stdout = NuGetExecutor.StartUnsourcing(name);
-            umwPkg.OnNuGetSourceUnregistered(stdout);
+            mwUninstl.OnNuGetSourceUnregistered(stdout);
         }
     }
 }

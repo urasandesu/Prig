@@ -89,11 +89,13 @@ namespace prig {
 
         void CreateSymLinkForAdditionalDelegates(PrigPackageConfig const &pkg, vector<PrigAdditionalDelegateConfig> const &additionalDlgts)
         {
+            using boost::system::error_code;
+
             BOOST_FOREACH (auto const &additionalDlgt, additionalDlgts)
             {
                 auto symlink = pkg.Source / additionalDlgt.HintPath.filename();
-                if (exists(symlink))
-                    remove(symlink);
+                auto ec = error_code();
+                remove(symlink, ec);
                 create_symlink(additionalDlgt.HintPath, symlink);
             }
         }

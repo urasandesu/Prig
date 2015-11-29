@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PrigExecutor.cs
+ * File: DirectoryInfoMixin.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,34 +29,31 @@
 
 
 
-using Microsoft.Practices.Unity;
+using Ploeh.AutoFixture;
+using System;
+using System.IO;
 
-namespace Urasandesu.Prig.VSPackage
+namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO
 {
-    class PrigExecutor : ProcessExecutor, IPrigExecutor
+    public static class DirectoryInfoMixin
     {
-        [Dependency]
-        public IEnvironmentRepository EnvironmentRepository { private get; set; }
-
-        public string StartInstalling(string name, string source)
+        public static DirectoryInfoModifyingBegun BeginModifying(this DirectoryInfo orgInfo)
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            var id = Guid.NewGuid().ToString("N");
+            var bakInfo = new DirectoryInfo(orgInfo.FullName);
+            var bakPath = orgInfo.FullName + "." + id + ".bak";
+            if (bakInfo.Exists)
+                bakInfo.MoveTo(bakPath);
+            return new DirectoryInfoModifyingBegun(orgInfo, bakPath);
         }
 
-        public string StartUninstalling(string name)
+        public static DirectoryInfo CreateWithContent(this DirectoryInfo info, IFixture fixture)
         {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("uninstall \"{0}\"", name);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
-        }
-
-        public string StartUpdatingDelegate(string @delegate)
-        {
-            var prig = EnvironmentRepository.GetPrigPath();
-            var args = string.Format("update All -delegate \"{0}\"", @delegate);
-            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+            info.Create();
+            var path = Path.Combine(info.FullName, fixture.Create<string>());
+            using (var sw = new StreamWriter(new FileInfo(path).Open(FileMode.Create)))
+                sw.WriteLine(fixture.Create<string>());
+            return info;
         }
     }
 }

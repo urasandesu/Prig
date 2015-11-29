@@ -34,8 +34,8 @@ using NUnit.Framework;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.AutoMoq;
 using System;
-using Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture;
-using Test.Urasandesu.Prig.VSPackage.Mixins.System;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System;
 using Urasandesu.Prig.VSPackage;
 
 namespace Test.Urasandesu.Prig.VSPackage
@@ -118,19 +118,79 @@ namespace Test.Urasandesu.Prig.VSPackage
                 }
             }
         }
-    }
-}
 
-namespace Test.Urasandesu.Prig.VSPackage.Mixins.Ploeh.AutoFixture
-{
-    static partial class IFixtureMixin
-    {
-        public static Regsvr32Executor NewRegsvr32Executor(this IFixture fixture)
+
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void StartUninstalling_should_install_x86_com_component()
         {
-            var regsvr32Executor = new Regsvr32Executor();
-            // Don't use mock because you have to write the logic same as `EnvironmentRepository` if using it.
-            regsvr32Executor.EnvironmentRepository = new EnvironmentRepository();
-            return regsvr32Executor;
+            using (var classesRootKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32))
+            {
+                try
+                {
+                    // Arrange
+                    var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                    var profPath = AppDomain.CurrentDomain.GetPathInBaseDirectory(@"tools\x86\Urasandesu.Prig.dll");
+
+                    var regsvr32Executor = fixture.NewRegsvr32Executor();
+                    regsvr32Executor.StartInstalling(profPath);
+
+
+                    // Act
+                    var result = regsvr32Executor.StartUninstalling(profPath);
+
+
+                    // Assert
+                    Assert.IsNull(classesRootKey.OpenSubKey(ProfilerLocation.InprocServer32Path));
+                }
+                finally
+                {
+                    try
+                    {
+                        classesRootKey.DeleteSubKey(ProfilerLocation.InprocServer32Path);
+                    }
+                    catch
+                    { }
+                }
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void StartUninstalling_should_install_x64_com_component()
+        {
+            using (var classesRootKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry64))
+            {
+                try
+                {
+                    // Arrange
+                    var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                    var profPath = AppDomain.CurrentDomain.GetPathInBaseDirectory(@"tools\x64\Urasandesu.Prig.dll");
+
+                    var regsvr32Executor = fixture.NewRegsvr32Executor();
+                    regsvr32Executor.StartInstalling(profPath);
+
+
+                    // Act
+                    var result = regsvr32Executor.StartUninstalling(profPath);
+
+
+                    // Assert
+                    Assert.IsNull(classesRootKey.OpenSubKey(ProfilerLocation.InprocServer32Path));
+                }
+                finally
+                {
+                    try
+                    {
+                        classesRootKey.DeleteSubKey(ProfilerLocation.InprocServer32Path);
+                    }
+                    catch
+                    { }
+                }
+            }
         }
     }
 }

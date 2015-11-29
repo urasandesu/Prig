@@ -29,6 +29,8 @@
 
 
 
+using Microsoft.VisualBasic.Devices;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
@@ -38,7 +40,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Test.Urasandesu.Prig.VSPackage.Mixins.System;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO;
 using Urasandesu.Prig.VSPackage;
 
 namespace Test.Urasandesu.Prig.VSPackage
@@ -46,14 +49,28 @@ namespace Test.Urasandesu.Prig.VSPackage
     [TestFixture]
     class EnvironmentRepositoryTest
     {
+        [TestFixtureSetUp]
+        public void Init()
+        {
+            Utility.Init();
+        }
+
+        [TestFixtureTearDown]
+        public void Cleanup()
+        {
+            Utility.Cleanup();
+        }
+
+
+
         [Test]
-        public void GetPackageFolder_should_return_executing_assembly_directory_path()
+        public void GetVsixPackageFolder_should_return_executing_assembly_directory_path()
         {
             // Arrange
             var envRepos = new EnvironmentRepository();
 
             // Act
-            var result = envRepos.GetPackageFolder();
+            var result = envRepos.GetVsixPackageFolder();
 
             // Assert
             Assert.That(result, Is.StringMatching(GetShadowCopyTargetDirectoryPattern()));
@@ -62,9 +79,236 @@ namespace Test.Urasandesu.Prig.VSPackage
 
 
         [Test]
-        [Explicit("This test case will be invoked from the test case that have the name `Invoke_ + <test case name same as this>` automatically. " + 
+        public void GetVsixToolsPath_should_return_tools_directory_in_executing_assembly_directory_path()
+        {
+            // Arrange
+            var envRepos = new EnvironmentRepository();
+
+            // Act
+            var result = envRepos.GetVsixToolsPath();
+
+            // Assert
+            Assert.That(result, Is.StringMatching(ToShadowCopyTargetPattern(@"tools")));
+        }
+
+
+
+        [Test]
+        public void GetVsixLibPath_should_return_lib_directory_in_executing_assembly_directory_path()
+        {
+            // Arrange
+            var envRepos = new EnvironmentRepository();
+
+            // Act
+            var result = envRepos.GetVsixLibPath();
+
+            // Assert
+            Assert.That(result, Is.StringMatching(ToShadowCopyTargetPattern(@"lib")));
+        }
+
+
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void RegisterPackageFolder_should_register_tools_and_lib_if_tools_exists_and_lib_exists()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                var dummyToolsLastWriteTime = new DirectoryInfo(Utility.Tools).CreateWithContent(fixture).LastWriteTime;
+                var dummyLibLastWriteTime = new DirectoryInfo(Utility.Lib).CreateWithContent(fixture).LastWriteTime;
+
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.RegisterPackageFolder();
+
+                // Assert
+                Assert.AreNotEqual(dummyToolsLastWriteTime, tools.Info.LastWriteTime);
+                Assert.AreNotEqual(dummyLibLastWriteTime, lib.Info.LastWriteTime);
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void RegisterPackageFolder_should_register_tools_and_lib_if_tools_exists_and_lib_does_not_exist()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                var dummyToolsLastWriteTime = new DirectoryInfo(Utility.Tools).CreateWithContent(fixture).LastWriteTime;
+
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.RegisterPackageFolder();
+
+                // Assert
+                Assert.AreNotEqual(dummyToolsLastWriteTime, tools.Info.LastWriteTime);
+                Assert.IsTrue(lib.Info.Exists);
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void RegisterPackageFolder_should_register_tools_and_lib_if_tools_does_not_exist_and_lib_exists()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                var dummyLibLastWriteTime = new DirectoryInfo(Utility.Lib).CreateWithContent(fixture).LastWriteTime;
+
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.RegisterPackageFolder();
+
+                // Assert
+                Assert.IsTrue(tools.Info.Exists);
+                Assert.AreNotEqual(dummyLibLastWriteTime, lib.Info.LastWriteTime);
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void RegisterPackageFolder_should_register_tools_and_lib_if_tools_does_not_exist_and_lib_does_not_exist()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.RegisterPackageFolder();
+
+                // Assert
+                Assert.IsTrue(tools.Info.Exists);
+                Assert.IsTrue(lib.Info.Exists);
+            }
+        }
+
+
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void UnregisterPackageFolder_should_unregister_tools_and_lib_if_tools_exists_and_lib_exists()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                new DirectoryInfo(Utility.Tools).CreateWithContent(fixture);
+                new DirectoryInfo(Utility.Lib).CreateWithContent(fixture);
+
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.UnregisterPackageFolder();
+
+                // Assert
+                Assert.IsFalse(tools.Info.Exists);
+                Assert.IsFalse(lib.Info.Exists);
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void UnregisterPackageFolder_should_unregister_tools_and_lib_if_tools_exists_and_lib_does_not_exist()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                new DirectoryInfo(Utility.Tools).CreateWithContent(fixture);
+
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.UnregisterPackageFolder();
+
+                // Assert
+                Assert.IsFalse(tools.Info.Exists);
+                Assert.IsFalse(lib.Info.Exists);
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void UnregisterPackageFolder_should_unregister_tools_and_lib_if_tools_does_not_exist_and_lib_exists()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+                
+                new DirectoryInfo(Utility.Lib).CreateWithContent(fixture);
+
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.UnregisterPackageFolder();
+
+                // Assert
+                Assert.IsFalse(tools.Info.Exists);
+                Assert.IsFalse(lib.Info.Exists);
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void UnregisterPackageFolder_should_unregister_tools_and_lib_if_tools_does_not_exist_and_lib_does_not_exist()
+        {
+            using (var tools = new DirectoryInfo(Utility.Tools).BeginModifying())
+            using (var lib = new DirectoryInfo(Utility.Lib).BeginModifying())
+            {
+                // Arrange
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.UnregisterPackageFolder();
+
+                // Assert
+                Assert.IsFalse(tools.Info.Exists);
+                Assert.IsFalse(lib.Info.Exists);
+            }
+        }
+
+
+
+        [Test]
+        public void GetPackageFolder_should_return_chocolatey_compatible_directory_path()
+        {
+            // Arrange
+            var envRepos = new EnvironmentRepository();
+
+            // Act
+            var result = envRepos.GetPackageFolder();
+
+            // Assert
+            Assert.AreEqual(@"C:\ProgramData\chocolatey\lib\Prig", result);
+        }
+
+
+
+        [Test]
+        [Explicit("This test case will be invoked from the test case that have the name `Invoke_ + <test case name same as this>` automatically. " +
                   "Note that don't run this test case manually.")]
-        public void SetPackageFolder_should_set_package_folder_as_environment_variable()
+        public void StorePackageFolder_should_set_package_folder_as_environment_variable()
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
@@ -75,7 +319,7 @@ namespace Test.Urasandesu.Prig.VSPackage
 
 
             // Act
-            envRepos.SetPackageFolder(variableValue);
+            envRepos.StorePackageFolder(variableValue);
 
 
             // Assert
@@ -83,11 +327,11 @@ namespace Test.Urasandesu.Prig.VSPackage
         }
         [Test]
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
-        public void Invoke_SetPackageFolder_should_set_package_folder_as_environment_variable()
+        public void Invoke_StorePackageFolder_should_set_package_folder_as_environment_variable()
         {
             try
             {
-                VerifyEnvironmentRepositoryTest("SetPackageFolder_should_set_package_folder_as_environment_variable");
+                VerifyEnvironmentRepositoryTest("StorePackageFolder_should_set_package_folder_as_environment_variable");
                 Assert.IsNotNull(Environment.GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", EnvironmentVariableTarget.User));
             }
             finally
@@ -99,7 +343,45 @@ namespace Test.Urasandesu.Prig.VSPackage
 
 
         [Test]
-        public void GetToolsPath_should_return_tools_directory_in_executing_assembly_directory_path()
+        [Explicit("This test case will be invoked from the test case that have the name `Invoke_ + <test case name same as this>` automatically. " +
+                  "Note that don't run this test case manually.")]
+        public void RemovePackageFolder_should_remove_package_folder_from_environment_variable()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var variableValue = fixture.Create<string>();
+
+            var envRepos = new EnvironmentRepository();
+            envRepos.StorePackageFolder(fixture.Create<string>());
+
+
+            // Act
+            envRepos.RemovePackageFolder();
+
+
+            // Assert
+            Assert.IsNull(Environment.GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER"));
+        }
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void Invoke_RemovePackageFolder_should_remove_package_folder_from_environment_variable()
+        {
+            try
+            {
+                VerifyEnvironmentRepositoryTest("RemovePackageFolder_should_remove_package_folder_from_environment_variable");
+                Assert.IsNull(Environment.GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", EnvironmentVariableTarget.User));
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null, EnvironmentVariableTarget.User);
+            }
+        }
+
+
+
+        [Test]
+        public void GetToolsPath_should_return_tools_directory_in_chocolatey_compatible_directory_path()
         {
             // Arrange
             var envRepos = new EnvironmentRepository();
@@ -108,7 +390,22 @@ namespace Test.Urasandesu.Prig.VSPackage
             var result = envRepos.GetToolsPath();
 
             // Assert
-            Assert.That(result, Is.StringMatching(ToShadowCopyTargetPattern(@"tools")));
+            Assert.AreEqual(@"C:\ProgramData\chocolatey\lib\Prig\tools", result);
+        }
+
+
+
+        [Test]
+        public void GetLibPath_should_return_lib_directory_in_chocolatey_compatible_directory_path()
+        {
+            // Arrange
+            var envRepos = new EnvironmentRepository();
+
+            // Act
+            var result = envRepos.GetLibPath();
+
+            // Assert
+            Assert.AreEqual(@"C:\ProgramData\chocolatey\lib\Prig\lib", result);
         }
 
 
@@ -125,9 +422,9 @@ namespace Test.Urasandesu.Prig.VSPackage
             // Assert
             Assert.AreEqual(2, results.Length);
             Assert.AreEqual(RegistryView.Registry64, results[0].RegistryView);
-            Assert.That(results[0].PathOfInstalling, Is.StringMatching(ToShadowCopyTargetPattern(@"tools\x64\Urasandesu.Prig.dll")));
+            Assert.AreEqual(@"C:\ProgramData\chocolatey\lib\Prig\tools\x64\Urasandesu.Prig.dll", results[0].PathOfInstalling);
             Assert.AreEqual(RegistryView.Registry32, results[1].RegistryView);
-            Assert.That(results[1].PathOfInstalling, Is.StringMatching(ToShadowCopyTargetPattern(@"tools\x86\Urasandesu.Prig.dll")));
+            Assert.AreEqual(@"C:\ProgramData\chocolatey\lib\Prig\tools\x86\Urasandesu.Prig.dll", results[1].PathOfInstalling);
         }
 
 
@@ -142,7 +439,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var result = envRepos.GetNuGetPath();
 
             // Assert
-            Assert.That(result, Is.StringMatching(ToShadowCopyTargetPattern(@"tools\NuGet.exe")));
+            Assert.AreEqual(@"C:\ProgramData\chocolatey\lib\Prig\tools\NuGet.exe", result);
         }
 
 
@@ -172,7 +469,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             var result = envRepos.GetPrigPath();
 
             // Assert
-            Assert.That(result, Is.StringMatching(ToShadowCopyTargetPattern(@"tools\prig.exe")));
+            Assert.AreEqual(@"C:\ProgramData\chocolatey\lib\Prig\tools\prig.exe", result);
         }
 
 
@@ -262,7 +559,7 @@ namespace Test.Urasandesu.Prig.VSPackage
         {
             // Arrange
             var envRepos = new EnvironmentRepository();
-            
+
             // Act
             var result = envRepos.GetFileDescription(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"tools\x64\Urasandesu.Prig.dll"));
 
@@ -303,7 +600,7 @@ namespace Test.Urasandesu.Prig.VSPackage
 
         static int StartEnvironmentRepositoryTest(string testCase, string resultXml)
         {
-            var arguments = string.Format("/domain=None /framework=v4.5 /run:Test.Urasandesu.Prig.VSPackage.EnvironmentRepositoryTest.{0} Test.Urasandesu.Prig.VSPackage.dll /result={1}", testCase, resultXml);
+            var arguments = string.Format("/framework=v4.5 /run:Test.Urasandesu.Prig.VSPackage.EnvironmentRepositoryTest.{0} Test.Urasandesu.Prig.VSPackage.dll /result={1}", testCase, resultXml);
             return StartNUnitConsoleX86(arguments);
         }
 
@@ -332,21 +629,53 @@ namespace Test.Urasandesu.Prig.VSPackage
             var pattern = shadowCopyTargetDirPattern + gap + Regex.Escape(relativePathFromPackageDirectory);
             return pattern;
         }
-    }
-}
 
-namespace Test.Urasandesu.Prig.VSPackage.Mixins.System
-{
-    public static class AppDomainMixin
-    {
-        public static string GetShadowCopyTargetDirectory(this AppDomain domain)
-        {
-            return Path.Combine(domain.SetupInformation.CachePath, domain.SetupInformation.ApplicationName);
-        }
 
-        public static string GetPathInBaseDirectory(this AppDomain domain, string relativePathInApplicationBase)
+
+        class Utility
         {
-            return Path.Combine(domain.BaseDirectory, relativePathInApplicationBase);
+            public static readonly string Tools = @"C:\ProgramData\chocolatey\lib\Prig\tools";
+            public static readonly string Lib = @"C:\ProgramData\chocolatey\lib\Prig\lib";
+
+            static string SourceToolsPath
+            {
+                get
+                {
+                    var srcPath = AppDomain.CurrentDomain.BaseDirectory;
+                    return Path.Combine(srcPath, @"tools");
+                }
+            }
+
+            static string SourceLibPath
+            {
+                get
+                {
+                    var srcPath = AppDomain.CurrentDomain.BaseDirectory;
+                    return Path.Combine(srcPath, @"Lib");
+                }
+            }
+
+            static readonly Computer Computer = new Computer();
+            static readonly EnvironmentRepository EnvironmentRepository = new EnvironmentRepository();
+
+            public static void Init()
+            {
+                Console.WriteLine(EnvironmentRepository.GetVsixToolsPath());
+                if (Computer.FileSystem.DirectoryExists(EnvironmentRepository.GetVsixToolsPath()))
+                    Computer.FileSystem.DeleteDirectory(EnvironmentRepository.GetVsixToolsPath(), DeleteDirectoryOption.DeleteAllContents);
+                if (Computer.FileSystem.DirectoryExists(EnvironmentRepository.GetVsixLibPath()))
+                    Computer.FileSystem.DeleteDirectory(EnvironmentRepository.GetVsixLibPath(), DeleteDirectoryOption.DeleteAllContents);
+                Computer.FileSystem.CopyDirectory(SourceToolsPath, EnvironmentRepository.GetVsixToolsPath());
+                Computer.FileSystem.CopyDirectory(SourceLibPath, EnvironmentRepository.GetVsixLibPath());
+            }
+
+            public static void Cleanup()
+            {
+                if (Computer.FileSystem.DirectoryExists(EnvironmentRepository.GetVsixToolsPath()))
+                    Computer.FileSystem.DeleteDirectory(EnvironmentRepository.GetVsixToolsPath(), DeleteDirectoryOption.DeleteAllContents);
+                if (Computer.FileSystem.DirectoryExists(EnvironmentRepository.GetVsixLibPath()))
+                    Computer.FileSystem.DeleteDirectory(EnvironmentRepository.GetVsixLibPath(), DeleteDirectoryOption.DeleteAllContents);
+            }
         }
     }
 }

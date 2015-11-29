@@ -35,5 +35,6 @@ namespace Urasandesu.Prig.VSPackage
     {
         string StartInstalling(string name, string source);
         string StartUninstalling(string packageName);
+        string StartUpdatingDelegate(string @delegate);
     }
 }
