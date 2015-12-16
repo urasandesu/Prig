@@ -32,6 +32,7 @@
 using Microsoft.VisualBasic.Devices;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
+using Moq;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.AutoMoq;
@@ -332,11 +333,11 @@ namespace Test.Urasandesu.Prig.VSPackage
             try
             {
                 VerifyEnvironmentRepositoryTest("StorePackageFolder_should_set_package_folder_as_environment_variable");
-                Assert.IsNotNull(Environment.GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", EnvironmentVariableTarget.User));
+                Assert.IsNotNull(Environment.GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", EnvironmentVariableTarget.Machine));
             }
             finally
             {
-                Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null, EnvironmentVariableTarget.User);
+                Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null, EnvironmentVariableTarget.Machine);
             }
         }
 
@@ -370,12 +371,242 @@ namespace Test.Urasandesu.Prig.VSPackage
             try
             {
                 VerifyEnvironmentRepositoryTest("RemovePackageFolder_should_remove_package_folder_from_environment_variable");
-                Assert.IsNull(Environment.GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", EnvironmentVariableTarget.User));
+                Assert.IsNull(Environment.GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", EnvironmentVariableTarget.Machine));
             }
             finally
             {
-                Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null, EnvironmentVariableTarget.User);
+                Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null, EnvironmentVariableTarget.Machine);
             }
+        }
+
+
+
+        [Test]
+        [Explicit("This test case will be invoked from the test case that have the name `Invoke_ + <test case name same as this>` automatically. " +
+                  "Note that don't run this test case manually.")]
+        public void RegisterToolsPath_should_set_tools_path_as_environment_variable()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var envRepos = new EnvironmentRepository();
+
+
+            // Act
+            envRepos.RegisterToolsPath();
+
+
+            // Assert
+            var path = Environment.GetEnvironmentVariable("Path");
+            Assert.That(path, Is.StringContaining(@";C:\ProgramData\chocolatey\lib\Prig\tools"));
+        }
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void Invoke_RegisterToolsPath_should_set_tools_path_as_environment_variable()
+        {
+            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            try
+            {
+                VerifyEnvironmentRepositoryTest("RegisterToolsPath_should_set_tools_path_as_environment_variable");
+                
+                var path = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+                Assert.That(path, Is.StringContaining(@";C:\ProgramData\chocolatey\lib\Prig\tools"));
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+            }
+        }
+
+        [Test]
+        [Explicit("This test case will be invoked from the test case that have the name `Invoke_ + <test case name same as this>` automatically. " +
+                  "Note that don't run this test case manually.")]
+        public void RegisterToolsPath_should_do_nothing_if_tools_path_has_already_been_registered()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var envRepos = new EnvironmentRepository();
+            envRepos.RegisterToolsPath();
+
+
+            // Act
+            envRepos.RegisterToolsPath();
+
+
+            // Assert
+            var path = Environment.GetEnvironmentVariable("Path");
+            Assert.That(path, Is.Not.StringContaining(@";C:\ProgramData\chocolatey\lib\Prig\tools;C:\ProgramData\chocolatey\lib\Prig\tools"));
+        }
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void Invoke_RegisterToolsPath_should_do_nothing_if_tools_path_has_already_been_registered()
+        {
+            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            try
+            {
+                VerifyEnvironmentRepositoryTest("RegisterToolsPath_should_do_nothing_if_tools_path_has_already_been_registered");
+
+                var path = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+                Assert.That(path, Is.Not.StringContaining(@";C:\ProgramData\chocolatey\lib\Prig\tools;C:\ProgramData\chocolatey\lib\Prig\tools"));
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+            }
+        }
+
+        [Test]
+        public void RegisterToolsPath_should_set_tools_path_even_if_path_environment_variable_was_null()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var envRepos = new EnvironmentRepository();
+            var mocks = new MockRepository(MockBehavior.Strict);
+            {
+                var m = mocks.Create<Func<string, string>>();
+                m.Setup(_ => _("Path")).Returns(default(string));
+                envRepos.GetEnvironmentVariableString = m.Object;
+            }
+            {
+                var m = mocks.Create<Action<string, string>>();
+                m.Setup(_ => _("Path", @"C:\ProgramData\chocolatey\lib\Prig\tools"));
+                envRepos.SetEnvironmentVariableStringString = m.Object;
+            }
+            {
+                var m = mocks.Create<Func<string, EnvironmentVariableTarget, string>>();
+                m.Setup(_ => _("Path", EnvironmentVariableTarget.Machine)).Returns(default(string));
+                envRepos.GetEnvironmentVariableStringEnvironmentVariableTarget = m.Object;
+            }
+            {
+                var m = mocks.Create<Action<string, string, EnvironmentVariableTarget>>();
+                m.Setup(_ => _("Path", @"C:\ProgramData\chocolatey\lib\Prig\tools", EnvironmentVariableTarget.Machine));
+                envRepos.SetEnvironmentVariableStringStringEnvironmentVariableTarget = m.Object;
+            }
+
+
+            // Act
+            envRepos.RegisterToolsPath();
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+
+
+        [Test]
+        [Explicit("This test case will be invoked from the test case that have the name `Invoke_ + <test case name same as this>` automatically. " +
+                  "Note that don't run this test case manually.")]
+        public void UnregisterToolsPath_should_remove_tools_path_from_environment_variable()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var envRepos = new EnvironmentRepository();
+            envRepos.RegisterToolsPath();
+
+
+            // Act
+            envRepos.UnregisterToolsPath();
+
+
+            // Assert
+            var path = Environment.GetEnvironmentVariable("Path");
+            Assert.That(path, Is.Not.StringContaining(@";C:\ProgramData\chocolatey\lib\Prig\tools"));
+        }
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void Invoke_UnregisterToolsPath_should_remove_tools_path_from_environment_variable()
+        {
+            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            try
+            {
+                VerifyEnvironmentRepositoryTest("UnregisterToolsPath_should_remove_tools_path_from_environment_variable");
+
+                var path = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+                Assert.That(path, Is.Not.StringContaining(@";C:\ProgramData\chocolatey\lib\Prig\tools"));
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+            }
+        }
+
+        [Test]
+        [Explicit("This test case will be invoked from the test case that have the name `Invoke_ + <test case name same as this>` automatically. " +
+                  "Note that don't run this test case manually.")]
+        public void UnregisterToolsPath_should_do_nothing_if_tools_path_has_not_been_registered_yet()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var orgPath = Environment.GetEnvironmentVariable("Path");
+
+            var envRepos = new EnvironmentRepository();
+
+
+            // Act
+            envRepos.UnregisterToolsPath();
+
+
+            // Assert
+            var path = Environment.GetEnvironmentVariable("Path");
+            Assert.AreEqual(orgPath, path);
+        }
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void Invoke_UnregisterToolsPath_should_do_nothing_if_tools_path_has_not_been_registered_yet()
+        {
+            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            try
+            {
+                VerifyEnvironmentRepositoryTest("UnregisterToolsPath_should_do_nothing_if_tools_path_has_not_been_registered_yet");
+
+                var path = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+                Assert.AreEqual(orgPath, path);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+            }
+        }
+
+        [Test]
+        public void UnregisterToolsPath_should_do_nothing_even_if_path_environment_variable_was_null()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var envRepos = new EnvironmentRepository();
+            var mocks = new MockRepository(MockBehavior.Strict);
+            {
+                var m = mocks.Create<Func<string, string>>();
+                m.Setup(_ => _("Path")).Returns(default(string));
+                envRepos.GetEnvironmentVariableString = m.Object;
+            }
+            {
+                var m = mocks.Create<Action<string, string>>();
+                envRepos.SetEnvironmentVariableStringString = m.Object;
+            }
+            {
+                var m = mocks.Create<Func<string, EnvironmentVariableTarget, string>>();
+                m.Setup(_ => _("Path", EnvironmentVariableTarget.Machine)).Returns(default(string));
+                envRepos.GetEnvironmentVariableStringEnvironmentVariableTarget = m.Object;
+            }
+            {
+                var m = mocks.Create<Action<string, string, EnvironmentVariableTarget>>();
+                envRepos.SetEnvironmentVariableStringStringEnvironmentVariableTarget = m.Object;
+            }
+
+
+            // Act
+            envRepos.UnregisterToolsPath();
+
+
+            // Assert
+            mocks.VerifyAll();
         }
 
 
@@ -547,6 +778,36 @@ namespace Test.Urasandesu.Prig.VSPackage
 
             // Act
             var result = envRepos.ExistsFile(fixture.Create<string>());
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+
+        [Test]
+        public void ExistsDirectory_should_return_true_if_directory_exists()
+        {
+            // Arrange
+            var envRepos = new EnvironmentRepository();
+
+            // Act
+            var result = envRepos.ExistsDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ExistsDirectory_should_return_false_if_directory_does_not_exist()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var envRepos = new EnvironmentRepository();
+
+            // Act
+            var result = envRepos.ExistsDirectory(fixture.Create<string>());
 
             // Assert
             Assert.IsFalse(result);

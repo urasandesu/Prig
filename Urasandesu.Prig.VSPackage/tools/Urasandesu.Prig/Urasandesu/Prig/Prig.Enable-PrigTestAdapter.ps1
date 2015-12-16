@@ -27,6 +27,16 @@
 #  THE SOFTWARE.
 #
 
+function IsTargetProcess {
+    param (
+        [System.Management.ManagementObject]
+        $Win32Process
+    )
+
+    ![string]::IsNullOrEmpty($ProfilerTargetProcessNameValue) -and $Win32Process.ProcessName -match $ProfilerTargetProcessNameValue -or 
+    ![string]::IsNullOrEmpty($ProfilerTargetProcessArgumentValue) -and $Win32Process.CommandLine -match $ProfilerTargetProcessArgumentValue
+}
+
 function Enable-PrigTestAdapter {
 
     [CmdletBinding()]
@@ -47,7 +57,7 @@ function Enable-PrigTestAdapter {
         }
     }
 
-    $executionEngineProcess = (Get-WmiObject Win32_Process | ? { $_.ParentProcessId -eq $devenvId -and $_.ProcessName -match 'vstest\.executionengine' })
+    $executionEngineProcess = Get-WmiObject Win32_Process | ? { $_.ParentProcessId -eq $devenvId } | ? { IsTargetProcess($_) }
 
     if ($null -ne $executionEngineProcess) {
         $executionengineId = $executionEngineProcess.ProcessId
@@ -75,5 +85,5 @@ function Enable-PrigTestAdapter {
     [System.Environment]::SetEnvironmentVariable($ProfilerKey, $ProfilerValue)
     [System.Environment]::SetEnvironmentVariable($ProfilerCurrentDirectoryKey, $targetDir)
     [System.Environment]::SetEnvironmentVariable($ProfilerTargetProcessNameKey, $ProfilerTargetProcessNameValue)
-    [System.Environment]::SetEnvironmentVariable($PrigPackageFolderKey, [System.Environment]::GetEnvironmentVariable($PrigPackageFolderKey, "User"))
+    [System.Environment]::SetEnvironmentVariable($ProfilerTargetProcessArgumentKey, $ProfilerTargetProcessArgumentValue)
 }

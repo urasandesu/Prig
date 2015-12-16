@@ -38,7 +38,7 @@ param (
     $Project
 )
 
-$pkgPath = [Environment]::GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", "User")
+$pkgPath = [Environment]::GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER")
 $ToolsPath = [IO.Path]::Combine($pkgPath, 'tools')
 Import-Module ([System.IO.Path]::Combine($ToolsPath, 'Urasandesu.Prig'))
 

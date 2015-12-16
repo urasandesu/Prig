@@ -76,6 +76,7 @@ namespace prig {
             using boost::wformat;
             using std::endl;
             using std::wcout;
+            using Urasandesu::CppAnonym::Environment;
             
             
             auto prigConfigPath = PrigConfig::GetConfigPath();
@@ -90,6 +91,12 @@ namespace prig {
                 return 0;
             }
             
+            if (!Environment::IsCurrentProcessRunAsAdministrator())
+            {
+                wcout << wformat(L"Installation process has failed. To install source:%|1$s|, you have to run this command as Administrator.") % m_source << endl;
+                return 1;
+            }
+
             auto libPath = PrigConfig::GetLibPath();
             if (!CreateSymLinkForPrigLib(libPath, m_source))
             {

@@ -2,8 +2,8 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0</version>
-    <title>Prig: Open Source Alternative to Microsoft Fakes</title>
+    <version>2.1.0</version>
+    <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
     <licenseUrl>https://github.com/urasandesu/Prig/blob/master/LICENSE.md</licenseUrl>
@@ -18,8 +18,11 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.1
-* 
+    <releaseNotes>Version 2.1.0
+* Fixed #48: No longer need install.ps1 for NuGet. Clean up the content.
+* Fixed #49: Minimize the dependency to Chocolatey. Prig can support standalone installation via VSIX since this version.
+* Fixed #52: Support Visual Studio 2015 Update 1. Deal that the test execution engine is changed from `vstest.executionengine` to `TE.ProcessHost.Managed`.
+* Fixed some potentially bugs for `prig` command. It could not remove the symbolic link that has been already moved. Additionaly, improve some error messages.
 
 
 Version 2.0.0

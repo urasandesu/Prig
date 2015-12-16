@@ -2,14 +2,15 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="0a06101d-8de3-40c4-b083-c5c16ca227ae" Version="2.0.0" Language="en-US" Publisher="Urasandesu" />
-    <DisplayName>Prig Test Adapter</DisplayName>
-    <Description xml:space="preserve">Visual Studio Integrated Test Adapter for Prig. Prig(PRototyping jIG) is a framework that generates a Test Double like Microsoft Fakes/Typemock Isolator/Telerik JustMock based on Unmanaged Profiler APIs. This framework enables that any methods are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.</Description>
-    <MoreInfo>https://github.com/urasandesu/Prig</MoreInfo>
-    <GettingStartedGuide>https://github.com/urasandesu/Prig.V2Docs/blob/master/README.md</GettingStartedGuide>
+    <DisplayName>Prig - Open Source Alternative to Microsoft Fakes</DisplayName>
+    <Description xml:space="preserve">Prig is a lightweight framework for test indirections in .NET Framework. This framework enables that any methods are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.</Description>
+    <MoreInfo>https://github.com/urasandesu/Prig/wiki</MoreInfo>
+    <License>LICENSE.md</License>
+    <GettingStartedGuide>https://github.com/urasandesu/Prig/blob/master/README.md</GettingStartedGuide>
     <ReleaseNotes>https://github.com/urasandesu/Prig/releases</ReleaseNotes>
     <Icon>Resources\PrigIcon.png</Icon>
     <PreviewImage>Resources\PrigPreviewImage.png</PreviewImage>
-    <Tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</Tags>
+    <Tags>tdd, isolation, mock, mocks, mocking, fake, fakes, faking, unittest, unittesting</Tags>
   </Metadata>
   <Installation InstalledByMsi="false">
     <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0,14.0]" />

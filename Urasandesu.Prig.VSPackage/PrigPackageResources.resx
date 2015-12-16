@@ -130,7 +130,7 @@
     <value>Skipped Prig registration processes because Visual Studio elevation is canceled by the user.</value>
   </data>
   <data name="SkippedMachineWideProcess_Uninstalling_AlreadyRegistered_Message" xml:space="preserve">
-    <value>Skipped Prig unregistration processes because Prig has been already registered.</value>
+    <value>Skipped Prig unregistration processes because Prig has been already unregistered.</value>
   </data>
   <data name="SkippedMachineWideProcess_Uninstalling_CanceledByUser_Message" xml:space="preserve">
     <value>Skipped Prig unregistration processes because Visual Studio elevation is canceled by the user.</value>
@@ -229,19 +229,24 @@ Do you want to restart Visual Studio now?</value>
     <value>Completed disabling Prig Test Adapter.</value>
   </data>
   <data name="SkippedProjectWideProcessFor_0_PrigAssemblyAdding_NotRegisteredYet_MessageFormat" xml:space="preserve">
-    <value>Skipped adding Prig Assembly for {0} because Prig has not been registered yet.</value>
+    <value>Skipped adding Prig Assembly for {0} because Prig has not been registered yet.
+Please select "Prig" - "Register Prig (Needs Restarting)" menu.</value>
   </data>
   <data name="SkippedProjectWideProcessFor_0_PrigIndirectionSettingsEditing_NotRegisteredYet_MessageFormat" xml:space="preserve">
-    <value>Skipped editing Prig Assembly for {0} because Prig has not been registered yet.</value>
+    <value>Skipped editing Prig Assembly for {0} because Prig has not been registered yet.
+Please select "Prig" - "Register Prig (Needs Restarting)" menu.</value>
   </data>
   <data name="SkippedProjectWideProcessFor_0_PrigAssemblyRemoving_NotRegisteredYet_MessageFormat" xml:space="preserve">
-    <value>Skipped removing Prig Assembly {0} because Prig has not been registered yet.</value>
+    <value>Skipped removing Prig Assembly {0} because Prig has not been registered yet.
+Please select "Prig" - "Register Prig (Needs Restarting)" menu.</value>
   </data>
   <data name="SkippedProjectWideProcessFor_0_TestAdapterEnabling_NotRegisteredYet_MessageFormat" xml:space="preserve">
-    <value>Skipped enabling Prig Test Adapter for {0} because Prig has not been registered yet.</value>
+    <value>Skipped enabling Prig Test Adapter for {0} because Prig has not been registered yet.
+Please select "Prig" - "Register Prig (Needs Restarting)" menu.</value>
   </data>
   <data name="SkippedProjectWideProcessFor_0_TestAdapterDisabling_NotRegisteredYet_MessageFormat" xml:space="preserve">
-    <value>Skipped disabling Prig Test Adapter because Prig has not been registered yet.</value>
+    <value>Skipped disabling Prig Test Adapter because Prig has not been registered yet.
+Please select "Prig" - "Register Prig (Needs Restarting)" menu.</value>
   </data>
   <data name="EnableTestAdapterMenu" xml:space="preserve">
     <value>&amp;Enable Test Adapter</value>

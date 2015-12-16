@@ -38,21 +38,3 @@ param (
     $Project
 )
 
-$pkgPath = [Environment]::GetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", "User")
-$chocoLibPath = [IO.Path]::Combine($pkgPath, 'lib')
-$chocoToolsPath = [IO.Path]::Combine($pkgPath, 'tools')
-
-
-Import-Module ([System.IO.Path]::Combine($chocoToolsPath, 'Urasandesu.Prig'))
-
-
-$here = Split-Path $MyInvocation.MyCommand.Path
-$nugetLibPath = [IO.Path]::Combine([IO.Path]::GetDirectoryName($here), 'lib')
-$nugetToolsPath = [IO.Path]::Combine($nugetPackageFolder, 'tools')
-rmdir $nugetLibPath -Recurse -ErrorAction SilentlyContinue
-mkdir $nugetLibPath | Out-Null
-foreach ($dll in (dir $chocoLibPath)) {
-    $target = [IO.Path]::Combine($nugetLibPath, $dll.Name)
-    $source = $dll.FullName
-    cmd /c ('" mklink "{0}" "{1}" "' -f $target, $source)
-}

@@ -40,6 +40,8 @@ namespace Urasandesu.Prig.VSPackage
         string GetVsixLibPath();
         void RegisterPackageFolder();
         void UnregisterPackageFolder();
+        void RegisterToolsPath();
+        void UnregisterToolsPath();
         string GetPackageFolder();
         string GetPackageFolderKey();
         void StorePackageFolder(string variableValue);
@@ -54,6 +56,7 @@ namespace Urasandesu.Prig.VSPackage
         RegistryKey OpenRegistrySubKey(RegistryKey key, string name);
         object GetRegistryValue(RegistryKey key, string name);
         bool ExistsFile(string path);
+        bool ExistsDirectory(string path);
         string GetFileDescription(string path);
     }
 }

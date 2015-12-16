@@ -35,7 +35,6 @@ $here = Split-Path $MyInvocation.MyCommand.Path
 
 
 
-New-Variable PrigPackageFolderKey 'URASANDESU_PRIG_PACKAGE_FOLDER' -Option ReadOnly
 New-Variable AssemblyNameExTypeName 'Urasandesu.Prig.AssemblyNameEx' -Option ReadOnly
 New-Variable EnableProfilingKey 'COR_ENABLE_PROFILING' -Option ReadOnly
 New-Variable EnableProfilingValueDisabled '0' -Option ReadOnly
@@ -44,7 +43,9 @@ New-Variable ProfilerKey 'COR_PROFILER' -Option ReadOnly
 New-Variable ProfilerValue '{532C1F05-F8F3-4FBA-8724-699A31756ABD}' -Option ReadOnly
 New-Variable ProfilerCurrentDirectoryKey 'URASANDESU_PRIG_CURRENT_DIRECTORY' -Option ReadOnly
 New-Variable ProfilerTargetProcessNameKey 'URASANDESU_PRIG_TARGET_PROCESS_NAME' -Option ReadOnly
-New-Variable ProfilerTargetProcessNameValue 'vstest\.executionengine' -Option ReadOnly
+New-Variable ProfilerTargetProcessNameValue '' -Option ReadOnly
+New-Variable ProfilerTargetProcessArgumentKey 'URASANDESU_PRIG_TARGET_PROCESS_ARGUMENT' -Option ReadOnly
+New-Variable ProfilerTargetProcessArgumentValue '(vstest\.executionengine)|(te\.processhost\.managed[^/]+/role=testexecution)' -Option ReadOnly
 
 
 
@@ -752,7 +753,6 @@ function ConvertStubToStubsXml {
 . $(Join-Path $here Prig.Get-IndirectionStubSetting.ps1)
 . $(Join-Path $here Prig.Get-PackageName.ps1)
 . $(Join-Path $here Prig.Get-PackageToolsPath.ps1)
-. $(Join-Path $here Prig.Invoke-Prig.ps1)
 . $(Join-Path $here Prig.New-PrigCsproj.ps1)
 . $(Join-Path $here Prig.New-PrigProxiesCs.ps1)
 . $(Join-Path $here Prig.New-PrigProxyTypeIntroducersCs.ps1)

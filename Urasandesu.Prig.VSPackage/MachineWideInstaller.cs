@@ -103,6 +103,7 @@ namespace Urasandesu.Prig.VSPackage
             }
 
             EnvironmentRepository.RegisterPackageFolder();
+            EnvironmentRepository.RegisterToolsPath();
             CreateNupkg(mwInstl);
             RegisterNuGetSource(mwInstl);
             RegisterEnvironmentVariables(mwInstl);
@@ -157,16 +158,28 @@ namespace Urasandesu.Prig.VSPackage
 
         void InstallDefaultSource(MachineWideInstallation mwInstl)
         {
-            var pkgName = "TestWindow";
             var msvsdirPath = new DirectoryInfo(@"C:\Program Files (x86)").EnumerateDirectories("Microsoft Visual Studio *").
                                                                            Where(_ => Regex.IsMatch(_.Name, @"Microsoft Visual Studio \d+\.\d+")).
                                                                            OrderByDescending(_ => _.Name).
                                                                            Select(_ => _.FullName).
                                                                            First();
-            var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");
-            mwInstl.OnDefaultSourceInstalling(pkgName, src);
-            var stdout = PrigExecutor.StartInstalling(pkgName, src);
-            mwInstl.OnDefaultSourceInstalled(stdout);
+            {
+                var pkgName = "TestWindow";
+                var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");
+                mwInstl.OnDefaultSourceInstalling(pkgName, src);
+                var stdout = PrigExecutor.StartInstalling(pkgName, src);
+                mwInstl.OnDefaultSourceInstalled(stdout);
+            }
+            {
+                var pkgName = "TestWindow1";
+                var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow\x64");
+                if (EnvironmentRepository.ExistsDirectory(src))
+                {
+                    mwInstl.OnDefaultSourceInstalling(pkgName, src);
+                    var stdout = PrigExecutor.StartInstalling(pkgName, src);
+                    mwInstl.OnDefaultSourceInstalled(stdout);
+                }
+            }
         }
 
 
@@ -187,6 +200,7 @@ namespace Urasandesu.Prig.VSPackage
             UnregisterProfiler(mwUninstl);
             UnregisterEnvironmentVariables(mwUninstl);
             UnregisterNuGetSource(mwUninstl);
+            EnvironmentRepository.UnregisterToolsPath();
             EnvironmentRepository.UnregisterPackageFolder();
 
             mwUninstl.OnCompleted(MachineWideProcessResults.Completed);

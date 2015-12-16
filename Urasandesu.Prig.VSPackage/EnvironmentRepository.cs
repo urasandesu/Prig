@@ -36,6 +36,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Urasandesu.Prig.VSPackage
 {
@@ -92,13 +93,64 @@ namespace Urasandesu.Prig.VSPackage
         public void StorePackageFolder(string variableValue)
         {
             Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue);
-            Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue, EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue, EnvironmentVariableTarget.Machine);
         }
         
         public void RemovePackageFolder()
         {
-            Environment.SetEnvironmentVariable(GetPackageFolderKey(), null, EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable(GetPackageFolderKey(), null, EnvironmentVariableTarget.Machine);
             Environment.SetEnvironmentVariable(GetPackageFolderKey(), null);
+        }
+
+        internal Func<string, string> GetEnvironmentVariableString = Environment.GetEnvironmentVariable;
+        internal Action<string, string> SetEnvironmentVariableStringString = Environment.SetEnvironmentVariable;
+        internal Func<string, EnvironmentVariableTarget, string> GetEnvironmentVariableStringEnvironmentVariableTarget = Environment.GetEnvironmentVariable;
+        internal Action<string, string, EnvironmentVariableTarget> SetEnvironmentVariableStringStringEnvironmentVariableTarget = Environment.SetEnvironmentVariable;
+
+        public void RegisterToolsPath()
+        {
+            RegisterToolsPath(
+                () => GetEnvironmentVariableString("Path"), 
+                value => SetEnvironmentVariableStringString("Path", value)
+            );
+            RegisterToolsPath(
+                () => GetEnvironmentVariableStringEnvironmentVariableTarget("Path", EnvironmentVariableTarget.Machine), 
+                value => SetEnvironmentVariableStringStringEnvironmentVariableTarget("Path", value, EnvironmentVariableTarget.Machine)
+            );
+        }
+
+        void RegisterToolsPath(Func<string> pathGetter, Action<string> pathSetter)
+        {
+            var path = pathGetter();
+            var pattern = @";?" + Regex.Escape(GetToolsPath());
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            if (!string.IsNullOrEmpty(path) && regex.IsMatch(path))
+                return;
+
+            pathSetter(path + (string.IsNullOrEmpty(path) ? "" : ";") + GetToolsPath());
+        }
+
+        public void UnregisterToolsPath()
+        {
+            UnregisterToolsPath(
+                () => GetEnvironmentVariableString("Path"),
+                value => SetEnvironmentVariableStringString("Path", value)
+            );
+            UnregisterToolsPath(
+                () => GetEnvironmentVariableStringEnvironmentVariableTarget("Path", EnvironmentVariableTarget.Machine),
+                value => SetEnvironmentVariableStringStringEnvironmentVariableTarget("Path", value, EnvironmentVariableTarget.Machine)
+            );
+        }
+
+        void UnregisterToolsPath(Func<string> pathGetter, Action<string> pathSetter)
+        {
+            var path = pathGetter();
+            var pattern = @";?" + Regex.Escape(GetToolsPath());
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            if (string.IsNullOrEmpty(path) || !regex.IsMatch(path))
+                return;
+
+            pathSetter(regex.Replace(path, ""));
         }
 
         public string GetToolsPath()
@@ -164,6 +216,11 @@ namespace Urasandesu.Prig.VSPackage
         public bool ExistsFile(string path)
         {
             return File.Exists(path);
+        }
+
+        public bool ExistsDirectory(string path)
+        {
+            return Directory.Exists(path);
         }
 
         public string GetFileDescription(string path)

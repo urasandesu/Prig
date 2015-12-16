@@ -85,6 +85,12 @@ switch ($PsCmdlet.ParameterSetName) {
             ($resx.root.data | ? { $_.name -eq 'NuGetRootPackageVersion' }).value = $nuspec.package.metadata.version
             $resx.Save($resxPath)
 
+            $vsixmanifestPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage\source.extension.vsixmanifest')
+            $vsixmanifest = [xml](Get-Content $vsixmanifestPath)
+
+            $vsixmanifest.PackageManifest.Metadata.Identity.Version = $nuspec.package.metadata.version
+            $vsixmanifest.Save($vsixmanifestPath)
+
             $idlPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig\UrasandesuPrig.idl')
             $idl = Get-Content $idlPath
 

@@ -805,16 +805,19 @@ namespace Test.Urasandesu.Prig.VSPackage
         }
 
         [Test]
-        public void Install_should_install_the_newest_TestWindow_as_default_source()
+        public void Install_should_install_the_newest_TestWindow_as_default_source_in_VS2013_or_VS2015()
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var testWindowVS2013OrVS2015 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
             {
-                var m = fixture.Freeze<Mock<IPrigExecutor>>();
-                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(@"C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"))).ReturnsUsingFixture(fixture);
+                var m = new Mock<IPrigExecutor>(MockBehavior.Strict);
+                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2013OrVS2015))).ReturnsUsingFixture(fixture);
+                fixture.Inject(m);
             }
 
             var mwInstllr = fixture.NewMachineWideInstaller();
@@ -829,22 +832,105 @@ namespace Test.Urasandesu.Prig.VSPackage
         }
 
         [Test]
-        public void Install_should_raise_the_event_to_install_the_newest_TestWindow_before_and_after()
+        public void Install_should_raise_the_event_to_install_the_newest_TestWindow_before_and_after_in_VS2013_or_VS2015()
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
-            var stdout = fixture.Create<string>();
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var testWindowVS2013OrVS2015 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
+            var stdouts = fixture.CreateMany<string>(2).ToArray();
             {
                 var m = fixture.Freeze<Mock<IPrigExecutor>>();
-                m.Setup(_ => _.StartInstalling(It.IsAny<string>(), It.IsAny<string>())).Returns(stdout);
+                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2013OrVS2015))).Returns(stdouts[0]);
             }
             var mocks = new MockRepository(MockBehavior.Strict);
-            var order = new MockOrder();
-            mwInstl.DefaultSourceInstalling += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _("TestWindow", It.IsRegex(@"C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow")))).Object;
-            mwInstl.DefaultSourceInstalled += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(stdout))).Object;
+            var order1 = new MockOrder();
+            mwInstl.DefaultSourceInstalling +=
+                mocks.Create<Action<string, string>>().
+                    InOrder(order1, m => m.Setup(_ => _("TestWindow", It.IsRegex(testWindowVS2013OrVS2015)))).Object;
+            mwInstl.DefaultSourceInstalled +=
+                mocks.Create<Action<string>>().
+                    InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).Object;
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Install(mwInstl);
+
+
+            // Assert
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void Install_should_install_the_newest_TestWindow_as_default_source_in_VS2015Update1()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var testWindowVS2015x86 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
+            var testWindowVS2015x64 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\x64$";
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.ExistsDirectory(It.IsRegex(testWindowVS2015x64))).Returns(true);
+            }
+            {
+                var m = new Mock<IPrigExecutor>(MockBehavior.Strict);
+                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2015x86))).ReturnsUsingFixture(fixture);
+                m.Setup(_ => _.StartInstalling("TestWindow1", It.IsRegex(testWindowVS2015x64))).ReturnsUsingFixture(fixture);
+                fixture.Inject(m);
+            }
+
+            var mwInstllr = fixture.NewMachineWideInstaller();
+
+
+            // Act
+            mwInstllr.Install(mwInstl);
+
+
+            // Assert
+            fixture.Freeze<Mock<IPrigExecutor>>().VerifyAll();
+        }
+
+        [Test]
+        public void Install_should_raise_the_event_to_install_the_newest_TestWindow_before_and_after_in_VS2015Update1()
+        {
+            // Arrange
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            var mwInstl = new MachineWideInstallation("2.0.0");
+            fixture.FreezeUninstalledEnvironment();
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var testWindowVS2015x86 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
+            var testWindowVS2015x64 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\x64$";
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.ExistsDirectory(It.IsRegex(testWindowVS2015x64))).Returns(true);
+            }
+            var stdouts = fixture.CreateMany<string>(2).ToArray();
+            {
+                var m = fixture.Freeze<Mock<IPrigExecutor>>();
+                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2015x86))).Returns(stdouts[0]);
+                m.Setup(_ => _.StartInstalling("TestWindow1", It.IsRegex(testWindowVS2015x64))).Returns(stdouts[1]);
+            }
+            var mocks = new MockRepository(MockBehavior.Strict);
+            var order1 = new MockOrder();
+            var order2 = new MockOrder();
+            mwInstl.DefaultSourceInstalling +=
+                mocks.Create<Action<string, string>>().
+                    InOrder(order1, m => m.Setup(_ => _("TestWindow", It.IsRegex(testWindowVS2015x86)))).
+                    InOrder(order2, m => m.Setup(_ => _("TestWindow1", It.IsRegex(testWindowVS2015x64)))).Object;
+            mwInstl.DefaultSourceInstalled +=
+                mocks.Create<Action<string>>().
+                    InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
+                    InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
 
             var mwInstllr = fixture.NewMachineWideInstaller();
 

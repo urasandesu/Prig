@@ -105,6 +105,7 @@ namespace prig {
             using boost::wformat;
             using std::endl;
             using std::wcout;
+            using Urasandesu::CppAnonym::Environment;
             using Urasandesu::CppAnonym::CppAnonymNotSupportedException;
             
             if (!m_delegate.empty())
@@ -128,7 +129,14 @@ namespace prig {
                 BOOST_FOREACH (auto &pkg, config.Packages)
                 {
                     if (!hasProcessed)
+                    {
+                        if (!Environment::IsCurrentProcessRunAsAdministrator())
+                        {
+                            wcout << wformat(L"Update process has failed. To update package:%|1$s|, you have to run this command as Administrator.") % m_package << endl;
+                            return 1;
+                        }
                         hasProcessed = true;
+                    }
                     
                     CreateSymLinkForAdditionalDelegates(pkg, additionalDlgts);
                     pkg.AddOrUpdateAdditionalDelegates(additionalDlgts);
