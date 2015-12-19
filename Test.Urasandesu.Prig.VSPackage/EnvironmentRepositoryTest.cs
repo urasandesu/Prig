@@ -41,6 +41,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Microsoft.Win32;
 using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System;
 using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO;
 using Urasandesu.Prig.VSPackage;
@@ -338,6 +339,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             finally
             {
                 Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null);
             }
         }
 
@@ -376,6 +378,7 @@ namespace Test.Urasandesu.Prig.VSPackage
             finally
             {
                 Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("URASANDESU_PRIG_PACKAGE_FOLDER", null);
             }
         }
 
@@ -404,7 +407,8 @@ namespace Test.Urasandesu.Prig.VSPackage
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void Invoke_RegisterToolsPath_should_set_tools_path_as_environment_variable()
         {
-            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            var orgProcessPath = Environment.GetEnvironmentVariable("Path");
+            var orgMachinePath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
             try
             {
                 VerifyEnvironmentRepositoryTest("RegisterToolsPath_should_set_tools_path_as_environment_variable");
@@ -414,7 +418,8 @@ namespace Test.Urasandesu.Prig.VSPackage
             }
             finally
             {
-                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgMachinePath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgProcessPath);
             }
         }
 
@@ -442,7 +447,8 @@ namespace Test.Urasandesu.Prig.VSPackage
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void Invoke_RegisterToolsPath_should_do_nothing_if_tools_path_has_already_been_registered()
         {
-            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            var orgProcessPath = Environment.GetEnvironmentVariable("Path");
+            var orgMachinePath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
             try
             {
                 VerifyEnvironmentRepositoryTest("RegisterToolsPath_should_do_nothing_if_tools_path_has_already_been_registered");
@@ -452,7 +458,8 @@ namespace Test.Urasandesu.Prig.VSPackage
             }
             finally
             {
-                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgMachinePath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgProcessPath);
             }
         }
 
@@ -465,24 +472,26 @@ namespace Test.Urasandesu.Prig.VSPackage
             var envRepos = new EnvironmentRepository();
             var mocks = new MockRepository(MockBehavior.Strict);
             {
-                var m = mocks.Create<Func<string, string>>();
-                m.Setup(_ => _("Path")).Returns(default(string));
-                envRepos.GetEnvironmentVariableString = m.Object;
-            }
-            {
-                var m = mocks.Create<Action<string, string>>();
-                m.Setup(_ => _("Path", @"C:\ProgramData\chocolatey\lib\Prig\tools"));
-                envRepos.SetEnvironmentVariableStringString = m.Object;
-            }
-            {
                 var m = mocks.Create<Func<string, EnvironmentVariableTarget, string>>();
+                m.Setup(_ => _("ALLUSERSPROFILE", EnvironmentVariableTarget.Process)).Returns(@"C:\ProgramData");
+                m.Setup(_ => _("Path", EnvironmentVariableTarget.Process)).Returns(default(string));
                 m.Setup(_ => _("Path", EnvironmentVariableTarget.Machine)).Returns(default(string));
-                envRepos.GetEnvironmentVariableStringEnvironmentVariableTarget = m.Object;
+                envRepos.EnvironmentGetEnvironmentVariable = m.Object;
             }
             {
                 var m = mocks.Create<Action<string, string, EnvironmentVariableTarget>>();
-                m.Setup(_ => _("Path", @"C:\ProgramData\chocolatey\lib\Prig\tools", EnvironmentVariableTarget.Machine));
-                envRepos.SetEnvironmentVariableStringStringEnvironmentVariableTarget = m.Object;
+                m.Setup(_ => _("Path", @"C:\ProgramData\chocolatey\lib\Prig\tools", EnvironmentVariableTarget.Process));
+                envRepos.EnvironmentSetEnvironmentVariable = m.Object;
+            }
+            {
+                var m = mocks.Create<Func<RegistryKey, string, bool, RegistryKey>>();
+                m.Setup(_ => _(Registry.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment", true)).Returns(RegistryKeyMixin.DummyEnvironmentKey);
+                envRepos.RegistryKeyOpenSubKeyStringBoolean = m.Object;
+            }
+            {
+                var m = mocks.Create<Action<RegistryKey, string, object>>();
+                m.Setup(_ => _(RegistryKeyMixin.DummyEnvironmentKey, "Path", @"C:\ProgramData\chocolatey\lib\Prig\tools"));
+                envRepos.RegistryKeySetValue = m.Object;
             }
 
 
@@ -520,7 +529,8 @@ namespace Test.Urasandesu.Prig.VSPackage
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void Invoke_UnregisterToolsPath_should_remove_tools_path_from_environment_variable()
         {
-            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            var orgProcessPath = Environment.GetEnvironmentVariable("Path");
+            var orgMachinePath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
             try
             {
                 VerifyEnvironmentRepositoryTest("UnregisterToolsPath_should_remove_tools_path_from_environment_variable");
@@ -530,7 +540,8 @@ namespace Test.Urasandesu.Prig.VSPackage
             }
             finally
             {
-                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgMachinePath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgProcessPath);
             }
         }
 
@@ -559,17 +570,19 @@ namespace Test.Urasandesu.Prig.VSPackage
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void Invoke_UnregisterToolsPath_should_do_nothing_if_tools_path_has_not_been_registered_yet()
         {
-            var orgPath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
+            var orgProcessPath = Environment.GetEnvironmentVariable("Path");
+            var orgMachinePath = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
             try
             {
                 VerifyEnvironmentRepositoryTest("UnregisterToolsPath_should_do_nothing_if_tools_path_has_not_been_registered_yet");
 
                 var path = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
-                Assert.AreEqual(orgPath, path);
+                Assert.AreEqual(orgMachinePath, path);
             }
             finally
             {
-                Environment.SetEnvironmentVariable("Path", orgPath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgMachinePath, EnvironmentVariableTarget.Machine);
+                Environment.SetEnvironmentVariable("Path", orgProcessPath);
             }
         }
 
@@ -582,22 +595,23 @@ namespace Test.Urasandesu.Prig.VSPackage
             var envRepos = new EnvironmentRepository();
             var mocks = new MockRepository(MockBehavior.Strict);
             {
-                var m = mocks.Create<Func<string, string>>();
-                m.Setup(_ => _("Path")).Returns(default(string));
-                envRepos.GetEnvironmentVariableString = m.Object;
-            }
-            {
-                var m = mocks.Create<Action<string, string>>();
-                envRepos.SetEnvironmentVariableStringString = m.Object;
-            }
-            {
                 var m = mocks.Create<Func<string, EnvironmentVariableTarget, string>>();
+                m.Setup(_ => _("ALLUSERSPROFILE", EnvironmentVariableTarget.Process)).Returns(@"C:\ProgramData");
+                m.Setup(_ => _("Path", EnvironmentVariableTarget.Process)).Returns(default(string));
                 m.Setup(_ => _("Path", EnvironmentVariableTarget.Machine)).Returns(default(string));
-                envRepos.GetEnvironmentVariableStringEnvironmentVariableTarget = m.Object;
+                envRepos.EnvironmentGetEnvironmentVariable = m.Object;
             }
             {
                 var m = mocks.Create<Action<string, string, EnvironmentVariableTarget>>();
-                envRepos.SetEnvironmentVariableStringStringEnvironmentVariableTarget = m.Object;
+                envRepos.EnvironmentSetEnvironmentVariable = m.Object;
+            }
+            {
+                var m = mocks.Create<Func<RegistryKey, string, bool, RegistryKey>>();
+                envRepos.RegistryKeyOpenSubKeyStringBoolean = m.Object;
+            }
+            {
+                var m = mocks.Create<Action<RegistryKey, string, object>>();
+                envRepos.RegistryKeySetValue = m.Object;
             }
 
 

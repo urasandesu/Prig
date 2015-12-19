@@ -36,6 +36,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace Urasandesu.Prig.VSPackage
@@ -81,7 +82,7 @@ namespace Urasandesu.Prig.VSPackage
 
         public string GetPackageFolder()
         {
-            var programDataPath = Environment.GetEnvironmentVariable("ALLUSERSPROFILE");
+            var programDataPath = GetEnvironmentVariable("ALLUSERSPROFILE", EnvironmentVariableTarget.Process);
             return Path.Combine(programDataPath, @"chocolatey\lib\Prig");
         }
 
@@ -92,30 +93,25 @@ namespace Urasandesu.Prig.VSPackage
 
         public void StorePackageFolder(string variableValue)
         {
-            Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue);
-            Environment.SetEnvironmentVariable(GetPackageFolderKey(), variableValue, EnvironmentVariableTarget.Machine);
+            SetEnvironmentVariable(GetPackageFolderKey(), variableValue);
+            SetEnvironmentVariable(GetPackageFolderKey(), variableValue, EnvironmentVariableTarget.Machine);
         }
         
         public void RemovePackageFolder()
         {
-            Environment.SetEnvironmentVariable(GetPackageFolderKey(), null, EnvironmentVariableTarget.Machine);
-            Environment.SetEnvironmentVariable(GetPackageFolderKey(), null);
+            SetEnvironmentVariable(GetPackageFolderKey(), null, EnvironmentVariableTarget.Machine);
+            SetEnvironmentVariable(GetPackageFolderKey(), null);
         }
-
-        internal Func<string, string> GetEnvironmentVariableString = Environment.GetEnvironmentVariable;
-        internal Action<string, string> SetEnvironmentVariableStringString = Environment.SetEnvironmentVariable;
-        internal Func<string, EnvironmentVariableTarget, string> GetEnvironmentVariableStringEnvironmentVariableTarget = Environment.GetEnvironmentVariable;
-        internal Action<string, string, EnvironmentVariableTarget> SetEnvironmentVariableStringStringEnvironmentVariableTarget = Environment.SetEnvironmentVariable;
 
         public void RegisterToolsPath()
         {
             RegisterToolsPath(
-                () => GetEnvironmentVariableString("Path"), 
-                value => SetEnvironmentVariableStringString("Path", value)
+                () => GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine),
+                value => SetEnvironmentVariable("Path", value, EnvironmentVariableTarget.Machine)
             );
             RegisterToolsPath(
-                () => GetEnvironmentVariableStringEnvironmentVariableTarget("Path", EnvironmentVariableTarget.Machine), 
-                value => SetEnvironmentVariableStringStringEnvironmentVariableTarget("Path", value, EnvironmentVariableTarget.Machine)
+                () => GetEnvironmentVariable("Path"),
+                value => SetEnvironmentVariable("Path", value)
             );
         }
 
@@ -133,12 +129,12 @@ namespace Urasandesu.Prig.VSPackage
         public void UnregisterToolsPath()
         {
             UnregisterToolsPath(
-                () => GetEnvironmentVariableString("Path"),
-                value => SetEnvironmentVariableStringString("Path", value)
+                () => GetEnvironmentVariable("Path"),
+                value => SetEnvironmentVariable("Path", value)
             );
             UnregisterToolsPath(
-                () => GetEnvironmentVariableStringEnvironmentVariableTarget("Path", EnvironmentVariableTarget.Machine),
-                value => SetEnvironmentVariableStringStringEnvironmentVariableTarget("Path", value, EnvironmentVariableTarget.Machine)
+                () => GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine),
+                value => SetEnvironmentVariable("Path", value, EnvironmentVariableTarget.Machine)
             );
         }
 
@@ -151,6 +147,103 @@ namespace Urasandesu.Prig.VSPackage
                 return;
 
             pathSetter(regex.Replace(path, ""));
+        }
+
+        internal Func<string, EnvironmentVariableTarget, string> EnvironmentGetEnvironmentVariable = Environment.GetEnvironmentVariable;
+        internal Action<string, string, EnvironmentVariableTarget> EnvironmentSetEnvironmentVariable = Environment.SetEnvironmentVariable;
+
+        public string GetEnvironmentVariable(string variable)
+        {
+            return GetEnvironmentVariable(variable, EnvironmentVariableTarget.Process);
+        }
+
+        public string GetEnvironmentVariable(string variable, EnvironmentVariableTarget target)
+        {
+            return EnvironmentGetEnvironmentVariable(variable, target);
+        }
+
+        public void SetEnvironmentVariable(string variable, string value)
+        {
+            SetEnvironmentVariable(variable, value, EnvironmentVariableTarget.Process);
+        }
+
+        const int WM_SETTINGCHANGE = 0x001A;
+
+        [Flags]
+        enum SendMessageTimeoutFlags : uint
+        {
+            SMTO_NORMAL = 0x0,
+            SMTO_BLOCK = 0x1,
+            SMTO_ABORTIFHUNG = 0x2,
+            SMTO_NOTIMEOUTIFNOTHUNG = 0x8,
+            SMTO_ERRORONEXIT = 0x20
+        }
+
+        [DllImport("user32.dll", BestFitMapping = false, SetLastError = true)]
+        static extern IntPtr SendMessageTimeout(
+            IntPtr hWnd,
+            int Msg,
+            IntPtr wParam,
+            string lParam,
+            SendMessageTimeoutFlags fuFlags,
+            uint uTimeout,
+            IntPtr lpdwResult);
+
+        public void SetEnvironmentVariable(string variable, string value, EnvironmentVariableTarget target)
+        {
+            if (target == EnvironmentVariableTarget.Process)
+            {
+                EnvironmentSetEnvironmentVariable(variable, value, target);
+                return;
+            }
+
+            switch (target)
+            {
+                case EnvironmentVariableTarget.Machine:
+                    SetMachineEnvironmentVariable(variable, value);
+                    break;
+                case EnvironmentVariableTarget.User:
+                    SetUserEnvironmentVariable(variable, value);
+                    break;
+                default:
+                    throw new NotSupportedException(target.ToString());
+            }
+
+            var explorers = Process.GetProcessesByName("explorer");
+            foreach (var explorer in explorers)
+            {
+                var ret = SendMessageTimeout(explorer.MainWindowHandle, WM_SETTINGCHANGE, IntPtr.Zero, "Environment", SendMessageTimeoutFlags.SMTO_NORMAL, 0, IntPtr.Zero);
+                Debug.Assert(ret != IntPtr.Zero);
+            }
+            SendMessageTimeout((IntPtr)0xFFFF, WM_SETTINGCHANGE, IntPtr.Zero, "Environment", SendMessageTimeoutFlags.SMTO_NORMAL, 0, IntPtr.Zero);
+        }
+
+        void SetMachineEnvironmentVariable(string variable, string value)
+        {
+            using (var environment = OpenRegistrySubKey(Registry.LocalMachine, @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment", true))
+            {
+                if (environment == null)
+                    return;
+
+                if (value == null)
+                    RegistryKeyDeleteValue(environment, variable, false);
+                else
+                    RegistryKeySetValue(environment, variable, value);
+            }
+        }
+
+        void SetUserEnvironmentVariable(string variable, string value)
+        {
+            using (var environment = OpenRegistrySubKey(Registry.CurrentUser, @"Environment", true))
+            {
+                if (environment == null)
+                    return;
+
+                if (value == null)
+                    RegistryKeyDeleteValue(environment, variable, false);
+                else
+                    RegistryKeySetValue(environment, variable, value);
+            }
         }
 
         public string GetToolsPath()
@@ -198,14 +291,25 @@ namespace Urasandesu.Prig.VSPackage
             return Path.Combine(toolsPath, "prig.exe");
         }
 
+        internal Func<RegistryHive, RegistryView, RegistryKey> RegistryKeyOpenBaseKey = RegistryKey.OpenBaseKey;
+        internal Func<RegistryKey, string, RegistryKey> RegistryKeyOpenSubKeyString = (key, name) => key.OpenSubKey(name);
+        internal Func<RegistryKey, string, bool, RegistryKey> RegistryKeyOpenSubKeyStringBoolean = (key, name, writable) => key.OpenSubKey(name, writable);
+        internal Action<RegistryKey, string, bool> RegistryKeyDeleteValue = (key, name, throwOnMissingValue) => key.DeleteValue(name, throwOnMissingValue);
+        internal Action<RegistryKey, string, object> RegistryKeySetValue = (key, name, value) => key.SetValue(name, value);
+
         public RegistryKey OpenRegistryBaseKey(RegistryHive hKey, RegistryView view)
         {
-            return RegistryKey.OpenBaseKey(hKey, view);
+            return RegistryKeyOpenBaseKey(hKey, view);
         }
 
         public RegistryKey OpenRegistrySubKey(RegistryKey key, string name)
         {
-            return key.OpenSubKey(name);
+            return RegistryKeyOpenSubKeyString(key, name);
+        }
+
+        public RegistryKey OpenRegistrySubKey(RegistryKey key, string name, bool writable)
+        {
+            return RegistryKeyOpenSubKeyStringBoolean(key, name, writable);
         }
 
         public object GetRegistryValue(RegistryKey key, string name)

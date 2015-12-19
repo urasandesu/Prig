@@ -39,5 +39,6 @@ namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Microsoft.Win32
         public static readonly RegistryKey DummyX86InProcServer32Key = Registry.LocalMachine;
         public static readonly RegistryKey DummyX64ClassesRootKey = Registry.CurrentUser;
         public static readonly RegistryKey DummyX64InProcServer32Key = Registry.CurrentConfig;
+        public static readonly RegistryKey DummyEnvironmentKey = Registry.CurrentConfig;
     }
 }

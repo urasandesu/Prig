@@ -30,6 +30,7 @@
 
 
 using Microsoft.Win32;
+using System;
 
 namespace Urasandesu.Prig.VSPackage
 {
@@ -46,6 +47,10 @@ namespace Urasandesu.Prig.VSPackage
         string GetPackageFolderKey();
         void StorePackageFolder(string variableValue);
         void RemovePackageFolder();
+        string GetEnvironmentVariable(string variable);
+        string GetEnvironmentVariable(string variable, EnvironmentVariableTarget target);
+        void SetEnvironmentVariable(string variable, string value);
+        void SetEnvironmentVariable(string variable, string value, EnvironmentVariableTarget target);
         string GetToolsPath();
         string GetLibPath();
         ProfilerLocation[] GetProfilerLocations();
@@ -54,7 +59,9 @@ namespace Urasandesu.Prig.VSPackage
         string GetPrigPath();
         RegistryKey OpenRegistryBaseKey(RegistryHive hKey, RegistryView view);
         RegistryKey OpenRegistrySubKey(RegistryKey key, string name);
+        RegistryKey OpenRegistrySubKey(RegistryKey key, string name, bool writable);
         object GetRegistryValue(RegistryKey key, string name);
+
         bool ExistsFile(string path);
         bool ExistsDirectory(string path);
         string GetFileDescription(string path);
