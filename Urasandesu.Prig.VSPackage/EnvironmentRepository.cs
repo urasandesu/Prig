@@ -212,10 +212,9 @@ namespace Urasandesu.Prig.VSPackage
             var explorers = Process.GetProcessesByName("explorer");
             foreach (var explorer in explorers)
             {
-                var ret = SendMessageTimeout(explorer.MainWindowHandle, WM_SETTINGCHANGE, IntPtr.Zero, "Environment", SendMessageTimeoutFlags.SMTO_NORMAL, 0, IntPtr.Zero);
-                Debug.Assert(ret != IntPtr.Zero);
+                SendMessageTimeout(explorer.MainWindowHandle, WM_SETTINGCHANGE, IntPtr.Zero, "Environment", SendMessageTimeoutFlags.SMTO_NORMAL, 1, IntPtr.Zero);
             }
-            SendMessageTimeout((IntPtr)0xFFFF, WM_SETTINGCHANGE, IntPtr.Zero, "Environment", SendMessageTimeoutFlags.SMTO_NORMAL, 0, IntPtr.Zero);
+            SendMessageTimeout((IntPtr)0xFFFF, WM_SETTINGCHANGE, IntPtr.Zero, "Environment", SendMessageTimeoutFlags.SMTO_NORMAL, 1, IntPtr.Zero);
         }
 
         void SetMachineEnvironmentVariable(string variable, string value)
