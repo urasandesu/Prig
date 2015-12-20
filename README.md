@@ -243,8 +243,7 @@ When Test Adapter was installed successfully, you can also modify the `Test Sett
 
 ### Step 6: Run Tests
 In fact, to enable any profiler based mocking tool, you have to set the environment variables. Therefore, such libraries - Microsoft Fakes/Typemock Isolator/Telerik JustMock provide small runner to satisfy the requisition, also it is true at Prig. Choose the menu `PRIG` - `Enable Test Adapter for ConsoleApplicationTest`:  
-![Run Tests 01](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2001.png)  
-_2015/12/16 The above picture should be changed to the newer_
+![Run Tests 01](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2001.png)
 
 Then, execute `TEST` - `Run` - `All Tests`, you can get test results in the Test Explorer.  
 ![Run Tests 02](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2002.png)
