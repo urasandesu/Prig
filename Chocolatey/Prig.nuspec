@@ -2,8 +2,8 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.0.0</version>
-    <title>Prig: Open Source Alternative to Microsoft Fakes</title>
+    <version>2.1.0</version>
+    <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
     <licenseUrl>https://github.com/urasandesu/Prig/blob/master/LICENSE.md</licenseUrl>
@@ -18,7 +18,14 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.0.0
+    <releaseNotes>Version 2.1.0
+* Fixed #48: No longer need install.ps1 for NuGet. Clean up the content.
+* Fixed #49: Minimize the dependency to Chocolatey. Prig can support standalone installation via VSIX since this version.
+* Fixed #52: Support Visual Studio 2015 Update 1. Deal that the test execution engine is changed from `vstest.executionengine` to `TE.ProcessHost.Managed`.
+* Fixed some potentially bugs for `prig` command. It could not remove the symbolic link that has been already moved. Additionaly, improve some error messages.
+
+
+Version 2.0.0
 * Fixed #31: Issue with out parameters.
 * Fixed #46: Support mocking DLL imports.
 * Against the comment-based help of Prig management commands, unified the definition of word because they were defined. See also our [wiki](https://github.com/urasandesu/Prig/wiki/Cheat-Sheet).
@@ -75,32 +82,10 @@ Version 2.0.0-alpha01
 * [NOTICE] Supported Visual Studio integrated environment.
 
 
-Version 1.1.0
-* Release 1.1.
-* Fixed #26: Prig assembly shouldn't need InternalsVisibleToAttribute.
-* Fixed #27: Test stalled if adding the indirection settings for all members of DateTime.
-* Fixed #28: The indirect tests sometimes fail.
-* Supported the feature "Prig setup session" that makes adding the indirection stub settings more easier.
-
-
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.
     </releaseNotes>
-    <dependencies>
-      <dependency id="nuget.commandline" version="2.8.3" />
-    </dependencies> 
   </metadata>
   <files>
-    <file src="..\Release\AnyCPU\Urasandesu.NAnonym.dll" target="lib" />
-    <file src="..\Release\AnyCPU\Urasandesu.Prig.Framework.dll" target="lib" />
-    <file src="..\Release\AnyCPU\Urasandesu.Prig.Delegates.dll" target="lib" />
-    <file src="..\Release\AnyCPU\Urasandesu.Prig.Delegates.0404.dll" target="lib" />
-    <file src="..\Release\AnyCPU\Urasandesu.Prig.Delegates.0804.dll" target="lib" />
-    <file src="..\Release\AnyCPU\Urasandesu.Prig.Delegates.1205.dll" target="lib" />
-    <file src="..\Release\x86\Prig.vsix" target="tools" />
-    <file src="..\NUnitTestAdapter\package\*.nupkg.hedge" target="tools" />
-    <file src="..\Release\x64\Urasandesu.Prig.dll" target="tools\x64\" />
-    <file src="..\Release\x86\Urasandesu.Prig.dll" target="tools\x86\" />
-    <file src="..\Release\x86\prig.exe" target="tools" />
     <file src="tools\**\*.*" target="tools" />
   </files>
 </package>

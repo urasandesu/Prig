@@ -28,9 +28,6 @@
 #
 
 
-$chocoToolsPath = [IO.Path]::Combine($env:chocolateyPackageFolder, 'tools')
-
-
 '  Uninstalling Prig.vsix...'
 $vscomntoolsPaths = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.value }
 if (0 -eq $vscomntoolsPaths.Length) {
@@ -43,29 +40,3 @@ if (![System.IO.File]::Exists($vsDevCmdPath)) {
     exit 1805378044
 }
 cmd /c ('" "{0}" & vsixinstaller /q /u:0a06101d-8de3-40c4-b083-c5c16ca227ae "' -f $vsDevCmdPath)
-
-
-$prig = [IO.Path]::Combine($chocoToolsPath, 'prig.exe')
-$packageName = "All"
-"  Uninstalling the all package..."
-& $prig uninstall $packageName
-
-
-$profilers = [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'tools\x64\Urasandesu.Prig.dll'), 
-             [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'tools\x86\Urasandesu.Prig.dll')
-foreach ($profiler in $profilers) {
-    "  Unregistering the profiler '$profiler' from Registry..."
-    regsvr32 /s /u $profiler
-}
-
-
-$variableName = "URASANDESU_PRIG_PACKAGE_FOLDER"
-"  Unregistering the environment variable '$variableName'..."
-[System.Environment]::SetEnvironmentVariable($variableName, $null, 'User')
-
-
-$name = "Prig Source"
-"  Unregistering the nuget source '$name'..."
-if (0 -lt @(nuget sources list | ? { $_ -match 'Prig Source' }).Length) {
-    nuget sources remove -name $name
-}

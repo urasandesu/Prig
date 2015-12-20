@@ -28,57 +28,8 @@
 #
 
 
-$chocoToolsPath = [IO.Path]::Combine($env:chocolateyPackageFolder, 'tools')
-
-
-foreach ($hedge in (dir $env:chocolateyPackageFolder -r | ? { $_.Extension -eq '.hedge' })) {
-    $src = $hedge.FullName
-    $dst = $src -replace '\.hedge$', ''
-    "  Renaming '$src' to '$dst'..."
-    Move-Item $src $dst -Force
-}
-
-
-$packageName = "Prig"
-"  Creating the nuget package '$packageName'..."
-$nugetPackageFolder = [IO.Path]::Combine($chocoToolsPath, 'NuGet')
-nuget pack ([IO.Path]::Combine($nugetPackageFolder, "Prig.nuspec")) -OutputDirectory $chocoToolsPath
-
-
-$name = "Prig Source"
-$source = $chocoToolsPath
-"  Registering the nuget source '$source' as '$name'..."
-if (0 -lt @(nuget sources list | ? { $_ -match 'Prig Source' }).Length) {
-    nuget sources update -name $name -source "$source"
-} else {
-    nuget sources add -name $name -source "$source"
-}
-
-
-$variableName = "URASANDESU_PRIG_PACKAGE_FOLDER"
-$variableValue = $env:chocolateyPackageFolder
-"  Registering the environment variable '$variableValue' as '$variableName'..."
-Install-ChocolateyEnvironmentVariable $variableName $variableValue
-
-
-$profilers = [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'tools\x64\Urasandesu.Prig.dll'), 
-             [System.IO.Path]::Combine($env:chocolateyPackageFolder, 'tools\x86\Urasandesu.Prig.dll')
-foreach ($profiler in $profilers) {
-    "  Registering the profiler '$profiler' to Registry..."
-    regsvr32 /s /i $profiler
-}
-
-
-$prig = [IO.Path]::Combine($chocoToolsPath, 'prig.exe')
-$packageName = "TestWindow"
-$msvsdirPaths = dir 'C:\Program Files (x86)\Microsoft Visual Studio *' | ? { $_.name -match 'Microsoft Visual Studio \d+\.\d+' } | sort name -Descending | % { $_.FullName }
-$source = [IO.Path]::Combine($msvsdirPaths[0], "Common7\IDE\CommonExtensions\Microsoft\TestWindow")
-"  Installing the default source '$source' as the package '$packageName'..."
-& $prig install $packageName -source $source
-
-
+'  Installing Prig.vsix...'
 $packageName = 'Prig'
-$vsixPath = [IO.Path]::Combine($chocoToolsPath, 'Prig.vsix')
-$vsixUrl = ([uri]$vsixPath).AbsoluteUri
+$vsixUrl = 'https://visualstudiogallery.msdn.microsoft.com/d010ce67-9389-4c7b-89cc-b3a4234da716/file/190901/3/Prig.vsix'
 
 Install-ChocolateyVsixPackage $packageName $vsixUrl
