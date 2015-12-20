@@ -32,5 +32,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
+[assembly: InternalsVisibleTo("Test.Urasandesu.Prig.VSPackage")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
-
+// For debugging, instrallation and uninstallation can be performed by the following commands in the Developer Command Prompt for VS2013 as Administrator.
+// CMD Prig> vsixinstaller Debug\x86\Prig.vsix
+// CMD Prig> vsixinstaller /u:0a06101d-8de3-40c4-b083-c5c16ca227ae & regsvr32 /u .\Release\x64\Urasandesu.Prig.dll & regsvr32 /u .\Release\x86\Urasandesu.Prig.dll

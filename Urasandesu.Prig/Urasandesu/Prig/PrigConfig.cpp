@@ -135,7 +135,7 @@ namespace Urasandesu { namespace Prig {
 
         void PrigConfig::DeletePackage(PrigPackageConfig const &item)
         {
-            auto isTarget = [&item](PrigPackageConfig const &pkg) { return equivalent(pkg.Source, item.Source); };
+            auto isTarget = [&item](PrigPackageConfig const &pkg) { return boost::iequals(pkg.Source.native(), item.Source.native()); };
             auto result = boost::remove_if(Packages, isTarget);
             if (result != Packages.end())
                 Packages.erase(result, Packages.end());

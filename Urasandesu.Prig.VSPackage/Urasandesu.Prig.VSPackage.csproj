@@ -203,25 +203,52 @@
     <Compile Include="Infrastructure\ProgressState.cs" />
     <Compile Include="Infrastructure\StatusbarViewModel.cs" />
     <Compile Include="Infrastructure\VSConstantsAlternative.cs" />
+    <Compile Include="IEnvironmentRepository.cs" />
+    <Compile Include="EnvironmentRepository.cs" />
+    <Compile Include="IMachineWideInstaller.cs" />
+    <Compile Include="IManagementCommandExecutor.cs" />
+    <Compile Include="IProcessExecutor.cs" />
+    <Compile Include="INuGetExecutor.cs" />
+    <Compile Include="IPrigExecutor.cs" />
+    <Compile Include="MachineWideProcesses.cs" />
+    <Compile Include="PrigExecutor.cs" />
+    <Compile Include="PrigPackageResources.cs" />
+    <Compile Include="ProjectWideProcesses.cs" />
+    <Compile Include="Regsvr32Executor.cs" />
+    <Compile Include="IRegsvr32Executor.cs" />
+    <Compile Include="NuGetExecutor.cs" />
+    <Compile Include="ProcessExecutor.cs" />
+    <Compile Include="ManagementCommandExecutor.cs" />
+    <Compile Include="ManagementCommandInfo.cs" />
+    <Compile Include="ProjectWidePackage.cs" />
+    <Compile Include="MachineWideInstaller.cs" />
+    <Compile Include="MachineWidePackage.cs" />
+    <Compile Include="MachinePrerequisite.cs" />
+    <Compile Include="MachineWideProcessResults.cs" />
+    <Compile Include="ProfilerLocation.cs" />
+    <Compile Include="ProjectWideInstaller.cs" />
     <Compile Include="PrigActivityLog.cs" />
     <Compile Include="PrigPackageCommands.cs" />
     <Compile Include="PrigPackageController.cs" />
+    <Compile Include="IProjectWideInstaller.cs" />
     <Compile Include="PrigPackageViewModel.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="PrigPackage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PkgCmdID.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="PrigPackage.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PkgCmdID.cs" />
+    <Compile Include="SkippedReasons.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="PrigPackageResources.resx" />
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
@@ -229,10 +256,151 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LICENSE.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Resources\ShieldIcon.png" />
+    <Content Include="tools\Add-PrigAssembly.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Import-PrigSetupSession.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Invoke-PilotStubber.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\PilotStubber.prig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Remove-PrigAssembly.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig.snk">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\format.ps1xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu.Prig.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu.Prig.psm1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Add-PrigAssembly.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.ConvertTo-PrigAssemblyName.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.ConvertTo-ProcessorArchitectureString.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Disable-PrigTestAdapter.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Enable-PrigTestAdapter.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Find-IndirectionTarget.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Get-AssemblyNameExs.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Get-AssemblyNameExsFrom.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Get-IndirectionStubSetting.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Get-PackageName.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Get-PackageToolsPath.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.New-PrigCsproj.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.New-PrigProxiesCs.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.New-PrigProxyTypeIntroducersCs.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.New-PrigStubsCs.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.New-PrigTokensCs.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.New-PrigTypeIntroducersCs.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.psm1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Remove-PrigAssembly.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\Urasandesu.Prig\Urasandesu\Prig\Prig.Start-PrigSetup.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\NuGet\Prig.nuspec">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\NuGet\tools\Init.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\NuGet\tools\Install.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\NuGet\tools\Uninstall.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\NUnitTestAdapterForPrig.2.0.0.nupkg">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="PrigPackage.vsct">
@@ -243,6 +411,30 @@
     <None Include="Resources\Images.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="lib\Urasandesu.NAnonym.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="lib\Urasandesu.Prig.Delegates.0404.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="lib\Urasandesu.Prig.Delegates.0804.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="lib\Urasandesu.Prig.Delegates.1205.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="lib\Urasandesu.Prig.Delegates.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="lib\Urasandesu.Prig.Framework.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Package.ico" />
     <Content Include="Resources\PrigIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -250,6 +442,22 @@
     </Content>
     <Content Include="Resources\PrigPreviewImage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\NuGet.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\prig.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\x64\Urasandesu.Prig.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="tools\x86\Urasandesu.Prig.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
@@ -269,6 +477,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
+      <Project>{c04a5e86-30e1-4c38-b916-324d000e240e}</Project>
+      <Name>Urasandesu.NAnonym</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>

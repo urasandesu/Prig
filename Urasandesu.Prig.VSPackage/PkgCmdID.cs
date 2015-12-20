@@ -43,6 +43,10 @@ namespace Urasandesu.Prig.VSPackage
         public const uint EnableTestAdapterCommand = 0x1102;
         public const uint DisableTestAdapterCommand = 0x1103;
 
+        public const uint RegistrationMenuGroup = 0x1104;
+        public const uint RegisterPrigCommand = 0x1105;
+        public const uint UnregisterPrigCommand = 0x1106;
+
         public const uint AddPrigAssemblyForMSCorLibGroup = 0x1011;
         public const uint AddPrigAssemblyForMSCorLibCommand = 0x1012;
 

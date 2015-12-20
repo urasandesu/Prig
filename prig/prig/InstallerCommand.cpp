@@ -52,6 +52,7 @@ namespace prig {
             using boost::filesystem::exists;
             using boost::filesystem::recursive_directory_iterator;
             using boost::filesystem::remove;
+            using boost::system::error_code;
 
             if (!exists(source))
                 return false;
@@ -62,8 +63,8 @@ namespace prig {
                     continue;
                 
                 auto symlink = source / i->path().filename();
-                if (exists(symlink))
-                    remove(symlink);
+                auto ec = error_code();
+                remove(symlink, ec);
                 create_symlink(i->path(), symlink);
             }
 
@@ -75,6 +76,7 @@ namespace prig {
             using boost::wformat;
             using std::endl;
             using std::wcout;
+            using Urasandesu::CppAnonym::Environment;
             
             
             auto prigConfigPath = PrigConfig::GetConfigPath();
@@ -89,6 +91,12 @@ namespace prig {
                 return 0;
             }
             
+            if (!Environment::IsCurrentProcessRunAsAdministrator())
+            {
+                wcout << wformat(L"Installation process has failed. To install source:%|1$s|, you have to run this command as Administrator.") % m_source << endl;
+                return 1;
+            }
+
             auto libPath = PrigConfig::GetLibPath();
             if (!CreateSymLinkForPrigLib(libPath, m_source))
             {

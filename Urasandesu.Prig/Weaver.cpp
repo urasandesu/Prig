@@ -83,6 +83,7 @@ namespace CWeaverDetail {
         /* [in] */ IUnknown *pICorProfilerInfoUnk)
     {
         using ATL::CComQIPtr;
+        using boost::algorithm::join;
         using boost::filesystem::current_path;
         using boost::lexical_cast;
         using boost::bad_lexical_cast;
@@ -122,10 +123,17 @@ namespace CWeaverDetail {
         CPPANONYM_D_LOGW1(L"Runtime Version: %|1$s|", version);
         
         auto procPath = Environment::GetCurrentProcessPath();
+        auto procArgs = Environment::GetCurrentProcessCommandLine();
+        auto procArg = join(procArgs, L" ");
         auto targetProcName = Environment::GetEnvironmentVariable(L"URASANDESU_PRIG_TARGET_PROCESS_NAME");
+        auto targetProcArg = Environment::GetEnvironmentVariable(L"URASANDESU_PRIG_TARGET_PROCESS_ARGUMENT");
         CPPANONYM_D_LOGW1(L"Current Process Path: %|1$s|", procPath);
         CPPANONYM_D_LOGW1(L"Target Process Name: %|1$s|", targetProcName);
-        if (!targetProcName.empty() && !regex_search(procPath.native(), wregex(targetProcName)))
+        CPPANONYM_D_LOGW1(L"Current Process Argument: %|1$s|", procArg);
+        CPPANONYM_D_LOGW1(L"Target Process Argument: %|1$s|", targetProcArg);
+        if (!targetProcName.empty() && !regex_search(procPath.native(), wregex(targetProcName, wregex::icase)))
+            return S_OK;
+        if (!targetProcArg.empty() && !regex_search(procArg, wregex(targetProcArg, wregex::icase)))
             return S_OK;
 
         CPPANONYM_LOG_NAMED_SCOPE("if (regex_search(procPath, wregex(targetProcName)))");

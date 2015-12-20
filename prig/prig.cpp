@@ -86,6 +86,26 @@ struct ExecuteCommandVisitor :
 int wmain(int argc, WCHAR* argv[])
 {
     using namespace prig;
+    using boost::lexical_cast;
+    using boost::bad_lexical_cast;
+    using Urasandesu::CppAnonym::Environment;
+
+#ifdef _DEBUG
+    auto dbgBreak = 0ul;
+    try
+    {
+        auto strDbgBreak = Environment::GetEnvironmentVariable("URASANDESU_PRIG_DEBUGGING_BREAK");
+        dbgBreak = lexical_cast<DWORD>(strDbgBreak);
+    }
+    catch(bad_lexical_cast const &)
+    {
+        dbgBreak = -1;
+    }
+    if (dbgBreak == 0)
+        ::_CrtDbgBreak();
+    else if (dbgBreak != -1)
+        ::Sleep(dbgBreak);
+#endif
 
     try
     {

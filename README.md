@@ -1,5 +1,5 @@
 # Prig: Open Source Alternative to Microsoft Fakes
-![Prig](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/PrigPreviewImage.png)
+![Prig](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/PrigPreviewImage.png)
 
 Prig(PRototyping jIG) is a framework that generates a [Test Double](http://martinfowler.com/bliki/TestDouble.html) like [Microsoft Fakes](http://msdn.microsoft.com/en-us/library/hh549175.aspx)/[Typemock Isolator](http://www.typemock.com/isolator-product-page)/[Telerik JustMock](http://www.telerik.com/products/mocking.aspx) based on Unmanaged Profiler APIs.
 This framework enables that any methods are replaced with mocks. For example, a static property, a private method, a non-virtual member and so on.
@@ -7,7 +7,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Oct 12, 2015, Released V2.0.0.
+As of Dec 20, 2015, Released V2.1.0.
 
 
 
@@ -31,27 +31,38 @@ namespace QuickTour
 You probably can't test this code, because `DateTime.Now` returns the value that depends on an external environment. To make be testable, you should replace `DateTime.Now` to the Test Double that returns the fake information. If you use Prig, it will enable you to generate a Test Double by the following steps without any editing the product code:
 
 
-### Step 1: Install From Chocolatey
-Install Chocolatey in accordance with [the top page](https://chocolatey.org/). Then, run Developer Command Prompt for VS2013 as Administrator, execute the following command: 
-```dos
-CMD C:\> choco install prig -y
-```
+### Step 1: Install From Visual Studio Gallery
+Run Visual Studio 2013(Community or more, 2015 is also supported) as Administrator and choose `TOOLS` - `Extensions and Updates...`.  
+![Extensions and Updates... menu](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%201%20Install%20From%20Visual%20Studio%20Gallery%2001.png)
+
+Now in the Extensions and Updates window, take the following steps:
+
+1. On the left side, ensure `Visual Studio Gallery` is selected under `Online`.
+2. In the search box in the upper right corner, type `prig`.
+3. Select the `Prig` package, and click `Download`.
+
+![Extensions and Updates dialog](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%201%20Install%20From%20Visual%20Studio%20Gallery%2002.png)
 
 **NOTE:** Prig requires PowerShell v3.0+. If you want to use Prig in Windows 7, please install [Windows Management Framework 3.0+](https://www.microsoft.com/en-us/download/details.aspx?id=34595) beforehand. [See also this issue](https://github.com/urasandesu/Prig/issues/41).
 
+Once restart Visual Studio, you can find `PRIG` in the menu. Choose `PRIG` - `Register Prig (Needs Restarting)`.  
+![Register Prig menu](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%201%20Install%20From%20Visual%20Studio%20Gallery%2003.png)
+
+Finally restart Visual Studio then you are now ready.
+
 
 ### Step 2: Add Stub Settings
-Run Visual Studio 2013(Community or more) as Administrator, add test project(e.g. `QuickTourTest`). Then, right click `References` and select `Add Prig Assembly for mscorlib`:  
-![Add Stub Settings](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%202%20Add%20Stub%20Settings.png)
+Add test project(e.g. `QuickTourTest`). Then, right click `References` and choose `Add Prig Assembly for mscorlib`:  
+![Add Stub Settings](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%202%20Add%20Stub%20Settings.png)
 
 
 ### Step 3: Modify Stub Settings
-You can find the [Stub Settings File](https://github.com/urasandesu/Prig/wiki/Cheat-Sheet#stub_settings_file) `<assembly name>.<runtime version>.v<assembly version>.prig` in the project(in this case, it is `mscorlib.v4.0.30319.v4.0.0.0.prig`). So, right click the file and select `Edit Prig Indirection Settings`:  
-![Edit Prig Indirection Settings](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2001.png)
+You can find the [Stub Settings File](https://github.com/urasandesu/Prig/wiki/Cheat-Sheet#stub_settings_file) `<assembly name>.<runtime version>.v<assembly version>.prig` in the project(in this case, it is `mscorlib.v4.0.30319.v4.0.0.0.prig`). So, right click the file and choose `Edit Prig Indirection Settings`:  
+![Edit Prig Indirection Settings](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2001.png)
 
 
 Then, [Prig Setup Session](https://github.com/urasandesu/Prig/wiki/Cheat-Sheet#prig_setup_session) will start:  
-![Prig Setup Session](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2002.png)
+![Prig Setup Session](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2002.png)
 
 
 ```powershell
@@ -109,7 +120,7 @@ PS 01.QuickTour> exit
 ```
 
 Exit the [Prig Setup Session](https://github.com/urasandesu/Prig/wiki/Cheat-Sheet#prig_setup_session), and paste the copied information to the [Stub Settings File](https://github.com/urasandesu/Prig/wiki/Cheat-Sheet#stub_settings_file):  
-![Indirection Setting File](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2003.png)
+![Indirection Setting File](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%203%20Modify%20Stub%20Settings%2003.png)
 
 
 ```xml
@@ -223,19 +234,19 @@ PM> Install-Package NUnitTestAdapterForPrig
 
 **NOTE:** Unfortunately, you can't use official [NUnit Test Adapter](https://www.nuget.org/packages/NUnitTestAdapter/) because it doesn't support any configurations like prime NUnit which is supported, e.g. [NUnit Gui Runner's Settings](http://www.nunit.org/index.php?p=settingsDialog&r=2.6.4) and [NUnit-Console's Settings](http://www.nunit.org/index.php?p=consoleCommandLine&r=2.6.4).
 
-After install, build the test project and select the menu `TEST` - `Windows` - `Test Explorer`. Then, you can find runnable tests in the Test Explorer.  
-![Install Test Adapter 01](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2001.png)
+After install, build the test project and choose the menu `TEST` - `Windows` - `Test Explorer`. Then, you can find runnable tests in the Test Explorer.  
+![Install Test Adapter 01](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2001.png)
 
 When Test Adapter was installed successfully, you can also modify the `Test Settings`. As the following image, change `Default Processor Architecture` to `x64` and uncheck `Keep Test Execution Engine Running`:  
-![Install Test Adapter 02](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2002.png)
+![Install Test Adapter 02](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%205%20Install%20Test%20Adapter%2002.png)
 
 
 ### Step 6: Run Tests
-In fact, to enable any profiler based mocking tool, you have to set the environment variables. Therefore, such libraries - Microsoft Fakes/Typemock Isolator/Telerik JustMock provide small runner to satisfy the requisition, also it is true at Prig. Select the menu `PRIG` - `Enable Test Adapter for ConsoleApplicationTest`:  
-![Run Tests 01](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2001.png)
+In fact, to enable any profiler based mocking tool, you have to set the environment variables. Therefore, such libraries - Microsoft Fakes/Typemock Isolator/Telerik JustMock provide small runner to satisfy the requisition, also it is true at Prig. Choose the menu `PRIG` - `Enable Test Adapter for ConsoleApplicationTest`:  
+![Run Tests 01](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2001.png)
 
 Then, execute `TEST` - `Run` - `All Tests`, you can get test results in the Test Explorer.  
-![Run Tests 02](https://github.com/urasandesu/Prig/blob/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2002.png)
+![Run Tests 02](https://cdn.rawgit.com/urasandesu/Prig/master/Urasandesu.Prig.VSPackage/Resources/Step%206%20Run%20Tests%2002.png)
 
 
 ### Final Step: Refactoring and Get Trig Back!
@@ -306,7 +317,7 @@ Performing configuration checks
 ...
 ```
 * [Google Test 1.6](https://code.google.com/p/googletest/)  
-Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the `Build` menu, and open `Configuration Manager...`. On `Configuration Manager` dialog box, in the `Active Solution Platform` drop-down list, select the `<New...>` option. After the `New Solution Platform` dialog box is opened, in the `Type or select the new platform` drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.
+Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the `Build` menu, and open `Configuration Manager...`. On `Configuration Manager` dialog box, in the `Active Solution Platform` drop-down list, choose the `<New...>` option. After the `New Solution Platform` dialog box is opened, in the `Type or select the new platform` drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.
 * [NUnit 2.6.3.13283](http://www.nunit.org/)  
 Install using with the installer(NUnit-2.6.3.msi).
 * [Modeling SDK for Microsoft Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40754)  

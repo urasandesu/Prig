@@ -40,6 +40,7 @@ namespace Urasandesu.Prig.VSPackage
         public const string PrigPackageString = "0a06101d-8de3-40c4-b083-c5c16ca227ae";
         public const string MainMenuString = "349577aa-b891-4271-bc7a-2121ccb68ee5";
         public const string MainMenuGroupString = "1ee497a1-b076-46b0-8808-64deb408c423";
+        public const string RegistrationMenuGroupString = "b635358f-b28c-4dac-b31a-7dccddfe7b0a";
         public const string AddPrigAssemblyForMSCorLibGroupString = "b99f3bdd-fee9-42ac-a943-303620e0ce53";
         public const string AddPrigAssemblyGroupString = "7c0c2ffb-c3a5-45d0-9887-026566d68825";
         public const string EditPrigIndirectionSettingsGroupString = "15fa994b-e3c6-4f6a-acdb-f311d1ebfa65";
@@ -47,6 +48,7 @@ namespace Urasandesu.Prig.VSPackage
 
         public static readonly Guid MainMenu = new Guid(MainMenuString);
         public static readonly Guid MainMenuGroup = new Guid(MainMenuGroupString);
+        public static readonly Guid RegistrationMenuGroup = new Guid(RegistrationMenuGroupString);
         public static readonly Guid AddPrigAssemblyForMSCorLibGroup = new Guid(AddPrigAssemblyForMSCorLibGroupString);
         public static readonly Guid AddPrigAssemblyGroup = new Guid(AddPrigAssemblyGroupString);
         public static readonly Guid EditPrigIndirectionSettingsGroup = new Guid(EditPrigIndirectionSettingsGroupString);

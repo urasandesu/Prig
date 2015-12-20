@@ -60,14 +60,6 @@ try {
 
 
 try {
-    cpack | Out-Null
-} catch [System.Management.Automation.CommandNotFoundException] {
-    Write-Error "You have to install Chocolatey. For more information, please see also README.md."
-    exit -915763295
-}
-
-
-try {
     nant -help | Out-Null
 } catch [System.Management.Automation.CommandNotFoundException] {
     Write-Error "You have to install NAnt. For more information, please see also README.md."
@@ -83,7 +75,7 @@ switch ($PsCmdlet.ParameterSetName) {
     'Package' { 
         $curDir = $PWD.Path
         if ($BuildTarget -ne "Clean") {
-            $nuspecPath = [System.IO.Path]::Combine($curDir, 'Chocolatey\tools\NuGet\Prig.nuspec.hedge')
+            $nuspecPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage\tools\NuGet\Prig.nuspec')
             $nuspec = [xml](Get-Content $nuspecPath)
 
             $resxPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage\Resources.resx')
@@ -92,11 +84,53 @@ switch ($PsCmdlet.ParameterSetName) {
             ($resx.root.data | ? { $_.name -eq 'NuGetRootPackageId' }).value = $nuspec.package.metadata.id
             ($resx.root.data | ? { $_.name -eq 'NuGetRootPackageVersion' }).value = $nuspec.package.metadata.version
             $resx.Save($resxPath)
+
+            $vsixmanifestPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage\source.extension.vsixmanifest')
+            $vsixmanifest = [xml](Get-Content $vsixmanifestPath)
+
+            $vsixmanifest.PackageManifest.Metadata.Identity.Version = $nuspec.package.metadata.version
+            $vsixmanifest.Save($vsixmanifestPath)
+
+            $idlPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig\UrasandesuPrig.idl')
+            $idl = Get-Content $idlPath
+
+            $modifiedIdl = 
+                $idl | 
+                    ForEach-Object { 
+                        if ($_ -match '    helpstring\("Prig Profiler [^\s]+ Type Library"\),') { 
+                            '    helpstring("Prig Profiler {0} Type Library"),' -f $nuspec.package.metadata.version 
+                        } else { 
+                            $_ 
+                        } 
+                    }
+            
+            $isIdlChanged = @(Compare-Object $idl $modifiedIdl -SyncWindow 0).Length -ne 0
+            if ($isIdlChanged) {
+                $modifiedIdl | Out-File $idlPath -Encoding ascii
+            }
+
+            $rcPath = [System.IO.Path]::Combine($curDir, 'Urasandesu.Prig\Urasandesu.Prig.rc')
+            $rc = Get-Content $rcPath
+
+            $modifiedRc = 
+                $rc | 
+                    ForEach-Object { 
+                        if ($_ -match '            VALUE "FileDescription", "Prig Profiler [^\s]+ Type Library"') { 
+                            '            VALUE "FileDescription", "Prig Profiler {0} Type Library"' -f $nuspec.package.metadata.version 
+                        } else { 
+                            $_ 
+                        } 
+                    }
+            
+            $isRcChanged = @(Compare-Object $rc $modifiedRc -SyncWindow 0).Length -ne 0
+            if ($isRcChanged) {
+                $modifiedRc | Out-File $rcPath -Encoding unicode
+            }
         }
 
         $solution = "Prig.sln"
         nuget restore $solution
-        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Urasandesu_Prig_VSPackage$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0404$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0804$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_1205$buildTarget_"
+        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0404$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0804$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_1205$buildTarget_"
         $configurations = "/p:Configuration=Release%28.NET 3.5%29", "/p:Configuration=Release%28.NET 4%29"
         $platforms = "/p:Platform=x86", "/p:Platform=x64"
         foreach ($configuration in $configurations) {
@@ -140,15 +174,53 @@ switch ($PsCmdlet.ParameterSetName) {
             $nuspec.package.metadata.id = 'NUnitTestAdapterForPrig'
             $nuspec.Save('NUnitTestAdapterForPrig.nuspec')
             nuget pack .\NUnitTestAdapterForPrig.nuspec
-            $src = (Resolve-Path .\NUnitTestAdapterForPrig.*.nupkg).Path
-            $dst = $src + '.hedge'
-            Move-Item $src $dst -Force
         }
 
         if ($BuildTarget -ne "Clean") {
-            Set-Location ([System.IO.Path]::Combine($curDir, 'Chocolatey'))
+            Set-Location ([System.IO.Path]::Combine($curDir, 'Urasandesu.Prig.VSPackage'))
             [System.Environment]::CurrentDirectory = $PWD
-            cpack .\Prig.nuspec
+
+            if (![IO.Directory]::Exists("lib")) {
+                New-Item "lib" -ItemType Directory
+            }
+            if (![IO.Directory]::Exists("tools")) {
+                New-Item "tools" -ItemType Directory
+            }
+            if (![IO.Directory]::Exists("tools\x64")) {
+                New-Item "tools\x64" -ItemType Directory
+            }
+            if (![IO.Directory]::Exists("tools\x86")) {
+                New-Item "tools\x86" -ItemType Directory
+            }
+            Copy-Item "..\Release\AnyCPU\Urasandesu.NAnonym.dll" "lib" -Force
+            Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.0404.dll" "lib" -Force
+            Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.0804.dll" "lib" -Force
+            Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.1205.dll" "lib" -Force
+            Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Delegates.dll" "lib" -Force
+            Copy-Item "..\Release\AnyCPU\Urasandesu.Prig.Framework.dll" "lib" -Force
+            Copy-Item "..\NUnitTestAdapter\package\NUnitTestAdapterForPrig.*.nupkg" "tools" -Force
+            Copy-Item "..\Release\x64\Urasandesu.Prig.dll" "tools\x64" -Force
+            Copy-Item "..\Release\x86\Urasandesu.Prig.dll" "tools\x86" -Force
+            Copy-Item "..\Release\x86\prig.exe" "tools" -Force
+
+            Set-Location $curDir
+            [System.Environment]::CurrentDirectory = $PWD
+        }
+        $solution = "Prig.sln"
+        $target = "/t:Urasandesu_Prig_VSPackage$buildTarget_"
+        $configurations = @("/p:Configuration=Release%28.NET 4%29")
+        $platforms = @("/p:Platform=x86")
+        foreach ($configuration in $configurations) {
+            foreach ($platform in $platforms) {
+                Write-Verbose ("Solution: {0}" -f $solution)
+                Write-Verbose ("Target: {0}" -f $target)
+                Write-Verbose ("Configuration: {0}" -f $configuration)
+                Write-Verbose ("Platform: {0}" -f $platform)
+                msbuild $solution $target $configuration $platform /m
+                if ($LASTEXITCODE -ne 0) {
+                    exit $LASTEXITCODE
+                }
+            }
         }
     }
 }
