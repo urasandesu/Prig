@@ -31,6 +31,10 @@
 param (
     [Parameter(Mandatory = $True)]
     [string]
+    $SolutionFullName, 
+
+    [Parameter(Mandatory = $True)]
+    [string]
     $ProjectName, 
 
     [Parameter(Mandatory = $True)]
@@ -67,6 +71,7 @@ param (
     $DeletionalInclude
 )
 
+Write-Verbose ('SolutionFullName         : {0}' -f $SolutionFullName)
 Write-Verbose ('ProjectName              : {0}' -f $ProjectName)
 Write-Verbose ('ProjectFullName          : {0}' -f $ProjectFullName)
 Write-Verbose ('TargetFrameworkVersion   : {0}' -f $TargetFrameworkVersion)
