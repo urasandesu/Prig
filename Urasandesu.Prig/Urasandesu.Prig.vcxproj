@@ -93,7 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;URASANDESU_PRIG_EXPORTS;NOMINMAX;OUTPUT_DEBUG;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_60_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zm241 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Midl>
@@ -119,7 +119,7 @@
       <ModuleDefinitionFile>.\Urasandesu.Prig.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <RegisterOutput>true</RegisterOutput>
-      <AdditionalLibraryDirectories>C:\boost_1_55_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\boost_1_60_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Dbghelp.lib;corguids.lib;mscoree.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -130,7 +130,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;URASANDESU_PRIG_EXPORTS;NOMINMAX;OUTPUT_DEBUG;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_60_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zm241 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Midl>
@@ -154,7 +154,7 @@
       <ModuleDefinitionFile>.\Urasandesu.Prig.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <RegisterOutput>true</RegisterOutput>
-      <AdditionalLibraryDirectories>C:\boost_1_55_0\stage\x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\boost_1_60_0\stage\x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Dbghelp.lib;corguids.lib;mscoree.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -165,7 +165,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;URASANDESU_PRIG_EXPORTS;NOMINMAX;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_60_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zm241 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Midl>
@@ -193,7 +193,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <RegisterOutput>true</RegisterOutput>
-      <AdditionalLibraryDirectories>C:\boost_1_55_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\boost_1_60_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Dbghelp.lib;corguids.lib;mscoree.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -204,7 +204,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;URASANDESU_PRIG_EXPORTS;NOMINMAX;_NET_3_5;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\boost_1_55_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost_1_60_0;.\;..\CppAnonym\Urasandesu.CppAnonym;..\Swathe\Urasandesu.Swathe;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zm241 /wd4231 /wd4345 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Midl>
@@ -230,7 +230,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <RegisterOutput>true</RegisterOutput>
-      <AdditionalLibraryDirectories>C:\boost_1_55_0\stage\x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\boost_1_60_0\stage\x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Dbghelp.lib;corguids.lib;mscoree.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
