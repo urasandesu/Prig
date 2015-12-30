@@ -178,8 +178,11 @@ namespace QuickTourTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                // Replace `DateTime.Now` body. Hereafter, `DateTime.Now` will return only `2013/12/13 11:00:00`.
+                // `PDateTime` is the class that is generated automatically by Prig.
+                // We call such class "Prig Type". You can replace the method body of 
+                // `DateTime.Now` by using that.
                 PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
+                // Hereafter, `DateTime.Now` will return only `2013/12/13 11:00:00`.
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
