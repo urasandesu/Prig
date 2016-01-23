@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,20 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.1.0
+    <releaseNotes>Version 2.1.1
+* Update middleware. Boost is updated from 1.55.0 to 1.60.0.
+* Fixed infrastructure's bug. The function to parse PE header was wrong. This bug affected the environment installed Visual Studio 2015 or more. See also [the comment of the issue](https://github.com/urasandesu/Prig/issues/56#issuecomment-169983706).
+* Reduce environmental dependence. Until this improvement, `Add-PrigAssembly` command used absolute path instead of relative path or environment variable. So, any build will fail on another environment different from first setup without `*.csproj` modification.
+* Improve prig.exe help. Also, we maintain [out wiki](https://github.com/urasandesu/Prig/wiki/Command-Line-Reference) to explain it.
+
+
+
+* Fixed #49: Minimize the dependency to Chocolatey. Prig can support standalone installation via VSIX since this version.
+* Fixed #52: Support Visual Studio 2015 Update 1. Deal that the test execution engine is changed from `vstest.executionengine` to `TE.ProcessHost.Managed`.
+* Fixed some potentially bugs for `prig` command. It could not remove the symbolic link that has been already moved. Additionaly, improve some error messages.
+
+
+Version 2.1.0
 * Fixed #48: No longer need install.ps1 for NuGet. Clean up the content.
 * Fixed #49: Minimize the dependency to Chocolatey. Prig can support standalone installation via VSIX since this version.
 * Fixed #52: Support Visual Studio 2015 Update 1. Deal that the test execution engine is changed from `vstest.executionengine` to `TE.ProcessHost.Managed`.
@@ -75,11 +88,6 @@ Version 2.0.0-alpha03
 
 Version 2.0.0-alpha02
 * Fixed #29: Support Chocolatey v0.9.9.
-
-
-Version 2.0.0-alpha01
-* [NOTICE] Changed the package management system to Chocolatey from NuGet.
-* [NOTICE] Supported Visual Studio integrated environment.
 
 
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.

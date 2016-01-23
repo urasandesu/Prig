@@ -246,7 +246,7 @@ function Start-PrigSetup {
     Write-Verbose ('ProjectReferenceInclude: {0}' -f $projRefInclude)
 
     $targetFrmwrkVer = $curMsbProj.ExpandString('$(TargetFrameworkVersion)')
-    $argList = '-NoLogo', '-File', """$importPrigSetupSession""", """$($envProj.Name)""", """$($envProj.FullName)""", """$targetFrmwrkVer""", """$outPath.""", """$refInclude""", """$refHint""", """$projRefInclude"""
+    $argList = '-NoLogo', '-File', """$importPrigSetupSession""", """$($envProj.DTE.Solution.FullName)""", """$($envProj.Name)""", """$($envProj.FullName)""", """$targetFrmwrkVer""", """$outPath.""", """$refInclude""", """$refHint""", """$projRefInclude"""
     $shouldBeAutomated = ![string]::IsNullOrEmpty($AdditionalInclude) -or ![string]::IsNullOrEmpty($DeletionalInclude)
     if (!$shouldBeAutomated) {
         $argList = ,'-NoExit' + $argList

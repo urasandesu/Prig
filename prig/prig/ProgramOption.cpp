@@ -65,15 +65,59 @@ namespace prig {
         {
             using boost::program_options::include_positional;
 
+            // SYNTAX is expressed by PowerShell like below: 
+            //function run {
+            //    [CmdletBinding()]
+            //    param (
+            //        [switch]
+            //        $help,
+            //
+            //        [Parameter(Mandatory = $True, Position = 0)]
+            //        [string]
+            //        $process, 
+            //
+            //        [string]
+            //        $arguments
+            //    )
+            //}
             auto runnerDesc = options_description
                 (
                 "RUNNER OPTIONS\n"
                 "Specify options to start with Prig.\n"
                 "\n"
+                "SYNTAX: \n"
+                "run [-process] <string> [-help] [-arguments <string>]\n"
+                "\n"
+                "\n"
+                "Executes the specified `*.exe` under the Prig. In the design of the unmanaged profiling API of .NET, it is also possible that by some environment variables is enabled. However, using this option makes it more easier.\n"
+                "You can filter the target process through environment variables if the process you want to apply Prig starts the child process of it. There are other ways to customize the behavior by some environment variables. For details, please see the below examples.\n"
+                "NOTE: Before you execute this option, you have to install the directory that target process exists as the scope of application of Prig in advance. See also Installer option.\n"
+                "\n"
+                "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig run -process \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console-x86.exe\" -arguments \"Test.program1.dll /domain=None\"\n"
                 "\n"
-                "This command executes the process designated by -process option with the program options designated by -arguments option.\n"
+                "DESCRIPTION\n"
+                "===========\n"
+                "This command executes the process designated by `-process` option with the program options designated by `-arguments` option.\n"
+                "\n"
+                "==== EXAMPLE 2 ====\n"
+                "PS C:\\> 'prig run -process \".\\packages\\nunit.Runners.2.6.4\\tools\\nunit-console.exe\" -arguments \".\\ProfilersChainTest\\bin\\Debug\\ProfilersChainTest.dll /domain=None /framework=v4.0\"' | Out-File runtests.bat -Encoding default\n"
+                "PS C:\\> $env:URASANDESU_PRIG_CURRENT_DIRECTORY = (Resolve-Path .\\ProfilersChainTest\\bin\\Debug).Path\n"
+                "PS C:\\> $env:URASANDESU_PRIG_TARGET_PROCESS_NAME = \"nunit-agent\"\n"
+                "PS C:\\> & .\\packages\\OpenCover.4.5.3723\\OpenCover.Console.exe -target:runtests.bat -filter:+[ProfilersChain]*\n"
+                "\n"
+                "DESCRIPTION\n"
+                "===========\n"
+                "To measure code coverage, set working directory and the target process name to each environment variable and run tests with OpenCover. Note that this command has to be run in PowerShell.\n"
+                "\n"
+                "==== EXAMPLE 3 ====\n"
+                "CMD C:\\> set URASANDESU_CPPANONYM_LOGGING_SEVERITY=0\n"
+                "CMD C:\\> prig run -process \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console.exe\" -arguments \"ClassLibrary1Test.dll /domain=None\"\n"
+                "\n"
+                "DESCRIPTION\n"
+                "===========\n"
+                "In this command, set logging severity DEBUG--- DEBUG:0, VERBOSE:1, INFO:2, WARNING:3 and ERROR:4. In default, it has been set to INFO--- and execute. Log file is output into the log directory of current directory.\n"
                 "\n");
             
             runnerDesc.add_options()(
@@ -121,20 +165,49 @@ namespace prig {
         {
             using boost::program_options::include_positional;
 
+            // SYNTAX is expressed by PowerShell like below: 
+            //function dasm {
+            //    [CmdletBinding()]
+            //    param (
+            //        [switch]
+            //        $help,
+            //
+            //        [Parameter(Mandatory = $true, ParameterSetName = 'Assembly')]
+            //        [string]
+            //        $assembly, 
+            //
+            //        [Parameter(Mandatory = $true, ParameterSetName = 'AssemblyFrom')]
+            //        [string]
+            //        $assemblyfrom
+            //    )
+            //}
             auto dasmlrDesc = options_description
                 (
                 "DISASSEMBLER OPTIONS\n"
                 "Specify options to disassemble with Prig.\n"
                 "\n"
+                "SYNTAX: \n"
+                "dasm -assembly <string> [-help]\n"
+                "\n"
+                "dasm -assemblyfrom <string> [-help]\n"
+                "\n"
+                "\n"
+                "Disassembles the summary of specified assembly. The summary that is name, version, culture, public key token, processor architecture, full name, runtime version and location is returned as csv format. To format the result, using `ConvertFrom-Csv` in PowerShell is convenience. This option returns all summaries of the assemblies that are qualifying condition in spite of the processor architecture and runtime version of parent process. Therefore, note that it has difference behavior from .NET default `Gacutil.exe` tool or each type of `System.Reflection` namespace.\n"
+                "\n"
+                "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig dasm -assembly \"mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\"\n"
                 "\n"
-                "This command disassembles the assembly designated by -assembly option.\n"
+                "DESCRIPTION\n"
+                "===========\n"
+                "This command disassembles the assembly designated by `-assembly` option.\n"
                 "\n"
                 "==== EXAMPLE 2 ====\n"
                 "CMD C:\\> prig dasm -assemblyfrom \"C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\mscorlib.dll\"\n"
                 "\n"
-                "This command disassembles the assembly designated by -assemblyfrom option.\n"
+                "DESCRIPTION\n"
+                "===========\n"
+                "This command disassembles the assembly designated by `-assemblyfrom` option.\n"
                 "\n");
             
             dasmlrDesc.add_options()(
@@ -181,14 +254,39 @@ namespace prig {
             using boost::program_options::positional_options_description;
             using boost::to_lower;
 
+            // SYNTAX is expressed by PowerShell like below: 
+            //function install {
+            //    [CmdletBinding()]
+            //    param (
+            //        [switch]
+            //        $help,
+            //
+            //        [Parameter(Mandatory = $True, Position = 0)]
+            //        [string]
+            //        $package, 
+            //
+            //        [Parameter(Mandatory = $True)]
+            //        [string]
+            //        $source
+            //    )
+            //}
             auto installerDesc = options_description
                 (
                 "INSTALLER OPTIONS\n"
                 "Specify options to install as a target package of Prig.\n"
                 "\n"
+                "SYNTAX: \n"
+                "install [-package] <string> [-source] <string> [-help]\n"
+                "\n"
+                "\n"
+                "To apply Prig against a `*.exe`, at first, you have to install the source as the package that is the scope of application of Prig. After only installing, you can execute any `*.exe` with Prig(About executing, please see the help for Runner option). This effect is enabled until uninstalling the package. In default, the source of the test execution engine for Visual Studio(\"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\") has already installed.\n"
+                "\n"
+                "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig install NUnit -source \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\"\n"
                 "\n"
+                "DESCRIPTION\n"
+                "===========\n"
                 "This command installs NUnit as a target packages of Prig. NUnit is located at \"C:\\Program Files (x86)\\NUnit 2.6.3\\bin\", so you have to specify the directory path.\n"
                 "\n");
             
@@ -241,15 +339,45 @@ namespace prig {
             using boost::program_options::positional_options_description;
             using boost::to_lower;
 
+            // SYNTAX is expressed by PowerShell like below: 
+            //function list {
+            //    [CmdletBinding()]
+            //    param (
+            //        [switch]
+            //        $help,
+            //
+            //        [string]
+            //        $filter, 
+            //
+            //        [switch]
+            //        $localonly
+            //    )
+            //}
             auto listerDesc = options_description
                 (
                 "LISTER OPTIONS\n"
                 "Specify options to list the packages that Prig installed as targets.\n"
                 "\n"
+                "SYNTAX: \n"
+                "list [[-filter] <string>] [-help] [-localonly]\n"
+                "\n"
+                "\n"
+                "Returns all installed packages, sources and additional delegates in list. The content is JSON format, so parsing by `ConvertFrom-Json` in PowerShell is convenience. \n"
+                "\n"
+                "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig list NUnit -localonly\n"
                 "\n"
+                "DESCRIPTION\n"
+                "===========\n"
                 "This command lists the packages that Prig installed as the method replacement targets. Packages are filtered by the name \"NUnit\".\n"
+                "\n"
+                "==== EXAMPLE 2 ====\n"
+                "PS C:\\> prig list | ConvertFrom-Json | Format-Custom\n"
+                "\n"
+                "DESCRIPTION\n"
+                "===========\n"
+                "This command lists all packages and parses the results. `Format-Custom` can expand the hierarchical structure. Note that this command has to be run in PowerShell.\n"
                 "\n");
             
             listerDesc.add_options()(
@@ -306,15 +434,43 @@ namespace prig {
             using boost::program_options::positional_options_description;
             using boost::to_lower;
 
+            // SYNTAX is expressed by PowerShell like below: 
+            //function update {
+            //    [CmdletBinding()]
+            //    param (
+            //        [switch]
+            //        $help,
+            //
+            //        [Parameter(Mandatory = $true)]
+            //        [string]
+            //        $package, 
+            //
+            //        [string]
+            //        $delegate
+            //    )
+            //}
             auto updaterDesc = options_description
                 (
                 "UPDATER OPTIONS\n"
                 "Specify options to update a package.\n"
                 "\n"
+                "SYNTAX: \n"
+                "update [-package] <string> [[-delegate] <string>] [-help]\n"
+                "\n"
+                "\n"
+                "Updates the information that installed package has. Updatable information is below: \n"
+                "\n"
+                "  * delegate\n"
+                "\n"
+                "For details, please see each description of sub option.\n"
+                "\n"
+                "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig update All -delegate \"C:\\Users\\User\\AdditionalDelegates\\ThreeOrMoreRefOutDelegates\\bin\\Release\\ThreeOrMoreRefOutDelegates.dll\"\n"
                 "\n"
-                "This command updates all package to use additional delegates for a method replacement. Also you have to specify the -delegate option because the delegates is contained in ThreeOrMoreRefOutDelegates.dll\n"
+                "DESCRIPTION\n"
+                "===========\n"
+                "This command updates all package to use additional delegates for a method replacement. Also you have to specify the `-delegate` option because the delegates is contained in `ThreeOrMoreRefOutDelegates.dll`\n"
                 "\n");
             
             updaterDesc.add_options()(
@@ -329,7 +485,7 @@ namespace prig {
                 (
                 "delegate", 
                 wvalue<wstring>(), 
-                "A configuration for update. This option adds the assembly that contains the indirection delegates. This option can only be specified when specifying `package` option to `All`. If its path contains any spaces, you shall surround with \"(double quotes). Also, if you want to use multiple assemblies, specify them by semicolon delimited format.\n" 
+                "A configuration for update. This option adds the assembly that contains the Indirection Delegates. If you want to replace the method that has three or more out/ref parameters, you can add available delegates by using this. This option can only be specified when specifying `-package` option to `All`. If its path contains any spaces, you shall surround with \"(double quotes). Also, if you want to use multiple assemblies, specify them by semicolon delimited format.\n" 
                 "NOTE: You have to specify at least one configuration.\n"
                 "\n");
 
@@ -377,14 +533,35 @@ namespace prig {
             using boost::program_options::positional_options_description;
             using boost::to_lower;
 
+            // SYNTAX is expressed by PowerShell like below: 
+            //function uninstall {
+            //    [CmdletBinding()]
+            //    param (
+            //        [switch]
+            //        $help,
+            //
+            //        [Parameter(Mandatory = $true)]
+            //        [string]
+            //        $package
+            //    )
+            //}
             auto uninstallerDesc = options_description
                 (
                 "UNINSTALLER OPTIONS\n"
                 "Specify options to uninstall a package from Prig.\n"
                 "\n"
+                "SYNTAX: \n"
+                "uninstall [-package] <string> [-help]\n"
+                "\n"
+                "\n"
+                "Uninstalls the installed package.\n"
+                "\n"
+                "\n"
                 "==== EXAMPLE 1 ====\n"
                 "CMD C:\\> prig uninstall NUnit\n"
                 "\n"
+                "DESCRIPTION\n"
+                "===========\n"
                 "This command uninstalls NUnit from Prig.\n"
                 "\n");
             

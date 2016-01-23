@@ -178,8 +178,11 @@ namespace QuickTourTest
             using (new IndirectionsContext())
             {
                 // Arrange
-                // Replace `DateTime.Now` body. Hereafter, `DateTime.Now` will return only `2013/12/13 11:00:00`.
+                // `PDateTime` is the class that is generated automatically by Prig.
+                // We call such class "Prig Type". You can replace the method body of 
+                // `DateTime.Now` by using that.
                 PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
+                // Hereafter, `DateTime.Now` will return only `2013/12/13 11:00:00`.
 
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
@@ -285,13 +288,13 @@ For more information, see also [Prig's wiki](https://github.com/urasandesu/Prig/
 ## DEPENDENCY
 To build this project needs the following dependencies: 
 * [Visual Studio 2013(more than Professional Edition because it uses ATL. Also, you can use Community Edition)](http://www.visualstudio.com/)
-* [Boost 1.55.0](http://www.boost.org/)  
-Extract to C:\boost_1_55_0, and will build with the following options(x86 and x64 libs are required):
+* [Boost 1.60.0](http://www.boost.org/users/history/version_1_60_0.html)  
+Extract to C:\boost_1_60_0, and will build with the following options(x86 and x64 libs are required):
 ```dos
-CMD boost_1_55_0>cd
-C:\boost_1_55_0
+CMD boost_1_60_0>cd
+C:\boost_1_60_0
 
-CMD boost_1_55_0>bootstrap.bat
+CMD boost_1_60_0>bootstrap.bat
 Building Boost.Build engine
 
 Bootstrapping is done. To build, run:
@@ -302,14 +305,14 @@ To adjust configuration, edit 'project-config.jam'.
 Further information:
 ...
 
-CMD boost_1_55_0>.\b2 link=static threading=multi variant=debug,release runtime-link=shared,static -j 4
+CMD boost_1_60_0>.\b2 link=static threading=multi variant=debug,release runtime-link=shared,static -j 4
 
 Building the Boost C++ Libraries.
 
 Performing configuration checks
 ...
 
-CMD boost_1_55_0>.\b2 link=static threading=multi variant=debug,release runtime-link=shared,static -j 4 --stagedir=.\stage\x64 address-model=64
+CMD boost_1_60_0>.\b2 link=static threading=multi variant=debug,release runtime-link=shared,static -j 4 --stagedir=.\stage\x64 address-model=64
 
 Building the Boost C++ Libraries.
 
@@ -345,10 +348,7 @@ Copyright (C) 2014 Microsoft Corporation. All rights reserved.
 PS Prig> .\Build.ps1
 ...
 
-Chocolatey v0.9.9.1
-Attempting to build package from 'Prig.nuspec'.
-Successfully created package 'Prig.2.0.0-alpha04.nupkg'
-PS Chocolatey>
+PS Prig>
 
 ```
 
@@ -366,66 +366,12 @@ After preparing all dependencies, you can build this project in the following st
 
 
 ## REGISTRATION
-If you built Prig by PowerShell script, Prig nupkg will be output to `<top level directory you cloned>\Chocolatey` directory. So, run PowerShell as Administrator from the directory, and execute the following command: 
-```powershell
-PS Chocolatey> dir
-
-
-    Directory: C:\Users\User\Prig\Chocolatey
-
-
-Mode                LastWriteTime     Length Name
-----                -------------     ------ ----
-d----        2015/05/27     22:11            tools
--a---        2015/05/30     17:18    4143089 Prig.2.0.0-alpha04.nupkg
--a---        2015/05/27     22:11       5477 Prig.nuspec
-
-
-PS Chocolatey> choco install prig -s "$pwd;https://chocolatey.org/api/v2/" -pre -y
-Chocolatey v0.9.9.1
-Installing the following packages:
-prig
-By installing you accept licenses for the packages.
-
-Prig v2.0.0-alpha04
-   Renaming 'C:\ProgramData\chocolatey\lib\Prig\tools\NUnitTestAdapterForPrig.2.0.0.nupkg.hedge' to 'C:\ProgramData\chocolatey\lib\Prig\tools\NUnitTestAdapterForPrig.2.0.0.nupkg'...
-   Renaming 'C:\ProgramData\chocolatey\lib\Prig\tools\NuGet\Prig.nuspec.hedge' to 'C:\ProgramData\chocolatey\lib\Prig\tools\NuGet\Prig.nuspec'...
-   Creating the nuget package 'Prig'...
-   ...
-
-
- prig has been installed successfully.
-
-Chocolatey installed 1/1 package(s). 0 package(s) failed.
- See the log for details.
-PS Chocolatey>
-
-```
+If you built Prig by PowerShell script, `Prig.vsix` will be output to `<top level directory you cloned>\Release\x86` directory. You can install by double clicking that. After that, do installation procedure same as the beginning; choose the menu `PRIG` - `Register Prig (Needs Restarting)`.
 
 
 
 ## UNREGISTRATION
-Unregistration operation is similar in the registration. Run PowerShell as Administrator and execute the following commands: 
-```powershell
-PS Chocolatey> choco uninstall prig -y -f
-Chocolatey v0.9.9.1
-Uninstalling the following packages:
-prig
-
-Prig v2.0.0-alpha04 (forced)
-   Uninstalling Prig.vsix...
-   Uninstalling the all package...
-   Unregistering the profiler 'C:\ProgramData\chocolatey\lib\Prig\tools\x64\Urasandesu.Prig.dll' from Registry...
-   Unregistering the profiler 'C:\ProgramData\chocolatey\lib\Prig\tools\x86\Urasandesu.Prig.dll' from Registry...
-   ...
-
-Chocolatey uninstalled 1/1 packages. 0 packages failed.
-See the log for details.
-PS Chocolatey>
-
-```
-
-**NOTE:** You have to run PowerShell as a different process from the registration time.
+At first, choose the menu `PRIG` - `Unregister Prig (Needs Restarting)`. After you once restart Visual Studio, uninstall the VSIX; choose `TOOLS` - `Extensions and Updates...`, search `Installed` for `prig` and click `Uninstall`.
 
 
 

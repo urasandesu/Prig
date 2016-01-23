@@ -31,6 +31,10 @@
 param (
     [Parameter(Mandatory = $True)]
     [string]
+    $SolutionFullName, 
+
+    [Parameter(Mandatory = $True)]
+    [string]
     $ProjectFullName, 
 
     [Parameter(Mandatory = $True)]
@@ -44,6 +48,7 @@ param (
     $AssemblyFrom
 )
 
+Write-Verbose ('SolutionFullName         : {0}' -f $SolutionFullName)
 Write-Verbose ('ProjectFullName          : {0}' -f $ProjectFullName)
 Write-Verbose ('TargetFrameworkVersion   : {0}' -f $TargetFrameworkVersion)
 Write-Verbose ('Assembly                 : {0}' -f $Assembly)
@@ -80,9 +85,41 @@ function SetPrigAssemblyReferenceItem {
 
 
 
+function GetAssemblyLocation {
+
+    param (
+        [Parameter(Mandatory = $True)]
+        [string]
+        $SolutionFullName, 
+
+        [Parameter(Mandatory = $true)]
+        [Microsoft.Build.Evaluation.Project]
+        $MSBuildProject,
+
+        [Parameter(Mandatory = $true)]
+        $AssemblyNameEx
+    )
+    
+    $slnDir = [System.IO.Path]::GetDirectoryName($SolutionFullName)
+    $slnDirPattern = "^" + [regex]::Escape($slnDir)
+    if ($AssemblyNameEx.Location -match $slnDirPattern) {
+        $curDir = Get-Location
+        Set-Location $MSBuildProject.DirectoryPath
+        $result = '$(ProjectDir)' + (Resolve-Path -Relative $AssemblyNameEx.Location)
+        Set-Location $curDir
+        $result
+    } else {
+        $AssemblyNameEx.Location
+    }
+}
+
 function SetStubberPreBuildEventProperty {
 
     param (
+        [Parameter(Mandatory = $True)]
+        [string]
+        $SolutionFullName, 
+
         [Parameter(Mandatory = $true)]
         [Microsoft.Build.Evaluation.Project]
         $MSBuildProject,
@@ -105,7 +142,7 @@ function SetStubberPreBuildEventProperty {
 
     $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' })
     $argFile = '-File "%URASANDESU_PRIG_PACKAGE_FOLDER%\tools\Invoke-PilotStubber.ps1"'
-    $argAssembly = '-AssemblyFrom "{0}"' -f $AssemblyNameEx.Location
+    $argAssembly = '-AssemblyFrom "{0}"' -f (GetAssemblyLocation $SolutionFullName $MSBuildProject $AssemblyNameEx)
     $argTargetFrameworkVersion = '-TargetFrameworkVersion {0}' -f $TargetFrameworkVersion
     if ($TargetFrameworkVersion -eq 'v3.5') {
         $argOther = '-Version 2.0 -NoLogo -NoProfile'
@@ -123,8 +160,8 @@ function SetStubberPreBuildEventProperty {
         $condition = "'`$(Platform)' == '$Platform'"
     }
 
-    $vscomntoolsPaths = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.value }
-    $vsDevCmdPath = [System.IO.Path]::Combine($vscomntoolsPaths[0], 'VsDevCmd.bat')
+    $vscomntoolsNames = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.name }
+    $vsDevCmdPath = '%{0}%VsDevCmd.bat' -f $vscomntoolsNames[0]
     $targetNames = 'BeforeBuild', 'BeforeRebuild'
     foreach ($targetName in $targetNames) {
         $argBuildTarget = '-BuildTarget {0}' -f $targetName
@@ -284,7 +321,7 @@ foreach ($platformTarget in $platformTargets.GetEnumerator()) {
     }
         
     SetPrigAssemblyReferenceItem $curMsbProj $actualNames[0] $platformTarget.Key
-    SetStubberPreBuildEventProperty $curMsbProj $TargetFrameworkVersion $actualNames[0] $platformTarget.Key $platformTarget.Value[0]
+    SetStubberPreBuildEventProperty $SolutionFullName $curMsbProj $TargetFrameworkVersion $actualNames[0] $platformTarget.Key $platformTarget.Value[0]
     $isPlatformMatched = $true
 }
 if (!$isPlatformMatched) {

@@ -146,7 +146,8 @@ function Add-PrigAssembly {
         $Project
     )
 
-    # $ProjectFullName and $TargetFrameworkVersion are only enabled in Prig Setup Session. See also `Import-PrigSetupSession.ps1`.
+    # $SolutionFullName, $ProjectFullName and $TargetFrameworkVersion are only enabled in Prig Setup Session. See also `Import-PrigSetupSession.ps1`.
+    $slnFullName = $SolutionFullName
     $projFullName = $ProjectFullName
     $targetFrmwrkVer = $TargetFrameworkVersion
     if ($null -eq $projFullName) {
@@ -155,6 +156,7 @@ function Add-PrigAssembly {
         }
 
         $envProj = $(if ($null -eq $Project) { (Get-Project).Object.Project } else { $Project.Object.Project })
+        $slnFullName = $envProj.DTE.Solution.FullName
         $projFullName = $envProj.FullName
 
         [void][System.Reflection.Assembly]::LoadWithPartialName('Microsoft.Build')
@@ -178,7 +180,7 @@ function Add-PrigAssembly {
     $powershell = 'powershell'
 
     $addPrigAssembly = [System.IO.Path]::Combine((Get-PackageToolsPath), 'Add-PrigAssembly.ps1')
-    $argList = '-NonInteractive', '-NoLogo', '-NoProfile', '-File', """$addPrigAssembly""", """$projFullName""", """$targetFrmwrkVer""", """$Assembly""", """$AssemblyFrom"""
+    $argList = '-NonInteractive', '-NoLogo', '-NoProfile', '-File', """$addPrigAssembly""", """$slnFullName""", """$projFullName""", """$targetFrmwrkVer""", """$Assembly""", """$AssemblyFrom"""
     if ($PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent) {
         $argList += '-Verbose'
     }
