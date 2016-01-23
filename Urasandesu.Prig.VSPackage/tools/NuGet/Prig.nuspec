@@ -25,12 +25,6 @@
 * Improve prig.exe help. Also, we maintain [out wiki](https://github.com/urasandesu/Prig/wiki/Command-Line-Reference) to explain it.
 
 
-
-* Fixed #49: Minimize the dependency to Chocolatey. Prig can support standalone installation via VSIX since this version.
-* Fixed #52: Support Visual Studio 2015 Update 1. Deal that the test execution engine is changed from `vstest.executionengine` to `TE.ProcessHost.Managed`.
-* Fixed some potentially bugs for `prig` command. It could not remove the symbolic link that has been already moved. Additionaly, improve some error messages.
-
-
 Version 2.1.0
 * Fixed #48: No longer need install.ps1 for NuGet. Clean up the content.
 * Fixed #49: Minimize the dependency to Chocolatey. Prig can support standalone installation via VSIX since this version.
