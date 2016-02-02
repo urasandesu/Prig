@@ -51,7 +51,7 @@ namespace Urasandesu.Prig.Framework
 
         protected InstanceHolder() { }
 
-        static T ms_instance = TypeMixin.ForciblyNew<T>();
+        static T ms_instance = InstanceGetters.DisableProcessing().EnsureDisposalThen(_ => TypeMixin.ForciblyNew<T>());
         public static T Instance { get { return ms_instance; } }
 
         // Prepare JIT to transgress the boundary of AppDomain.

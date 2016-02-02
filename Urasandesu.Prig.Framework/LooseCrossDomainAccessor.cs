@@ -144,9 +144,7 @@ namespace Urasandesu.Prig.Framework
 
     public class LooseCrossDomainAccessor<T> where T : InstanceHolder<T>
     {
-        static readonly object ms_lockObj = new object();
         static T ms_holder = null;
-        static bool ms_ready = false;
         static readonly Type ms_t = typeof(T);
         static readonly string ms_key = ms_t.AssemblyQualifiedName;
 
@@ -249,24 +247,18 @@ namespace Urasandesu.Prig.Framework
         {
             get
             {
-                if (!ms_ready)
+                var holder = ms_holder;
+                if (holder == null)
                 {
-                    lock (ms_lockObj)
-                    {
-                        if (!ms_ready)
-                        {
-                            var holder = default(T);
-                            if (!TryGetHolder(out holder))
-                                using (InstanceGetters.DisableProcessing())
-                                    throw new InvalidOperationException(string.Format("T({0}) has not been registered yet. Please call Register method.", typeof(T)));
-                            ms_holder = holder;
-                            using (InstanceGetters.DisableProcessing())
-                                Thread.MemoryBarrier();
-                            ms_ready = true;
-                        }
-                    }
+                    if (!TryGetHolder(out holder))
+                        using (InstanceGetters.DisableProcessing())
+                            throw new InvalidOperationException(string.Format("T({0}) has not been registered yet. Please call Register method.", typeof(T)));
+
+                    using (InstanceGetters.DisableProcessing())
+                        if (Interlocked.CompareExchange(ref ms_holder, holder, null) != null)
+                            holder = ms_holder;
                 }
-                return ms_holder;
+                return holder;
             }
         }
 
@@ -274,24 +266,17 @@ namespace Urasandesu.Prig.Framework
         {
             get
             {
-                if (!ms_ready)
+                var holder = ms_holder;
+                if (holder == null)
                 {
-                    lock (ms_lockObj)
-                    {
-                        if (!ms_ready)
-                        {
-                            var holder = default(T);
-                            if (TryGetHolder(out holder))
-                            {
-                                ms_holder = holder;
-                                using (InstanceGetters.DisableProcessing())
-                                    Thread.MemoryBarrier();
-                                ms_ready = true;
-                            }
-                        }
-                    }
+                    if (!TryGetHolder(out holder))
+                        return default(T);
+
+                    using (InstanceGetters.DisableProcessing())
+                        if (Interlocked.CompareExchange(ref ms_holder, holder, null) != null)
+                            holder = ms_holder;
                 }
-                return ms_holder;
+                return holder;
             }
         }
 
@@ -299,31 +284,28 @@ namespace Urasandesu.Prig.Framework
         {
             get
             {
-                if (!ms_ready)
+                var holder = ms_holder;
+                if (holder == null)
                 {
-                    lock (ms_lockObj)
-                    {
-                        if (!ms_ready)
-                        {
-                            ms_holder = GetOrRegisterHolder();
-                            if (ms_holder != null)
-                            {
-                                using (InstanceGetters.DisableProcessing())
-                                    Thread.MemoryBarrier();
-                                ms_ready = true;
-                            }
-                        }
-                    }
+                    holder = GetOrRegisterHolder();
+
+                    using (InstanceGetters.DisableProcessing())
+                        if (Interlocked.CompareExchange(ref ms_holder, holder, null) != null)
+                            holder = ms_holder;
                 }
-                return ms_holder;
+                return holder;
             }
         }
 
         public static void Unload()
         {
-            lock (ms_lockObj)
-                if (ms_holder != null)
-                    ms_holder.Dispose();
+            var holder = ms_holder;
+            if (holder == null)
+                return;
+
+            using (InstanceGetters.DisableProcessing())
+                if (Interlocked.CompareExchange(ref ms_holder, null, holder) != null)
+                    holder.Dispose();
         }
     }
 
