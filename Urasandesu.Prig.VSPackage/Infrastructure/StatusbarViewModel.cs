@@ -64,24 +64,24 @@ namespace Urasandesu.Prig.VSPackage.Infrastructure
             ProgressState.Value = progressState;
         }
 
-        PackageProperty<ProgressState> m_progressState;
-        public PackageProperty<ProgressState> ProgressState
+        ApplicationProperty<ProgressState> m_progressState;
+        public ApplicationProperty<ProgressState> ProgressState
         {
             get
             {
                 if (m_progressState == null)
-                    m_progressState = new PackageProperty<ProgressState>();
+                    m_progressState = new ApplicationProperty<ProgressState>();
                 return m_progressState;
             }
         }
 
-        PackageProperty<string> m_text;
-        public PackageProperty<string> Text
+        ApplicationProperty<string> m_text;
+        public ApplicationProperty<string> Text
         {
             get
             {
                 if (m_text == null)
-                    m_text = new PackageProperty<string>();
+                    m_text = new ApplicationProperty<string>();
                 return m_text;
             }
         }

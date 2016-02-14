@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: IProcessExecutor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,13 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using System;
+using System.Diagnostics;
+
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    interface IProcessExecutor
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        TResult StartProcessWithoutShell<TResult>(string fileName, string arguments, Func<Process, TResult> resultSelector);
     }
 }

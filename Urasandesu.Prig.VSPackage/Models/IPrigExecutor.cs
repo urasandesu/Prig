@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: IPrigExecutor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,12 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    interface IPrigExecutor : IProcessExecutor
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        string StartInstalling(string name, string source);
+        string StartUninstalling(string packageName);
+        string StartUpdatingDelegate(string @delegate);
     }
 }

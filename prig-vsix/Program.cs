@@ -1,10 +1,10 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: Program.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2015 Akira Sugiura
+ * Copyright (c) 2016 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -29,13 +29,38 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using CommandLine;
+using System;
+
+namespace prig_vsix
 {
-    enum SkippedReasons
+    class Program
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        static int Main(string[] args)
+        {
+            var invokedVerb = default(string);
+            var invokedVerbInstance = default(object);
+            var options = new Options();
+            if (!Parser.Default.ParseArguments(args, options,
+                (verb, subOptions) =>
+                {
+                    invokedVerb = verb;
+                    invokedVerbInstance = subOptions;
+                }))
+            {
+                return 20 + Parser.DefaultExitCodeFail;
+            }
+
+
+            switch (invokedVerb.ToLower())
+            {
+                case "register":
+                    return ConsoleHost.RegisterPrig();
+                case "unregister":
+                    return ConsoleHost.UnregisterPrig();
+                default:
+                    throw new NotSupportedException(invokedVerb);
+            }
+        }
     }
 }

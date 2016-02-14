@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: ApplicationProperty.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,23 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using Codeplex.Reactive;
+using System.Reactive.Concurrency;
+
+namespace Urasandesu.Prig.VSPackage.Infrastructure
 {
-    enum SkippedReasons
+    public class ApplicationProperty<T> : ReactiveProperty<T>
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        public ApplicationProperty()
+            : this(default(T), ReactivePropertyMode.None)
+        { }
+
+        public ApplicationProperty(T initialValue = default(T), ReactivePropertyMode mode = ReactivePropertyMode.None)
+            : this(Scheduler.Immediate, initialValue, mode)
+        { }
+
+        public ApplicationProperty(IScheduler raiseEventScheduler, T initialValue = default(T), ReactivePropertyMode mode = ReactivePropertyMode.None)
+            : base(raiseEventScheduler, initialValue, mode)
+        { }
     }
 }

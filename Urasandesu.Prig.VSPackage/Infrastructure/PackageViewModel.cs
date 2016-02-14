@@ -35,23 +35,20 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Urasandesu.Prig.VSPackage.Infrastructure
 {
-    public abstract class PackageViewModel
+    public abstract class PackageViewModel : ApplicationViewModel
     {
-        [Dependency]
-        public IUnityContainer Container { protected get; set; }
-
         public void SetWaitCursor()
         {
             IsWaitCursorEnabled.Value = true;
         }
 
-        PackageProperty<bool> m_isWaitCursorEnabled;
-        public PackageProperty<bool> IsWaitCursorEnabled
+        ApplicationProperty<bool> m_isWaitCursorEnabled;
+        public ApplicationProperty<bool> IsWaitCursorEnabled
         {
             get
             {
                 if (m_isWaitCursorEnabled == null)
-                    m_isWaitCursorEnabled = new PackageProperty<bool>();
+                    m_isWaitCursorEnabled = new ApplicationProperty<bool>();
                 return m_isWaitCursorEnabled;
             }
         }
@@ -83,13 +80,13 @@ namespace Urasandesu.Prig.VSPackage.Infrastructure
             return parameter.Result;
         }
 
-        PackageProperty<MessageBoxParameter> m_messageBoxParameter;
-        public PackageProperty<MessageBoxParameter> MessageBoxParameter
+        ApplicationProperty<MessageBoxParameter> m_messageBoxParameter;
+        public ApplicationProperty<MessageBoxParameter> MessageBoxParameter
         {
             get
             {
                 if (m_messageBoxParameter == null)
-                    m_messageBoxParameter = new PackageProperty<MessageBoxParameter>();
+                    m_messageBoxParameter = new ApplicationProperty<MessageBoxParameter>();
                 return m_messageBoxParameter;
             }
         }
@@ -103,13 +100,6 @@ namespace Urasandesu.Prig.VSPackage.Infrastructure
                     m_statusbar = new StatusbarViewModel();
                 return m_statusbar;
             }
-        }
-
-        protected TPackageCommand BuildUpPackageCommand<TPackageCommand>(TPackageCommand command) where TPackageCommand : PackageCommand
-        {
-            if (Container != null)
-                Container.BuildUp(command);
-            return command;
         }
     }
 }

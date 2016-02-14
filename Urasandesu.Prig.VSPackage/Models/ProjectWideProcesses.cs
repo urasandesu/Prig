@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: ProjectWideProcesses.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,15 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    enum ProjectWideProcesses
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        None,
+        PrigAssemblyAdding,
+        PrigIndirectionSettingsEditing,
+        PrigAssemblyRemoving,
+        TestAdapterEnabling,
+        TestAdapterDisabling
     }
 }

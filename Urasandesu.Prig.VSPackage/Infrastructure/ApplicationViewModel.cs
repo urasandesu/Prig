@@ -1,10 +1,10 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: ApplicationViewModel.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2015 Akira Sugiura
+ * Copyright (c) 2016 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -29,13 +29,20 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using Microsoft.Practices.Unity;
+
+namespace Urasandesu.Prig.VSPackage.Infrastructure
 {
-    enum SkippedReasons
+    public abstract class ApplicationViewModel
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        [Dependency]
+        public IUnityContainer Container { protected get; set; }
+
+        protected TApplicationCommand BuildUpCommand<TApplicationCommand>(TApplicationCommand command) where TApplicationCommand : ApplicationCommand
+        {
+            if (Container != null)
+                Container.BuildUp(command);
+            return command;
+        }
     }
 }

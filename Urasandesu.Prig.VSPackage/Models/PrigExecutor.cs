@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: PrigExecutor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,34 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using Microsoft.Practices.Unity;
+
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    class PrigExecutor : ProcessExecutor, IPrigExecutor
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        [Dependency]
+        public IEnvironmentRepository EnvironmentRepository { private get; set; }
+
+        public string StartInstalling(string name, string source)
+        {
+            var prig = EnvironmentRepository.GetPrigPath();
+            var args = string.Format("install \"{0}\" -source \"{1}\"", name, source);
+            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+        }
+
+        public string StartUninstalling(string name)
+        {
+            var prig = EnvironmentRepository.GetPrigPath();
+            var args = string.Format("uninstall \"{0}\"", name);
+            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+        }
+
+        public string StartUpdatingDelegate(string @delegate)
+        {
+            var prig = EnvironmentRepository.GetPrigPath();
+            var args = string.Format("update All -delegate \"{0}\"", @delegate);
+            return StartProcessWithoutShell(prig, args, p => p.StandardOutput.ReadToEnd());
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: IRegsvr32Executor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,11 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    interface IRegsvr32Executor : IProcessExecutor
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        string StartInstalling(string path);
+        string StartUninstalling(string path);
     }
 }

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: IManagementCommandExecutor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,13 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using System.Collections.ObjectModel;
+using System.Management.Automation;
+
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    interface IManagementCommandExecutor
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        Collection<PSObject> Execute(ManagementCommandInfo mci);
     }
 }

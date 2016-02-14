@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: INuGetExecutor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,13 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    interface INuGetExecutor : IProcessExecutor
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        string StartPacking(string nuspec, string outputDirectory);
+        bool HaveAddedSources(string name);
+        string StartSourcing(string name, string source);
+        string StartUnsourcing(string name);
     }
 }

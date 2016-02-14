@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: MachineWideProcesses.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,12 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    enum MachineWideProcesses
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        None,
+        Installing,
+        Uninstalling
     }
 }

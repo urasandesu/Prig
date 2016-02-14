@@ -1,10 +1,10 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: ConsoleHost.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2015 Akira Sugiura
+ * Copyright (c) 2016 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -29,13 +29,27 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using System;
+using System.IO;
+using System.Reflection;
+
+namespace prig_vsix
 {
-    enum SkippedReasons
+    class ConsoleHost
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        static readonly Assembly ms_prig = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Prig.dll"));
+        static readonly Type ms_consoleHost = ms_prig.GetType("Urasandesu.Prig.VSPackage.Shell.ConsoleHost");
+        static readonly MethodInfo ms_registerPrig = ms_consoleHost.GetMethod("RegisterPrig");
+        static readonly MethodInfo ms_unregisterPrig = ms_consoleHost.GetMethod("UnregisterPrig");
+
+        public static int RegisterPrig()
+        {
+            return (int)ms_registerPrig.Invoke(null, null);
+        }
+
+        public static int UnregisterPrig()
+        {
+            return (int)ms_unregisterPrig.Invoke(null, null);
+        }
     }
 }

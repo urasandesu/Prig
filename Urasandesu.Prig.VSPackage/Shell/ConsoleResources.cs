@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: ConsoleResources.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,33 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using System.Globalization;
+using System.Resources;
+
+namespace Urasandesu.Prig.VSPackage.Shell
 {
-    enum SkippedReasons
-    {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+    class ConsoleResources 
+    {        
+        static ResourceManager m_resourceManager;
+
+        public ConsoleResources()
+        { }
+        
+        public static ResourceManager ResourceManager 
+        {
+            get 
+            {
+                if (object.ReferenceEquals(m_resourceManager, null))
+                    m_resourceManager = new ResourceManager("Urasandesu.Prig.VSPackage.Shell.ConsoleResources", typeof(ConsoleResources).Assembly);
+                return m_resourceManager;
+            }
+        }
+
+        public static CultureInfo Culture { get; set; }
+
+        public static string GetString(string name)
+        {
+            return ResourceManager.GetString(name, Culture);
+        }
     }
 }

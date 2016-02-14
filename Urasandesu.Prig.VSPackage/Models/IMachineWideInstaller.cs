@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: IMachineWideInstaller.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,12 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    interface IMachineWideInstaller
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        bool HasBeenInstalled(MachinePrerequisite machinePreq);
+        void Install(MachineWideInstallation mwInstl);
+        void Uninstall(MachineWideUninstallation umwPkg);
     }
 }

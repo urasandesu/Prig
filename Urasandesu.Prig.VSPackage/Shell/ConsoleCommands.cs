@@ -1,10 +1,10 @@
 ﻿/* 
- * File: PackageCommand.cs
+ * File: ConsoleCommands.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2015 Akira Sugiura
+ * Copyright (c) 2016 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -29,55 +29,74 @@
 
 
 
-using Codeplex.Reactive;
 using Microsoft.Practices.Unity;
 using System;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Urasandesu.Prig.VSPackage.Infrastructure;
 
-namespace Urasandesu.Prig.VSPackage.Infrastructure
+namespace Urasandesu.Prig.VSPackage.Shell
 {
-    public abstract class PackageCommand : ApplicationCommand
+    abstract class ConsoleCommand : ApplicationCommand
     {
-        protected PackageViewModel PackageViewModel { get { return (PackageViewModel)ApplicationViewModel; } }
+        [Dependency]
+        public ConsoleController Controller { protected get; set; }
 
         [Dependency]
-        public PackageLog ActivityLog { protected get; set; }
+        public ConsoleActivityLog ActivityLog { protected get; set; }
 
-        protected PackageCommand(PackageViewModel packageViewModel)
-            : base(packageViewModel)
+        protected ConsoleViewModel ViewModel { get { return (ConsoleViewModel)ApplicationViewModel; } }
+
+        protected ConsoleCommand(ConsoleViewModel vm)
+            : base(vm)
         { }
 
-        protected PackageCommand(PackageViewModel packageViewModel, IScheduler scheduler)
-            : base(packageViewModel, scheduler)
-        { }
-
-        protected PackageCommand(PackageViewModel packageViewModel, IObservable<bool> canExecuteSource, bool initialValue = true)
-            : base(packageViewModel, canExecuteSource, initialValue)
-        { }
-
-        protected PackageCommand(PackageViewModel packageViewModel, IObservable<bool> canExecuteSource, IScheduler scheduler, bool initialValue = true)
-            : base(packageViewModel, canExecuteSource, scheduler, initialValue)
+        protected ConsoleCommand(ConsoleViewModel vm, IObservable<bool> canExecuteSource)
+            : base(vm, canExecuteSource)
         { }
 
         protected override void OnBegin(object parameter)
         {
             if (ActivityLog != null)
                 ActivityLog.Info(string.Format("Begin {0}...", this));
-            PackageViewModel.SetWaitCursor();
         }
 
         protected override void OnError(object parameter, Exception e)
         {
             if (ActivityLog != null)
                 ActivityLog.Error(string.Format("Error {0}...", e));
-            PackageViewModel.Statusbar.EndProgress();
         }
 
         protected override void OnEnd(object parameter)
         {
             if (ActivityLog != null)
                 ActivityLog.Info(string.Format("End {0}...", this));
+        }
+    }
+
+    class RegisterPrigCommand : ConsoleCommand
+    {
+        public RegisterPrigCommand(ConsoleViewModel vm)
+            : base(vm)
+        { }
+
+        protected override void InvokeCore(object parameter)
+        {
+            Controller.PrepareRegisteringPrig(ViewModel);
+        }
+    }
+
+    class UnregisterPrigCommand : ConsoleCommand
+    {
+        public UnregisterPrigCommand(ConsoleViewModel vm)
+            : base(vm)
+        { }
+
+        protected override void InvokeCore(object parameter)
+        {
+            Controller.PrepareUnregisteringPrig(ViewModel);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: PrigResources.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,33 @@
 
 
 
+using System.Globalization;
+using System.Resources;
+
 namespace Urasandesu.Prig.VSPackage
 {
-    enum SkippedReasons
-    {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+    class PrigResources 
+    {        
+        static ResourceManager m_resourceManager;        
+
+        public PrigResources()
+        { }
+        
+        public static ResourceManager ResourceManager 
+        {
+            get 
+            {
+                if (object.ReferenceEquals(m_resourceManager, null))
+                    m_resourceManager = new ResourceManager("Urasandesu.Prig.VSPackage.PrigResources", typeof(PrigResources).Assembly);
+                return m_resourceManager;
+            }
+        }
+
+        public static CultureInfo Culture { get; set; }
+
+        public static string GetString(string name)
+        {
+            return ResourceManager.GetString(name, Culture);
+        }
     }
 }

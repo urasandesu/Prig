@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: Regsvr32Executor.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,13 +29,27 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using Microsoft.Practices.Unity;
+
+namespace Urasandesu.Prig.VSPackage.Models
 {
-    enum SkippedReasons
+    class Regsvr32Executor : ProcessExecutor, IRegsvr32Executor
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        [Dependency]
+        public IEnvironmentRepository EnvironmentRepository { private get; set; }
+
+        public string StartInstalling(string path)
+        {
+            var regsvr32 = EnvironmentRepository.GetRegsvr32Path();
+            var arguments = string.Format("/s /i \"{0}\"", path);
+            return StartProcessWithoutShell(regsvr32, arguments, p => p.StandardOutput.ReadToEnd());
+        }
+
+        public string StartUninstalling(string path)
+        {
+            var regsvr32 = EnvironmentRepository.GetRegsvr32Path();
+            var arguments = string.Format("/s /u \"{0}\"", path);
+            return StartProcessWithoutShell(regsvr32, arguments, p => p.StandardOutput.ReadToEnd());
+        }
     }
 }

@@ -167,15 +167,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PrigPackageTest.cs" />
-    <Compile Include="PrigPackageViewModelTest.cs" />
-    <Compile Include="Regsvr32ExecutorTest.cs" />
-    <Compile Include="ProjectWideInstallerTest.cs" />
-    <Compile Include="PrigExecutorTest.cs" />
-    <Compile Include="NuGetExecutorTest.cs" />
-    <Compile Include="ManagementCommandExecutorTest.cs" />
-    <Compile Include="EnvironmentRepositoryTest.cs" />
-    <Compile Include="MachineWideInstallerTest.cs" />
+    <Compile Include="PrigViewModelTest.cs" />
+    <Compile Include="Models\Regsvr32ExecutorTest.cs" />
+    <Compile Include="Models\ProjectWideInstallerTest.cs" />
+    <Compile Include="Models\PrigExecutorTest.cs" />
+    <Compile Include="Models\NuGetExecutorTest.cs" />
+    <Compile Include="Models\ManagementCommandExecutorTest.cs" />
+    <Compile Include="Models\EnvironmentRepositoryTest.cs" />
+    <Compile Include="Models\MachineWideInstallerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shell\ConsoleViewModelTest.cs" />
     <Compile Include="TestUtilities\Mixins\Microsoft\Win32\RegistryKeyMixin.cs" />
     <Compile Include="TestUtilities\Mixins\Moq\MockMixin.cs" />
     <Compile Include="TestUtilities\Mixins\Moq\MockOrder.cs" />

@@ -1,10 +1,10 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: Options.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2015 Akira Sugiura
+ * Copyright (c) 2016 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -29,13 +29,23 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+using CommandLine;
+using CommandLine.Text;
+
+namespace prig_vsix
 {
-    enum SkippedReasons
+    class Options
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
+        [VerbOption("register", HelpText = "Register Prig to this computer. This command should be run as Administrator. If Prig has been already registered, this command will skip the processing.")]
+        public RegisterSubOptions RegisterVerb { get; set; }
+
+        [VerbOption("unregister", HelpText = "Unregister Prig from this computer. This command should be run as Administrator. If Prig has been already unregistered, this command will skip the processing.")]
+        public UnregisterSubOptions UnregisterVerb { get; set; }
+
+        [HelpVerbOption]
+        public string GetUsage(string verb)
+        {
+            return HelpText.AutoBuild(this, verb);
+        }
     }
 }

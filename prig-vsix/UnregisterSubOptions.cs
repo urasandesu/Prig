@@ -1,10 +1,10 @@
 ﻿/* 
- * File: SkippedReasons.cs
+ * File: UnregisterSubOptions.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2015 Akira Sugiura
+ * Copyright (c) 2016 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -29,13 +29,9 @@
 
 
 
-namespace Urasandesu.Prig.VSPackage
+namespace prig_vsix
 {
-    enum SkippedReasons
+    class UnregisterSubOptions
     {
-        AlreadyRegistered,
-        CanceledByUser,
-        NotRegisteredYet, 
-        Error
     }
 }
