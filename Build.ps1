@@ -205,6 +205,8 @@ switch ($PsCmdlet.ParameterSetName) {
             Copy-Item "..\Release\x86\CommandLine.dll" .\ -Force
             Copy-Item "..\Release\x86\prig-vsix.exe" .\ -Force
             Copy-Item "..\Release\x86\prig-vsix.exe.config" .\ -Force
+            Copy-Item "..\Release\x86\Register-Prig.ps1" .\ -Force
+            Copy-Item "..\Release\x86\Unregister-Prig.ps1" .\ -Force
 
             Set-Location $curDir
             [System.Environment]::CurrentDirectory = $PWD
