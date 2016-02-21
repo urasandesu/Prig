@@ -30,6 +30,6 @@
 
 '  Installing Prig.vsix...'
 $packageName = 'Prig'
-$vsixUrl = 'https://visualstudiogallery.msdn.microsoft.com/d010ce67-9389-4c7b-89cc-b3a4234da716/file/190901/4/Prig.vsix'
+$vsixUrl = 'https://visualstudiogallery.msdn.microsoft.com/d010ce67-9389-4c7b-89cc-b3a4234da716/file/190901/5/Prig.vsix'
 
 Install-ChocolateyVsixPackage $packageName $vsixUrl
