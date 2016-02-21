@@ -52,7 +52,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                 m.Setup(_ => _.Name).Returns(projName);
             }
 
-            var vm = new PrigPackageViewModel();
+            var vm = new PrigViewModel();
             var menuCommand = PrigPackage.NewEnableTestAdapterCommand(vm);
             menuCommand.Text = null;
 
@@ -83,7 +83,7 @@ namespace Test.Urasandesu.Prig.VSPackage
                 m.Setup(_ => _.Name).Returns(projName);
             }
 
-            var vm = new PrigPackageViewModel();
+            var vm = new PrigViewModel();
             var menuCommand = PrigPackage.NewDisableTestAdapterCommand(vm);
             menuCommand.Text = null;
 

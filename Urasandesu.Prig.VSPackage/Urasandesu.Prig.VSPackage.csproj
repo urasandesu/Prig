@@ -195,43 +195,45 @@
     <Compile Include="Guids.cs" />
     <Compile Include="Infrastructure\MessageBoxParameter.cs" />
     <Compile Include="Infrastructure\MonitoringSelectionService.cs" />
+    <Compile Include="Infrastructure\ApplicationCommand.cs" />
     <Compile Include="Infrastructure\PackageCommand.cs" />
     <Compile Include="Infrastructure\PackageLog.cs" />
-    <Compile Include="Infrastructure\PackageProperty.cs" />
+    <Compile Include="Infrastructure\ApplicationProperty.cs" />
     <Compile Include="Infrastructure\PackageView.cs" />
+    <Compile Include="Infrastructure\ApplicationViewModel.cs" />
     <Compile Include="Infrastructure\PackageViewModel.cs" />
     <Compile Include="Infrastructure\ProgressState.cs" />
     <Compile Include="Infrastructure\StatusbarViewModel.cs" />
     <Compile Include="Infrastructure\VSConstantsAlternative.cs" />
-    <Compile Include="IEnvironmentRepository.cs" />
-    <Compile Include="EnvironmentRepository.cs" />
-    <Compile Include="IMachineWideInstaller.cs" />
-    <Compile Include="IManagementCommandExecutor.cs" />
-    <Compile Include="IProcessExecutor.cs" />
-    <Compile Include="INuGetExecutor.cs" />
-    <Compile Include="IPrigExecutor.cs" />
-    <Compile Include="MachineWideProcesses.cs" />
-    <Compile Include="PrigExecutor.cs" />
-    <Compile Include="PrigPackageResources.cs" />
-    <Compile Include="ProjectWideProcesses.cs" />
-    <Compile Include="Regsvr32Executor.cs" />
-    <Compile Include="IRegsvr32Executor.cs" />
-    <Compile Include="NuGetExecutor.cs" />
-    <Compile Include="ProcessExecutor.cs" />
-    <Compile Include="ManagementCommandExecutor.cs" />
-    <Compile Include="ManagementCommandInfo.cs" />
-    <Compile Include="ProjectWidePackage.cs" />
-    <Compile Include="MachineWideInstaller.cs" />
-    <Compile Include="MachineWidePackage.cs" />
-    <Compile Include="MachinePrerequisite.cs" />
-    <Compile Include="MachineWideProcessResults.cs" />
-    <Compile Include="ProfilerLocation.cs" />
-    <Compile Include="ProjectWideInstaller.cs" />
+    <Compile Include="Models\IEnvironmentRepository.cs" />
+    <Compile Include="Models\EnvironmentRepository.cs" />
+    <Compile Include="Models\IMachineWideInstaller.cs" />
+    <Compile Include="Models\IManagementCommandExecutor.cs" />
+    <Compile Include="Models\IProcessExecutor.cs" />
+    <Compile Include="Models\INuGetExecutor.cs" />
+    <Compile Include="Models\IPrigExecutor.cs" />
+    <Compile Include="Models\MachineWideProcesses.cs" />
+    <Compile Include="Models\PrigExecutor.cs" />
+    <Compile Include="PrigResources.cs" />
+    <Compile Include="Models\ProjectWideProcesses.cs" />
+    <Compile Include="Models\Regsvr32Executor.cs" />
+    <Compile Include="Models\IRegsvr32Executor.cs" />
+    <Compile Include="Models\NuGetExecutor.cs" />
+    <Compile Include="Models\ProcessExecutor.cs" />
+    <Compile Include="Models\ManagementCommandExecutor.cs" />
+    <Compile Include="Models\ManagementCommandInfo.cs" />
+    <Compile Include="Models\ProjectWidePackage.cs" />
+    <Compile Include="Models\MachineWideInstaller.cs" />
+    <Compile Include="Models\MachineWidePackage.cs" />
+    <Compile Include="Models\MachinePrerequisite.cs" />
+    <Compile Include="Models\MachineWideProcessResults.cs" />
+    <Compile Include="Models\ProfilerLocation.cs" />
+    <Compile Include="Models\ProjectWideInstaller.cs" />
     <Compile Include="PrigActivityLog.cs" />
-    <Compile Include="PrigPackageCommands.cs" />
-    <Compile Include="PrigPackageController.cs" />
-    <Compile Include="IProjectWideInstaller.cs" />
-    <Compile Include="PrigPackageViewModel.cs" />
+    <Compile Include="PrigCommands.cs" />
+    <Compile Include="PrigController.cs" />
+    <Compile Include="Models\IProjectWideInstaller.cs" />
+    <Compile Include="PrigViewModel.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PrigPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -241,14 +243,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Shell\ConsoleController.cs" />
+    <Compile Include="Shell\ConsoleActivityLog.cs" />
+    <Compile Include="Shell\ConsoleHost.cs" />
+    <Compile Include="Shell\ConsoleCommands.cs" />
+    <Compile Include="Shell\ConsoleViewModel.cs" />
+    <Compile Include="Shell\ConsoleResources.cs" />
     <Compile Include="SkippedReasons.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PrigPackageResources.resx" />
+    <EmbeddedResource Include="PrigResources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shell\ConsoleResources.resx">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
@@ -256,14 +269,30 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CommandLine.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="LICENSE.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="packages.config" />
+    <Content Include="prig-vsix.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Register-Prig.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="prig-vsix.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\ShieldIcon.png" />
     <Content Include="tools\Add-PrigAssembly.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -400,6 +429,10 @@
     <Content Include="tools\NUnitTestAdapterForPrig.2.0.0.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Unregister-Prig.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
   <ItemGroup>

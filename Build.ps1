@@ -130,7 +130,7 @@ switch ($PsCmdlet.ParameterSetName) {
 
         $solution = "Prig.sln"
         nuget restore $solution
-        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0404$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0804$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_1205$buildTarget_"
+        $target = "/t:Urasandesu_Prig_Framework$buildTarget_;prig$buildTarget_;Urasandesu_Prig$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0404$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_0804$buildTarget_;Prig_Delegates\Urasandesu_Prig_Delegates_1205$buildTarget_;prig-vsix$buildTarget_"
         $configurations = "/p:Configuration=Release%28.NET 3.5%29", "/p:Configuration=Release%28.NET 4%29"
         $platforms = "/p:Platform=x86", "/p:Platform=x64"
         foreach ($configuration in $configurations) {
@@ -202,6 +202,11 @@ switch ($PsCmdlet.ParameterSetName) {
             Copy-Item "..\Release\x64\Urasandesu.Prig.dll" "tools\x64" -Force
             Copy-Item "..\Release\x86\Urasandesu.Prig.dll" "tools\x86" -Force
             Copy-Item "..\Release\x86\prig.exe" "tools" -Force
+            Copy-Item "..\Release\x86\CommandLine.dll" .\ -Force
+            Copy-Item "..\Release\x86\prig-vsix.exe" .\ -Force
+            Copy-Item "..\Release\x86\prig-vsix.exe.config" .\ -Force
+            Copy-Item "..\Release\x86\Register-Prig.ps1" .\ -Force
+            Copy-Item "..\Release\x86\Unregister-Prig.ps1" .\ -Force
 
             Set-Location $curDir
             [System.Environment]::CurrentDirectory = $PWD

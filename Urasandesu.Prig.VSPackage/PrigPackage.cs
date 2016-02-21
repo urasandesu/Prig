@@ -42,6 +42,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 using Urasandesu.Prig.VSPackage.Infrastructure;
+using Urasandesu.Prig.VSPackage.Models;
 
 namespace Urasandesu.Prig.VSPackage
 {
@@ -76,20 +77,20 @@ namespace Urasandesu.Prig.VSPackage
             get { return ViewModel; }
         }
 
-        PrigPackageViewModel m_viewModel;
-        PrigPackageViewModel ViewModel
+        PrigViewModel m_viewModel;
+        PrigViewModel ViewModel
         {
             get
             {
                 if (m_viewModel == null)
-                    m_viewModel = new PrigPackageViewModel();
+                    m_viewModel = new PrigViewModel();
                 return m_viewModel;
             }
         }
 
         protected override void RegisterPackageController(IUnityContainer container)
         {
-            container.RegisterType<PrigPackageController, PrigPackageController>(new ContainerControlledLifetimeManager());
+            container.RegisterType<PrigController, PrigController>(new ContainerControlledLifetimeManager());
         }
 
         void RegisterNuGetComponent(IUnityContainer container)
@@ -126,7 +127,7 @@ namespace Urasandesu.Prig.VSPackage
             container.RegisterInstance(menuCommandService);
         }
 
-        static MenuCommand NewAddPrigAssemblyForMSCorLibCommand(PrigPackageViewModel vm)
+        static MenuCommand NewAddPrigAssemblyForMSCorLibCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.AddPrigAssemblyForMSCorLibGroup, (int)PkgCmdIDList.AddPrigAssemblyForMSCorLibCommand);
             var handler = new EventHandler((sender, e) => vm.AddPrigAssemblyForMSCorLibCommand.Execute(sender));
@@ -134,7 +135,7 @@ namespace Urasandesu.Prig.VSPackage
             return menuCommand;
         }
 
-        static MenuCommand NewAddPrigAssemblyCommand(PrigPackageViewModel vm)
+        static MenuCommand NewAddPrigAssemblyCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.AddPrigAssemblyGroup, (int)PkgCmdIDList.AddPrigAssemblyCommand);
             var handler = new EventHandler((sender, e) => vm.AddPrigAssemblyCommand.Execute(sender));
@@ -142,33 +143,33 @@ namespace Urasandesu.Prig.VSPackage
             return menuCommand;
         }
 
-        internal static OleMenuCommand NewEnableTestAdapterCommand(PrigPackageViewModel vm)
+        internal static OleMenuCommand NewEnableTestAdapterCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.MainMenuGroup, (int)PkgCmdIDList.EnableTestAdapterCommand);
             var handler = new EventHandler((sender, e) => vm.EnableTestAdapterCommand.Execute(sender));
             var menuCommand = new OleMenuCommand(handler, commandId);
             vm.EnableTestAdapterCommand.CanExecuteChanged += (sender, e) => menuCommand.Enabled = ((ICommand)sender).CanExecute(menuCommand);
             menuCommand.BeforeQueryStatus += (sender, e) => vm.TestAdapterBeforeQueryStatusCommand.Execute(sender);
-            var text = PrigPackageResources.GetString("EnableTestAdapterMenu");
+            var text = PrigResources.GetString("EnableTestAdapterMenu");
             vm.CurrentProject.Subscribe(
-                proj => menuCommand.Text = proj == null ? text : string.Format(PrigPackageResources.GetString("_0_For_1_MenuFormat"), text, proj.Name));
+                proj => menuCommand.Text = proj == null ? text : string.Format(PrigResources.GetString("_0_For_1_MenuFormat"), text, proj.Name));
             return menuCommand;
         }
 
-        internal static OleMenuCommand NewDisableTestAdapterCommand(PrigPackageViewModel vm)
+        internal static OleMenuCommand NewDisableTestAdapterCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.MainMenuGroup, (int)PkgCmdIDList.DisableTestAdapterCommand);
             var handler = new EventHandler((sender, e) => vm.DisableTestAdapterCommand.Execute(sender));
             var menuCommand = new OleMenuCommand(handler, commandId);
             vm.DisableTestAdapterCommand.CanExecuteChanged += (sender, e) => menuCommand.Enabled = ((ICommand)sender).CanExecute(menuCommand);
             menuCommand.Enabled = false;
-            var text = PrigPackageResources.GetString("DisableTestAdapterMenu");
+            var text = PrigResources.GetString("DisableTestAdapterMenu");
             vm.CurrentProject.Subscribe(
-                proj => menuCommand.Text = proj == null ? text : string.Format(PrigPackageResources.GetString("_0_For_1_MenuFormat"), text, proj.Name));
+                proj => menuCommand.Text = proj == null ? text : string.Format(PrigResources.GetString("_0_For_1_MenuFormat"), text, proj.Name));
             return menuCommand;
         }
 
-        static MenuCommand NewRegisterPrigCommand(PrigPackageViewModel vm)
+        static MenuCommand NewRegisterPrigCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.RegistrationMenuGroup, (int)PkgCmdIDList.RegisterPrigCommand);
             var handler = new EventHandler((sender, e) => vm.RegisterPrigCommand.Execute(sender));
@@ -176,7 +177,7 @@ namespace Urasandesu.Prig.VSPackage
             return menuCommand;
         }
 
-        static MenuCommand NewUnregisterPrigCommand(PrigPackageViewModel vm)
+        static MenuCommand NewUnregisterPrigCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.RegistrationMenuGroup, (int)PkgCmdIDList.UnregisterPrigCommand);
             var handler = new EventHandler((sender, e) => vm.UnregisterPrigCommand.Execute(sender));
@@ -184,7 +185,7 @@ namespace Urasandesu.Prig.VSPackage
             return menuCommand;
         }
 
-        static OleMenuCommand NewEditPrigIndirectionSettingsCommand(PrigPackageViewModel vm)
+        static OleMenuCommand NewEditPrigIndirectionSettingsCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.EditPrigIndirectionSettingsGroup, (int)PkgCmdIDList.EditPrigIndirectionSettingsCommand);
             var handler = new EventHandler((sender, e) => vm.EditPrigIndirectionSettingsCommand.Execute(sender));
@@ -195,7 +196,7 @@ namespace Urasandesu.Prig.VSPackage
             return menuCommand;
         }
 
-        static OleMenuCommand NewRemovePrigAssemblyCommand(PrigPackageViewModel vm)
+        static OleMenuCommand NewRemovePrigAssemblyCommand(PrigViewModel vm)
         {
             var commandId = new CommandID(GuidList.EditPrigIndirectionSettingsGroup, (int)PkgCmdIDList.RemovePrigAssemblyCommand);
             var handler = new EventHandler((sender, e) => vm.RemovePrigAssemblyCommand.Execute(sender));

@@ -54,7 +54,7 @@ namespace Urasandesu.Prig.Framework
             // This is by design, all additional delegates settings have same information. See also the help for `prig update` command.
             var pkg = config.Packages.item.DefaultIfEmpty(new PrigPackageConfig()).First();
             var additionalDlgts = pkg.AdditionalDelegates.item;
-            ms_indirectionDelegatesList = additionalDlgts.Select(_ => Assembly.LoadFrom(_.HintPath.Native)).ToList();
+            ms_indirectionDelegatesList = additionalDlgts.Select(ToIndirectionDelegate).Where(_ => _ != null).ToList();
 
             var corVersion = typeof(object).Assembly.ImageRuntimeVersion;
             var libPath = Path.Combine(pkgPath, "lib");
@@ -78,6 +78,18 @@ namespace Urasandesu.Prig.Framework
             {
                 var serializer = new XmlSerializer(typeof(T));
                 return (T)serializer.Deserialize(sr);
+            }
+        }
+
+        static Assembly ToIndirectionDelegate(PrigAdditionalDelegateConfig config)
+        {
+            try
+            {
+                return Assembly.LoadFrom(config.HintPath.Native);
+            }
+            catch
+            {
+                return null;
             }
         }
     }

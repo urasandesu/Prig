@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.1.1</version>
+    <version>2.2.0</version>
     <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,13 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.1.1
+    <releaseNotes>Version 2.2.0
+* Fixed #57: Support for Continuous Integration Server (like AppVeyor). Add some special APIs and maintenance document to explain them. For details, please see [our Wiki](https://github.com/urasandesu/Prig/wiki/AppVeyor-Support).
+* Fixed #58: Needs more robustness for additional delegates. Ignore the additional delegate that doesn't exist, because build error occurs even if the delegate doesn't relevant.
+* Fixed potential bugs. Some multiple threads race conditions existed. These were found by Coverity.
+
+
+Version 2.1.1
 * Update middleware. Boost is updated from 1.55.0 to 1.60.0.
 * Fixed infrastructure's bug. The function to parse PE header was wrong. This bug affected the environment installed Visual Studio 2015 or more. See also [the comment of the issue](https://github.com/urasandesu/Prig/issues/56#issuecomment-169983706).
 * Reduce environmental dependence. Until this improvement, `Add-PrigAssembly` command used absolute path instead of relative path or environment variable. So, any build will fail on another environment different from first setup without `*.csproj` modification.
@@ -78,10 +84,6 @@ Version 2.0.0-alpha04
 
 Version 2.0.0-alpha03
 * Improve stability a little. Support the test runners that have never been able to run. The test runners like NUnit(GUI)/xUnit.net/MbUnit couldn't even start up until now(They were raising `ExecutionEngineException`).
-
-
-Version 2.0.0-alpha02
-* Fixed #29: Support Chocolatey v0.9.9.
 
 
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.

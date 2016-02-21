@@ -35,6 +35,7 @@ namespace Urasandesu.Prig.VSPackage
     {
         AlreadyRegistered,
         CanceledByUser,
-        NotRegisteredYet
+        NotRegisteredYet, 
+        Error
     }
 }

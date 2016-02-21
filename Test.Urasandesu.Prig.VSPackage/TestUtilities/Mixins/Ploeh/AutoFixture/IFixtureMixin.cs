@@ -38,6 +38,7 @@ using System;
 using System.Collections.Generic;
 using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Microsoft.Win32;
 using Urasandesu.Prig.VSPackage;
+using Urasandesu.Prig.VSPackage.Models;
 
 namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture
 {

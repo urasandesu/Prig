@@ -37,73 +37,44 @@ using System.Reactive.Linq;
 
 namespace Urasandesu.Prig.VSPackage.Infrastructure
 {
-    public abstract class PackageCommand : ReactiveCommand
+    public abstract class PackageCommand : ApplicationCommand
     {
-        protected PackageViewModel PackageViewModel { get; private set; }
-
-        [Dependency]
-        public IUnityContainer Container { protected get; set; }
+        protected PackageViewModel PackageViewModel { get { return (PackageViewModel)ApplicationViewModel; } }
 
         [Dependency]
         public PackageLog ActivityLog { protected get; set; }
 
         protected PackageCommand(PackageViewModel packageViewModel)
-            : this(packageViewModel, Scheduler.Immediate)
+            : base(packageViewModel)
         { }
 
         protected PackageCommand(PackageViewModel packageViewModel, IScheduler scheduler)
-            : this(packageViewModel, Observable.Never<bool>(), scheduler)
+            : base(packageViewModel, scheduler)
         { }
 
         protected PackageCommand(PackageViewModel packageViewModel, IObservable<bool> canExecuteSource, bool initialValue = true)
-            : this(packageViewModel, canExecuteSource, Scheduler.Immediate, initialValue)
+            : base(packageViewModel, canExecuteSource, initialValue)
         { }
 
         protected PackageCommand(PackageViewModel packageViewModel, IObservable<bool> canExecuteSource, IScheduler scheduler, bool initialValue = true)
-            : base(canExecuteSource, scheduler, initialValue)
-        {
-            if (packageViewModel == null)
-                throw new ArgumentNullException("packageViewModel");
+            : base(packageViewModel, canExecuteSource, scheduler, initialValue)
+        { }
 
-            PackageViewModel = packageViewModel;
-            this.Subscribe(Invoke);
-        }
-
-        void Invoke(object parameter)
-        {
-            try
-            {
-                OnBegin(parameter);
-                InvokeCore(parameter);
-            }
-            catch (Exception e)
-            {
-                OnError(parameter, e);
-                throw;
-            }
-            finally
-            {
-                OnEnd(parameter);
-            }
-        }
-
-        protected virtual void OnBegin(object parameter)
+        protected override void OnBegin(object parameter)
         {
             if (ActivityLog != null)
                 ActivityLog.Info(string.Format("Begin {0}...", this));
             PackageViewModel.SetWaitCursor();
         }
 
-        protected abstract void InvokeCore(object parameter);
-
-        protected virtual void OnError(object parameter, Exception e)
+        protected override void OnError(object parameter, Exception e)
         {
             if (ActivityLog != null)
                 ActivityLog.Error(string.Format("Error {0}...", e));
             PackageViewModel.Statusbar.EndProgress();
         }
 
-        protected virtual void OnEnd(object parameter)
+        protected override void OnEnd(object parameter)
         {
             if (ActivityLog != null)
                 ActivityLog.Info(string.Format("End {0}...", this));
