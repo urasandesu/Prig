@@ -321,14 +321,18 @@ Performing configuration checks
 ```
 * [Google Test 1.6](https://code.google.com/p/googletest/)  
 Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the `Build` menu, and open `Configuration Manager...`. On `Configuration Manager` dialog box, in the `Active Solution Platform` drop-down list, choose the `<New...>` option. After the `New Solution Platform` dialog box is opened, in the `Type or select the new platform` drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.
-* [NUnit 2.6.3.13283](http://www.nunit.org/)  
-Install using with the installer(NUnit-2.6.3.msi).
-* [Modeling SDK for Microsoft Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40754)  
-Install using with the installer(VS_VmSdk.exe).
+* [NUnit 2.6.4.14350](http://www.nunit.org/)  
+Install using with the installer(NUnit-2.6.4.msi). As more easy way, you can install it by using Chocolatey: `choco install nunit -version 2.6.4 -y`.
 * [Microsoft Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)  
 Install using with the installer(vssdk_full.exe).
+* [Modeling SDK for Microsoft Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40754)  
+Install using with the installer(VS_VmSdk.exe).
 * [NAnt](http://nant.sourceforge.net/)  
-You can also install in accordance with [the help](http://nant.sourceforge.net/release/latest/help/introduction/installation.html), but the easiest way is using Chocolatey: `choco install nant`.
+You can also install in accordance with [the help](http://nant.sourceforge.net/release/latest/help/introduction/installation.html), but the easiest way is using Chocolatey: `choco install nant -y`.
+* [Microsoft .NET Framework 3.5 Service Pack 1](https://www.microsoft.com/en-us/download/details.aspx?id=22)  
+Install using with the installer(dotnetfx35setup.exe).
+* [Jekyll](http://jekyllrb.com/docs/windows/)(Optional)  
+This is used to only edit and test locally [Prig's GitHub Pages](http://urasandesu.github.io/Prig/). The installation steps are too complex. I think that [you had better use Chocolatey](https://davidburela.wordpress.com/2015/11/28/easily-install-jekyll-on-windows-with-3-command-prompt-entries-and-chocolatey/)(just executing a few commands).
 
 
 
@@ -353,6 +357,8 @@ PS Prig>
 ```
 
 **NOTE:** It takes somewhere round 30 minutes.
+
+**NOTE:** Probably, the reference assembly path of `NuGet.VisualStudio` will be changed to another path like [this commit](https://github.com/urasandesu/Prig/commit/57e464473e1472aafa2127d46685950339cf38d0#diff-6803a2af143ce7c259ada1b02bbbeeba). It seems that it will be created randomly when installing Visual Studio, so temporarily change it correct path for your development.
 
 
 
