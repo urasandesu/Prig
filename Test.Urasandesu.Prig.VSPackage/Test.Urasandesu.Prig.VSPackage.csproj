@@ -35,7 +35,7 @@
       <HintPath>..\packages\Moq.4.1.1308.2120\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="Ploeh.AutoFixture, Version=3.36.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoFixture.3.36.10\lib\net40\Ploeh.AutoFixture.dll</HintPath>
       <Private>True</Private>
@@ -63,7 +63,7 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" />
     <Reference Include="NuGet.VisualStudio">
-      <HintPath>$(MSBuildProgramFiles32)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\bpjdy4sy.vkf\NuGet.VisualStudio.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\eevtghkx.d2g\NuGet.VisualStudio.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="PresentationCore" />
