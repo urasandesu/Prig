@@ -875,7 +875,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
         static int StartEnvironmentRepositoryTest(string testCase, string resultXml)
         {
-            var arguments = string.Format("/framework=v4.5 /run:Test.Urasandesu.Prig.VSPackage.EnvironmentRepositoryTest.{0} Test.Urasandesu.Prig.VSPackage.dll /result={1}", testCase, resultXml);
+            var arguments = string.Format("/framework=v4.5 /run:Test.Urasandesu.Prig.VSPackage.Models.EnvironmentRepositoryTest.{0} Test.Urasandesu.Prig.VSPackage.dll /result={1}", testCase, resultXml);
             return StartNUnitConsoleX86(arguments);
         }
 
