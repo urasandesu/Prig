@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Prig: Open Source Alternative to Microsoft Fakes By: @urasandesu</title>
+    <title>Prig by urasandesu</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-light.css">
@@ -20,9 +20,8 @@
         <p class="header">Open Source Alternative to Microsoft Fakes</p>
 
         <ul>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v2.2.0/Prig.vsix">Download VSIX</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v2.2.0/Prig.2.2.0.nupkg">Download Nupkg</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v2.2.0/Prig-v2.2.0.zip">Download SRC</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/tarball/master">Download TAR</a></li>
           <li><a class="buttons github" href="https://github.com/urasandesu/Prig">View On GitHub</a></li>
         </ul>
 
@@ -42,7 +41,9 @@ This framework enables that any methods are replaced with mocks. For example, a 
 <h2>
 <a id="status" class="anchor" href="#status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>STATUS</h2>
 
-<p>As of Feb 21, 2016, Released V2.2.0.</p>
+<p>As of Feb 21, 2016, Released V2.2.0.<br>
+<a href="https://scan.coverity.com/projects/urasandesu-prig"><img alt="Coverity Scan Build Status" src="https://img.shields.io/coverity/scan/7574.svg"></a>
+<a href="https://amzn.com/w/ZW5EZ9JC3XKH"><img alt="Donate via Amazon Wish List" src="https://img.shields.io/badge/amazon%20wish%20list-donate-fe9900.svg"></a></p>
 
 <h2>
 <a id="quick-tour" class="anchor" href="#quick-tour" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>QUICK TOUR</h2>
@@ -364,17 +365,23 @@ Performing configuration checks
 <a href="https://code.google.com/p/googletest/">Google Test 1.6</a><br>
 Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the <code>Build</code> menu, and open <code>Configuration Manager...</code>. On <code>Configuration Manager</code> dialog box, in the <code>Active Solution Platform</code> drop-down list, choose the <code>&lt;New...&gt;</code> option. After the <code>New Solution Platform</code> dialog box is opened, in the <code>Type or select the new platform</code> drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.</li>
 <li>
-<a href="http://www.nunit.org/">NUnit 2.6.3.13283</a><br>
-Install using with the installer(NUnit-2.6.3.msi).</li>
-<li>
-<a href="http://www.microsoft.com/en-us/download/details.aspx?id=40754">Modeling SDK for Microsoft Visual Studio 2013</a><br>
-Install using with the installer(VS_VmSdk.exe).</li>
+<a href="http://www.nunit.org/">NUnit 2.6.4.14350</a><br>
+Install using with the installer(NUnit-2.6.4.msi). As more easy way, you can install it by using Chocolatey: <code>choco install nunit -version 2.6.4 -y</code>.</li>
 <li>
 <a href="http://www.microsoft.com/en-us/download/details.aspx?id=40758">Microsoft Visual Studio 2013 SDK</a><br>
 Install using with the installer(vssdk_full.exe).</li>
 <li>
+<a href="http://www.microsoft.com/en-us/download/details.aspx?id=40754">Modeling SDK for Microsoft Visual Studio 2013</a><br>
+Install using with the installer(VS_VmSdk.exe).</li>
+<li>
 <a href="http://nant.sourceforge.net/">NAnt</a><br>
-You can also install in accordance with <a href="http://nant.sourceforge.net/release/latest/help/introduction/installation.html">the help</a>, but the easiest way is using Chocolatey: <code>choco install nant</code>.</li>
+You can also install in accordance with <a href="http://nant.sourceforge.net/release/latest/help/introduction/installation.html">the help</a>, but the easiest way is using Chocolatey: <code>choco install nant -y</code>.</li>
+<li>
+<a href="https://www.microsoft.com/en-us/download/details.aspx?id=22">Microsoft .NET Framework 3.5 Service Pack 1</a><br>
+Install using with the installer(dotnetfx35setup.exe).</li>
+<li>
+<a href="http://jekyllrb.com/docs/windows/">Jekyll</a>(Optional)<br>
+This is used to only edit and test locally <a href="http://urasandesu.github.io/Prig/">Prig's GitHub Pages</a>. The installation steps are too complex. I think that <a href="https://davidburela.wordpress.com/2015/11/28/easily-install-jekyll-on-windows-with-3-command-prompt-entries-and-chocolatey/">you had better use Chocolatey</a>(just executing a few commands).</li>
 </ul>
 
 <h2>
@@ -401,6 +408,8 @@ PS Prig&gt;
 </code></pre>
 
 <p><strong>NOTE:</strong> It takes somewhere round 30 minutes.</p>
+
+<p><strong>NOTE:</strong> Probably, the reference assembly path of <code>NuGet.VisualStudio</code> will be changed to another path like <a href="https://github.com/urasandesu/Prig/commit/57e464473e1472aafa2127d46685950339cf38d0#diff-6803a2af143ce7c259ada1b02bbbeeba">this commit</a>. It seems that it will be created randomly when installing Visual Studio, so temporarily change it correct path for your development.</p>
 
 <h3>
 <a id="from-visual-studio" class="anchor" href="#from-visual-studio" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>From Visual Studio</h3>
