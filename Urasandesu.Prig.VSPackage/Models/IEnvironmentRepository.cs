@@ -47,6 +47,10 @@ namespace Urasandesu.Prig.VSPackage.Models
         string GetPackageFolderKey();
         void StorePackageFolder(string variableValue);
         void RemovePackageFolder();
+        string GetLogFolder();
+        string GetLogFolderKey();
+        void StoreLogFolder(string variableValue);
+        void RemoveLogFolder();
         string GetEnvironmentVariable(string variable);
         string GetEnvironmentVariable(string variable, EnvironmentVariableTarget target);
         void SetEnvironmentVariable(string variable, string value);

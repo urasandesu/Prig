@@ -625,18 +625,30 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
             var pkgDir = @"C:\ProgramData\chocolatey\lib\Prig";
-            var variableName = "URASANDESU_PRIG_PACKAGE_FOLDER";
-            var variableValue = pkgDir;
+            var pkgDirKey = "URASANDESU_PRIG_PACKAGE_FOLDER";
+            var logDir = @"C:\ProgramData\chocolatey\lib\Prig\tools\log";
+            var logDirKey = "URASANDESU_CPPANONYM_LOGGING_TARGET";
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
                 m.Setup(_ => _.GetPackageFolder()).Returns(pkgDir);
-                m.Setup(_ => _.GetPackageFolderKey()).Returns(variableName);
-                m.Setup(_ => _.StorePackageFolder(variableValue));
+                m.Setup(_ => _.GetPackageFolderKey()).Returns(pkgDirKey);
+                m.Setup(_ => _.StorePackageFolder(pkgDir));
+                m.Setup(_ => _.GetLogFolder()).Returns(logDir);
+                m.Setup(_ => _.GetLogFolderKey()).Returns(logDirKey);
+                m.Setup(_ => _.StoreLogFolder(logDir));
             }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();
-            mwInstl.EnvironmentVariableRegistering += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _(variableName, variableValue))).Object;
-            mwInstl.EnvironmentVariableRegistered += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _(variableName, variableValue))).Object;
+            {
+                var m1 = mocks.Create<Action<string, string>>();
+                var m2 = mocks.Create<Action<string, string>>();
+                m1.InOrder(order, m => m.Setup(_ => _(pkgDirKey, pkgDir)));
+                m2.InOrder(order, m => m.Setup(_ => _(pkgDirKey, pkgDir)));
+                m1.InOrder(order, m => m.Setup(_ => _(logDirKey, logDir)));
+                m2.InOrder(order, m => m.Setup(_ => _(logDirKey, logDir)));
+                mwInstl.EnvironmentVariableRegistering += m1.Object;
+                mwInstl.EnvironmentVariableRegistered += m2.Object;
+            }
 
             var mwInstllr = fixture.NewMachineWideInstaller();
 
@@ -966,8 +978,16 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             mwInstl.NuGetPackageCreated += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
             mwInstl.NuGetSourceRegistering += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _(It.IsAny<string>(), It.IsAny<string>()))).Object;
             mwInstl.NuGetSourceRegistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
-            mwInstl.EnvironmentVariableRegistering += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _(It.IsAny<string>(), It.IsAny<string>()))).Object;
-            mwInstl.EnvironmentVariableRegistered += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _(It.IsAny<string>(), It.IsAny<string>()))).Object;
+            {
+                var m1 = mocks.Create<Action<string, string>>();
+                var m2 = mocks.Create<Action<string, string>>();
+                m1.InOrder(order, m => m.Setup(_ => _("PackageFolderKey", It.IsAny<string>())));
+                m2.InOrder(order, m => m.Setup(_ => _("PackageFolderKey", It.IsAny<string>())));
+                m1.InOrder(order, m => m.Setup(_ => _("LogFolderKey", It.IsAny<string>())));
+                m2.InOrder(order, m => m.Setup(_ => _("LogFolderKey", It.IsAny<string>())));
+                mwInstl.EnvironmentVariableRegistering += m1.Object;
+                mwInstl.EnvironmentVariableRegistered += m2.Object;
+            }
             mwInstl.ProfilerRegistering += mocks.InOrder<Action<ProfilerLocation>>(order, m => m.Setup(_ => _(It.IsAny<ProfilerLocation>()))).Object;
             mwInstl.ProfilerRegistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
             mwInstl.PrigSourceInstalling += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _(It.IsAny<string>(), It.IsAny<string>()))).Object;
@@ -1213,15 +1233,25 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
             var mwUninstl = new MachineWideUninstallation("2.0.0");
             fixture.FreezeInstalledEnvironment();
-            var variableName = "URASANDESU_PRIG_PACKAGE_FOLDER";
+            var pkgDirKey = "URASANDESU_PRIG_PACKAGE_FOLDER";
+            var logDirKey = "URASANDESU_CPPANONYM_LOGGING_TARGET";
             {
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
-                m.Setup(_ => _.GetPackageFolderKey()).Returns(variableName);
+                m.Setup(_ => _.GetPackageFolderKey()).Returns(pkgDirKey);
+                m.Setup(_ => _.GetLogFolderKey()).Returns(logDirKey);
             }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();
-            mwUninstl.EnvironmentVariableUnregistering += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(variableName))).Object;
-            mwUninstl.EnvironmentVariableUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(variableName))).Object;
+            {
+                var m1 = mocks.Create<Action<string>>();
+                var m2 = mocks.Create<Action<string>>();
+                m1.InOrder(order, m => m.Setup(_ => _(pkgDirKey)));
+                m2.InOrder(order, m => m.Setup(_ => _(pkgDirKey)));
+                m1.InOrder(order, m => m.Setup(_ => _(logDirKey)));
+                m2.InOrder(order, m => m.Setup(_ => _(logDirKey)));
+                mwUninstl.EnvironmentVariableUnregistering += m1.Object;
+                mwUninstl.EnvironmentVariableUnregistered += m2.Object;
+            }
 
             var mwInstllr = fixture.NewMachineWideInstaller();
 
@@ -1328,8 +1358,16 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             mwUninstl.PrigSourceUninstalled += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
             mwUninstl.ProfilerUnregistering += mocks.InOrder<Action<ProfilerLocation>>(order, m => m.Setup(_ => _(It.IsAny<ProfilerLocation>()))).Object;
             mwUninstl.ProfilerUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
-            mwUninstl.EnvironmentVariableUnregistering += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
-            mwUninstl.EnvironmentVariableUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            {
+                var m1 = mocks.Create<Action<string>>();
+                var m2 = mocks.Create<Action<string>>();
+                m1.InOrder(order, m => m.Setup(_ => _("PackageFolderKey")));
+                m2.InOrder(order, m => m.Setup(_ => _("PackageFolderKey")));
+                m1.InOrder(order, m => m.Setup(_ => _("LogFolderKey")));
+                m2.InOrder(order, m => m.Setup(_ => _("LogFolderKey")));
+                mwUninstl.EnvironmentVariableUnregistering += m1.Object;
+                mwUninstl.EnvironmentVariableUnregistered += m2.Object;
+            }
             mwUninstl.NuGetSourceUnregistering += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
             mwUninstl.NuGetSourceUnregistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
             mwUninstl.Completed += mocks.InOrder<Action<MachineWideProcessResults>>(order, m => m.Setup(_ => _(It.IsAny<MachineWideProcessResults>()))).Object;

@@ -103,6 +103,28 @@ namespace Urasandesu.Prig.VSPackage.Models
             SetEnvironmentVariable(GetPackageFolderKey(), null);
         }
 
+        public string GetLogFolder()
+        {
+            return Path.Combine(GetToolsPath(), "log");
+        }
+
+        public string GetLogFolderKey()
+        {
+            return "URASANDESU_CPPANONYM_LOGGING_TARGET";
+        }
+
+        public void StoreLogFolder(string variableValue)
+        {
+            SetEnvironmentVariable(GetLogFolderKey(), variableValue);
+            SetEnvironmentVariable(GetLogFolderKey(), variableValue, EnvironmentVariableTarget.Machine);
+        }
+
+        public void RemoveLogFolder()
+        {
+            SetEnvironmentVariable(GetLogFolderKey(), null, EnvironmentVariableTarget.Machine);
+            SetEnvironmentVariable(GetLogFolderKey(), null);
+        }
+
         public void RegisterToolsPath()
         {
             RegisterToolsPath(

@@ -69,6 +69,8 @@ namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture
             m.Setup(_ => _.GetRegistryValue(It.IsAny<RegistryKey>(), It.IsAny<string>())).Returns(fixture.Create<string>());
             m.Setup(_ => _.ExistsFile(It.IsAny<string>())).Returns(true);
             m.Setup(_ => _.GetFileDescription(It.IsAny<string>())).Returns("Prig Profiler 2.0.0 Type Library");
+            m.Setup(_ => _.GetPackageFolderKey()).Returns("PackageFolderKey");
+            m.Setup(_ => _.GetLogFolderKey()).Returns("LogFolderKey");
         }
 
         public static void FreezeUninstalledEnvironment(this IFixture fixture)
@@ -80,6 +82,8 @@ namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture
         {
             var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
             m.Setup(_ => _.GetToolsPath()).Returns(toolsPath);
+            m.Setup(_ => _.GetPackageFolderKey()).Returns("PackageFolderKey");
+            m.Setup(_ => _.GetLogFolderKey()).Returns("LogFolderKey");
         }
 
         public static NuGetExecutor NewNuGetExecutor(this IFixture fixture)

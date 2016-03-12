@@ -135,12 +135,22 @@ namespace Urasandesu.Prig.VSPackage.Models
 
         void RegisterEnvironmentVariables(MachineWideInstallation mwInstl)
         {
-            var pkgDir = EnvironmentRepository.GetPackageFolder();
-            var name = EnvironmentRepository.GetPackageFolderKey();
-            var value = pkgDir;
-            mwInstl.OnEnvironmentVariableRegistering(name, value);
-            EnvironmentRepository.StorePackageFolder(value);
-            mwInstl.OnEnvironmentVariableRegistered(name, value);
+            {
+                var pkgDir = EnvironmentRepository.GetPackageFolder();
+                var name = EnvironmentRepository.GetPackageFolderKey();
+                var value = pkgDir;
+                mwInstl.OnEnvironmentVariableRegistering(name, value);
+                EnvironmentRepository.StorePackageFolder(value);
+                mwInstl.OnEnvironmentVariableRegistered(name, value);
+            }
+            {
+                var logDir = EnvironmentRepository.GetLogFolder();
+                var name = EnvironmentRepository.GetLogFolderKey();
+                var value = logDir;
+                mwInstl.OnEnvironmentVariableRegistering(name, value);
+                EnvironmentRepository.StoreLogFolder(value);
+                mwInstl.OnEnvironmentVariableRegistered(name, value);
+            }
         }
 
         void RegisterProfiler(MachineWideInstallation mwInstl)
@@ -232,10 +242,18 @@ namespace Urasandesu.Prig.VSPackage.Models
 
         void UnregisterEnvironmentVariables(MachineWideUninstallation mwUninstl)
         {
-            var name = EnvironmentRepository.GetPackageFolderKey();
-            mwUninstl.OnEnvironmentVariableUnregistering(name);
-            EnvironmentRepository.RemovePackageFolder();
-            mwUninstl.OnEnvironmentVariableUnregistered(name);
+            {
+                var name = EnvironmentRepository.GetPackageFolderKey();
+                mwUninstl.OnEnvironmentVariableUnregistering(name);
+                EnvironmentRepository.RemovePackageFolder();
+                mwUninstl.OnEnvironmentVariableUnregistered(name);
+            }
+            {
+                var name = EnvironmentRepository.GetLogFolderKey();
+                mwUninstl.OnEnvironmentVariableUnregistering(name);
+                EnvironmentRepository.RemoveLogFolder();
+                mwUninstl.OnEnvironmentVariableUnregistered(name);
+            }
         }
 
         void UnregisterNuGetSource(MachineWideUninstallation mwUninstl)
