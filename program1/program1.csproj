@@ -94,7 +94,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -104,6 +106,10 @@
     <Compile Include="Mixins\UntestableLibrary\ULTableMixin.cs" />
     <Compile Include="MyLibrary\FarmRoad.cs" />
     <Compile Include="MyLibrary\ChatRoom.cs" />
+    <Compile Include="MyLibrary\MyElement.cs" />
+    <Compile Include="MyLibrary\MyElementCollection.cs" />
+    <Compile Include="MyLibrary\MySection.cs" />
+    <Compile Include="MyLibrary\MyConfiguration.cs" />
     <Compile Include="MyLibrary\Route.cs" />
     <Compile Include="MyLibrary\RicePaddy.cs" />
     <Compile Include="MyLibrary\Village.cs" />
