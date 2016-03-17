@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ULInstanceGetters.cs" />
     <Compile Include="ULChatBot.cs" />
     <Compile Include="ULDllImport.cs" />
     <Compile Include="Variations.cs" />

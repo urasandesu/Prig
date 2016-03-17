@@ -29,6 +29,9 @@
 
 
 
+using Microsoft.Win32;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace UntestableLibrary
