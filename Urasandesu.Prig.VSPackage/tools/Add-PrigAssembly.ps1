@@ -160,7 +160,7 @@ function SetStubberPreBuildEventProperty {
         $condition = "'`$(Platform)' == '$Platform'"
     }
 
-    $vscomntoolsNames = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.name }
+    [array]$vscomntoolsNames = gci env:vs* | ? { $_.name -match 'VS\d{3}COMNTOOLS' } | sort name -Descending | % { $_.name }
     $vsDevCmdPath = '%{0}%VsDevCmd.bat' -f $vscomntoolsNames[0]
     $targetNames = 'BeforeBuild', 'BeforeRebuild'
     foreach ($targetName in $targetNames) {
