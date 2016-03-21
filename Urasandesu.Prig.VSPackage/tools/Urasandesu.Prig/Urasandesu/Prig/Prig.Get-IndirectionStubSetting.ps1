@@ -126,6 +126,13 @@ function Get-IndirectionStubSetting {
                 $content = $sb.ToString()
                 $name = ConvertToIndirectionStubName $methodBase
                 @"
+      <!-- 
+          P$(ConvertTypeToClassName $methodBase.DeclaringType).$(ConvertMethodBaseToClassName $methodBase)().Body = 
+              $(ConvertMethodBaseToLambdaParameters $methodBase) => 
+              {   $(ConvertMethodBaseToLambdaParameterRemarks $methodBase)
+                  throw new NotImplementedException();
+              };
+      -->
 <add name="$name" alias="$name">
 $content
 </add>

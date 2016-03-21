@@ -286,6 +286,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Snippets\Prig\pmock.snippet">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Snippets\Prig\pproxymock.snippet">
+      <SubType>Designer</SubType>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -294,6 +302,10 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Resources\ShieldIcon.png" />
+    <Content Include="snippets.pkgdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="tools\Add-PrigAssembly.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -517,6 +529,7 @@
       <Name>Urasandesu.NAnonym</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

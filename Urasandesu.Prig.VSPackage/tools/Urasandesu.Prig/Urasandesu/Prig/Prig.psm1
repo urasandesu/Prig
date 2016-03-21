@@ -315,6 +315,181 @@ function ConvertStubToClassName {
 
 
 
+function ConvertMethodBaseToClassName {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+    
+    $defName = ConvertToIndirectionStubName $MethodBase
+    if ($MethodBase.IsGenericMethod) {
+        $defName = StripGenericParameterCount $defName
+        $genericArgNames = @()
+        foreach ($genericArg in $MethodBase.GetGenericArguments()) {
+            $genericArgNames += (ConvertTypeToFullName $genericArg)
+        }
+        $defName = ($defName + "<" + ($genericArgNames -join ', ') + ">")
+    }
+    $defName
+}
+
+
+
+function ConvertMethodBaseToLambdaParameters {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
+    if (IsMethodBaseSignaturePublic $MethodBase) {
+        ConvertPublicMethodBaseToLambdaParameters $MethodBase
+    } else {
+        ConvertNonPublicMethodBaseToLambdaParameters $MethodBase
+    }
+}
+
+
+function GetParametersForLambda {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
+    if (!$MethodBase.IsStatic) {
+        if ($MethodBase.DeclaringType.IsClass) {
+            $type = $MethodBase.DeclaringType
+        } else {
+            $type = $MethodBase.DeclaringType.MakeByRefType()
+        }
+        $attr = [System.Reflection.ParameterAttributes]::None
+        $name = '@this'
+        New-Object psobject | 
+            Add-Member NoteProperty Type $type -PassThru | 
+            Add-Member NoteProperty Attribute $attr -PassThru | 
+            Add-Member NoteProperty Name $name -PassThru
+    }
+
+    $paramInfos = $MethodBase.GetParameters()
+    foreach ($paramInfo in $paramInfos) {
+        $type = $paramInfo.ParameterType
+        $attr = $paramInfo.Attributes
+        $name = $paramInfo.Name
+        New-Object psobject | 
+            Add-Member NoteProperty Type $type -PassThru | 
+            Add-Member NoteProperty Attribute $attr -PassThru | 
+            Add-Member NoteProperty Name $name -PassThru
+    }
+}
+
+
+
+function ConvertPublicMethodBaseToLambdaParameters {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
+    $params = @(GetParametersForLambda $MethodBase)
+
+    if ($params.Length -eq 0) {
+        '()'
+    } elseif (@($params | ? { $_.Type.IsByRef }).Length -eq 0) {
+        if ($params.Length -eq 1) {
+            $params[0].Name
+        } else {
+            '({0})' -f (($params | % { $_.Name }) -join ', ')
+        }
+    } else {
+        $paramStrs = New-Object System.Collections.Generic.List[string]
+        foreach ($param in $params) {
+            $strs = New-Object System.Collections.Generic.List[string]
+            if ($param.Type.IsByRef) {
+                if (($param.Attribute -band [System.Reflection.ParameterAttributes]::Out) -ne 0) {
+                    $strs.Add('out')
+                } else {
+                    $strs.Add('ref')
+                }
+            }
+            $strs.Add((ConvertTypeToFullName $param.Type))
+            $strs.Add($param.Name)
+            $paramStrs.Add(($strs -join ' '))
+        }
+        '({0})' -f ($paramStrs -join ', ')
+    }
+}
+
+
+
+function ConvertNonPublicMethodBaseToLambdaParameters {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
+    'args'
+}
+
+
+
+function ConvertMethodBaseToLambdaParameterRemarks {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
+    if (IsMethodBaseSignaturePublic $MethodBase) {
+        ConvertPublicMethodBaseToLambdaParameterRemarks $MethodBase
+    } else {
+        ConvertNonPublicMethodBaseToLambdaParameterRemarks $MethodBase
+    }
+}
+
+
+
+function ConvertPublicMethodBaseToLambdaParameterRemarks {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
+    [string]::Empty
+}
+
+
+
+function ConvertNonPublicMethodBaseToLambdaParameterRemarks {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
+    $params = @(GetParametersForLambda $MethodBase)
+
+    if ($params.Length -eq 0) {
+        '// args.Length == 0: because this method has no parameters.'
+    } else {
+        $paramStrs = New-Object System.Collections.Generic.List[string]
+        for ($i = 0; $i -lt $params.Length; $i++) { 
+            $param = $params[$i]
+            $strs = New-Object System.Collections.Generic.List[string]
+            $strs.Add(('args[{0}]:' -f $i))
+            if ($param.Type.IsByRef) {
+                if (($param.Attribute -band [System.Reflection.ParameterAttributes]::Out) -ne 0) {
+                    $strs.Add('out')
+                } else {
+                    $strs.Add('ref')
+                }
+            }
+            $strs.Add((ConvertTypeToFullName $param.Type))
+            $strs.Add($param.Name)
+            $paramStrs.Add(($strs -join ' '))
+        }
+        '// {0}' -f ($paramStrs -join ', ')
+    }
+}
+
+
+
 function IsPublic {
     param (
         [type]
@@ -336,20 +511,30 @@ function IsSignaturePublic {
         $Stub
     )
 
+    IsMethodBaseSignaturePublic $Stub.Target
+}
+
+
+
+function IsMethodBaseSignaturePublic {
+    param (
+        [System.Reflection.MethodBase]
+        $MethodBase
+    )
+
     $result = $true
     
-    if (!$Stub.Target.IsStatic) {
-        $result = $result -and (IsPublic $Stub.Target.DeclaringType)
+    if (!$MethodBase.IsStatic) {
+        $result = $result -and (IsPublic $MethodBase.DeclaringType)
     }
 
-    $paramInfos = $Stub.Target.GetParameters()
+    $paramInfos = $MethodBase.GetParameters()
     $result = $result -and !(0 -lt @($paramInfos | ? { !(IsPublic $_.ParameterType) }).Length)
 
-    switch ($Stub.Target)
-    {
+    switch ($MethodBase) {
         { $_ -is [System.Reflection.MethodInfo] } {
             [System.Reflection.MethodInfo]$methodInfo = $null
-            $methodInfo = $Stub.Target
+            $methodInfo = $MethodBase
             $result = $result -and (IsPublic $methodInfo.ReturnType)
             break
         }
@@ -358,7 +543,7 @@ function IsSignaturePublic {
             break
         }
         Default {
-            throw New-Object System.ArgumentException ('Parameter $Stub.Target({0}) is not supported.' -f $Stub.Target.GetType()) 
+            throw New-Object System.ArgumentException ('Parameter $MethodBase({0}) is not supported.' -f $MethodBase.GetType()) 
         }
     }
     $result

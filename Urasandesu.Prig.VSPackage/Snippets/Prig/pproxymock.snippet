@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Specified instance Prig Type mock</Title>
+      <Shortcut>pproxymock</Shortcut>
+      <Description>Code snippet for specified instance Prig Type mock</Description>
+      <Author>Akira Sugiura</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>originalType</ID>
+          <ToolTip>Name of original type</ToolTip>
+          <Default>Foo</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp">
+        <![CDATA[class PProxy$originalType$Mock : PProxy$originalType$
+{
+}]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
