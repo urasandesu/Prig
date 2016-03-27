@@ -21,6 +21,15 @@
       <Code Language="csharp">
         <![CDATA[class P$originalType$Mock : P$originalType$
 {
+    
+    
+    
+    List<Action> m_verifiers = new List<Action>();
+    public void VerifyAll()
+    {
+        foreach (var verifier in m_verifiers)
+            verifier();
+    }
 }]]>
       </Code>
     </Snippet>
