@@ -32,6 +32,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace UntestableLibrary
@@ -48,7 +49,16 @@ namespace UntestableLibrary
     // MVAR:            None, MVar
     // SZARRAY:         None, SZArray
     // VAR:             None, Var
+    // 
+    // Against issue #65, add some generic parameter constraint variation.
     public class Variation_HasGenericThis_Default_bool_None_CLASS_None_None_None_None_None<T>
+    {
+        public bool Do(Regex r)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasGenericThisStructConstrained_Default_bool_None_CLASS_None_None_None_None_None<T> where T : struct
     {
         public bool Do(Regex r)
         {
@@ -62,9 +72,30 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasGenericThisClassConstrained_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<T> where T : class
+    {
+        public T[,][] Do<M>(Regex r)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasGenericThis_GenericStructConstrained_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<T>
+    {
+        public T[,][] Do<M>(Regex r) where M : struct
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_HasThis_Generic_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None
     {
         public DateTime Do<M>(out M[] mArr)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasThis_GenericClassConstrained_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None
+    {
+        public DateTime Do<M>(out M[] mArr) where M : class
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -76,9 +107,23 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasGenericThisNewConstrained_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<T> where T : new()
+    {
+        public Regex Do(T[,] tArr)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_None_Generic_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None
     {
         public static M[,] Do<M>(DateTime dt)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_None_GenericNewConstrained_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None
+    {
+        public static M[,] Do<M>(DateTime dt) where M : new()
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -97,6 +142,13 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasThis_GenericBaseClassConstrained_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None
+    {
+        public Regex Do<M>(out M m) where M : WebRequest
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_HasThis_Default_void_ByRef_VALUETYPE_None_None_None_None_None
     {
         public void Do(out DateTime dt)
@@ -111,9 +163,30 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasGenericThisBaseClassConstrained_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> where T : WebRequest
+    {
+        public char Do<M>(out T[][,] tArr)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasGenericThis_GenericInterfaceConstrained_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>
+    {
+        public char Do<M>(out T[][,] tArr) where M : IWebProxy
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_HasThis_Generic_void_None_char_None_None_None_None_None
     {
         public void Do<M>(char c)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasThis_GenericSuppliedArgumentConstrained_void_None_char_None_None_None_None_None
+    {
+        public void Do<M, N>(char c) where M : N
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -146,7 +219,21 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasGenericThisInterfaceConstrained_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> where T : IWebProxy
+    {
+        public DateTime Do<M>(out byte u1)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>
+    {
+        public void Do<M>(out T[,][] tArr)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T, U> where T : U
     {
         public void Do<M>(out T[,][] tArr)
         {

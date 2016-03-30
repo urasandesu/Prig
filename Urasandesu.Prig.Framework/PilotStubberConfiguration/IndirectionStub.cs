@@ -1186,7 +1186,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             static ModuleBuilder NewTemporaryModuleBuilder()
             {
                 var asmName = new AssemblyName(Guid.NewGuid().ToString("N"));
-                var asmBldr = AppDomain.CurrentDomain.DefineDynamicAssembly(asmName, AssemblyBuilderAccess.ReflectionOnly);
+                var asmBldr = AppDomain.CurrentDomain.DefineDynamicAssembly(asmName, AssemblyBuilderAccess.Run);
                 return asmBldr.DefineDynamicModule(asmName.Name + ".dll");
             }
             public static ModuleBuilder ms_modBldr = NewTemporaryModuleBuilder();
