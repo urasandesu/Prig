@@ -169,11 +169,16 @@ namespace Urasandesu.Prig.VSPackage.Models
 
         void InstallDefaultSource(MachineWideInstallation mwInstl)
         {
-            var msvsdirPath = new DirectoryInfo(@"C:\Program Files (x86)").EnumerateDirectories("Microsoft Visual Studio *").
-                                                                           Where(_ => Regex.IsMatch(_.Name, @"Microsoft Visual Studio \d+\.\d+")).
-                                                                           OrderByDescending(_ => _.Name).
-                                                                           Select(_ => _.FullName).
-                                                                           First();
+            var programFilesInfo = default(DirectoryInfo);
+            if (EnvironmentRepository.Is64BitOperatingSystem())
+                programFilesInfo = new DirectoryInfo(@"C:\Program Files (x86)");
+            else
+                programFilesInfo = new DirectoryInfo(@"C:\Program Files");
+            var msvsdirPath = programFilesInfo.EnumerateDirectories("Microsoft Visual Studio *").
+                                               Where(_ => Regex.IsMatch(_.Name, @"Microsoft Visual Studio \d+\.\d+")).
+                                               OrderByDescending(_ => _.Name).
+                                               Select(_ => _.FullName).
+                                               First();
             {
                 var pkgName = "TestWindow";
                 var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");

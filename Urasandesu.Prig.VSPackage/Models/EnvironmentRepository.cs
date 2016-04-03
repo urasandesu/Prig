@@ -285,12 +285,19 @@ namespace Urasandesu.Prig.VSPackage.Models
             if (m_profLocs == null)
             {
                 var toolsPath = GetToolsPath();
-                m_profLocs =
-                    new[] 
-                    { 
-                        new ProfilerLocation(RegistryView.Registry64, Path.Combine(toolsPath, @"x64\Urasandesu.Prig.dll")), 
-                        new ProfilerLocation(RegistryView.Registry32, Path.Combine(toolsPath, @"x86\Urasandesu.Prig.dll")) 
-                    };
+                if (Is64BitOperatingSystem())
+                    m_profLocs =
+                        new[] 
+                        { 
+                            new ProfilerLocation(RegistryView.Registry64, Path.Combine(toolsPath, @"x64\Urasandesu.Prig.dll")), 
+                            new ProfilerLocation(RegistryView.Registry32, Path.Combine(toolsPath, @"x86\Urasandesu.Prig.dll")) 
+                        };
+                else
+                    m_profLocs =
+                        new[] 
+                        { 
+                            new ProfilerLocation(RegistryView.Registry32, Path.Combine(toolsPath, @"x86\Urasandesu.Prig.dll")) 
+                        };
             }
             return m_profLocs;
         }
@@ -303,7 +310,12 @@ namespace Urasandesu.Prig.VSPackage.Models
 
         public string GetRegsvr32Path()
         {
-            return Path.Combine(Environment.ExpandEnvironmentVariables("%windir%"), @"SysNative\regsvr32.exe");
+            var regsvr32Path = default(string);
+            if (Is64BitOperatingSystem())
+                regsvr32Path = Path.Combine(Environment.ExpandEnvironmentVariables("%windir%"), @"SysNative\regsvr32.exe");
+            else
+                regsvr32Path = Path.Combine(Environment.ExpandEnvironmentVariables("%windir%"), @"system32\regsvr32.exe");
+            return regsvr32Path;
         }
 
         public string GetPrigPath()
@@ -336,6 +348,11 @@ namespace Urasandesu.Prig.VSPackage.Models
         public object GetRegistryValue(RegistryKey key, string name)
         {
             return key.GetValue(name);
+        }
+
+        public bool Is64BitOperatingSystem()
+        {
+            return Environment.Is64BitOperatingSystem;
         }
 
         public bool ExistsFile(string path)

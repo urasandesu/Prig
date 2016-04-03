@@ -65,7 +65,7 @@ namespace Urasandesu.Prig.VSPackage.Models
         RegistryKey OpenRegistrySubKey(RegistryKey key, string name);
         RegistryKey OpenRegistrySubKey(RegistryKey key, string name, bool writable);
         object GetRegistryValue(RegistryKey key, string name);
-
+        bool Is64BitOperatingSystem();
         bool ExistsFile(string path);
         bool ExistsDirectory(string path);
         string GetFileDescription(string path);
