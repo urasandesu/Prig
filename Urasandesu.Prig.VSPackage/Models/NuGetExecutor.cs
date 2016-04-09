@@ -70,8 +70,14 @@ namespace Urasandesu.Prig.VSPackage.Models
         {
             var nuget = EnvironmentRepository.GetNuGetPath();
             var args = "sources list";
-            return StartProcessWithoutShell(nuget, args, 
-                p => p.StandardOutput.ReadLines().Any(_ => Regex.IsMatch(_, name, RegexOptions.IgnoreCase)));
+            var nameRecordRegex = new Regex(@"^\s+\d+\.\s+");
+            var nameExtractRegex = new Regex(@"^\s+\d+\.\s+(?<name>.*)(( \[Enabled\])|( \[Disabled\]))$", RegexOptions.IgnoreCase);
+            var nameRegex = new Regex(string.Format(@"^{0}$", Regex.Escape(name)), RegexOptions.IgnoreCase);
+            return StartProcessWithoutShell(nuget, args, p => p.StandardOutput.ReadLines().
+                        Where(_ => nameRecordRegex.IsMatch(_)).
+                        Select(_ => nameExtractRegex.Replace(_, @"${name}")).
+                        Any(_ => nameRegex.IsMatch(_))
+                   );
         }
 
         public string StartUnsourcing(string name)

@@ -104,8 +104,6 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             }
         }
 
-
-
         [Test]
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void StartSourcing_should_update_the_specified_source_if_it_has_already_existed()
@@ -145,8 +143,6 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             }
         }
 
-
-
         [Test]
         [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
         public void StartSourcing_should_update_the_specified_source_if_only_letter_case_is_unmatched()
@@ -159,6 +155,45 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
   <packageSources>
     <add key=""https://www.nuget.org/api/v2/"" value=""https://www.nuget.org/api/v2/"" />
     <add key=""pRiG sOurCe"" value=""C:\Users\Akira\Prig\Test.Urasandesu.Prig.VSPackage\bin\Debug\ "" />
+  </packageSources>
+  <disabledPackageSources />
+</configuration>
+";
+                using (var fs = nugetConfig.Info.Open(FileMode.Create))
+                using (var sw = new StreamWriter(fs))
+                    sw.Write(xml);
+
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+                {
+                    var m = new Mock<IEnvironmentRepository>(MockBehavior.Strict);
+                    m.Setup(_ => _.GetNuGetPath()).Returns(AppDomain.CurrentDomain.GetPathInBaseDirectory(@"tools\NuGet.exe"));
+                    fixture.Inject(m);
+                }
+
+                var nugetExecutor = fixture.NewNuGetExecutor();
+
+
+                // Act
+                var result = nugetExecutor.StartSourcing("Prig Source", Environment.ExpandEnvironmentVariables("%TEMP%"));
+
+
+                // Assert
+                Assert.That(result, Is.StringMatching("Prig Source"));
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void StartSourcing_should_add_the_specified_source_if_package_name_matches_partially()
+        {
+            using (var nugetConfig = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config")).BeginModifying())
+            {
+                // Arrange
+                var xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <packageSources>
+    <add key=""https://www.nuget.org/api/v2/"" value=""https://www.nuget.org/api/v2/"" />
+    <add key=""Moq.Prig Source"" value=""C:\ProgramData\chocolatey\lib\Moq.Prig\tools"" />
   </packageSources>
   <disabledPackageSources />
 </configuration>
@@ -225,6 +260,45 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             {
                 // Arrange
                 nugetConfig.Info.Delete();
+
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+                {
+                    var m = new Mock<IEnvironmentRepository>(MockBehavior.Strict);
+                    m.Setup(_ => _.GetNuGetPath()).Returns(AppDomain.CurrentDomain.GetPathInBaseDirectory(@"tools\NuGet.exe"));
+                    fixture.Inject(m);
+                }
+
+                var nugetExecutor = fixture.NewNuGetExecutor();
+
+
+                // Act
+                var result = nugetExecutor.StartUnsourcing("Prig Source");
+
+
+                // Assert
+                Assert.That(result, Is.StringMatching("Prig Source"));
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void StartUnsourcing_should_do_nothing_if_package_name_matches_partially()
+        {
+            using (var nugetConfig = new FileInfo(Path.Combine(Environment.ExpandEnvironmentVariables("%APPDATA%"), @"NuGet\NuGet.Config")).BeginModifying())
+            {
+                // Arrange
+                var xml = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <packageSources>
+    <add key=""https://www.nuget.org/api/v2/"" value=""https://www.nuget.org/api/v2/"" />
+    <add key=""Moq.Prig Source"" value=""C:\ProgramData\chocolatey\lib\Moq.Prig\tools"" />
+  </packageSources>
+  <disabledPackageSources />
+</configuration>
+";
+                using (var fs = nugetConfig.Info.Open(FileMode.Create))
+                using (var sw = new StreamWriter(fs))
+                    sw.Write(xml);
 
                 var fixture = new Fixture().Customize(new AutoMoqCustomization());
                 {
