@@ -140,14 +140,14 @@ function SetStubberPreBuildEventProperty {
         $ProcessorArchitecture
     )
 
-    $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass' })
+    $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe' })
     $argFile = '-File "%URASANDESU_PRIG_PACKAGE_FOLDER%\tools\Invoke-PilotStubber.ps1"'
     $argAssembly = '-AssemblyFrom "{0}"' -f (GetAssemblyLocation $SolutionFullName $MSBuildProject $AssemblyNameEx)
     $argTargetFrameworkVersion = '-TargetFrameworkVersion {0}' -f $TargetFrameworkVersion
     if ($TargetFrameworkVersion -eq 'v3.5') {
-        $argOther = '-Version 2.0 -NoLogo -NoProfile'
+        $argOther = '-Version 2.0 -ExecutionPolicy Bypass -NoLogo -NoProfile'
     } else {
-        $argOther = '-NoLogo -NoProfile'
+        $argOther = '-ExecutionPolicy Bypass -NoLogo -NoProfile'
     }
     $argReferenceFrom = '-ReferenceFrom "@(''%URASANDESU_PRIG_PACKAGE_FOLDER%\lib\Urasandesu.NAnonym.dll'',''%URASANDESU_PRIG_PACKAGE_FOLDER%\lib\Urasandesu.Prig.Framework.dll'')"'
     $argKeyFile = '-KeyFile "%URASANDESU_PRIG_PACKAGE_FOLDER%\tools\Urasandesu.Prig.snk"'
