@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
-  
+
   <configSections>
     <section name="prig" type="Urasandesu.Prig.Framework.PilotStubberConfiguration.PrigSection, Urasandesu.Prig.Framework" />
   </configSections>
@@ -42,7 +42,7 @@
       </add>
 
     </stubs>
-    
+
   </prig>
 
 </configuration>

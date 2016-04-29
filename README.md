@@ -137,6 +137,13 @@ Exit the [Prig Setup Session](https://github.com/urasandesu/Prig/wiki/Cheat-Shee
 
     <stubs>
       <!-- PASTE HERE -->
+      <!-- 
+          PDateTime.NowGet().Body = 
+              () => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
       <add name="NowGet" alias="NowGet">
         <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
           <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">get_Now</Name>
@@ -155,6 +162,8 @@ Exit the [Prig Setup Session](https://github.com/urasandesu/Prig/wiki/Cheat-Shee
 
 </configuration>
 ```
+
+**NOTE:** You can also get the same result using [Prig ILSpy plug-in](https://github.com/urasandesu/ILSpy.GetPrigIndirectionStubSetting.Plugin).
 
 Were you able to build successfully? OK, now you're ready to test them.
 
@@ -287,7 +296,7 @@ For more information, see also [Prig's wiki](https://github.com/urasandesu/Prig/
 
 
 # INSTALLATION FROM SOURCE CODE
-## DEPENDENCY
+## PREREQUISITES
 To build this project needs the following dependencies: 
 * [Visual Studio 2013(more than Professional Edition because it uses ATL. Also, you can use Community Edition)](http://www.visualstudio.com/)
 * [Boost 1.60.0](http://www.boost.org/users/history/version_1_60_0.html)  
@@ -324,13 +333,13 @@ Performing configuration checks
 * [Google Test 1.6](https://code.google.com/p/googletest/)  
 Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the `Build` menu, and open `Configuration Manager...`. On `Configuration Manager` dialog box, in the `Active Solution Platform` drop-down list, choose the `<New...>` option. After the `New Solution Platform` dialog box is opened, in the `Type or select the new platform` drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.
 * [NUnit 2.6.4.14350](http://www.nunit.org/)  
-Install using with the installer(NUnit-2.6.4.msi). As more easy way, you can install it by using Chocolatey: `choco install nunit -version 2.6.4 -y`.
+Install using with the installer(NUnit-2.6.4.msi). As more easy way, you can install it by using Chocolatey: `cinst nunit -version 2.6.4 -y`.
 * [Microsoft Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)  
 Install using with the installer(vssdk_full.exe).
 * [Modeling SDK for Microsoft Visual Studio 2013](http://www.microsoft.com/en-us/download/details.aspx?id=40754)  
 Install using with the installer(VS_VmSdk.exe).
 * [NAnt](http://nant.sourceforge.net/)  
-You can also install in accordance with [the help](http://nant.sourceforge.net/release/latest/help/introduction/installation.html), but the easiest way is using Chocolatey: `choco install nant -y`.
+You can also install in accordance with [the help](http://nant.sourceforge.net/release/latest/help/introduction/installation.html), but the easiest way is using Chocolatey: `cinst nant -y`.
 * [Microsoft .NET Framework 3.5 Service Pack 1](https://www.microsoft.com/en-us/download/details.aspx?id=22)  
 Install using with the installer(dotnetfx35setup.exe).
 * [Jekyll](http://jekyllrb.com/docs/windows/)(Optional)  

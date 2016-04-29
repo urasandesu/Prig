@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
     <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,19 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.2.0
+    <releaseNotes>Version 2.3.0
+* Fixed the issue that stack trace isn't outputted in Windows 10. It seems that this correction doesn't effect against Windows 7 and Windows 8.1. There is a high probability that we used wrongly the api that handles stack trace.
+* Update middleware. NUnit is updated from 2.6.3.13283 to 2.6.4.14350.
+* Fixed #60: Don't create log directory in various places. When installing, add the environment variable to indicate the log directory. Also, remove the variable when uninstalling.
+* Fixed #62: Propose empty mock implementation for replacement target method. Improve `Get-IndirectionStubSetting` command more explanatorily. By the way, I added some code snippets, but it is an experiment -- possibly, they are removed at next release.
+* Fixed #64: Any Prig Assembly addition is failed in the environment that the environment variable `VS###COMNTOOLS` is installed only one. Fix the script bug.
+* Fixed #65: Prig cannot handle type reference generic parameter constraint. Change the AssemblyBuilderAccess of temporary assembly `ReflectionOnly` to `Run`, because it conflicts with the assembly that has been already loaded as runnable(this behavior is uncontrollable).
+* Fixed #66: `Register Prig` menu doesn't work in a x86 environment. Fix the behavior to choose the file path depends on the processor architecture.
+* Fixed a regression caused by Visual Studio 2015 support.
+* Fixed some potential bugs.
+
+
+Version 2.2.0
 * Fixed #57: Support for Continuous Integration Server (like AppVeyor). Add some special APIs and maintenance document to explain them. For details, please see [our Wiki](https://github.com/urasandesu/Prig/wiki/AppVeyor-Support).
 * Fixed #58: Needs more robustness for additional delegates. Ignore the additional delegate that doesn't exist, because build error occurs even if the delegate doesn't relevant.
 * Fixed potential bugs. Some multiple threads race conditions existed. These were found by Coverity.
@@ -80,10 +92,6 @@ Version 2.0.0-alpha04
 * Fix error when enabling Test Adapter and no vstest running
 * Fix more generation issues
 * Response to Strange Behavior. Depending on the replacing method, the static method of the infrastructure is sometimes called before initializing the field of the type. For example, you will find the behavior if you try [a sample of Generics](https://github.com/urasandesu/Prig/wiki/Generics) with [Prig v2.0.0-alpha03](https://github.com/urasandesu/Prig/releases/tag/v2.0.0-alpha03) in Visual Studio integrated environment. It seems very strange behavior, but we have to consider that in this layer.
-
-
-Version 2.0.0-alpha03
-* Improve stability a little. Support the test runners that have never been able to run. The test runners like NUnit(GUI)/xUnit.net/MbUnit couldn't even start up until now(They were raising `ExecutionEngineException`).
 
 
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.
