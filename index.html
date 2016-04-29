@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Prig: Open Source Alternative to Microsoft Fakes By: @urasandesu</title>
+    <title>Prig by urasandesu</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-light.css">
@@ -20,9 +20,8 @@
         <p class="header">Open Source Alternative to Microsoft Fakes</p>
 
         <ul>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v2.2.0/Prig.vsix">Download VSIX</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v2.2.0/Prig.2.2.0.nupkg">Download Nupkg</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/releases/download/v2.2.0/Prig-v2.2.0.zip">Download SRC</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/urasandesu/Prig/tarball/master">Download TAR</a></li>
           <li><a class="buttons github" href="https://github.com/urasandesu/Prig">View On GitHub</a></li>
         </ul>
 
@@ -42,7 +41,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 <h2>
 <a id="status" class="anchor" href="#status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>STATUS</h2>
 
-<p>As of Feb 21, 2016, Released V2.2.0.<br>
+<p>As of Apr 29, 2016, Released V2.3.0.<br>
 <a href="https://scan.coverity.com/projects/urasandesu-prig"><img alt="Coverity Scan Build Status" src="https://img.shields.io/coverity/scan/7574.svg"></a>
 <a href="https://amzn.com/w/ZW5EZ9JC3XKH"><img alt="Donate via Amazon Wish List" src="https://img.shields.io/badge/amazon%20wish%20list-donate-fe9900.svg"></a></p>
 
@@ -170,6 +169,13 @@ PS <span class="pl-c1"><span class="pl-c1">01</span></span>.QuickTour<span class
 
     &lt;<span class="pl-ent">stubs</span>&gt;
       <span class="pl-c">&lt;!-- PASTE HERE --&gt;</span>
+      <span class="pl-c">&lt;!-- </span>
+<span class="pl-c">          PDateTime.NowGet().Body = </span>
+<span class="pl-c">              () =&gt; </span>
+<span class="pl-c">              {   </span>
+<span class="pl-c">                  throw new NotImplementedException();</span>
+<span class="pl-c">              };</span>
+<span class="pl-c">      --&gt;</span>
       &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>NowGet<span class="pl-pds">"</span></span> <span class="pl-e">alias</span>=<span class="pl-s"><span class="pl-pds">"</span>NowGet<span class="pl-pds">"</span></span>&gt;
         &lt;<span class="pl-ent">RuntimeMethodInfo</span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">i</span>=<span class="pl-s"><span class="pl-pds">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">x</span>=<span class="pl-s"><span class="pl-pds">"</span>http://www.w3.org/2001/XMLSchema<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">FactoryType</span>=<span class="pl-s"><span class="pl-pds">"</span>MemberInfoSerializationHolder<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.Reflection.MemberInfoSerializationHolder<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span><span class="pl-e">:</span><span class="pl-e">z</span>=<span class="pl-s"><span class="pl-pds">"</span>http://schemas.microsoft.com/2003/10/Serialization/<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span>http://schemas.datacontract.org/2004/07/System.Reflection<span class="pl-pds">"</span></span>&gt;
           &lt;<span class="pl-ent">Name</span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Id</span>=<span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Type</span>=<span class="pl-s"><span class="pl-pds">"</span>System.String<span class="pl-pds">"</span></span> <span class="pl-e">z</span><span class="pl-e">:</span><span class="pl-e">Assembly</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">xmlns</span>=<span class="pl-s"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>&gt;get_Now&lt;/<span class="pl-ent">Name</span>&gt;
@@ -187,6 +193,8 @@ PS <span class="pl-c1"><span class="pl-c1">01</span></span>.QuickTour<span class
   &lt;/<span class="pl-ent">prig</span>&gt;
 
 &lt;/<span class="pl-ent">configuration</span>&gt;</pre></div>
+
+<p><strong>NOTE:</strong> You can also get the same result using <a href="https://github.com/urasandesu/ILSpy.GetPrigIndirectionStubSetting.Plugin">Prig ILSpy plug-in</a>.</p>
 
 <p>Were you able to build successfully? OK, now you're ready to test them.</p>
 
@@ -321,7 +329,7 @@ PS <span class="pl-c1"><span class="pl-c1">01</span></span>.QuickTour<span class
 <a id="installation-from-source-code" class="anchor" href="#installation-from-source-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>INSTALLATION FROM SOURCE CODE</h1>
 
 <h2>
-<a id="dependency" class="anchor" href="#dependency" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>DEPENDENCY</h2>
+<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PREREQUISITES</h2>
 
 <p>To build this project needs the following dependencies: </p>
 
@@ -367,7 +375,7 @@ Performing configuration checks
 Extract to C:\gtest-1.6.0, and upgrade C:\gtest-1.6.0\msvc\gtest.sln to Visual Studio 2013. Choose the <code>Build</code> menu, and open <code>Configuration Manager...</code>. On <code>Configuration Manager</code> dialog box, in the <code>Active Solution Platform</code> drop-down list, choose the <code>&lt;New...&gt;</code> option. After the <code>New Solution Platform</code> dialog box is opened, in the <code>Type or select the new platform</code> drop-down list, select a 64-bit platform. Then build all(Debug/Release) configurations.</li>
 <li>
 <a href="http://www.nunit.org/">NUnit 2.6.4.14350</a><br>
-Install using with the installer(NUnit-2.6.4.msi). As more easy way, you can install it by using Chocolatey: <code>choco install nunit -version 2.6.4 -y</code>.</li>
+Install using with the installer(NUnit-2.6.4.msi). As more easy way, you can install it by using Chocolatey: <code>cinst nunit -version 2.6.4 -y</code>.</li>
 <li>
 <a href="http://www.microsoft.com/en-us/download/details.aspx?id=40758">Microsoft Visual Studio 2013 SDK</a><br>
 Install using with the installer(vssdk_full.exe).</li>
@@ -376,7 +384,7 @@ Install using with the installer(vssdk_full.exe).</li>
 Install using with the installer(VS_VmSdk.exe).</li>
 <li>
 <a href="http://nant.sourceforge.net/">NAnt</a><br>
-You can also install in accordance with <a href="http://nant.sourceforge.net/release/latest/help/introduction/installation.html">the help</a>, but the easiest way is using Chocolatey: <code>choco install nant -y</code>.</li>
+You can also install in accordance with <a href="http://nant.sourceforge.net/release/latest/help/introduction/installation.html">the help</a>, but the easiest way is using Chocolatey: <code>cinst nant -y</code>.</li>
 <li>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?id=22">Microsoft .NET Framework 3.5 Service Pack 1</a><br>
 Install using with the installer(dotnetfx35setup.exe).</li>
