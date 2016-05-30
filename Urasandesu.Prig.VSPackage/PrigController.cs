@@ -62,7 +62,7 @@ namespace Urasandesu.Prig.VSPackage
 
         public virtual void AddPrigAssembly(PrigViewModel vm)
         {
-            AddPrigAssemblyCore(vm, MonitoringSelectionService.GetSelectedItem<Reference5>().Name);
+            AddPrigAssemblyCore(vm, MonitoringSelectionService.GetSelectedItem<Reference5>().Identity);
         }
 
         public virtual void EnableTestAdapter(PrigViewModel vm)
