@@ -273,7 +273,8 @@ function Start-PrigSetup {
 
     $tmpFileName = [System.IO.Path]::GetTempFileName()
 
-    Start-Process $powershell $argList -Wait -WindowStyle $(if ($shouldBeAutomated) { 'Hidden' } else { 'Normal' }) -RedirectStandardError $tmpFileName
+    $proc = Start-Process $powershell $argList -Wait -WindowStyle $(if ($shouldBeAutomated) { 'Hidden' } else { 'Normal' }) -RedirectStandardError $tmpFileName -PassThru
+    $proc.WaitForExit()
     $errors = Get-Content $tmpFileName
     Remove-Item $tmpFileName -ErrorAction SilentlyContinue
     if (0 -lt $errors.Length) {

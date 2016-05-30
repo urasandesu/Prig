@@ -187,7 +187,8 @@ function Add-PrigAssembly {
 
     $tmpFileName = [System.IO.Path]::GetTempFileName()
 
-    Start-Process $powershell $argList -Wait -RedirectStandardError $tmpFileName -NoNewWindow
+    $proc = Start-Process $powershell $argList -Wait -RedirectStandardError $tmpFileName -NoNewWindow -PassThru
+    $proc.WaitForExit()
     $errors = Get-Content $tmpFileName
     Remove-Item $tmpFileName -ErrorAction SilentlyContinue
     if (0 -lt $errors.Length) {
