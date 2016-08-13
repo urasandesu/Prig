@@ -37,7 +37,6 @@ using Ploeh.AutoFixture;
 using System;
 using System.Collections.Generic;
 using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Microsoft.Win32;
-using Urasandesu.Prig.VSPackage;
 using Urasandesu.Prig.VSPackage.Models;
 
 namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture
@@ -84,6 +83,11 @@ namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture
             m.Setup(_ => _.GetToolsPath()).Returns(toolsPath);
             m.Setup(_ => _.GetPackageFolderKey()).Returns("PackageFolderKey");
             m.Setup(_ => _.GetLogFolderKey()).Returns("LogFolderKey");
+            m.Setup(_ => _.Is64BitOperatingSystem()).Returns(true);
+            var envVars = new Dictionary<string, string>();
+            envVars.Add("VS110COMNTOOLS", @"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\Tools\");
+            envVars.Add("VS120COMNTOOLS", @"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\");
+            m.Setup(_ => _.GetEnvironmentVariables()).Returns(envVars);
         }
 
         public static NuGetExecutor NewNuGetExecutor(this IFixture fixture)

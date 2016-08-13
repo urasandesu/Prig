@@ -32,9 +32,8 @@
 using Microsoft.Practices.Unity;
 using Microsoft.Win32;
 using System;
-using System.Linq;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Urasandesu.Prig.VSPackage.Models
@@ -53,7 +52,7 @@ namespace Urasandesu.Prig.VSPackage.Models
         [Dependency]
         public IPrigExecutor PrigExecutor { private get; set; }
 
-        
+
         public bool HasBeenInstalled(MachinePrerequisite machinePreq)
         {
             if (machinePreq == null)
@@ -169,16 +168,12 @@ namespace Urasandesu.Prig.VSPackage.Models
 
         void InstallDefaultSource(MachineWideInstallation mwInstl)
         {
-            var programFilesInfo = default(DirectoryInfo);
-            if (EnvironmentRepository.Is64BitOperatingSystem())
-                programFilesInfo = new DirectoryInfo(@"C:\Program Files (x86)");
-            else
-                programFilesInfo = new DirectoryInfo(@"C:\Program Files");
-            var msvsdirPath = programFilesInfo.EnumerateDirectories("Microsoft Visual Studio *").
-                                               Where(_ => Regex.IsMatch(_.Name, @"Microsoft Visual Studio \d+\.\d+")).
-                                               OrderByDescending(_ => _.Name).
-                                               Select(_ => _.FullName).
-                                               First();
+            var query = from envVar in EnvironmentRepository.GetEnvironmentVariables()
+                        where Regex.IsMatch(envVar.Key, @"VS\d{3}COMNTOOLS", RegexOptions.IgnoreCase)
+                        orderby envVar.Key descending
+                        select envVar.Value;
+            var vsComnToolsPath = query.First();
+            var msvsdirPath = Path.Combine(vsComnToolsPath, @"..\..");
             {
                 var pkgName = "TestWindow";
                 var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");

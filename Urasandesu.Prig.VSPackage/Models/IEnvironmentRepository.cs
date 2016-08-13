@@ -31,6 +31,7 @@
 
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 
 namespace Urasandesu.Prig.VSPackage.Models
 {
@@ -69,5 +70,6 @@ namespace Urasandesu.Prig.VSPackage.Models
         bool ExistsFile(string path);
         bool ExistsDirectory(string path);
         string GetFileDescription(string path);
+        IDictionary<string, string> GetEnvironmentVariables();
     }
 }

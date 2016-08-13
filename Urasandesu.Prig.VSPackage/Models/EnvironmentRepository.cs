@@ -33,8 +33,11 @@ using Microsoft.VisualBasic.Devices;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -368,6 +371,11 @@ namespace Urasandesu.Prig.VSPackage.Models
         public string GetFileDescription(string path)
         {
             return FileVersionInfo.GetVersionInfo(path).FileDescription;
+        }
+
+        public IDictionary<string, string> GetEnvironmentVariables()
+        {
+            return Environment.GetEnvironmentVariables().OfType<DictionaryEntry>().ToDictionary(_ => (string)_.Key, _ => (string)_.Value);
         }
     }
 }

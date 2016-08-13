@@ -823,7 +823,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
-            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\Tools\\\.\.\\\.\.\\";
             var testWindowVS2013OrVS2015 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
             {
                 var m = new Mock<IPrigExecutor>(MockBehavior.Strict);
@@ -850,7 +850,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
-            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\Tools\\\.\.\\\.\.\\";
             var testWindowVS2013OrVS2015 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
             var stdouts = fixture.CreateMany<string>(2).ToArray();
             {
@@ -885,7 +885,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
-            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\Tools\\\.\.\\\.\.\\";
             var testWindowVS2015x86 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
             var testWindowVS2015x64 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\x64$";
             {
@@ -918,7 +918,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
-            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\";
+            var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\Tools\\\.\.\\\.\.\\";
             var testWindowVS2015x86 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
             var testWindowVS2015x64 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\x64$";
             {
