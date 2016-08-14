@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,16 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.3.0
+    <releaseNotes>Version 2.3.1
+* Fixed #68: MSTest is crashed. This was regression by part of 6e0571f3386371e6c5404c17893038e05d6c906b.
+* Fixed #72: Problem for multi assemblies loading order(HRESULT: 0x80131124). This cause is wrong assembly identification. Add the flag that indicates whether the assembly is modifiable to determine their equality.
+* Fixed #74: Unable to register. Prig registration process didn't support except C drive. Now we support another.
+* Fix the bug that is low in reproducibility. Prig Assembly operation sometimes failed. It seems that [the design of Start-Process](http://stackoverflow.com/questions/20790798/start-process-wait-doesnt-work-when-script-is-launched-from-command-prompt-ope) is the reason.
+* Fix the adding Prig Assembly problem. The operation that adds Prig Assembly always failed if the target referenced assembly name is different from its project name. Until now, we had used `Name` property but it was wrong. To specify the assembly name, we have to use `Identity` property.
+* Change Chocolatey installation source from Visual Studio Gallery to GitHub. Because Visual Studio Gallery doesn't allow to keep the old version.
+
+
+Version 2.3.0
 * Fixed the issue that stack trace isn't outputted in Windows 10. It seems that this correction doesn't effect against Windows 7 and Windows 8.1. There is a high probability that we used wrongly the api that handles stack trace.
 * Update middleware. NUnit is updated from 2.6.3.13283 to 2.6.4.14350.
 * Fixed #60: Don't create log directory in various places. When installing, add the environment variable to indicate the log directory. Also, remove the variable when uninstalling.
