@@ -30,6 +30,6 @@
 
 '  Installing Prig.vsix...'
 $packageName = 'Prig'
-$vsixUrl = 'https://github.com/urasandesu/Prig/releases/download/v2.3.0/Prig.vsix'
+$vsixUrl = 'https://github.com/urasandesu/Prig/releases/download/v2.3.1/Prig.vsix'
 
 Install-ChocolateyVsixPackage $packageName $vsixUrl
