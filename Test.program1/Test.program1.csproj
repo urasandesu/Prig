@@ -253,6 +253,7 @@
     <Compile Include="System\Prig\PDateTimeTest.cs" />
     <Compile Include="System\Text\Prig\PStringBuilderTest.cs" />
     <Compile Include="System\Threading\Prig\PInterlockedTest.cs" />
+    <Compile Include="UntestableLibrary\IgnoreCA1724\Prig\IgnoreCA1724Test.cs" />
     <Compile Include="Urasandesu\Moq\Prig\MockMixin.cs" />
     <Compile Include="TestUtilities\Mixins\System\Diagnostics\Prig\PProxyProcessMixin.cs" />
     <Compile Include="TestUtilities\Mixins\System\Diagnostics\Prig\PProcessMixin.cs" />

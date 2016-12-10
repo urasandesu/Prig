@@ -205,6 +205,8 @@ function ConvertTypeToFullName {
     $defName = $Type.FullName
     if ($defName -eq $null) {
         $defName = $Type.Name
+    } else {
+        $defName = "global::" + $defName
     }
         
     if ($Type.IsGenericParameter -and !$Type.IsNested) {
@@ -214,7 +216,7 @@ function ConvertTypeToFullName {
     } elseif (!$Type.IsGenericParameter -and $Type.IsNested) {
         $defName = (ConvertTypeToFullName $Type.DeclaringType) + '.' + $Type.Name
     } elseif ($Type.IsGenericType -and !$Type.IsGenericTypeDefinition) {
-        $defName = $Type.Namespace + "." + $Type.Name
+        $defName = "global::" + $Type.Namespace + "." + $Type.Name
     } elseif ($Type.HasElementType -and $Type.IsArray) {
         if ($null -eq $List) {
             $List = New-Object System.Collections.ArrayList
@@ -247,6 +249,7 @@ function ConvertTypeToFullName {
     }
     $defName
 }
+New-Variable ValueTypeFullName (ConvertTypeToFullName ([System.ValueType])) -Option ReadOnly
 
 
 
@@ -636,7 +639,7 @@ function ConvertTypeToGenericParameterConstraintClause {
     $typeConstraints = $GenericArgument.GetGenericParameterConstraints()
     foreach ($typeConstraint in $typeConstraints) {
         $fullName = ConvertTypeToFullName $typeConstraint
-        if ($fullName -ne 'System.ValueType') {
+        if ($fullName -ne $ValueTypeFullName) {
             $names.Add($fullName)
         }
     }

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.3.1</version>
+    <version>2.3.2</version>
     <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,11 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.3.1
+    <releaseNotes>Version 2.3.2
+* 
+
+
+Version 2.3.1
 * Fixed #68: MSTest is crashed. This was regression by part of 6e0571f3386371e6c5404c17893038e05d6c906b.
 * Fixed #72: Problem for multi assemblies loading order(HRESULT: 0x80131124). This cause is wrong assembly identification. Add the flag that indicates whether the assembly is modifiable to determine their equality.
 * Fixed #74: Unable to register. Prig registration process didn't support except C drive. Now we support another.

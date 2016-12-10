@@ -1134,6 +1134,100 @@
         </RuntimeMethodInfo>
       </add>
 
+      <!-- 
+          PHasFullName.Hoge().Body = 
+              @this => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="Hoge" alias="Hoge">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Hoge</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.HasFullName.HasFullName</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.HasFullName.HasFullName Hoge()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.HasFullName.HasFullName Hoge()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PIsGenericInstance<T>.Hoge().Body = 
+              @this => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="Hoge" alias="Hoge">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Hoge</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.IsGenericInstance.IsGenericInstance`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Void Hoge()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Void Hoge()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PAB<IsGenericNestedParameter>.HogeListOfIsGenericNestedParameterArray().Body = 
+              (@this, arg) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="HogeListOfIsGenericNestedParameterArray" alias="HogeListOfIsGenericNestedParameterArray">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Hoge</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.IsGenericNestedParameter.A+B`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Void Hoge(System.Collections.Generic.List`1[IsGenericNestedParameter][])</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Void Hoge(System.Collections.Generic.List`1[IsGenericNestedParameter][])</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PC<IsGenericParameter>.FugaListOfIsGenericParameterRef().Body = 
+              (global::UntestableLibrary.IgnoreCA1724.IsGenericParameter.C<IsGenericParameter> @this, out global::System.Collections.Generic.List<IsGenericParameter> result) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="FugaListOfIsGenericParameterRef" alias="FugaListOfIsGenericParameterRef">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Fuga</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.IsGenericParameter.C`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Void Fuga(System.Collections.Generic.List`1[IsGenericParameter] ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Void Fuga(System.Collections.Generic.List`1[IsGenericParameter]&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PDIsNested.Hoge().Body = 
+              @this => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="Hoge" alias="Hoge">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Hoge</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.IsNested.D+IsNested</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">IsNested[][] Hoge()</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.IgnoreCA1724.IsNested.D+IsNested[][] Hoge()</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
     </stubs>
 
   </prig>
