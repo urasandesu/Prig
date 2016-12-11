@@ -50,7 +50,8 @@ namespace UntestableLibrary
     // SZARRAY:         None, SZArray
     // VAR:             None, Var
     // 
-    // Against issue #65, add some generic parameter constraint variation.
+    // Against issue #65, add some generic parameter constraint variations.
+    // Against issue #85, add some variations that method that has the parameter of the type as same as the declaring type.
     public class Variation_HasGenericThis_Default_bool_None_CLASS_None_None_None_None_None<T>
     {
         public bool Do(Regex r)
@@ -61,6 +62,13 @@ namespace UntestableLibrary
     public class Variation_HasGenericThisStructConstrained_Default_bool_None_CLASS_None_None_None_None_None<T> where T : struct
     {
         public bool Do(Regex r)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<T>
+    {
+        public bool Do(Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<T> other, Regex r)
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -82,6 +90,13 @@ namespace UntestableLibrary
     public class Variation_HasGenericThis_GenericStructConstrained_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<T>
     {
         public T[,][] Do<M>(Regex r) where M : struct
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<T>
+    {
+        public Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<T>[,][] Do<M>(Regex r)
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -110,6 +125,13 @@ namespace UntestableLibrary
     public class Variation_HasGenericThisNewConstrained_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<T> where T : new()
     {
         public Regex Do(T[,] tArr)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<T>
+    {
+        public Regex Do(Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<T>[,] tArr)
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -177,6 +199,13 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>
+    {
+        public char Do<M>(out Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>[][,] tArr)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_HasThis_Generic_void_None_char_None_None_None_None_None
     {
         public void Do<M>(char c)
@@ -226,6 +255,13 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T>
+    {
+        public DateTime Do<M>(Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> other, out byte u1)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>
     {
         public void Do<M>(out T[,][] tArr)
@@ -236,6 +272,13 @@ namespace UntestableLibrary
     public class Variation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T, U> where T : U
     {
         public void Do<M>(out T[,][] tArr)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>
+    {
+        public void Do<M>(out Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>[,][] tArr)
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -254,9 +297,23 @@ namespace UntestableLibrary
             throw new InvalidOperationException("We shouldn't get here!!");
         }
     }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T>
+    {
+        public Regex Do(Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T> other, out DateTime dt)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
     public class Variation_HasGenericThis_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<T>
     {
         public byte Do<M>(List<DateTime[]> list)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<T>
+    {
+        public byte Do<M>(List<Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<T>[]> list)
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }
@@ -292,6 +349,13 @@ namespace UntestableLibrary
     public class Variation_HasGenericThis_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<T>
     {
         public CultureInfo Do(List<DateTime[]>[,] list)
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<T>
+    {
+        public CultureInfo Do(List<Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<T>[]>[,] list)
         {
             throw new InvalidOperationException("We shouldn't get here!!");
         }

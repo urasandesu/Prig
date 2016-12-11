@@ -75,6 +75,24 @@ namespace Test.program1.UntestableLibrary.Prig
     }
 
     [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_NoneTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<int>.DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_NoneOfTRegex().Body =
+                    (@this, other, r) => true;
+
+                // Act, Assert
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<int>().Do(new Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<int>(), new Regex("^$")));
+            }
+        }
+    }
+
+    [TestFixture]
     public class Variation_HasGenericThis_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_VarTest
     {
         [Test]
@@ -121,6 +139,24 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 Assert.DoesNotThrow(() => new Variation_HasGenericThis_GenericStructConstrained_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
+            }
+        }
+    }
+
+    [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_VarTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>.DoOfMRegex<double>().Body =
+                    (@this, r) => null;
+
+                // Act, Assert
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
             }
         }
     }
@@ -193,6 +229,24 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 Assert.DoesNotThrow(() => new Variation_HasGenericThisNewConstrained_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new int[1, 1]));
+            }
+        }
+    }
+
+    [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_VarTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>.DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_VarOfT2().Body =
+                    (@this, tArr) => null;
+
+                // Act, Assert
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>[1, 1]));
             }
         }
     }
@@ -363,6 +417,25 @@ namespace Test.program1.UntestableLibrary.Prig
     }
 
     [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_VarTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>.DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfT2ArrayRef<WebProxy>().Body =
+                    (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int> @this, out global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>[][,] _tArr) => { _tArr = null; return '\0'; };
+
+                // Act, Assert
+                var tArr = default(Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>[][,]);
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<WebProxy>(out tArr));
+            }
+        }
+    }
+
+    [TestFixture]
     public class Variation_HasThis_Generic_void_None_char_None_None_None_None_NoneTest
     {
         [Test]
@@ -488,6 +561,25 @@ namespace Test.program1.UntestableLibrary.Prig
     }
 
     [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_NoneTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy>.DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_NoneOfTByteRef<double>().Body =
+                    (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy> @this, global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy> other, out global::System.Byte _u1) => { _u1 = (byte)42; return DateTime.Now; };
+
+                // Act, Assert
+                var u1 = default(byte);
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy>().Do<double>(null, out u1));
+            }
+        }
+    }
+
+    [TestFixture]
     public class Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_VarTest
     {
         [Test]
@@ -521,6 +613,25 @@ namespace Test.program1.UntestableLibrary.Prig
                 // Act, Assert
                 var tArr = default(int[,][]);
                 Assert.DoesNotThrow(() => new Variation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int, int>().Do<double>(out tArr));
+            }
+        }
+    }
+
+    [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_VarTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>.DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfTArray2Ref<double>().Body =
+                    (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int> @this, out global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>[,][] _tArr) => { _tArr = null; };
+
+                // Act, Assert
+                var tArr = default(Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>[,][]);
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<double>(out tArr));
             }
         }
     }
@@ -563,6 +674,25 @@ namespace Test.program1.UntestableLibrary.Prig
     }
 
     [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_NoneTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int>.DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_NoneOfTDateTimeRef().Body =
+                    (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int> @this, global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int> other, out global::System.DateTime _dt) => { _dt = DateTime.Now; return null; };
+
+                // Act, Assert
+                var dt = default(DateTime);
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int>().Do(null, out dt));
+            }
+        }
+    }
+
+    [TestFixture]
     public class Variation_HasGenericThis_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_NoneTest
     {
         [Test]
@@ -575,6 +705,24 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>().Do<double>(new List<DateTime[]>()));
+            }
+        }
+    }
+
+    [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_NoneTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>.DoOfMListOfVariation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_NoneOfTArray<double>().Body =
+                    (@this, list) => (byte)42;
+
+                // Act, Assert
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>().Do<double>(new List<Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>[]>()));
             }
         }
     }
@@ -661,6 +809,24 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>().Do(new List<DateTime[]>[2, 2]));
+            }
+        }
+    }
+
+    [TestFixture]
+    public class Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_NoneTest
+    {
+        [Test]
+        public void Do_should_be_callable_indirectly()
+        {
+            using (new IndirectionsContext())
+            {
+                // Arrange
+                PVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>.DoListOfVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_NoneOfTArray2().Body =
+                    (@this, list) => null;
+
+                // Act, Assert
+                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>().Do(new List<Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>[]>[2, 2]));
             }
         }
     }

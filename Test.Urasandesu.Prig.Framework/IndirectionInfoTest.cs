@@ -30,6 +30,7 @@
 
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Test.Urasandesu.Prig.Framework.TestUtilities;
 using Urasandesu.Prig.Framework;
@@ -84,7 +85,15 @@ namespace Test.Urasandesu.Prig.Framework
             }.Select(_ => _.ToString());
             CollectionAssert.AreEqual(expected, info.Instantiation);
         }
-        
+
+        class ULUnusedGeneric<T1, T2, T3, T4>
+        {
+            public TRet Echo<T5, T6, T7, T8, TRet>(T4 v4, T8 v8)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         [Test]
         public void SetInstantiation_should_set_Instantiation_property_with_the_generic_method_signature_that_contains_same_type_parameter()
         {
@@ -115,21 +124,87 @@ namespace Test.Urasandesu.Prig.Framework
             CollectionAssert.AreEqual(expected, info.Instantiation);
         }
 
-        
-        
-        class ULUnusedGeneric<T1, T2, T3, T4>
-        {
-            public TRet Echo<T5, T6, T7, T8, TRet>(T4 v4, T8 v8)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         class ULConfigurationManager
         {
             public static T GetProperty<T>(string key, T defaultValue)
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        [Test]
+        public void SetInstantiation_should_set_Instantiation_property_with_the_signature_of_the_method_that_has_a_type_as_same_as_declaring_type_excluding_this()
+        {
+            // Arrange
+            var name = "FugaIndirectionInfoTestCOfBar";
+            var alias = "FugaIndirectionInfoTestCOfBar";
+            var xml = string.Empty;
+            var target = typeof(C<>).GetMethods().First();
+            var stub = new IndirectionStub(name, alias, xml, target);
+
+            var info = new IndirectionInfo();
+
+            var typeGenericArgs = new[] { typeof(int) };
+            var methodGenericArgs = Type.EmptyTypes;
+
+
+            // Act
+            info.SetInstantiation(target, stub.Signature, typeGenericArgs, methodGenericArgs);
+
+
+            // Assert
+            var expected = new[] 
+            { 
+                target.DeclaringType.MakeGenericType(typeGenericArgs[0]), 
+                target.DeclaringType.MakeGenericType(typeGenericArgs[0]), 
+                target.DeclaringType.MakeGenericType(typeGenericArgs[0])
+            }.Select(_ => _.ToString());
+            CollectionAssert.AreEqual(expected, info.Instantiation);
+        }
+
+        class C<Bar>
+        {
+            public C<Bar> Fuga(C<Bar> result)
+            {
+                throw new InvalidOperationException("We shouldn't get here!!");
+            }
+        }
+
+        [Test]
+        public void SetInstantiation_should_set_Instantiation_property_with_the_signature_of_the_method_that_has_a_type_as_same_as_declaring_type_variation()
+        {
+            // Arrange
+            var name = "FugaIndirectionInfoTestDOfBarRef";
+            var alias = "FugaIndirectionInfoTestDOfBarRef";
+            var xml = string.Empty;
+            var target = typeof(D<>).GetMethods().First();
+            var stub = new IndirectionStub(name, alias, xml, target);
+
+            var info = new IndirectionInfo();
+
+            var typeGenericArgs = new[] { typeof(int) };
+            var methodGenericArgs = Type.EmptyTypes;
+
+
+            // Act
+            info.SetInstantiation(target, stub.Signature, typeGenericArgs, methodGenericArgs);
+
+
+            // Assert
+            var expected = new[] 
+            { 
+                target.DeclaringType.MakeGenericType(typeGenericArgs[0]), 
+                typeof(List<>).MakeGenericType(target.DeclaringType.MakeGenericType(typeGenericArgs[0]).MakeArrayType()).MakeArrayType(2).MakeByRefType(), 
+                typeof(List<>).MakeGenericType(target.DeclaringType.MakeGenericType(typeGenericArgs[0]).MakeArrayType()).MakeArrayType(2)
+            }.Select(_ => _.ToString());
+            CollectionAssert.AreEqual(expected, info.Instantiation);
+        }
+
+        class D<Baz>
+        {
+            public List<D<Baz>[]>[,] Fuga(out List<D<Baz>[]>[,] result)
+            {
+                throw new InvalidOperationException("We shouldn't get here!!");
             }
         }
     }

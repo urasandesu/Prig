@@ -30,6 +30,7 @@
 
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -98,7 +99,7 @@ namespace Test.Urasandesu.Prig.Framework.PilotStubberConfiguration
             // Assert
             Assert.AreEqual("Urasandesu.Prig.Delegates.IndirectionRefThisAction`2[System.Nullable`1[T],T]", indDlgt.ToString());
             var genericType = indDlgt.GetMethod("Invoke").GetParameters()[0].ParameterType.GetElementType();
-            Assert.AreEqual("System.Nullable`1[T]", genericType.ToString());
+            Assert.AreEqual(typeof(Nullable<>).ToString(), genericType.ToString());
             Assert.AreNotEqual(typeof(Nullable<>), genericType);
         }
 
@@ -169,6 +170,89 @@ namespace Test.Urasandesu.Prig.Framework.PilotStubberConfiguration
             static extern bool IsWow64Process([In] IntPtr processHandle, [Out, MarshalAs(UnmanagedType.Bool)] out bool wow64Process);
         }
 
+        [Repeat(50)]
+        [Test]
+        public void IndirectionDelegate_should_get_the_delegate_type_that_indicates_the_method_that_has_a_type_as_same_as_declaring_type_excluding_this()
+        {
+            // Arrange
+            var name = "FugaIndirectionStubTestCOfBar";
+            var alias = "FugaIndirectionStubTestCOfBar";
+            var xml = string.Empty;
+            var target = typeof(C<>).GetMethods().First();
+            var stub = new IndirectionStub(name, alias, xml, target);
+
+
+            // Act
+            var indDlgt = stub.IndirectionDelegate;
+
+
+            // Assert
+            Assert.AreEqual("Urasandesu.Prig.Delegates.IndirectionFunc`3[Test.Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStubTest+C`1[Bar]," +
+                "Test.Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStubTest+C`1[Bar]," +
+                "Test.Urasandesu.Prig.Framework.PilotStubberConfiguration.IndirectionStubTest+C`1[Bar]]", indDlgt.ToString());
+            var invokeMeth = indDlgt.GetMethod("Invoke");
+            {
+                var genericType = invokeMeth.GetParameters()[0].ParameterType;
+                Assert.AreEqual(typeof(C<>).ToString(), genericType.ToString());
+                Assert.AreNotEqual(typeof(C<>), genericType);
+            }
+            {
+                var genericType = invokeMeth.GetParameters()[1].ParameterType;
+                Assert.AreEqual(typeof(C<>).ToString(), genericType.ToString());
+                Assert.AreNotEqual(typeof(C<>), genericType);
+            }
+            {
+                var genericType = invokeMeth.ReturnType;
+                Assert.AreEqual(typeof(C<>).ToString(), genericType.ToString());
+                Assert.AreNotEqual(typeof(C<>), genericType);
+            }
+        }
+
+        class C<Bar>
+        {
+            public C<Bar> Fuga(C<Bar> result)
+            {
+                throw new InvalidOperationException("We shouldn't get here!!");
+            }
+        }
+
+        [Test]
+        public void IndirectionDelegate_should_get_the_delegate_type_that_indicates_the_method_that_has_a_type_as_same_as_declaring_type_variation()
+        {
+            // Arrange
+            var name = "FugaIndirectionStubTestDOfBarRef";
+            var alias = "FugaIndirectionStubTestDOfBarRef";
+            var xml = string.Empty;
+            var target = typeof(D<>).GetMethods().First();
+            var stub = new IndirectionStub(name, alias, xml, target);
+
+
+            // Act
+            var indDlgt = stub.IndirectionDelegate;
+
+
+            // Assert
+            var invokeMeth = indDlgt.GetMethod("Invoke");
+            {
+                var genericType = invokeMeth.GetParameters()[1].ParameterType.GetElementType().GetElementType().GetGenericArguments()[0].GetElementType();
+                Assert.AreEqual(typeof(D<>).ToString(), genericType.ToString());
+                Assert.AreNotEqual(typeof(D<>), genericType);
+            }
+            {
+                var genericType = invokeMeth.ReturnType.GetElementType().GetGenericArguments()[0].GetElementType();
+                Assert.AreEqual(typeof(D<>).ToString(), genericType.ToString());
+                Assert.AreNotEqual(typeof(D<>), genericType);
+            }
+        }
+
+        class D<Baz>
+        {
+            public List<D<Baz>[]>[,] Fuga(out List<D<Baz>[]>[,] result)
+            {
+                throw new InvalidOperationException("We shouldn't get here!!");
+            }
+        }
+
 
 
         [Test]
@@ -191,7 +275,7 @@ namespace Test.Urasandesu.Prig.Framework.PilotStubberConfiguration
             var value = get_Now();
             Assert.AreEqual(default(DateTime), value);
         }
-        
+
         [Test]
         public void CreateDelegateOfDefaultBehavior_should_return_the_default_behavior_that_indicates_the_ctor_of_generic_struct()
         {

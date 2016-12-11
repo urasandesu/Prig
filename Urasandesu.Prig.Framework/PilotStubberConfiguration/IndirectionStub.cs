@@ -88,7 +88,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
         }
 
         Type[] m_sig;
-        public Type[] Signature 
+        public Type[] Signature
         {
             get
             {
@@ -293,7 +293,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
 
             var factory = new DynamicMethod("Factory", typeof(Delegate), new[] { typeof(IndirectionBehaviors) }, typeof(InstanceGetters).Module, true);
             var gen = factory.GetILGenerator();
-            
+
             var local0_impl = gen.DeclareLocal(defaultBehaviorImpl);
 
             gen.Emit(OpCodes.Newobj, defaultBehaviorImpl_ctor);
@@ -908,7 +908,7 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
                 m_paramType = paramType;
             }
         }
-        
+
         class MethodSigEqualityComparer : IEqualityComparer<MethodBase>
         {
             public bool Equals(MethodBase x, MethodBase y)
@@ -1135,18 +1135,24 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
                     {
                         var declaringType = target.DeclaringType;
                         if (declaringType.IsGenericType)
-                            declaringType = MakeGenericExplicitThisType(declaringType);
+                            declaringType = MakeGenericThisTypeIfNecessary(declaringType, declaringType);
                         genericArgs.Add(declaringType);
                     }
-                    var @params = target.GetParameters();
-                    foreach (var param in @params)
                     {
-                        var paramType = param.ParameterType;
-                        genericArgs.Add(paramType.IsByRef ? paramType.GetElementType() : paramType);
+                        var declaringType = target.DeclaringType;
+                        var @params = target.GetParameters();
+                        foreach (var param in @params)
+                        {
+                            var paramType = param.ParameterType;
+                            genericArgs.Add(MakeGenericThisTypeIfNecessary(paramType.IsByRef ? paramType.GetElementType() : paramType, declaringType));
+                        }
                     }
-                    var _target = default(MethodInfo);
-                    if ((_target = target as MethodInfo) != null && _target.ReturnType != typeof(void))
-                        genericArgs.Add(_target.ReturnType);
+                    {
+                        var declaringType = target.DeclaringType;
+                        var _target = default(MethodInfo);
+                        if ((_target = target as MethodInfo) != null && _target.ReturnType != typeof(void))
+                            genericArgs.Add(MakeGenericThisTypeIfNecessary(_target.ReturnType, declaringType));
+                    }
                     var indDlgtInst = indDlgt.MakeGenericType(genericArgs.ToArray());
                     return indDlgtInst;
                 }
@@ -1165,16 +1171,19 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
                 var isGenericType = declaringType.IsGenericType;
                 var isValueType = declaringType.IsValueType;
                 if (isGenericType)
-                    declaringType = MakeGenericExplicitThisType(declaringType);
+                    declaringType = MakeGenericThisTypeIfNecessary(declaringType, declaringType);
                 if (isValueType)
                     declaringType = declaringType.MakeByRefType();
                 sig.Add(declaringType);
             }
 
-            var @params = target.GetParameters();
-            sig.AddRange(@params.Select(_ => _.ParameterType));
+            {
+                var declaringType = target.DeclaringType;
+                var @params = target.GetParameters();
+                sig.AddRange(@params.Select(_ => MakeGenericThisTypeIfNecessary(_.ParameterType, declaringType)));
+            }
 
-            sig.Add(target.GetReturnTypeIfAvailable());
+            sig.Add(MakeGenericThisTypeIfNecessary(target.GetReturnTypeIfAvailable(), target.DeclaringType));
 
             return sig.ToArray();
         }
@@ -1192,18 +1201,85 @@ namespace Urasandesu.Prig.Framework.PilotStubberConfiguration
             public static ModuleBuilder ms_modBldr = NewTemporaryModuleBuilder();
         }
 
-        static Type MakeGenericExplicitThisType(Type target)
+        static Type MakeGenericThisTypeIfNecessary(Type target, Type declaringType)
         {
-            // We couldn't make the generic type instance that is instantiated by its generic parameter from the managed code.
-            // For example, `typeof(Nullable<>).MakeGenericType(typeof(Nullable<>).GetGenericArguments()[0])` is treated same as `Nullable<>`!
-            // Therefore, we have to generate the generic parameter that has the constraints same as it to express such generic type instance.
-            var tempGenericArgsCache = StorageToDefineReflectionOnlyTypes.ms_tempGenericArgsCache;
-            lock (tempGenericArgsCache)
-            {
-                if (!tempGenericArgsCache.ContainsKey(target))
-                    tempGenericArgsCache.Add(target, DefineTemporaryGenericArguments(target));
+            if (!ContainsGenericThisType(target, declaringType))
+                return target;
 
-                return target.MakeGenericType(tempGenericArgsCache[target]);
+            return MakeGenericThisTypeIfNecessaryCore(target, declaringType);
+        }
+
+        static bool ContainsGenericThisType(Type type, Type declaringType)
+        {
+            if (!declaringType.IsGenericType)
+            {
+                return false;
+            }
+            else if (type.HasElementType)
+            {
+                return ContainsGenericThisType(type.GetElementType(), declaringType);
+            }
+            else if (type.IsGenericType && !type.IsGenericTypeDefinition)
+            {
+                var genericArgs = type.GetGenericArguments();
+                foreach (var genericArg in genericArgs)
+                    if (ContainsGenericThisType(genericArg, declaringType))
+                        return true;
+                return ContainsGenericThisType(type.GetGenericTypeDefinition(), declaringType);
+            }
+            else
+            {
+                return type == declaringType;
+            }
+        }
+
+        static Type MakeGenericThisTypeIfNecessaryCore(Type target, Type declaringType)
+        {
+            if (target.IsPointer)
+            {
+                return MakeGenericThisTypeIfNecessaryCore(target.GetElementType(), declaringType).MakePointerType();
+            }
+            else if (target.IsByRef)
+            {
+                return MakeGenericThisTypeIfNecessaryCore(target.GetElementType(), declaringType).MakeByRefType();
+            }
+            else if (target.IsArray)
+            {
+                var rank = target.GetArrayRank();
+                if (rank == 1)
+                    return MakeGenericThisTypeIfNecessaryCore(target.GetElementType(), declaringType).MakeArrayType();
+                else
+                    return MakeGenericThisTypeIfNecessaryCore(target.GetElementType(), declaringType).MakeArrayType(rank);
+            }
+            else if (target.IsGenericType && !target.IsGenericTypeDefinition)
+            {
+                var genericArgs = target.GetGenericArguments();
+                var genericArgs_ = new List<Type>(genericArgs.Length);
+                foreach (var genericArg in genericArgs)
+                    genericArgs_.Add(MakeGenericThisTypeIfNecessaryCore(genericArg, declaringType));
+                return MakeGenericThisTypeIfNecessaryCore(target.GetGenericTypeDefinition(), declaringType).MakeGenericType(genericArgs_.ToArray());
+            }
+            else if (target.IsGenericParameter)
+            {
+                return target;
+            }
+            else if (target.IsGenericType && target == declaringType)
+            {
+                // We couldn't make the generic type instance that is instantiated by its generic parameter from the managed code.
+                // For example, `typeof(Nullable<>).MakeGenericType(typeof(Nullable<>).GetGenericArguments()[0])` is treated same as `Nullable<>`!
+                // Therefore, we have to generate the generic parameter that has the constraints same as it to express such generic type instance.
+                var tempGenericArgsCache = StorageToDefineReflectionOnlyTypes.ms_tempGenericArgsCache;
+                lock (tempGenericArgsCache)
+                {
+                    if (!tempGenericArgsCache.ContainsKey(target))
+                        tempGenericArgsCache.Add(target, DefineTemporaryGenericArguments(target));
+
+                    return target.MakeGenericType(tempGenericArgsCache[target]);
+                }
+            }
+            else
+            {
+                return target;
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿<NUnitProject>
   <Settings activeconfig="Debug" processModel="Default" domainUsage="Default" />
-  <Config name="Debug" appbase="Test.Urasandesu.Prig.Framework\bin\Debug\AnyCPU" binpathtype="Auto">
+  <Config name="Debug" appbase="Test.Urasandesu.Prig.Framework\bin\Debug\AnyCPU" binpathtype="Auto" runtimeFramework="v4.0.21006">
     <assembly path="Test.Urasandesu.Prig.Framework.dll" />
   </Config>
   <Config name="Release" binpathtype="Auto" />

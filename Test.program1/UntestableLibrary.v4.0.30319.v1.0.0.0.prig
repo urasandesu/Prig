@@ -261,6 +261,25 @@
       </add>
 
       <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<T>.DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_NoneOfTRegex().Body = 
+              (@this, other, r) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_NoneOfTRegex" alias="DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_NoneOfTRegex">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Boolean Do(UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None`1[T], System.Text.RegularExpressions.Regex)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Boolean Do(UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None`1, System.Text.RegularExpressions.Regex)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
           PVariation_HasGenericThis_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<T>.DoOfMRegex<M>().Body = 
               (@this, r) => 
               {   
@@ -318,8 +337,27 @@
       </add>
 
       <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<T>.DoOfMRegex<M>().Body = 
+              (@this, r) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoOfMRegex" alias="DoOfMRegex">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var`1[T][][,] Do[M](System.Text.RegularExpressions.Regex)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var`1[][,] Do[M](System.Text.RegularExpressions.Regex)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
           PVariation_HasThis_Generic_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None.DoOfMMArrayRef<M>().Body = 
-              (UntestableLibrary.Variation_HasThis_Generic_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None @this, out M[] mArr) => 
+              (global::UntestableLibrary.Variation_HasThis_Generic_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None @this, out M[] mArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -338,7 +376,7 @@
 
       <!-- 
           PVariation_HasThis_GenericClassConstrained_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None.DoOfMMArrayRef<M>().Body = 
-              (UntestableLibrary.Variation_HasThis_GenericClassConstrained_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None @this, out M[] mArr) => 
+              (global::UntestableLibrary.Variation_HasThis_GenericClassConstrained_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None @this, out M[] mArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -388,6 +426,25 @@
           <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasGenericThisNewConstrained_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var`1</ClassName>
           <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(T[,])</Signature>
           <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(!T[,])</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<T>.DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_VarOfT2().Body = 
+              (@this, tArr) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_VarOfT2" alias="DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_VarOfT2">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var`1[T][,])</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var`1[,])</Signature2>
           <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
           <GenericArguments i:nil="true" xmlns="" />
         </RuntimeMethodInfo>
@@ -452,7 +509,7 @@
 
       <!-- 
           PVariation_HasThis_Generic_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None.DoOfMMRef<M>().Body = 
-              (UntestableLibrary.Variation_HasThis_Generic_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None @this, out M m) => 
+              (global::UntestableLibrary.Variation_HasThis_Generic_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None @this, out M m) => 
               {   
                   throw new NotImplementedException();
               };
@@ -471,7 +528,7 @@
 
       <!-- 
           PVariation_HasThis_GenericBaseClassConstrained_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None.DoOfMMRef<M>().Body = 
-              (UntestableLibrary.Variation_HasThis_GenericBaseClassConstrained_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None @this, out M m) => 
+              (global::UntestableLibrary.Variation_HasThis_GenericBaseClassConstrained_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None @this, out M m) => 
               {   
                   throw new NotImplementedException();
               };
@@ -490,7 +547,7 @@
 
       <!-- 
           PVariation_HasThis_Default_void_ByRef_VALUETYPE_None_None_None_None_None.DoDateTimeRef().Body = 
-              (UntestableLibrary.Variation_HasThis_Default_void_ByRef_VALUETYPE_None_None_None_None_None @this, out System.DateTime dt) => 
+              (global::UntestableLibrary.Variation_HasThis_Default_void_ByRef_VALUETYPE_None_None_None_None_None @this, out global::System.DateTime dt) => 
               {   
                   throw new NotImplementedException();
               };
@@ -509,7 +566,7 @@
 
       <!-- 
           PVariation_HasGenericThis_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>.DoOfMT2ArrayRef<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThis_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[][,] tArr) => 
+              (global::UntestableLibrary.Variation_HasGenericThis_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[][,] tArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -528,7 +585,7 @@
 
       <!-- 
           PVariation_HasGenericThisBaseClassConstrained_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>.DoOfMT2ArrayRef<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThisBaseClassConstrained_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[][,] tArr) => 
+              (global::UntestableLibrary.Variation_HasGenericThisBaseClassConstrained_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[][,] tArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -547,7 +604,7 @@
 
       <!-- 
           PVariation_HasGenericThis_GenericInterfaceConstrained_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>.DoOfMT2ArrayRef<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThis_GenericInterfaceConstrained_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[][,] tArr) => 
+              (global::UntestableLibrary.Variation_HasGenericThis_GenericInterfaceConstrained_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[][,] tArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -559,6 +616,25 @@
           <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasGenericThis_GenericInterfaceConstrained_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var`1</ClassName>
           <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Char Do[M](T[,][] ByRef)</Signature>
           <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Char Do[M](!T[,][]&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>.DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfT2ArrayRef<M>().Body = 
+              (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>[][,] tArr) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfT2ArrayRef" alias="DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfT2ArrayRef">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Char Do[M](UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var`1[T][,][] ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Char Do[M](UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var`1[,][]&amp;)</Signature2>
           <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
           <GenericArguments i:nil="true" xmlns="" />
         </RuntimeMethodInfo>
@@ -642,7 +718,7 @@
 
       <!-- 
           PVariation_HasThis_Generic_sbyte_ByRef_TYPESPEC_Array_None_MVar_SZArray_None.DoOfMM2ArrayRef<M>().Body = 
-              (UntestableLibrary.Variation_HasThis_Generic_sbyte_ByRef_TYPESPEC_Array_None_MVar_SZArray_None @this, out M[][,] mArr) => 
+              (global::UntestableLibrary.Variation_HasThis_Generic_sbyte_ByRef_TYPESPEC_Array_None_MVar_SZArray_None @this, out M[][,] mArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -661,7 +737,7 @@
 
       <!-- 
           PVariation_HasGenericThis_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T>.DoOfMByteRef<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThis_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> @this, out System.Byte u1) => 
+              (global::UntestableLibrary.Variation_HasGenericThis_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> @this, out global::System.Byte u1) => 
               {   
                   throw new NotImplementedException();
               };
@@ -680,7 +756,7 @@
 
       <!-- 
           PVariation_HasGenericThisInterfaceConstrained_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T>.DoOfMByteRef<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThisInterfaceConstrained_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> @this, out System.Byte u1) => 
+              (global::UntestableLibrary.Variation_HasGenericThisInterfaceConstrained_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> @this, out global::System.Byte u1) => 
               {   
                   throw new NotImplementedException();
               };
@@ -698,8 +774,27 @@
       </add>
 
       <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T>.DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_NoneOfTByteRef<M>().Body = 
+              (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> @this, global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<T> other, out global::System.Byte u1) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_NoneOfTByteRef" alias="DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_NoneOfTByteRef">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime Do[M](UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None`1[T], Byte ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.DateTime Do[M](UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None`1, System.Byte&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
           PVariation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>.DoOfMTArray2Ref<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[,][] tArr) => 
+              (global::UntestableLibrary.Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out T[,][] tArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -718,7 +813,7 @@
 
       <!-- 
           PVariation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T, U>.DoOfMTArray2Ref<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T, U> @this, out T[,][] tArr) => 
+              (global::UntestableLibrary.Variation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T, U> @this, out T[,][] tArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -736,8 +831,27 @@
       </add>
 
       <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>.DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfTArray2Ref<M>().Body = 
+              (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T> @this, out global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<T>[,][] tArr) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfTArray2Ref" alias="DoOfMVariation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_VarOfTArray2Ref">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Void Do[M](UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var`1[T][][,] ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Void Do[M](UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var`1[][,]&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
           PVariation_None_Generic_VALUETYPE_ByRef_TYPESPEC_Array_GenericInst_None_None_None.DoOfMNullableOfDateTimeArrayRef<M>().Body = 
-              (out System.Nullable<System.DateTime>[] dtArr) => 
+              (out global::System.Nullable<global::System.DateTime>[] dtArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -756,7 +870,7 @@
 
       <!-- 
           PVariation_HasGenericThis_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T>.DoDateTimeRef().Body = 
-              (UntestableLibrary.Variation_HasGenericThis_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T> @this, out System.DateTime dt) => 
+              (global::UntestableLibrary.Variation_HasGenericThis_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T> @this, out global::System.DateTime dt) => 
               {   
                   throw new NotImplementedException();
               };
@@ -768,6 +882,25 @@
           <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasGenericThis_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None`1</ClassName>
           <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(System.DateTime ByRef)</Signature>
           <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(System.DateTime&amp;)</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T>.DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_NoneOfTDateTimeRef().Body = 
+              (global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T> @this, global::UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<T> other, out global::System.DateTime dt) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_NoneOfTDateTimeRef" alias="DoVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_NoneOfTDateTimeRef">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None`1[T], System.DateTime ByRef)</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Text.RegularExpressions.Regex Do(UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None`1, System.DateTime&amp;)</Signature2>
           <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
           <GenericArguments i:nil="true" xmlns="" />
         </RuntimeMethodInfo>
@@ -787,6 +920,25 @@
           <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasGenericThis_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None`1</ClassName>
           <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Byte Do[M](System.Collections.Generic.List`1[System.DateTime[]])</Signature>
           <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Byte Do[M](System.Collections.Generic.List`1[[System.DateTime[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]])</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<T>.DoOfMListOfVariation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_NoneOfTArray<M>().Body = 
+              (@this, list) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoOfMListOfVariation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_NoneOfTArray" alias="DoOfMListOfVariation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_NoneOfTArray">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">Byte Do[M](System.Collections.Generic.List`1[UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None`1[T][]])</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Byte Do[M](System.Collections.Generic.List`1[[UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None`1[], UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]])</Signature2>
           <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
           <GenericArguments i:nil="true" xmlns="" />
         </RuntimeMethodInfo>
@@ -813,7 +965,7 @@
 
       <!-- 
           PVariation_None_Default_CLASS_ByRef_short_None_None_None_None_None.DoInt16Ref().Body = 
-              (out System.Int16 i2) => 
+              (out global::System.Int16 i2) => 
               {   
                   throw new NotImplementedException();
               };
@@ -888,8 +1040,27 @@
       </add>
 
       <!-- 
+          PVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<T>.DoListOfVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_NoneOfTArray2().Body = 
+              (@this, list) => 
+              {   
+                  throw new NotImplementedException();
+              };
+      -->
+      <add name="DoListOfVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_NoneOfTArray2" alias="DoListOfVariation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_NoneOfTArray2">
+        <RuntimeMethodInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="http://www.w3.org/2001/XMLSchema" z:Id="1" z:FactoryType="MemberInfoSerializationHolder" z:Type="System.Reflection.MemberInfoSerializationHolder" z:Assembly="0" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/" xmlns="http://schemas.datacontract.org/2004/07/System.Reflection">
+          <Name z:Id="2" z:Type="System.String" z:Assembly="0" xmlns="">Do</Name>
+          <AssemblyName z:Id="3" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyName>
+          <ClassName z:Id="4" z:Type="System.String" z:Assembly="0" xmlns="">UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None`1</ClassName>
+          <Signature z:Id="5" z:Type="System.String" z:Assembly="0" xmlns="">System.Globalization.CultureInfo Do(System.Collections.Generic.List`1[UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None`1[T][]][,])</Signature>
+          <Signature2 z:Id="6" z:Type="System.String" z:Assembly="0" xmlns="">System.Globalization.CultureInfo Do(System.Collections.Generic.List`1[[UntestableLibrary.Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None`1[], UntestableLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][,])</Signature2>
+          <MemberType z:Id="7" z:Type="System.Int32" z:Assembly="0" xmlns="">8</MemberType>
+          <GenericArguments i:nil="true" xmlns="" />
+        </RuntimeMethodInfo>
+      </add>
+
+      <!-- 
           PVariation_None_Generic_void_ByRef_CLASS_None_None_None_None_None.DoOfMCultureInfoRef<M>().Body = 
-              (out System.Globalization.CultureInfo ci) => 
+              (out global::System.Globalization.CultureInfo ci) => 
               {   
                   throw new NotImplementedException();
               };
@@ -908,7 +1079,7 @@
 
       <!-- 
           PVariation_HasGenericThis_Default_VALUETYPE_ByRef_TYPESPEC_None_None_None_SZArray_Var<T>.DoTArrayRef().Body = 
-              (UntestableLibrary.Variation_HasGenericThis_Default_VALUETYPE_ByRef_TYPESPEC_None_None_None_SZArray_Var<T> @this, out T[] tArr) => 
+              (global::UntestableLibrary.Variation_HasGenericThis_Default_VALUETYPE_ByRef_TYPESPEC_None_None_None_SZArray_Var<T> @this, out T[] tArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -965,7 +1136,7 @@
 
       <!-- 
           PVariation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_MVar_SZArray_None<T>.DoOfMMArray2Ref<M>().Body = 
-              (UntestableLibrary.Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_MVar_SZArray_None<T> @this, out M[,][] mArr) => 
+              (global::UntestableLibrary.Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_MVar_SZArray_None<T> @this, out M[,][] mArr) => 
               {   
                   throw new NotImplementedException();
               };
@@ -1003,7 +1174,7 @@
 
       <!-- 
           PVariation_HasThis_Generic_TYPESPEC_ByRef_CLASS_None_None_MVar_SZArray_None.DoOfMRegexRef<M>().Body = 
-              (UntestableLibrary.Variation_HasThis_Generic_TYPESPEC_ByRef_CLASS_None_None_MVar_SZArray_None @this, out System.Text.RegularExpressions.Regex r) => 
+              (global::UntestableLibrary.Variation_HasThis_Generic_TYPESPEC_ByRef_CLASS_None_None_MVar_SZArray_None @this, out global::System.Text.RegularExpressions.Regex r) => 
               {   
                   throw new NotImplementedException();
               };
