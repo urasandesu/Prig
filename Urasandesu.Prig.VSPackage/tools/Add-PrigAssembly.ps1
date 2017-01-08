@@ -97,12 +97,16 @@ function GetAssemblyLocation {
         $MSBuildProject,
 
         [Parameter(Mandatory = $true)]
-        $AssemblyNameEx
+        $AssemblyNameEx, 
+
+        [Parameter(Mandatory = $true)]
+        [hashtable]
+        $SystemDirectories
     )
     
     $slnDir = [System.IO.Path]::GetDirectoryName($SolutionFullName)
     $slnDirPattern = "^" + [regex]::Escape($slnDir)
-    if ($AssemblyNameEx.Location -match $slnDirPattern) {
+    if ($AssemblyNameEx.Location -match $slnDirPattern -or ($SystemDirectories.Keys | ? { $AssemblyNameEx.Location -match ("^" + [regex]::Escape($_)) }).Length -eq 0) {
         $curDir = Get-Location
         Set-Location $MSBuildProject.DirectoryPath
         $result = '$(ProjectDir)' + (Resolve-Path -Relative $AssemblyNameEx.Location)
@@ -137,12 +141,16 @@ function SetStubberPreBuildEventProperty {
 
         [Parameter(Mandatory = $true)]
         [System.Reflection.ProcessorArchitecture]
-        $ProcessorArchitecture
+        $ProcessorArchitecture, 
+
+        [Parameter(Mandatory = $true)]
+        [hashtable]
+        $SystemDirectories
     )
 
     $powershell = $(if ($ProcessorArchitecture -eq 'Amd64') { '%windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe' } else { '%windir%\system32\WindowsPowerShell\v1.0\powershell.exe' })
     $argFile = '-File "%URASANDESU_PRIG_PACKAGE_FOLDER%\tools\Invoke-PilotStubber.ps1"'
-    $argAssembly = '-AssemblyFrom "{0}"' -f (GetAssemblyLocation $SolutionFullName $MSBuildProject $AssemblyNameEx)
+    $argAssembly = '-AssemblyFrom "{0}"' -f (GetAssemblyLocation $SolutionFullName $MSBuildProject $AssemblyNameEx $SystemDirectories)
     $argTargetFrameworkVersion = '-TargetFrameworkVersion {0}' -f $TargetFrameworkVersion
     if ($TargetFrameworkVersion -eq 'v3.5') {
         $argOther = '-Version 2.0 -ExecutionPolicy Bypass -NoLogo -NoProfile'
@@ -300,6 +308,16 @@ if ($candidateNames.Length -eq 0) {
     exit 964834411
 }
 
+$sysDirs = @{ }
+$envVarNames = 'ProgramFiles', 'ProgramW6432', 'ProgramFiles(x86)', 'SystemRoot', 'ALLUSERSPROFILE'
+foreach ($envVarName in $envVarNames) {
+    $envVar = [Environment]::GetEnvironmentVariable($envVarName)
+    if ([string]::IsNullOrEmpty($envVar)) { continue }
+
+    $envVar = [Environment]::ExpandEnvironmentVariables($envVar)
+    $sysDirs[$envVar] = $true
+}
+
 $isPlatformMatched = $false
 foreach ($platformTarget in $platformTargets.GetEnumerator()) {
     $actualNames = New-Object System.Collections.ArrayList
@@ -321,7 +339,7 @@ foreach ($platformTarget in $platformTargets.GetEnumerator()) {
     }
         
     SetPrigAssemblyReferenceItem $curMsbProj $actualNames[0] $platformTarget.Key
-    SetStubberPreBuildEventProperty $SolutionFullName $curMsbProj $TargetFrameworkVersion $actualNames[0] $platformTarget.Key $platformTarget.Value[0]
+    SetStubberPreBuildEventProperty $SolutionFullName $curMsbProj $TargetFrameworkVersion $actualNames[0] $platformTarget.Key $platformTarget.Value[0] $sysDirs
     $isPlatformMatched = $true
 }
 if (!$isPlatformMatched) {
