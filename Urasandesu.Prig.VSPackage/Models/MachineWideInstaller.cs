@@ -170,25 +170,32 @@ namespace Urasandesu.Prig.VSPackage.Models
         {
             var query = from envVar in EnvironmentRepository.GetEnvironmentVariables()
                         where Regex.IsMatch(envVar.Key, @"VS\d{3}COMNTOOLS", RegexOptions.IgnoreCase)
-                        orderby envVar.Key descending
-                        select envVar.Value;
-            var vsComnToolsPath = query.First();
-            var msvsdirPath = Path.Combine(vsComnToolsPath, @"..\..");
+                        select envVar;
+            foreach (var envVar in query)
             {
-                var pkgName = "TestWindow";
-                var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");
-                mwInstl.OnPrigSourceInstalling(pkgName, src);
-                var stdout = PrigExecutor.StartInstalling(pkgName, src);
-                mwInstl.OnPrigSourceInstalled(stdout);
-            }
-            {
-                var pkgName = "TestWindow1";
-                var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow\x64");
-                if (EnvironmentRepository.ExistsDirectory(src))
+                var vsComnToolsPathName = envVar.Key;
+                var vsComnToolsPath = envVar.Value;
+
+                var msvsdirPath = Path.Combine(vsComnToolsPath, @"..\..");
                 {
-                    mwInstl.OnPrigSourceInstalling(pkgName, src);
-                    var stdout = PrigExecutor.StartInstalling(pkgName, src);
-                    mwInstl.OnPrigSourceInstalled(stdout);
+                    var pkgName = "TestWindow_" + vsComnToolsPathName;
+                    var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow");
+                    if (EnvironmentRepository.ExistsDirectory(src))
+                    {
+                        mwInstl.OnPrigSourceInstalling(pkgName, src);
+                        var stdout = PrigExecutor.StartInstalling(pkgName, src);
+                        mwInstl.OnPrigSourceInstalled(stdout);
+                    }
+                }
+                {
+                    var pkgName = "TestWindow64_" + vsComnToolsPathName;
+                    var src = Path.Combine(msvsdirPath, @"Common7\IDE\CommonExtensions\Microsoft\TestWindow\x64");
+                    if (EnvironmentRepository.ExistsDirectory(src))
+                    {
+                        mwInstl.OnPrigSourceInstalling(pkgName, src);
+                        var stdout = PrigExecutor.StartInstalling(pkgName, src);
+                        mwInstl.OnPrigSourceInstalled(stdout);
+                    }
                 }
             }
         }

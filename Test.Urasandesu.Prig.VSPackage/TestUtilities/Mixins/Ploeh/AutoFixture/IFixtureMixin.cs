@@ -88,6 +88,7 @@ namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Ploeh.AutoFixture
             envVars.Add("VS110COMNTOOLS", @"C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\Tools\");
             envVars.Add("VS120COMNTOOLS", @"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\");
             m.Setup(_ => _.GetEnvironmentVariables()).Returns(envVars);
+            m.Setup(_ => _.ExistsDirectory(It.IsAny<string>())).Returns(true);
         }
 
         public static NuGetExecutor NewNuGetExecutor(this IFixture fixture)
