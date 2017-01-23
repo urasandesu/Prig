@@ -795,11 +795,11 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             var mocks = new MockRepository(MockBehavior.Strict);
             var order1 = new MockOrder();
             var order2 = new MockOrder();
-            mwInstl.ProfilerRegistering += 
+            mwInstl.ProfilerRegistering +=
                 mocks.Create<Action<ProfilerLocation>>().
                       InOrder(order1, m => m.Setup(_ => _(profLocs[0]))).
                       InOrder(order2, m => m.Setup(_ => _(profLocs[1]))).Object;
-            mwInstl.ProfilerRegistered += 
+            mwInstl.ProfilerRegistered +=
                 mocks.Create<Action<string>>().
                       InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
                       InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
@@ -816,18 +816,22 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
         }
 
         [Test]
-        public void Install_should_install_the_newest_TestWindow_as_default_source_in_VS2013_or_VS2015()
+        public void Install_should_install_all_TestWindow_as_default_source_in_VS2013_or_VS2015()
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.ExistsDirectory(It.IsRegex("x64$"))).Returns(false);
+            }
             var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\Tools\\\.\.\\\.\.\\";
             var testWindowVS2013OrVS2015 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
             {
                 var m = new Mock<IPrigExecutor>(MockBehavior.Strict);
-                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2013OrVS2015))).ReturnsUsingFixture(fixture);
+                m.Setup(_ => _.StartInstalling(It.IsRegex("^TestWindow_VS1(1|2)0COMNTOOLS"), It.IsRegex(testWindowVS2013OrVS2015))).ReturnsUsingFixture(fixture);
                 fixture.Inject(m);
             }
 
@@ -843,28 +847,36 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
         }
 
         [Test]
-        public void Install_should_raise_the_event_to_install_the_newest_TestWindow_before_and_after_in_VS2013_or_VS2015()
+        public void Install_should_raise_the_event_to_install_all_TestWindow_before_and_after_in_VS2013_or_VS2015()
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             var mwInstl = new MachineWideInstallation("2.0.0");
             fixture.FreezeUninstalledEnvironment();
+            {
+                var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
+                m.Setup(_ => _.ExistsDirectory(It.IsRegex("x64$"))).Returns(false);
+            }
             var msvsdirPath = @"^C:\\Program Files \(x86\)\\Microsoft Visual Studio \d+\.\d+\\Common7\\Tools\\\.\.\\\.\.\\";
             var testWindowVS2013OrVS2015 = msvsdirPath + @"Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow$";
             var stdouts = fixture.CreateMany<string>(2).ToArray();
             {
                 var m = fixture.Freeze<Mock<IPrigExecutor>>();
-                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2013OrVS2015))).Returns(stdouts[0]);
+                m.Setup(_ => _.StartInstalling(It.IsRegex("^TestWindow_VS110COMNTOOLS"), It.IsRegex(testWindowVS2013OrVS2015))).Returns(stdouts[0]);
+                m.Setup(_ => _.StartInstalling(It.IsRegex("^TestWindow_VS120COMNTOOLS"), It.IsRegex(testWindowVS2013OrVS2015))).Returns(stdouts[1]);
             }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order1 = new MockOrder();
+            var order2 = new MockOrder();
             mwInstl.PrigSourceInstalling +=
                 mocks.Create<Action<string, string>>().
-                    InOrder(order1, m => m.Setup(_ => _("TestWindow", It.IsRegex(testWindowVS2013OrVS2015)))).Object;
+                    InOrder(order1, m => m.Setup(_ => _("TestWindow_VS110COMNTOOLS", It.IsRegex(testWindowVS2013OrVS2015)))).
+                    InOrder(order2, m => m.Setup(_ => _("TestWindow_VS120COMNTOOLS", It.IsRegex(testWindowVS2013OrVS2015)))).Object;
             mwInstl.PrigSourceInstalled +=
                 mocks.Create<Action<string>>().
-                    InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).Object;
+                    InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
+                    InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
 
             var mwInstllr = fixture.NewMachineWideInstaller();
 
@@ -878,7 +890,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
         }
 
         [Test]
-        public void Install_should_install_the_newest_TestWindow_as_default_source_in_VS2015Update1()
+        public void Install_should_install_all_TestWindow_as_default_source_in_VS2015Update1()
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
@@ -894,8 +906,8 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             }
             {
                 var m = new Mock<IPrigExecutor>(MockBehavior.Strict);
-                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2015x86))).ReturnsUsingFixture(fixture);
-                m.Setup(_ => _.StartInstalling("TestWindow1", It.IsRegex(testWindowVS2015x64))).ReturnsUsingFixture(fixture);
+                m.Setup(_ => _.StartInstalling(It.IsRegex("^TestWindow_"), It.IsRegex(testWindowVS2015x86))).ReturnsUsingFixture(fixture);
+                m.Setup(_ => _.StartInstalling(It.IsRegex("^TestWindow64_"), It.IsRegex(testWindowVS2015x64))).ReturnsUsingFixture(fixture);
                 fixture.Inject(m);
             }
 
@@ -911,7 +923,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
         }
 
         [Test]
-        public void Install_should_raise_the_event_to_install_the_newest_TestWindow_before_and_after_in_VS2015Update1()
+        public void Install_should_raise_the_event_to_install_all_TestWindow_before_and_after_in_VS2015Update1()
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
@@ -925,23 +937,31 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
                 m.Setup(_ => _.ExistsDirectory(It.IsRegex(testWindowVS2015x64))).Returns(true);
             }
-            var stdouts = fixture.CreateMany<string>(2).ToArray();
+            var stdouts = fixture.CreateMany<string>(4).ToArray();
             {
                 var m = fixture.Freeze<Mock<IPrigExecutor>>();
-                m.Setup(_ => _.StartInstalling("TestWindow", It.IsRegex(testWindowVS2015x86))).Returns(stdouts[0]);
-                m.Setup(_ => _.StartInstalling("TestWindow1", It.IsRegex(testWindowVS2015x64))).Returns(stdouts[1]);
+                m.Setup(_ => _.StartInstalling("TestWindow_VS110COMNTOOLS", It.IsRegex(testWindowVS2015x86))).Returns(stdouts[0]);
+                m.Setup(_ => _.StartInstalling("TestWindow64_VS110COMNTOOLS", It.IsRegex(testWindowVS2015x64))).Returns(stdouts[1]);
+                m.Setup(_ => _.StartInstalling("TestWindow_VS120COMNTOOLS", It.IsRegex(testWindowVS2015x86))).Returns(stdouts[2]);
+                m.Setup(_ => _.StartInstalling("TestWindow64_VS120COMNTOOLS", It.IsRegex(testWindowVS2015x64))).Returns(stdouts[3]);
             }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order1 = new MockOrder();
             var order2 = new MockOrder();
+            var order3 = new MockOrder();
+            var order4 = new MockOrder();
             mwInstl.PrigSourceInstalling +=
                 mocks.Create<Action<string, string>>().
-                    InOrder(order1, m => m.Setup(_ => _("TestWindow", It.IsRegex(testWindowVS2015x86)))).
-                    InOrder(order2, m => m.Setup(_ => _("TestWindow1", It.IsRegex(testWindowVS2015x64)))).Object;
+                    InOrder(order1, m => m.Setup(_ => _("TestWindow_VS110COMNTOOLS", It.IsRegex(testWindowVS2015x86)))).
+                    InOrder(order2, m => m.Setup(_ => _("TestWindow64_VS110COMNTOOLS", It.IsRegex(testWindowVS2015x64)))).
+                    InOrder(order3, m => m.Setup(_ => _("TestWindow_VS120COMNTOOLS", It.IsRegex(testWindowVS2015x86)))).
+                    InOrder(order4, m => m.Setup(_ => _("TestWindow64_VS120COMNTOOLS", It.IsRegex(testWindowVS2015x64)))).Object;
             mwInstl.PrigSourceInstalled +=
                 mocks.Create<Action<string>>().
                     InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
-                    InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
+                    InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).
+                    InOrder(order3, m => m.Setup(_ => _(stdouts[2]))).
+                    InOrder(order4, m => m.Setup(_ => _(stdouts[3]))).Object;
 
             var mwInstllr = fixture.NewMachineWideInstaller();
 
@@ -970,6 +990,13 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
                 m.Setup(_ => _.OpenRegistrySubKey(RegistryKeyMixin.DummyX86ClassesRootKey, ProfilerLocation.InprocServer32Path)).Returns(RegistryKeyMixin.DummyX86InProcServer32Key);
                 m.Setup(_ => _.GetRegistryValue(RegistryKeyMixin.DummyX86InProcServer32Key, null)).Returns(fixture.Create<string>());
             }
+            {
+                var m = fixture.Freeze<Mock<IPrigExecutor>>();
+                m.Setup(_ => _.StartInstalling("TestWindow_VS110COMNTOOLS", It.IsAny<string>())).Returns("a");
+                m.Setup(_ => _.StartInstalling("TestWindow64_VS110COMNTOOLS", It.IsAny<string>())).Returns("b");
+                m.Setup(_ => _.StartInstalling("TestWindow_VS120COMNTOOLS", It.IsAny<string>())).Returns("c");
+                m.Setup(_ => _.StartInstalling("TestWindow64_VS120COMNTOOLS", It.IsAny<string>())).Returns("d");
+            }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();
             mwInstl.Preparing += mocks.InOrder<Action>(order, m => m.Setup(_ => _())).Object;
@@ -990,8 +1017,20 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             }
             mwInstl.ProfilerRegistering += mocks.InOrder<Action<ProfilerLocation>>(order, m => m.Setup(_ => _(It.IsAny<ProfilerLocation>()))).Object;
             mwInstl.ProfilerRegistered += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
-            mwInstl.PrigSourceInstalling += mocks.InOrder<Action<string, string>>(order, m => m.Setup(_ => _(It.IsAny<string>(), It.IsAny<string>()))).Object;
-            mwInstl.PrigSourceInstalled += mocks.InOrder<Action<string>>(order, m => m.Setup(_ => _(It.IsAny<string>()))).Object;
+            {
+                var m1 = mocks.Create<Action<string, string>>();
+                var m2 = mocks.Create<Action<string>>();
+                m1.InOrder(order, m => m.Setup(_ => _("TestWindow_VS110COMNTOOLS", It.IsAny<string>())));
+                m2.InOrder(order, m => m.Setup(_ => _("a")));
+                m1.InOrder(order, m => m.Setup(_ => _("TestWindow64_VS110COMNTOOLS", It.IsAny<string>())));
+                m2.InOrder(order, m => m.Setup(_ => _("b")));
+                m1.InOrder(order, m => m.Setup(_ => _("TestWindow_VS120COMNTOOLS", It.IsAny<string>())));
+                m2.InOrder(order, m => m.Setup(_ => _("c")));
+                m1.InOrder(order, m => m.Setup(_ => _("TestWindow64_VS120COMNTOOLS", It.IsAny<string>())));
+                m2.InOrder(order, m => m.Setup(_ => _("d")));
+                mwInstl.PrigSourceInstalling += m1.Object;
+                mwInstl.PrigSourceInstalled += m2.Object;
+            }
             mwInstl.Completed += mocks.InOrder<Action<MachineWideProcessResults>>(order, m => m.Setup(_ => _(It.IsAny<MachineWideProcessResults>()))).Object;
 
             var mwInstllr = fixture.NewMachineWideInstaller();
@@ -1180,11 +1219,11 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             var mocks = new MockRepository(MockBehavior.Strict);
             var order1 = new MockOrder();
             var order2 = new MockOrder();
-            mwUninstl.ProfilerUnregistering += 
+            mwUninstl.ProfilerUnregistering +=
                 mocks.Create<Action<ProfilerLocation>>().
                       InOrder(order1, m => m.Setup(_ => _(profLocs[0]))).
                       InOrder(order2, m => m.Setup(_ => _(profLocs[1]))).Object;
-            mwUninstl.ProfilerUnregistered += 
+            mwUninstl.ProfilerUnregistered +=
                 mocks.Create<Action<string>>().
                       InOrder(order1, m => m.Setup(_ => _(stdouts[0]))).
                       InOrder(order2, m => m.Setup(_ => _(stdouts[1]))).Object;
