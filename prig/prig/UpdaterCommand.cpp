@@ -123,7 +123,7 @@ namespace prig {
                 auto prigConfigPath = PrigConfig::GetConfigPath();
                 
                 auto config = PrigConfig();
-                config.TrySerializeFrom(prigConfigPath);
+                config.TryDeserializeFrom(prigConfigPath);
                 
                 auto hasProcessed = false;
                 BOOST_FOREACH (auto &pkg, config.Packages)
@@ -147,7 +147,7 @@ namespace prig {
                     return 1;
                 }
                 
-                config.TryDeserializeTo(prigConfigPath);
+                config.TrySerializeTo(prigConfigPath);
                 return 0;
             }
             

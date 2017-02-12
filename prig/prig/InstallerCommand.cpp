@@ -82,7 +82,7 @@ namespace prig {
             auto prigConfigPath = PrigConfig::GetConfigPath();
             
             auto config = PrigConfig();
-            config.TrySerializeFrom(prigConfigPath);
+            config.TryDeserializeFrom(prigConfigPath);
             
             auto result = config.FindPackage(m_source);
             if (result)
@@ -108,7 +108,7 @@ namespace prig {
             package.Name = m_package;
             package.Source = m_source;
             config.Packages.push_back(package);
-            config.TryDeserializeTo(prigConfigPath);
+            config.TrySerializeTo(prigConfigPath);
             return 0;
         }
 

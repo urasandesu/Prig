@@ -35,6 +35,10 @@
 #include <PrigData.h>
 #endif
 
+#ifndef INDIRETIONINTERFACES_H
+#include <InstanceGetters.h>
+#endif
+
 #ifndef INDIRECTIONDELEGATES_H
 #include <IndirectionDelegates.h>
 #endif
@@ -164,7 +168,7 @@ namespace CWeaverDetail {
         }
 
         auto config = PrigConfig();
-        config.TrySerializeFrom(PrigConfig::GetConfigPath());
+        config.TryDeserializeFrom(PrigConfig::GetConfigPath());
             
         auto procDirPath = procPath.parent_path();
         auto result = FindIf(config.Packages, [&procDirPath](PrigPackageConfig const &pkg) { return equivalent(pkg.Source, procDirPath); });
@@ -242,6 +246,7 @@ namespace CWeaverDetail {
             return S_OK;
 
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
+        InstanceGettersCurrentAppDomainUnload(pProcProf);
         pProcProf->DetachFromAppDomain(appDomainId);
 
         return S_OK;

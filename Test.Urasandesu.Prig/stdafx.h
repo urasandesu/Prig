@@ -44,8 +44,8 @@
 #include <atlbase.h>
 #include <atlstr.h>
 
-#ifndef URASANDESU_CPPANONYM_CPPANONYMDEPENDSON_H
-#include <Urasandesu/CppAnonym/CppAnonymDependsOn.h>
+#ifndef URASANDESU_SWATHE_SWATHEDEPENDSON_H
+#include <Urasandesu/Swathe/SwatheDependsOn.h>
 #endif
 
 #include <gtest/gtest.h>

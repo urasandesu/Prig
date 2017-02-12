@@ -164,11 +164,10 @@ namespace Urasandesu.Prig.Framework
             if (ms_key == null)
                 return;
 
+            var funcPtr = default(IntPtr);
             using (InstanceGetters.DisableProcessing())
-            {
-                var funcPtr = GetFunctionPointerCore(ms_t);
-                InstanceGetters.TryAdd(ms_key, funcPtr);
-            }
+                funcPtr = GetFunctionPointerCore(ms_t);
+            InstanceGetters.TryAdd(ms_key, funcPtr);
         }
 
         static IntPtr GetFunctionPointerCore(Type t)

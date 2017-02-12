@@ -31,6 +31,8 @@
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Urasandesu.Prig.Framework
@@ -42,6 +44,15 @@ namespace Urasandesu.Prig.Framework
             var weaverPath = GetWeaverPath();
             var weaverDir = Path.GetDirectoryName(weaverPath);
             SetDllDirectory(weaverDir);
+            using (DisableProcessing())
+            {
+                var fields = typeof(AppDomain).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+                var appDomainIdField = fields.FirstOrDefault(_ => _.Name == "_pDomain" || _.Name == "_dummyField");
+                if (appDomainIdField == null)
+                    throw new NotSupportedException(string.Format("This runtime 'v{0}' is not supported.", typeof(object).Assembly.ImageRuntimeVersion));
+
+                AppDomainID = (IntPtr)appDomainIdField.GetValue(AppDomain.CurrentDomain);
+            }
         }
 
         static string GetWeaverPath()
@@ -50,30 +61,61 @@ namespace Urasandesu.Prig.Framework
             return (string)subKey.GetValue("");
         }
 
-        
-        
+
+
+        public static readonly IntPtr AppDomainID;
+
+
+
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetDllDirectory(string lpPathName);
 
+
+
+        internal static bool TryAdd(string key, IntPtr pFuncPtr)
+        {
+            return TryAddCore(AppDomainID, key, pFuncPtr);
+        }
+
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryAdd")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool TryAdd([MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr);
+        static extern bool TryAddCore(IntPtr appDomainId, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr);
+
+        internal static bool TryGet(string key, out IntPtr ppFuncPtr)
+        {
+            return TryGetCore(AppDomainID, key, out ppFuncPtr);
+        }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryGet")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool TryGet([MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
+        static extern bool TryGetCore(IntPtr appDomainId, [MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
+
+        internal static bool TryRemove(string key, out IntPtr ppFuncPtr)
+        {
+            return TryRemoveCore(AppDomainID, key, out ppFuncPtr);
+        }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryRemove")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool TryRemove([MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
+        static extern bool TryRemoveCore(IntPtr appDomainId, [MarshalAs(UnmanagedType.LPWStr)] string key, out IntPtr ppFuncPtr);
+
+        internal static bool GetOrAdd(string key, IntPtr pFuncPtr, out IntPtr ppFuncPtr)
+        {
+            return GetOrAddCore(AppDomainID, key, pFuncPtr, out ppFuncPtr);
+        }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersGetOrAdd")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetOrAdd([MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr, out IntPtr ppFuncPtr);
+        static extern bool GetOrAddCore(IntPtr appDomainId, [MarshalAs(UnmanagedType.LPWStr)] string key, IntPtr pFuncPtr, out IntPtr ppFuncPtr);
+
+        internal static void Clear()
+        {
+            ClearCore(AppDomainID);
+        }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersClear")]
-        internal static extern void Clear();
+        static extern void ClearCore(IntPtr appDomainId);
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersEnterDisabledProcessing")]
         static extern void EnterDisabledProcessing();
@@ -85,6 +127,9 @@ namespace Urasandesu.Prig.Framework
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersIsDisabledProcessing")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsDisabledProcessing();
+
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersDebugWriteLine")]
+        internal static extern void DebugWriteLine([MarshalAs(UnmanagedType.LPWStr)] string message);
 
         public struct InstanceGettersProcessingDisabled : IDisposable
         {
@@ -100,8 +145,8 @@ namespace Urasandesu.Prig.Framework
             return new InstanceGettersProcessingDisabled();
         }
 
-        
-        
+
+
         static Func<IndirectionAssemblyRepository> ms_newIndirectionAssemblyRepository;
         internal static Func<IndirectionAssemblyRepository> NewIndirectionAssemblyRepository
         {

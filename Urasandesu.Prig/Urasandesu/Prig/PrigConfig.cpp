@@ -83,7 +83,19 @@ namespace Urasandesu { namespace Prig {
             return prigConfigPath;
         }
 
-        bool PrigConfig::TrySerializeFrom(path const &prigConfigPath)
+        bool PrigConfig::IsPrigAttached()
+        {
+            using Urasandesu::CppAnonym::Environment;
+            using Urasandesu::Swathe::Profiling::ProfilingSpecialValues;
+
+            static auto enableProfiling = Environment::GetEnvironmentVariable(ProfilingSpecialValues::ENABLE_PROFILING_KEY);
+            static auto profiler = Environment::GetEnvironmentVariable(ProfilingSpecialValues::PROFILER_KEY);
+            static auto isPrigAttached = enableProfiling == ProfilingSpecialValues::ENABLE_PROFILING_VALUE_ENABLED &&
+                                         boost::iequals(profiler, L"{532C1F05-F8F3-4FBA-8724-699A31756ABD}");
+            return isPrigAttached;
+        }
+
+        bool PrigConfig::TryDeserializeFrom(path const &prigConfigPath)
         {
             using boost::serialization::make_nvp;
             using namespace Urasandesu::CppAnonym::IO;
@@ -96,7 +108,7 @@ namespace Urasandesu { namespace Prig {
             return true;
         }
 
-        bool PrigConfig::TryDeserializeTo(path const &prigConfigPath) const
+        bool PrigConfig::TrySerializeTo(path const &prigConfigPath) const
         {
             using boost::serialization::make_nvp;
             using namespace Urasandesu::CppAnonym::IO;

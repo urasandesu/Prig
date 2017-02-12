@@ -101,7 +101,7 @@ namespace prig {
             auto prigConfigPath = PrigConfig::GetConfigPath();
             
             auto config = PrigConfig();
-            config.TrySerializeFrom(prigConfigPath);
+            config.TryDeserializeFrom(prigConfigPath);
             
             auto pkgs = config.FindPackages(m_package);
             auto hasProcessed = false;
@@ -126,7 +126,7 @@ namespace prig {
                 return 0;
             }
             
-            config.TryDeserializeTo(prigConfigPath);
+            config.TrySerializeTo(prigConfigPath);
             return 0;
         }
 
