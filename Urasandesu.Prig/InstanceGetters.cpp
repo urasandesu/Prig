@@ -43,7 +43,7 @@
 #endif
 
 typedef Urasandesu::CppAnonym::Collections::GlobalSafeDictionary<std::wstring, void const *> FunctionCollection;
-typedef Urasandesu::CppAnonym::Collections::GlobalSafeDictionary<AppDomainID, boost::shared_ptr<FunctionCollection>> AppDomainFunctionCollection;
+typedef Urasandesu::CppAnonym::Collections::GlobalSafeDictionary<AppDomainID, std::pair<bool, boost::shared_ptr<FunctionCollection>>> AppDomainFunctionCollection;
 
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(AppDomainID appDomainId, LPCWSTR key, void const *pFuncPtr)
 {
@@ -55,14 +55,18 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(AppDomain
         appDomainId = 0;
 
     auto &adfc = AppDomainFunctionCollection::GetInstance();
-    auto result = BOOL();
-    if (!adfc.IsDisabledProcessing())  // NOTE: we should skip if processing is disabled because "while (...)" will be an infinite loop.
-    {
-        auto pFc = boost::make_shared<FunctionCollection>();
-        while (!adfc.GetOrAdd(appDomainId, pFc, pFc));
 
-        result = pFc->TryAdd(std::wstring(key), pFuncPtr);
-    }
+    typedef AppDomainFunctionCollection::in_key_type InKey;
+    typedef AppDomainFunctionCollection::in_value_type InValue;
+    typedef AppDomainFunctionCollection::out_value_type OutValue;
+
+    auto addValue = std::make_pair(true, boost::make_shared<FunctionCollection>());
+    auto updateValueFactory = std::function<void(InKey, InValue, OutValue)>();
+    updateValueFactory = [](InKey inKey, InValue inValue, OutValue outValue) { outValue = inValue; outValue.first = true; };
+    auto resultValue = adfc.AddOrUpdate(appDomainId, addValue, updateValueFactory);
+
+    auto result = resultValue.second->TryAdd(std::wstring(key), pFuncPtr);
+
     CPPANONYM_D_LOGW4(L"InstanceGettersTryAdd(appDomainId: 0x%1%, key: %|2$s|, pFuncPtr: 0x%3%): %|4$d|", reinterpret_cast<void *>(appDomainId), key, pFuncPtr, result);
     return result;
 }
@@ -77,14 +81,19 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(AppDomain
         appDomainId = 0;
 
     _ASSERTE(ppFuncPtr != NULL);
-    auto const &adfc = AppDomainFunctionCollection::GetInstance();
-    auto result = BOOL();
-    auto pFc = boost::shared_ptr<FunctionCollection>();
-    if (!(result = adfc.TryGet(appDomainId, pFc)))
-        goto EXIT;
+    auto &adfc = AppDomainFunctionCollection::GetInstance();
 
-    result = pFc->TryGet(std::wstring(key), *ppFuncPtr);
-EXIT:
+    typedef AppDomainFunctionCollection::in_key_type InKey;
+    typedef AppDomainFunctionCollection::in_value_type InValue;
+    typedef AppDomainFunctionCollection::out_value_type OutValue;
+
+    auto addValue = std::make_pair(true, boost::make_shared<FunctionCollection>());
+    auto updateValueFactory = std::function<void(InKey, InValue, OutValue)>();
+    updateValueFactory = [](InKey inKey, InValue inValue, OutValue outValue) { outValue = inValue; outValue.first = true; };
+    auto resultValue = adfc.AddOrUpdate(appDomainId, addValue, updateValueFactory);
+
+    auto result = resultValue.second->TryGet(std::wstring(key), *ppFuncPtr);
+
     CPPANONYM_D_LOGW4(L"InstanceGettersTryGet(appDomainId: 0x%1%, key: %|2$s|, *ppFuncPtr: 0x%3%): %|4$d|", reinterpret_cast<void *>(appDomainId), key, *ppFuncPtr, result);
     return result;
 }
@@ -99,14 +108,19 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(AppDom
         appDomainId = 0;
 
     _ASSERTE(ppFuncPtr != NULL);
-    auto const &adfc = AppDomainFunctionCollection::GetInstance();
-    auto result = BOOL();
-    auto pFc = boost::shared_ptr<FunctionCollection>();
-    if (!(result = adfc.TryGet(appDomainId, pFc)))
-        goto EXIT;
+    auto &adfc = AppDomainFunctionCollection::GetInstance();
 
-    result = pFc->TryRemove(std::wstring(key), *ppFuncPtr);
-EXIT:
+    typedef AppDomainFunctionCollection::in_key_type InKey;
+    typedef AppDomainFunctionCollection::in_value_type InValue;
+    typedef AppDomainFunctionCollection::out_value_type OutValue;
+
+    auto addValue = std::make_pair(true, boost::make_shared<FunctionCollection>());
+    auto updateValueFactory = std::function<void(InKey, InValue, OutValue)>();
+    updateValueFactory = [](InKey inKey, InValue inValue, OutValue outValue) { outValue = inValue; outValue.first = true; };
+    auto resultValue = adfc.AddOrUpdate(appDomainId, addValue, updateValueFactory);
+
+    auto result = resultValue.second->TryRemove(std::wstring(key), *ppFuncPtr);
+
     CPPANONYM_D_LOGW4(L"InstanceGettersTryRemove(appDomainId: 0x%1%, key: %|2$s|, *ppFuncPtr: 0x%3%): %|4$d|", reinterpret_cast<void *>(appDomainId), key, *ppFuncPtr, result);
     return result;
 }
@@ -122,14 +136,18 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(AppDoma
 
     _ASSERTE(ppFuncPtr != NULL);
     auto &adfc = AppDomainFunctionCollection::GetInstance();
-    auto result = BOOL();
-    if (!adfc.IsDisabledProcessing())  // NOTE: we should skip if processing is disabled because "while (...)" will be an infinite loop.
-    {
-        auto pFc = boost::make_shared<FunctionCollection>();
-        while (!adfc.GetOrAdd(appDomainId, pFc, pFc));
 
-        result = pFc->GetOrAdd(std::wstring(key), pFuncPtr, *ppFuncPtr);
-    }
+    typedef AppDomainFunctionCollection::in_key_type InKey;
+    typedef AppDomainFunctionCollection::in_value_type InValue;
+    typedef AppDomainFunctionCollection::out_value_type OutValue;
+
+    auto addValue = std::make_pair(true, boost::make_shared<FunctionCollection>());
+    auto updateValueFactory = std::function<void(InKey, InValue, OutValue)>();
+    updateValueFactory = [](InKey inKey, InValue inValue, OutValue outValue) { outValue = inValue; outValue.first = true; };
+    auto resultValue = adfc.AddOrUpdate(appDomainId, addValue, updateValueFactory);
+
+    auto result = resultValue.second->GetOrAdd(std::wstring(key), pFuncPtr, *ppFuncPtr);
+
     CPPANONYM_D_LOGW5(L"InstanceGettersGetOrAdd(appDomainId: 0x%1%, key: %|2$s|, pFuncPtr: 0x%3%, *ppFuncPtr: 0x%4%): %|5$d|", reinterpret_cast<void *>(appDomainId), key, pFuncPtr, *ppFuncPtr, result);
     return result;
 }
@@ -143,14 +161,17 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear(AppDomainI
     if (!PrigConfig::IsPrigAttached())
         appDomainId = 0;
 
-    auto const &adfc = AppDomainFunctionCollection::GetInstance();
-    auto result = BOOL();
-    auto pFc = boost::shared_ptr<FunctionCollection>();
-    if (!(result = adfc.TryGet(appDomainId, pFc)))
-        goto EXIT;
-    
-    pFc->Clear();
-EXIT:
+    auto &adfc = AppDomainFunctionCollection::GetInstance();
+
+    typedef AppDomainFunctionCollection::in_key_type InKey;
+    typedef AppDomainFunctionCollection::in_value_type InValue;
+    typedef AppDomainFunctionCollection::out_value_type OutValue;
+
+    auto addValue = std::make_pair(false, boost::make_shared<FunctionCollection>());
+    auto updateValueFactory = std::function<void(InKey, InValue, OutValue)>();
+    updateValueFactory = [](InKey inKey, InValue inValue, OutValue outValue) { outValue = inValue; outValue.first = false; };
+    adfc.AddOrUpdate(appDomainId, addValue, updateValueFactory);
+
     CPPANONYM_D_LOGW1(L"InstanceGettersClear(appDomainId: 0x%1%)", reinterpret_cast<void *>(appDomainId));
 }
 
@@ -198,31 +219,31 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersCurrentAppDomain
     auto appDomainId = pDomainProf->GetID();
     
     auto const &adfc = AppDomainFunctionCollection::GetInstance();
-    auto result = BOOL();
-    auto pFc = boost::shared_ptr<FunctionCollection>();
-    if (result = !adfc.TryGet(appDomainId, pFc))    // NOTE: to determine whether empty, so "no data" is TRUE.
+    auto result = BOOL();   // NOTE: to determine whether empty, so "no data" is TRUE.
+    auto pair = std::pair<bool, boost::shared_ptr<FunctionCollection>>();
+    if (result = !adfc.TryGet(appDomainId, pair))
+        goto EXIT;
+
+    if (result = !pair.first)
         goto EXIT;
     
-    result = pFc->Empty();
+    result = pair.second->Empty();
 EXIT:
     CPPANONYM_D_LOGW2(L"InstanceGettersEmpty(pProcProf: 0x%1%): %|2$d|", pProcProf, result);
     return result;
 }
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersCurrentAppDomainUnload(void *pProcProf)
+BOOL InstanceGettersCurrentAppDomainUnload(AppDomainID appDomainId)
 {
-    using namespace Urasandesu::Swathe::Profiling;
-    
-    auto pDomainProf = static_cast<ProcessProfiler *>(pProcProf)->GetCurrentAppDomain();
-    auto appDomainId = pDomainProf->GetID();
+    CPPANONYM_LOG_FUNCTION();
     
     auto &adfc = AppDomainFunctionCollection::GetInstance();
     auto result = BOOL();
-    auto pFc = boost::shared_ptr<FunctionCollection>();
-    if (!(result = adfc.TryRemove(appDomainId, pFc)))
+    auto pair = std::pair<bool, boost::shared_ptr<FunctionCollection>>();
+    if (!(result = adfc.TryRemove(appDomainId, pair)))
         goto EXIT;
     
 EXIT:
-    CPPANONYM_D_LOGW2(L"InstanceGettersUnload(pProcProf: 0x%1%): %|2$d|", pProcProf, result);
+    CPPANONYM_D_LOGW2(L"InstanceGettersUnload(appDomainId: 0x%1%): %|2$d|", reinterpret_cast<void *>(appDomainId), result);
     return result;
 }

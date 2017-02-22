@@ -55,20 +55,20 @@ namespace Test.program1.UntestableLibrary.Prig
                 Assert.IsTrue(actual);
             }
         }
-        
+
         [Test]
         public void EnumeratorCurrent_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULDictionaryOfTKeyOfTValueEnumerator<int, string>.CurrentGet().Body = 
+                PULDictionaryOfTKeyOfTValueEnumerator<int, string>.CurrentGet().Body =
                     (ref ULDictionary<int, string>.Enumerator @this) => new KeyValuePair<int, string>(42, "にゃんぱすー");
-                
+
                 // Act
                 var enumerator = new ULDictionary<int, string>.Enumerator();
                 var actual = enumerator.Current;
-                
+
                 // Assert
                 Assert.AreEqual(42, actual.Key);
                 Assert.AreEqual("にゃんぱすー", actual.Value);

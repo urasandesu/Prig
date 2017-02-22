@@ -1,10 +1,10 @@
 ﻿/* 
- * File: GenericHolder.cs
+ * File: MarshalByRefRunner.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2014 Akira Sugiura
+ * Copyright (c) 2012 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -28,38 +28,17 @@
  */
 
 
+using System;
 
-using System.Reflection;
-using System.Runtime.CompilerServices;
-
-namespace Urasandesu.Prig.Framework
+namespace Test.program1.TestUtilities.Mixins.System
 {
-    public class GenericHolder<T> : InstanceHolder<GenericHolder<T>>
+    class MarshalByRefRunner : MarshalByRefObject
     {
-        static GenericHolder()
+        public Delegate Action { get; set; }
+        public void Run(params object[] args)
         {
-            using (InstanceGetters.DisableProcessing())
-            {
-                var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-                foreach (var method in typeof(GenericHolder<T>).GetMethods(all))
-                    RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
-            }
-        }
-
-        GenericHolder() { }
-        public T Source { get; set; }
-
-        protected internal override void Prepare()
-        {
-            Source = Source;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Source = default(T);
-            }
+            if (Action != null)
+                Action.DynamicInvoke(args);
         }
     }
 }

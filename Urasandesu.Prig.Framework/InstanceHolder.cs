@@ -41,12 +41,15 @@ namespace Urasandesu.Prig.Framework
     {
         static InstanceHolder()
         {
-            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            foreach (var method in typeof(InstanceHolder<T>).GetMethods(all).Where(_ => !_.IsAbstract))
-                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
+            using (InstanceGetters.DisableProcessing())
+            {
+                var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+                foreach (var method in typeof(InstanceHolder<T>).GetMethods(all).Where(_ => !_.IsAbstract))
+                    RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
 
-            // Prepare JIT here if the type has been already known explicitly.
-            new FallthroughException();
+                // Prepare JIT here if the type has been already known explicitly.
+                new FallthroughException();
+            }
         }
 
         protected InstanceHolder() { }

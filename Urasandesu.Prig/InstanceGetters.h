@@ -49,7 +49,8 @@ EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProc
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing();
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersDebugWriteLine(LPCWSTR message);
 
+// The following functions are only called from profiler side.
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersCurrentAppDomainEmpty(void *pProcProf);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersCurrentAppDomainUnload(void *pProcProf);
+BOOL InstanceGettersCurrentAppDomainUnload(AppDomainID appDomainId);
 
 #endif  // #ifndef INDIRETIONINTERFACES_H

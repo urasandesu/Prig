@@ -1,5 +1,5 @@
 ﻿/* 
- * File: GenericHolder.cs
+ * File: LooseCrossDomainAccessorUntyped.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,38 +28,16 @@
  */
 
 
-
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using System;
 
 namespace Urasandesu.Prig.Framework
 {
-    public class GenericHolder<T> : InstanceHolder<GenericHolder<T>>
+    public class LooseCrossDomainAccessorUntyped
     {
-        static GenericHolder()
+        public static IndirectionHolderUntyped GetOrRegister(Type indDlgt)
         {
-            using (InstanceGetters.DisableProcessing())
-            {
-                var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-                foreach (var method in typeof(GenericHolder<T>).GetMethods(all))
-                    RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
-            }
-        }
-
-        GenericHolder() { }
-        public T Source { get; set; }
-
-        protected internal override void Prepare()
-        {
-            Source = Source;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Source = default(T);
-            }
+            var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+            return new IndirectionHolderUntyped(holder, indDlgt);
         }
     }
 }

@@ -38,9 +38,12 @@ namespace Urasandesu.Prig.Framework
     {
         static TargetSettingValue()
         {
-            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            foreach (var method in typeof(TargetSettingValue<TIndirection>).GetMethods(all))
-                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(TIndirection).TypeHandle });
+            using (InstanceGetters.DisableProcessing())
+            {
+                var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+                foreach (var method in typeof(TargetSettingValue<TIndirection>).GetMethods(all))
+                    RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(TIndirection).TypeHandle });
+            }
         }
 
         readonly TIndirection m_original;

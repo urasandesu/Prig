@@ -31,8 +31,6 @@
 using Microsoft.Win32;
 using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Urasandesu.Prig.Framework
@@ -44,15 +42,6 @@ namespace Urasandesu.Prig.Framework
             var weaverPath = GetWeaverPath();
             var weaverDir = Path.GetDirectoryName(weaverPath);
             SetDllDirectory(weaverDir);
-            using (DisableProcessing())
-            {
-                var fields = typeof(AppDomain).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-                var appDomainIdField = fields.FirstOrDefault(_ => _.Name == "_pDomain" || _.Name == "_dummyField");
-                if (appDomainIdField == null)
-                    throw new NotSupportedException(string.Format("This runtime 'v{0}' is not supported.", typeof(object).Assembly.ImageRuntimeVersion));
-
-                AppDomainID = (IntPtr)appDomainIdField.GetValue(AppDomain.CurrentDomain);
-            }
         }
 
         static string GetWeaverPath()
@@ -60,12 +49,6 @@ namespace Urasandesu.Prig.Framework
             var subKey = Registry.ClassesRoot.OpenSubKey(@"CLSID\{532C1F05-F8F3-4FBA-8724-699A31756ABD}\InprocServer32");
             return (string)subKey.GetValue("");
         }
-
-
-
-        public static readonly IntPtr AppDomainID;
-
-
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -75,7 +58,7 @@ namespace Urasandesu.Prig.Framework
 
         internal static bool TryAdd(string key, IntPtr pFuncPtr)
         {
-            return TryAddCore(AppDomainID, key, pFuncPtr);
+            return TryAddCore(AppDomainId.Value, key, pFuncPtr);
         }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryAdd")]
@@ -84,7 +67,7 @@ namespace Urasandesu.Prig.Framework
 
         internal static bool TryGet(string key, out IntPtr ppFuncPtr)
         {
-            return TryGetCore(AppDomainID, key, out ppFuncPtr);
+            return TryGetCore(AppDomainId.Value, key, out ppFuncPtr);
         }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryGet")]
@@ -93,7 +76,7 @@ namespace Urasandesu.Prig.Framework
 
         internal static bool TryRemove(string key, out IntPtr ppFuncPtr)
         {
-            return TryRemoveCore(AppDomainID, key, out ppFuncPtr);
+            return TryRemoveCore(AppDomainId.Value, key, out ppFuncPtr);
         }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersTryRemove")]
@@ -102,7 +85,7 @@ namespace Urasandesu.Prig.Framework
 
         internal static bool GetOrAdd(string key, IntPtr pFuncPtr, out IntPtr ppFuncPtr)
         {
-            return GetOrAddCore(AppDomainID, key, pFuncPtr, out ppFuncPtr);
+            return GetOrAddCore(AppDomainId.Value, key, pFuncPtr, out ppFuncPtr);
         }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersGetOrAdd")]
@@ -111,7 +94,7 @@ namespace Urasandesu.Prig.Framework
 
         internal static void Clear()
         {
-            ClearCore(AppDomainID);
+            ClearCore(AppDomainId.Value);
         }
 
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersClear")]
