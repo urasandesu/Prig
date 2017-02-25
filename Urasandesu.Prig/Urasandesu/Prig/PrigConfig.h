@@ -122,6 +122,9 @@ namespace Urasandesu { namespace Prig {
             static path const &GetLibPath();
             static path const &GetConfigPath();
             static bool IsPrigAttached();
+            static vector<path> GetLibAllAssemblyPaths();
+            static vector<path> GetLibFrameworkAssemblyPaths();
+            static vector<path> GetLibNonFrameworkAssemblyPaths();
             bool TryDeserializeFrom(path const &prigConfigPath);
             bool TrySerializeTo(path const &prigConfigPath) const;
             optional<PrigPackageConfig> FindPackage(path const &source) const;

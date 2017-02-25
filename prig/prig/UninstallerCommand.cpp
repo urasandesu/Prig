@@ -39,6 +39,10 @@
 #include <Urasandesu/Prig/PrigConfig.h>
 #endif
 
+#ifndef URASANDESU_SWATHE_H
+#include <Urasandesu/Swathe.h>
+#endif
+
 namespace prig { 
 
     namespace UninstallerCommandDetail {
@@ -47,36 +51,23 @@ namespace prig {
         using std::vector;
         using Urasandesu::Prig::PrigConfig;
         using Urasandesu::Prig::PrigPackageConfig;
-        
-        void FillPrigDllNames(path const &libPath, vector<wstring> &prigDllNames)
-        {
-            using boost::filesystem::recursive_directory_iterator;
-            
-            for (recursive_directory_iterator i(libPath), i_end; i != i_end; ++i)
-            {
-                if (!is_regular_file(i->status()))
-                    continue;
-                
-                prigDllNames.push_back(i->path().filename().native());
-            }
-        }
 
-        void RemoveSymLinkForPrigLib(PrigPackageConfig const &pkg, vector<wstring> const &prigDllNames)
+        void RemoveSymLinksForPrigLib(PrigPackageConfig const &pkg, vector<path> const &libAllAsmPaths)
         {
             using boost::system::error_code;
 
             if (!exists(pkg.Source))
                 return;
             
-            BOOST_FOREACH (auto const &prigDllName, prigDllNames)
+            BOOST_FOREACH (auto const &libAllAsmPath, libAllAsmPaths)
             {
-                auto symlink = pkg.Source / prigDllName;
+                auto symlink = pkg.Source / libAllAsmPath.filename();
                 auto ec = error_code();
                 remove(symlink, ec);
             }
         }
 
-        void RemoveSymLinkForAdditionalDelegates(PrigPackageConfig const &pkg)
+        void RemoveSymLinksForAdditionalDelegates(PrigPackageConfig const &pkg)
         {
             using boost::system::error_code;
 
@@ -91,11 +82,35 @@ namespace prig {
             }
         }
 
+        void UnregisterFromGAC(vector<path> const &asmPaths)
+        {
+            using namespace Urasandesu::CppAnonym::Traits;
+            using namespace Urasandesu::Swathe::Hosting;
+            using namespace Urasandesu::Swathe::Fusion;
+
+            using boost::remove_reference;
+            using std::map;
+
+            auto const *pHost = HostInfo::CreateHost();
+            auto const &runtimes = pHost->GetRuntimes();
+            
+            typedef remove_reference<RemoveConst<decltype(runtimes)>::type>::type Runtimes;
+            typedef Runtimes::key_type Key;
+            typedef Runtimes::mapped_type Mapped;
+            auto orderedRuntimes = map<Key, Mapped>(runtimes.begin(), runtimes.end());
+            auto const *pLatestRuntime = (*orderedRuntimes.rbegin()).second;
+            auto const *pFuInfo = pLatestRuntime->GetInfo<FusionInfo>();
+            auto pAsmCache = pFuInfo->NewAssemblyCache();
+            BOOST_FOREACH (auto const &asmPath, asmPaths)
+                pAsmCache->UninstallAssembly(asmPath.stem().native());
+        }
+
         int UninstallerCommandImpl::Execute()
         {
             using boost::wformat;
             using std::endl;
             using std::wcout;
+            using Urasandesu::CppAnonym::Environment;
             
             
             auto prigConfigPath = PrigConfig::GetConfigPath();
@@ -104,27 +119,28 @@ namespace prig {
             config.TryDeserializeFrom(prigConfigPath);
             
             auto pkgs = config.FindPackages(m_package);
-            auto hasProcessed = false;
-            auto prigDllNames = vector<wstring>();
-            BOOST_FOREACH (auto const &pkg, pkgs)
-            {
-                if (!hasProcessed)
-                {
-                    hasProcessed = true;
-                    
-                    auto libPath = PrigConfig::GetLibPath();
-                    FillPrigDllNames(libPath, prigDllNames);
-                }
-                
-                RemoveSymLinkForPrigLib(pkg, prigDllNames);
-                RemoveSymLinkForAdditionalDelegates(pkg);
-                config.DeletePackage(pkg);
-            }
-            if (!hasProcessed)
+            if (pkgs.empty())
             {
                 wcout << wformat(L"The specified package:%|1$s| is not found. It might have been already uninstalled.") % m_package << endl;
                 return 0;
             }
+
+            if (!Environment::IsCurrentProcessRunAsAdministrator())
+            {
+                wcout << wformat(L"Uninstallation process has failed. To uninstall pacakge:%|1$s|, you have to run this command as Administrator.") % m_package << endl;
+                return 1;
+            }
+
+            auto libAllAsmPaths = PrigConfig::GetLibAllAssemblyPaths();
+            BOOST_FOREACH (auto const &pkg, pkgs)
+            {
+                RemoveSymLinksForPrigLib(pkg, libAllAsmPaths);
+                RemoveSymLinksForAdditionalDelegates(pkg);
+                config.DeletePackage(pkg);
+            }
+
+            if (config.Packages.empty())
+                UnregisterFromGAC(PrigConfig::GetLibFrameworkAssemblyPaths());
             
             config.TrySerializeTo(prigConfigPath);
             return 0;
