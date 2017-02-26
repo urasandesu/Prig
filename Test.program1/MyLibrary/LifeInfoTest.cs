@@ -28,13 +28,21 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#endif
 using program1.MyLibrary;
 using System;
 using System.Collections;
 using System.Prig;
 using UntestableLibrary.Prig;
 using Urasandesu.Prig.Framework;
+using Test.program1.TestUtilities;
 
 namespace Test.program1.MyLibrary
 {
@@ -48,7 +56,7 @@ namespace Test.program1.MyLibrary
             {
                 // Arrange
                 PDateTime.NowGet().Body = () => new DateTime(2013, 12, 13, 11, 00, 00);
-                
+
                 // Act
                 var result = LifeInfo.IsNowLunchBreak();
 
@@ -92,7 +100,149 @@ namespace Test.program1.MyLibrary
 
 
         [Test]
-        [TestCaseSource(typeof(IsTodayHolidayTestSource), "TestCases")]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131116_DayOfWeek_Sunday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 16), DayOfWeek.Sunday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131117_DayOfWeek_Sunday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 17), DayOfWeek.Sunday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131118_DayOfWeek_Sunday()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 18), DayOfWeek.Sunday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131117_DayOfWeek_Monday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 17), DayOfWeek.Monday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131118_DayOfWeek_Monday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 18), DayOfWeek.Monday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131119_DayOfWeek_Monday()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 19), DayOfWeek.Monday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131118_DayOfWeek_Tuesday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 18), DayOfWeek.Tuesday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131119_DayOfWeek_Tuesday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 19), DayOfWeek.Tuesday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131120_DayOfWeek_Tuesday()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 20), DayOfWeek.Tuesday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131119_DayOfWeek_Wednesday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 19), DayOfWeek.Wednesday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131120_DayOfWeek_Wednesday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 20), DayOfWeek.Wednesday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131121_DayOfWeek_Wednesday()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 21), DayOfWeek.Wednesday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131120_DayOfWeek_Thursday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 20), DayOfWeek.Thursday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131121_DayOfWeek_Thursday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 21), DayOfWeek.Thursday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131122_DayOfWeek_Thursday()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 22), DayOfWeek.Thursday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131121_DayOfWeek_Friday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 21), DayOfWeek.Friday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131122_DayOfWeek_Friday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 22), DayOfWeek.Friday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131123_DayOfWeek_Friday()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 23), DayOfWeek.Friday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131122_DayOfWeek_Saturday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 22), DayOfWeek.Saturday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131123_DayOfWeek_Saturday()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 23), DayOfWeek.Saturday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131124_DayOfWeek_Saturday()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 24), DayOfWeek.Saturday));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131123_99()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 23), (DayOfWeek)99));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_true_if_passing_20131124_99()
+        {
+            Assert.AreEqual(true, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 24), (DayOfWeek)99));
+        }
+
+        [Test]
+        public void IsTodayHoliday_should_returns_false_if_passing_20131125_99()
+        {
+            Assert.AreEqual(false, IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(new DateTime(2013, 11, 25), (DayOfWeek)99));
+        }
+
         public bool IsTodayHoliday_should_consider_a_set_day_and_the_previous_day_as_holiday(DateTime today, DayOfWeek holiday)
         {
             using (new IndirectionsContext())
@@ -103,47 +253,6 @@ namespace Test.program1.MyLibrary
 
                 // Act, Assert
                 return LifeInfo.IsTodayHoliday();
-            }
-        }
-
-        class IsTodayHolidayTestSource
-        {
-            public static IEnumerable TestCases
-            {
-                get
-                {
-                    yield return new TestCaseData(new DateTime(2013, 11, 16), DayOfWeek.Sunday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 17), DayOfWeek.Sunday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 18), DayOfWeek.Sunday).Returns(false);
-
-                    yield return new TestCaseData(new DateTime(2013, 11, 17), DayOfWeek.Monday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 18), DayOfWeek.Monday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 19), DayOfWeek.Monday).Returns(false);
-
-                    yield return new TestCaseData(new DateTime(2013, 11, 18), DayOfWeek.Tuesday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 19), DayOfWeek.Tuesday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 20), DayOfWeek.Tuesday).Returns(false);
-
-                    yield return new TestCaseData(new DateTime(2013, 11, 19), DayOfWeek.Wednesday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 20), DayOfWeek.Wednesday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 21), DayOfWeek.Wednesday).Returns(false);
-
-                    yield return new TestCaseData(new DateTime(2013, 11, 20), DayOfWeek.Thursday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 21), DayOfWeek.Thursday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 22), DayOfWeek.Thursday).Returns(false);
-
-                    yield return new TestCaseData(new DateTime(2013, 11, 21), DayOfWeek.Friday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 22), DayOfWeek.Friday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 23), DayOfWeek.Friday).Returns(false);
-
-                    yield return new TestCaseData(new DateTime(2013, 11, 22), DayOfWeek.Saturday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 23), DayOfWeek.Saturday).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 24), DayOfWeek.Saturday).Returns(false);
-
-                    yield return new TestCaseData(new DateTime(2013, 11, 23), (DayOfWeek)99).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 24), (DayOfWeek)99).Returns(true);
-                    yield return new TestCaseData(new DateTime(2013, 11, 25), (DayOfWeek)99).Returns(false);
-                }
             }
         }
 
@@ -160,7 +269,7 @@ namespace Test.program1.MyLibrary
                     DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
                 // Act, Assert
-                Assert.Throws<NotImplementedException>(() => LifeInfo.IsNowLunchBreak());
+                ExceptionAssert.Throws<NotImplementedException>(() => LifeInfo.IsNowLunchBreak());
             }
         }
 
@@ -193,7 +302,7 @@ namespace Test.program1.MyLibrary
                     DefaultBehavior = IndirectionBehaviors.Fallthrough;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => LifeInfo.IsNowLunchBreak());
+                ExceptionAssert.DoesNotThrow(() => LifeInfo.IsNowLunchBreak());
             }
         }
     }

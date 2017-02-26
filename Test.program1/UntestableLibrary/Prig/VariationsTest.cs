@@ -28,12 +28,20 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
+using Test.program1.TestUtilities;
 using UntestableLibrary;
 using UntestableLibrary.Prig;
 using Urasandesu.Prig.Framework;
@@ -52,7 +60,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Default_bool_None_CLASS_None_None_None_None_None<int>.DoRegex().Body = (@this, r) => true;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_bool_None_CLASS_None_None_None_None_None<int>().Do(new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Default_bool_None_CLASS_None_None_None_None_None<int>().Do(new Regex("^$")));
             }
         }
     }
@@ -69,7 +77,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThisStructConstrained_Default_bool_None_CLASS_None_None_None_None_None<int>.DoRegex().Body = (@this, r) => true;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThisStructConstrained_Default_bool_None_CLASS_None_None_None_None_None<int>().Do(new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThisStructConstrained_Default_bool_None_CLASS_None_None_None_None_None<int>().Do(new Regex("^$")));
             }
         }
     }
@@ -87,7 +95,7 @@ namespace Test.program1.UntestableLibrary.Prig
                     (@this, other, r) => true;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<int>().Do(new Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<int>(), new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<int>().Do(new Variation_HasTypeOfParameterSameAsDeclaringType_Default_bool_None_CLASS_None_None_None_None_None<int>(), new Regex("^$")));
             }
         }
     }
@@ -104,7 +112,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>.DoOfMRegex<double>().Body = (@this, r) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
             }
         }
     }
@@ -121,7 +129,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThisClassConstrained_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<Version>.DoOfMRegex<double>().Body = (@this, r) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThisClassConstrained_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<Version>().Do<double>(new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThisClassConstrained_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<Version>().Do<double>(new Regex("^$")));
             }
         }
     }
@@ -138,7 +146,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_GenericStructConstrained_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>.DoOfMRegex<double>().Body = (@this, r) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_GenericStructConstrained_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_GenericStructConstrained_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
             }
         }
     }
@@ -156,7 +164,7 @@ namespace Test.program1.UntestableLibrary.Prig
                     (@this, r) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_TYPESPEC_ByRef_CLASS_Array_None_None_SZArray_Var<int>().Do<double>(new Regex("^$")));
             }
         }
     }
@@ -175,7 +183,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var mArr = default(double[]);
-                Assert.DoesNotThrow(() => new Variation_HasThis_Generic_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None().Do<double>(out mArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Generic_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None().Do<double>(out mArr));
             }
         }
     }
@@ -194,7 +202,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var mArr = default(Version[]);
-                Assert.DoesNotThrow(() => new Variation_HasThis_GenericClassConstrained_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None().Do<Version>(out mArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_GenericClassConstrained_VALUETYPE_ByRef_TYPESPEC_None_None_MVar_SZArray_None().Do<Version>(out mArr));
             }
         }
     }
@@ -211,7 +219,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>.DoT2().Body = (@this, tArr) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new int[1, 1]));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new int[1, 1]));
             }
         }
     }
@@ -228,7 +236,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThisNewConstrained_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>.DoT2().Body = (@this, tArr) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThisNewConstrained_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new int[1, 1]));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThisNewConstrained_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new int[1, 1]));
             }
         }
     }
@@ -246,7 +254,7 @@ namespace Test.program1.UntestableLibrary.Prig
                     (@this, tArr) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>[1, 1]));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>().Do(new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_None_TYPESPEC_Array_None_None_None_Var<int>[1, 1]));
             }
         }
     }
@@ -263,7 +271,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_None_Generic_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None.DoOfMDateTime<double>().Body = dt => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => Variation_None_Generic_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None.Do<double>(DateTime.Now));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Generic_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None.Do<double>(DateTime.Now));
             }
         }
     }
@@ -280,7 +288,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_None_GenericNewConstrained_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None.DoOfMDateTime<double>().Body = dt => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => Variation_None_GenericNewConstrained_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None.Do<double>(DateTime.Now));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_GenericNewConstrained_TYPESPEC_None_VALUETYPE_Array_None_MVar_None_None.Do<double>(DateTime.Now));
             }
         }
     }
@@ -297,7 +305,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_None_Default_TYPESPEC_None_bool_None_GenericInst_None_SZArray_None.DoBoolean().Body = b => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => Variation_None_Default_TYPESPEC_None_bool_None_GenericInst_None_SZArray_None.Do(true));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Default_TYPESPEC_None_bool_None_GenericInst_None_SZArray_None.Do(true));
             }
         }
     }
@@ -316,7 +324,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var m = default(double);
-                Assert.DoesNotThrow(() => new Variation_HasThis_Generic_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None().Do<double>(out m));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Generic_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None().Do<double>(out m));
             }
         }
     }
@@ -335,7 +343,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var m = default(HttpWebRequest);
-                Assert.DoesNotThrow(() => new Variation_HasThis_GenericBaseClassConstrained_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None().Do<HttpWebRequest>(out m));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_GenericBaseClassConstrained_CLASS_ByRef_TYPESPEC_None_None_MVar_None_None().Do<HttpWebRequest>(out m));
             }
         }
     }
@@ -354,7 +362,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var dt = default(DateTime);
-                Assert.DoesNotThrow(() => new Variation_HasThis_Default_void_ByRef_VALUETYPE_None_None_None_None_None().Do(out dt));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Default_void_ByRef_VALUETYPE_None_None_None_None_None().Do(out dt));
             }
         }
     }
@@ -373,7 +381,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(int[][,]);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<double>(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<double>(out tArr));
             }
         }
     }
@@ -392,7 +400,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(HttpWebRequest[][,]);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThisBaseClassConstrained_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<HttpWebRequest>().Do<double>(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThisBaseClassConstrained_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<HttpWebRequest>().Do<double>(out tArr));
             }
         }
     }
@@ -411,7 +419,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(int[][,]);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_GenericInterfaceConstrained_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<WebProxy>(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_GenericInterfaceConstrained_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<WebProxy>(out tArr));
             }
         }
     }
@@ -430,7 +438,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>[][,]);
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<WebProxy>(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_char_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<WebProxy>(out tArr));
             }
         }
     }
@@ -447,7 +455,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasThis_Generic_void_None_char_None_None_None_None_None.DoOfMChar<double>().Body = (@this, c) => { };
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasThis_Generic_void_None_char_None_None_None_None_None().Do<double>('\0'));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Generic_void_None_char_None_None_None_None_None().Do<double>('\0'));
             }
         }
     }
@@ -464,7 +472,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasThis_GenericSuppliedArgumentConstrained_void_None_char_None_None_None_None_None.DoOfMOfNChar<double, double>().Body = (@this, c) => { };
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasThis_GenericSuppliedArgumentConstrained_void_None_char_None_None_None_None_None().Do<double, double>('\0'));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_GenericSuppliedArgumentConstrained_void_None_char_None_None_None_None_None().Do<double, double>('\0'));
             }
         }
     }
@@ -481,7 +489,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasThis_Generic_TYPESPEC_ByRef_sbyte_Array_None_MVar_SZArray_None.DoOfMSByte<double>().Body = (@this, i1) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasThis_Generic_TYPESPEC_ByRef_sbyte_Array_None_MVar_SZArray_None().Do<double>((sbyte)42));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Generic_TYPESPEC_ByRef_sbyte_Array_None_MVar_SZArray_None().Do<double>((sbyte)42));
             }
         }
     }
@@ -498,7 +506,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_None_Default_VALUETYPE_None_CLASS_None_None_None_None_None.DoRegex().Body = r => DateTime.Now;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => Variation_None_Default_VALUETYPE_None_CLASS_None_None_None_None_None.Do(new Regex("^$")));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Default_VALUETYPE_None_CLASS_None_None_None_None_None.Do(new Regex("^$")));
             }
         }
     }
@@ -517,7 +525,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var mArr = default(double[][,]);
-                Assert.DoesNotThrow(() => new Variation_HasThis_Generic_sbyte_ByRef_TYPESPEC_Array_None_MVar_SZArray_None().Do(out mArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Generic_sbyte_ByRef_TYPESPEC_Array_None_MVar_SZArray_None().Do(out mArr));
             }
         }
     }
@@ -536,7 +544,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var u1 = default(byte);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<int>().Do<double>(out u1));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<int>().Do<double>(out u1));
             }
         }
     }
@@ -555,7 +563,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var u1 = default(byte);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThisInterfaceConstrained_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy>().Do<double>(out u1));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThisInterfaceConstrained_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy>().Do<double>(out u1));
             }
         }
     }
@@ -574,7 +582,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var u1 = default(byte);
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy>().Do<double>(null, out u1));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_VALUETYPE_ByRef_byte_None_None_None_None_None<WebProxy>().Do<double>(null, out u1));
             }
         }
     }
@@ -593,7 +601,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(int[,][]);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<double>(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<double>(out tArr));
             }
         }
     }
@@ -612,7 +620,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(int[,][]);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int, int>().Do<double>(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThisSuppliedArgumentConstrained_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int, int>().Do<double>(out tArr));
             }
         }
     }
@@ -631,7 +639,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>[,][]);
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<double>(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_void_ByRef_TYPESPEC_Array_None_None_SZArray_Var<int>().Do<double>(out tArr));
             }
         }
     }
@@ -649,7 +657,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var dtArr = default(DateTime?[]);
-                Assert.DoesNotThrow(() => Variation_None_Generic_VALUETYPE_ByRef_TYPESPEC_Array_GenericInst_None_None_None.Do<double>(out dtArr));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Generic_VALUETYPE_ByRef_TYPESPEC_Array_GenericInst_None_None_None.Do<double>(out dtArr));
             }
         }
     }
@@ -668,7 +676,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var dt = default(DateTime);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int>().Do(out dt));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int>().Do(out dt));
             }
         }
     }
@@ -687,7 +695,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var dt = default(DateTime);
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int>().Do(null, out dt));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_VALUETYPE_None_None_None_None_None<int>().Do(null, out dt));
             }
         }
     }
@@ -704,7 +712,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>.DoOfMListOfDateTimeArray<double>().Body = (@this, list) => (byte)42;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>().Do<double>(new List<DateTime[]>()));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>().Do<double>(new List<DateTime[]>()));
             }
         }
     }
@@ -722,7 +730,7 @@ namespace Test.program1.UntestableLibrary.Prig
                     (@this, list) => (byte)42;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>().Do<double>(new List<Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>[]>()));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>().Do<double>(new List<Variation_HasTypeOfParameterSameAsDeclaringType_Generic_byte_None_TYPESPEC_None_GenericInst_None_SZArray_None<int>[]>()));
             }
         }
     }
@@ -739,7 +747,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_None_Generic_short_None_TYPESPEC_None_None_MVar_SZArray_None.DoOfMMArray<double>().Body = mArr => (short)42;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => Variation_None_Generic_short_None_TYPESPEC_None_None_MVar_SZArray_None.Do<double>(new double[10]));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Generic_short_None_TYPESPEC_None_None_MVar_SZArray_None.Do<double>(new double[10]));
             }
         }
     }
@@ -757,7 +765,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var i2 = default(short);
-                Assert.DoesNotThrow(() => Variation_None_Default_CLASS_ByRef_short_None_None_None_None_None.Do(out i2));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Default_CLASS_ByRef_short_None_None_None_None_None.Do(out i2));
             }
         }
     }
@@ -774,7 +782,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Generic_TYPESPEC_None_VALUETYPE_None_None_None_SZArray_Var<int>.DoOfMDateTime<double>().Body = (@this, dt) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_TYPESPEC_None_VALUETYPE_None_None_None_SZArray_Var<int>().Do<double>(DateTime.Now));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_TYPESPEC_None_VALUETYPE_None_None_None_SZArray_Var<int>().Do<double>(DateTime.Now));
             }
         }
     }
@@ -791,7 +799,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasThis_Default_TYPESPEC_None_CLASS_None_GenericInst_None_SZArray_None.DoCultureInfo().Body = (@this, ci) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasThis_Default_TYPESPEC_None_CLASS_None_GenericInst_None_SZArray_None().Do(CultureInfo.CurrentCulture));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Default_TYPESPEC_None_CLASS_None_GenericInst_None_SZArray_None().Do(CultureInfo.CurrentCulture));
             }
         }
     }
@@ -808,7 +816,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>.DoListOfDateTimeArray2().Body = (@this, list) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>().Do(new List<DateTime[]>[2, 2]));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>().Do(new List<DateTime[]>[2, 2]));
             }
         }
     }
@@ -826,7 +834,7 @@ namespace Test.program1.UntestableLibrary.Prig
                     (@this, list) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>().Do(new List<Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>[]>[2, 2]));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>().Do(new List<Variation_HasTypeOfParameterSameAsDeclaringType_Default_CLASS_ByRef_TYPESPEC_Array_GenericInst_None_SZArray_None<int>[]>[2, 2]));
             }
         }
     }
@@ -844,7 +852,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var ci = default(CultureInfo);
-                Assert.DoesNotThrow(() => Variation_None_Generic_void_ByRef_CLASS_None_None_None_None_None.Do<double>(out ci));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Generic_void_ByRef_CLASS_None_None_None_None_None.Do<double>(out ci));
             }
         }
     }
@@ -863,7 +871,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var tArr = default(int[]);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_VALUETYPE_ByRef_TYPESPEC_None_None_None_SZArray_Var<int>().Do(out tArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Default_VALUETYPE_ByRef_TYPESPEC_None_None_None_SZArray_Var<int>().Do(out tArr));
             }
         }
     }
@@ -880,7 +888,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Default_ushort_None_VALUETYPE_None_None_None_None_None<int>.DoDecimal().Body = (@this, dec) => (ushort)42;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_ushort_None_VALUETYPE_None_None_None_None_None<int>().Do(42m));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Default_ushort_None_VALUETYPE_None_None_None_None_None<int>().Do(42m));
             }
         }
     }
@@ -897,7 +905,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasThis_Default_void_None_TYPESPEC_Array_GenericInst_None_None_None.DoListOfDateTimeArray().Body = (@this, arr) => { };
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasThis_Default_void_None_TYPESPEC_Array_GenericInst_None_None_None().Do(new List<DateTime>[2]));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Default_void_None_TYPESPEC_Array_GenericInst_None_None_None().Do(new List<DateTime>[2]));
             }
         }
     }
@@ -916,7 +924,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var mArr = default(double[,][]);
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_MVar_SZArray_None<int>().Do(out mArr));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Generic_void_ByRef_TYPESPEC_Array_None_MVar_SZArray_None<int>().Do(out mArr));
             }
         }
     }
@@ -933,7 +941,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_None_Generic_TYPESPEC_None_VALUETYPE_Array_GenericInst_None_SZArray_None.DoOfMDecimal<double>().Body = dec => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => Variation_None_Generic_TYPESPEC_None_VALUETYPE_Array_GenericInst_None_SZArray_None.Do<double>(42m));
+                ExceptionAssert.DoesNotThrow(() => Variation_None_Generic_TYPESPEC_None_VALUETYPE_Array_GenericInst_None_SZArray_None.Do<double>(42m));
             }
         }
     }
@@ -952,7 +960,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
                 // Act, Assert
                 var r = default(Regex);
-                Assert.DoesNotThrow(() => new Variation_HasThis_Generic_TYPESPEC_ByRef_CLASS_None_None_MVar_SZArray_None().Do<double>(out r));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasThis_Generic_TYPESPEC_ByRef_CLASS_None_None_MVar_SZArray_None().Do<double>(out r));
             }
         }
     }
@@ -969,7 +977,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PVariation_HasGenericThis_Default_TYPESPEC_None_ushort_None_None_None_SZArray_Var<int>.DoUInt16().Body = (@this, u2) => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Variation_HasGenericThis_Default_TYPESPEC_None_ushort_None_None_None_SZArray_Var<int>().Do((ushort)42));
+                ExceptionAssert.DoesNotThrow(() => new Variation_HasGenericThis_Default_TYPESPEC_None_ushort_None_None_None_SZArray_Var<int>().Do((ushort)42));
             }
         }
     }

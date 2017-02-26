@@ -28,9 +28,17 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#endif
 using System;
 using System.Prig;
+using Test.program1.TestUtilities;
 using Test.program1.TestUtilities.Mixins.System;
 using UntestableLibrary;
 using UntestableLibrary.Prig;
@@ -38,14 +46,14 @@ using Urasandesu.Prig.Framework;
 
 namespace Test.program1.UntestableLibrary.Prig
 {
+#if _NET_3_5
+        // In CLR v2, new AppDomain is never created. It occurs ExecutionEngineException.
+#else
     // When creating new AppDomain in each test case, you have to create new IndirectionsContext in each AppDomain.
     [TestFixture]
     public class AppDomainSomethingTest
     {
         [Test]
-#if _NET_3_5
-        [Ignore("In CLR v2, new AppDomain is never created. It occurs ExecutionEngineException.")]
-#endif
         public void Something_that_is_cross_plural_AppDomains_should_not_be_callable_indirectly()
         {
             using (new IndirectionsContext())
@@ -59,15 +67,12 @@ namespace Test.program1.UntestableLibrary.Prig
                 using (new IndirectionsContext())
                 {
                     // Act, Assert
-                    Assert.Throws<InvalidOperationException>(() => AppDomainSomething.Do());
+                    ExceptionAssert.Throws<InvalidOperationException>(() => AppDomainSomething.Do());
                 }
             });
         }
 
         [Test]
-#if _NET_3_5
-        [Ignore("In CLR v2, new AppDomain is never created. It occurs ExecutionEngineException.")]
-#endif
         public void Something_that_is_cross_plural_AppDomains_should_be_handled_as_different_setup()
         {
             AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
@@ -84,15 +89,12 @@ namespace Test.program1.UntestableLibrary.Prig
                 using (new IndirectionsContext())
                 {
                     // Act, Assert
-                    Assert.Throws<InvalidOperationException>(() => AppDomainSomething.Do());
+                    ExceptionAssert.Throws<InvalidOperationException>(() => AppDomainSomething.Do());
                 }
             });
         }
 
         [Test]
-#if _NET_3_5
-        [Ignore("In CLR v2, new AppDomain is never created. It occurs ExecutionEngineException.")]
-#endif
         public void Something_that_is_in_same_AppDomain_should_be_callable_indirectly()
         {
             AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
@@ -103,15 +105,12 @@ namespace Test.program1.UntestableLibrary.Prig
                     PAppDomainSomething.Do().Body = () => { };
 
                     // Act, Assert
-                    Assert.DoesNotThrow(() => AppDomainSomething.Do());
+                    ExceptionAssert.DoesNotThrow(() => AppDomainSomething.Do());
                 }
             });
         }
 
         [Test]
-#if _NET_3_5
-        [Ignore("In CLR v2, new AppDomain is never created. It occurs ExecutionEngineException.")]
-#endif
         public void MSCorLib_something_that_is_in_another_AppDomain_should_be_callable_indirectly()
         {
             AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
@@ -130,4 +129,5 @@ namespace Test.program1.UntestableLibrary.Prig
             });
         }
     }
+#endif
 }

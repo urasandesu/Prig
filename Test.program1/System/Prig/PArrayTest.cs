@@ -28,9 +28,17 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#endif
 using System;
 using System.Prig;
+using Test.program1.TestUtilities;
 using Urasandesu.NAnonym.Collections.Generic;
 using Urasandesu.Prig.Framework;
 
@@ -102,7 +110,7 @@ namespace Test.program1.System.Prig
                     DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
                 // Act, Assert
-                Assert.Throws<NotImplementedException>(() => Array.Exists(new int[] { 1, 2, 3 }, x => x == 42));
+                ExceptionAssert.Throws<NotImplementedException>(() => Array.Exists(new int[] { 1, 2, 3 }, x => x == 42));
             }
         }
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "program1", "program1\program1.csproj", "{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.program1", "Test.program1\Test.program1.csproj", "{95E1F039-6E0F-4276-934B-1DB270CF6334}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.program1.NUnit", "Test.program1\Test.program1.NUnit.csproj", "{95E1F039-6E0F-4276-934B-1DB270CF6334}"
 	ProjectSection(ProjectDependencies) = preProject
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0} = {68A62EF4-B2AD-4634-8961-F66C2D60CBB0}
 		{23389061-145F-4CB1-86ED-64A9F35F52A6} = {23389061-145F-4CB1-86ED-64A9F35F52A6}

@@ -28,14 +28,21 @@
  */
 
 
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#endif
 using Moq;
-using NUnit.Framework;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.Prig;
 using System.IO;
 using System.Prig;
+using Test.program1.TestUtilities;
 using Test.program1.TestUtilities.Mixins.System.Diagnostics.Prig;
 using Test.program1.TestUtilities.Mixins.System.Prig;
 using UntestableLibrary;
@@ -218,7 +225,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
 
                 // Act, Assert
-                Assert.Throws<Win32Exception>(() => ULProcessMixin.RestartCurrentProcess());
+                ExceptionAssert.Throws<Win32Exception>(() => ULProcessMixin.RestartCurrentProcess());
             }
         }
 
@@ -246,7 +253,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
 
                 // Act, Assert
-                Assert.Throws<FileNotFoundException>(() => ULProcessMixin.RestartCurrentProcess());
+                ExceptionAssert.Throws<FileNotFoundException>(() => ULProcessMixin.RestartCurrentProcess());
             }
         }
 

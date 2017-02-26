@@ -28,9 +28,17 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#endif
 using System.Collections;
 using System.Collections.Generic;
+using Test.program1.TestUtilities;
 using UntestableLibrary;
 using UntestableLibrary.IgnoreCA1724.HasFullName.Prig;
 using UntestableLibrary.IgnoreCA1724.IsGenericInstance.Prig;
@@ -54,7 +62,7 @@ namespace Test.program1.UntestableLibrary.IgnoreCA1724.Prig
                 PHasFullName.Hoge().Body = @this => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.HasFullName.HasFullName().Hoge());
+                ExceptionAssert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.HasFullName.HasFullName().Hoge());
             }
         }
     }
@@ -71,7 +79,7 @@ namespace Test.program1.UntestableLibrary.IgnoreCA1724.Prig
                 PIsGenericInstance<MyIsGenericInstance>.Hoge().Body = @this => { };
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsGenericInstance.IsGenericInstance<MyIsGenericInstance>().Hoge());
+                ExceptionAssert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsGenericInstance.IsGenericInstance<MyIsGenericInstance>().Hoge());
             }
         }
     }
@@ -91,7 +99,7 @@ namespace Test.program1.UntestableLibrary.IgnoreCA1724.Prig
                 PAB<int>.HogeListOfIsGenericNestedParameterArray().Body = (@this, arg) => { };
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsGenericNestedParameter.A.B<int>().Hoge(null));
+                ExceptionAssert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsGenericNestedParameter.A.B<int>().Hoge(null));
             }
         }
     }
@@ -114,7 +122,7 @@ namespace Test.program1.UntestableLibrary.IgnoreCA1724.Prig
                 // Act, Assert
                 {
                     var result = default(global::System.Collections.Generic.List<double>);
-                    Assert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsGenericParameter.C<double>().Fuga(out result));
+                    ExceptionAssert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsGenericParameter.C<double>().Fuga(out result));
                 }
             }
         }
@@ -132,7 +140,7 @@ namespace Test.program1.UntestableLibrary.IgnoreCA1724.Prig
                 PDIsNested.Hoge().Body = @this => null;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsNested.D.IsNested().Hoge());
+                ExceptionAssert.DoesNotThrow(() => new global::UntestableLibrary.IgnoreCA1724.IsNested.D.IsNested().Hoge());
             }
         }
     }

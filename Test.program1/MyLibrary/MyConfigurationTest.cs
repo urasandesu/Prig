@@ -28,7 +28,14 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#endif
 using program1.MyLibrary;
 using System;
 using System.Configuration;
@@ -36,6 +43,7 @@ using System.Configuration.Prig;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Prig;
+using Test.program1.TestUtilities;
 using Urasandesu.Prig.Framework;
 
 namespace Test.program1.MyLibrary
@@ -112,7 +120,7 @@ namespace Test.program1.MyLibrary
             var myConfiguration = new MyConfiguration();
 
             // Act, Assert
-            Assert.Throws<InvalidOperationException>(() => myConfiguration.LoadFromSettings());
+            ExceptionAssert.Throws<InvalidOperationException>(() => myConfiguration.LoadFromSettings());
         }
 
         [Test]
@@ -132,7 +140,7 @@ namespace Test.program1.MyLibrary
 
 
                 // Act, Assert
-                Assert.Throws<InvalidOperationException>(() => myConfiguration.LoadFromSettings());
+                ExceptionAssert.Throws<InvalidOperationException>(() => myConfiguration.LoadFromSettings());
             }
         }
 
