@@ -30,6 +30,7 @@
 
 using Microsoft.Win32;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -111,8 +112,25 @@ namespace Urasandesu.Prig.Framework
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsDisabledProcessing();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersErrorWriteLine")]
+        public static extern void ErrorWriteLine([MarshalAs(UnmanagedType.LPWStr)] string message);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersWarningWriteLine")]
+        public static extern void WarningWriteLine([MarshalAs(UnmanagedType.LPWStr)] string message);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersInfoWriteLine")]
+        public static extern void InfoWriteLine([MarshalAs(UnmanagedType.LPWStr)] string message);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersVerboseWriteLine")]
+        public static extern void VerboseWriteLine([MarshalAs(UnmanagedType.LPWStr)] string message);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [DllImport("Urasandesu.Prig.dll", EntryPoint = "InstanceGettersDebugWriteLine")]
-        internal static extern void DebugWriteLine([MarshalAs(UnmanagedType.LPWStr)] string message);
+        public static extern void DebugWriteLine([MarshalAs(UnmanagedType.LPWStr)] string message);
 
         public struct InstanceGettersProcessingDisabled : IDisposable
         {

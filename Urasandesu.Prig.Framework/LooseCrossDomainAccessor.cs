@@ -43,8 +43,8 @@ namespace Urasandesu.Prig.Framework
         public static void Register<T>() where T : InstanceHolder<T>
         {
             LooseCrossDomainAccessor<T>.Register();
-            lock (ms_unloadMethods)
-                using (InstanceGetters.DisableProcessing())
+            using (InstanceGetters.DisableProcessing())
+                lock (ms_unloadMethods)
                     ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
         }
 
@@ -62,8 +62,8 @@ namespace Urasandesu.Prig.Framework
         {
             var holder = LooseCrossDomainAccessor<T>.HolderOrRegistered;
             if (holder != null)
-                lock (ms_unloadMethods)
-                    using (InstanceGetters.DisableProcessing())
+                using (InstanceGetters.DisableProcessing())
+                    lock (ms_unloadMethods)
                         ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
             return holder;
         }
@@ -78,9 +78,9 @@ namespace Urasandesu.Prig.Framework
 
         public static void Clear()
         {
-            lock (ms_unloadMethods)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (ms_unloadMethods)
                 {
                     foreach (var unloadMethod in ms_unloadMethods)
                         unloadMethod();

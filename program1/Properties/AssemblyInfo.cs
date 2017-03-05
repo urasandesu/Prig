@@ -67,3 +67,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("Test.program1.NUnit")]
 [assembly: InternalsVisibleTo("Test.program1.MsTest")]
+[assembly: InternalsVisibleTo("Test.program1.Xunit")]

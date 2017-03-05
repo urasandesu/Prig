@@ -35,6 +35,8 @@ using TestAttribute = NUnit.Framework.TestAttribute;
 #elif MsTest
 using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
 #endif
 using System;
 using System.Prig;
@@ -49,7 +51,7 @@ namespace Test.program1.UntestableLibrary.Prig
 #if _NET_3_5
         // In CLR v2, new AppDomain is never created. It occurs ExecutionEngineException.
 #else
-    // When creating new AppDomain in each test case, you have to create new IndirectionsContext in each AppDomain.
+    // When creating new AppDomain in each test case, you have to also create new IndirectionsContext in each AppDomain.
     [TestFixture]
     public class AppDomainSomethingTest
     {
@@ -75,23 +77,26 @@ namespace Test.program1.UntestableLibrary.Prig
         [Test]
         public void Something_that_is_cross_plural_AppDomains_should_be_handled_as_different_setup()
         {
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
+            lock (AppDomainMixin.SyncRoot)
             {
-                using (new IndirectionsContext())
+                AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
                 {
-                    // Arrange
-                    PAppDomainSomething.Do().Body = () => { };
-                }
-            });
+                    using (new IndirectionsContext())
+                    {
+                        // Arrange
+                        PAppDomainSomething.Do().Body = () => { };
+                    }
+                });
 
-            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
-            {
-                using (new IndirectionsContext())
+                AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
                 {
-                    // Act, Assert
-                    ExceptionAssert.Throws<InvalidOperationException>(() => AppDomainSomething.Do());
-                }
-            });
+                    using (new IndirectionsContext())
+                    {
+                        // Act, Assert
+                        ExceptionAssert.Throws<InvalidOperationException>(() => AppDomainSomething.Do());
+                    }
+                });
+            }
         }
 
         [Test]

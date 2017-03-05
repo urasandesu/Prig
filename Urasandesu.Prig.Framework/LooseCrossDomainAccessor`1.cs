@@ -148,15 +148,16 @@ namespace Urasandesu.Prig.Framework
             {
                 if (!ms_ready)
                 {
+                    var holder = default(T);
+                    if (!TryGetHolder(out holder))
+                        using (InstanceGetters.DisableProcessing())
+                            throw new InvalidOperationException(string.Format("T({0}) has not been registered yet. Please call Register method.", typeof(T)));
+
                     lock (ms_lockObj)
                     {
                         Thread.MemoryBarrier();
                         if (!ms_ready)
                         {
-                            var holder = default(T);
-                            if (!TryGetHolder(out holder))
-                                using (InstanceGetters.DisableProcessing())
-                                    throw new InvalidOperationException(string.Format("T({0}) has not been registered yet. Please call Register method.", typeof(T)));
                             ms_holder = holder;
                             ms_ready = true;
                             Thread.MemoryBarrier();
@@ -173,13 +174,15 @@ namespace Urasandesu.Prig.Framework
             {
                 if (!ms_ready)
                 {
+                    var holder = default(T);
+                    var existsHolder = TryGetHolder(out holder);
+
                     lock (ms_lockObj)
                     {
                         Thread.MemoryBarrier();
                         if (!ms_ready)
                         {
-                            var holder = default(T);
-                            if (TryGetHolder(out holder))
+                            if (existsHolder)
                             {
                                 ms_holder = holder;
                                 ms_ready = true;
@@ -198,12 +201,14 @@ namespace Urasandesu.Prig.Framework
             {
                 if (!ms_ready)
                 {
+                    var holder = GetOrRegisterHolder();
+
                     lock (ms_lockObj)
                     {
                         Thread.MemoryBarrier();
                         if (!ms_ready)
                         {
-                            ms_holder = GetOrRegisterHolder();
+                            ms_holder = holder;
                             if (ms_holder != null)
                             {
                                 ms_ready = true;
@@ -218,11 +223,14 @@ namespace Urasandesu.Prig.Framework
 
         public static void Unload()
         {
+            var holder = ms_holder;
+            if (holder != null)
+                holder.Dispose();
+
             lock (ms_lockObj)
             {
                 if (ms_holder != null)
                 {
-                    ms_holder.Dispose();
                     ms_holder = null;
                     ms_ready = false;
                     Thread.MemoryBarrier();

@@ -35,6 +35,8 @@ using TestAttribute = NUnit.Framework.TestAttribute;
 #elif MsTest
 using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
 #endif
 using System.IO;
 using System.IO.Prig;

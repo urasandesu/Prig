@@ -36,6 +36,9 @@ namespace Test.program1.TestUtilities.Mixins.System
 {
     public static class AppDomainMixin
     {
+        static readonly object ms_syncRoot = new object();
+        public static object SyncRoot { get { return ms_syncRoot; } }
+
         public static void RunAtIsolatedDomain(this AppDomain source, Action action)
         {
             if (source == null)
@@ -145,31 +148,34 @@ namespace Test.program1.TestUtilities.Mixins.System
                           "The parameter must be designated a static method.", "action");
 
 
-            var domain = default(AppDomain);
-            try
+            lock (ms_syncRoot)
             {
-                domain = AppDomain.CreateDomain("Domain " + action.Method.ToString(),
-                                               securityInfo, info);
-                var type = typeof(MarshalByRefRunner);
-                var runner = (MarshalByRefRunner)domain.CreateInstanceAndUnwrap(
-                                                  type.Assembly.FullName, type.FullName);
-                runner.Action = action;
-                runner.Run(args);
-            }
-            catch (SerializationException e)
-            {
-                throw new ArgumentException("The parameter must be domain crossable. " +
-                          "Please confirm that the type inherits MarshalByRefObject, " +
-                          "or it is applied SerializableAttribute.", e);
-            }
-            finally
-            {
+                var domain = default(AppDomain);
                 try
                 {
-                    if (domain != null)
-                        AppDomain.Unload(domain);
+                    domain = AppDomain.CreateDomain("Domain " + action.Method.ToString(),
+                                                   securityInfo, info);
+                    var type = typeof(MarshalByRefRunner);
+                    var runner = (MarshalByRefRunner)domain.CreateInstanceAndUnwrap(
+                                                      type.Assembly.FullName, type.FullName);
+                    runner.Action = action;
+                    runner.Run(args);
                 }
-                catch { }
+                catch (SerializationException e)
+                {
+                    throw new ArgumentException("The parameter must be domain crossable. " +
+                              "Please confirm that the type inherits MarshalByRefObject, " +
+                              "or it is applied SerializableAttribute.", e);
+                }
+                finally
+                {
+                    try
+                    {
+                        if (domain != null)
+                            AppDomain.Unload(domain);
+                    }
+                    catch { }
+                }
             }
         }
     }

@@ -98,4 +98,16 @@ namespace {
             ASSERT_EQ(static_cast<HogePtr>(NULL), pFuncPtr);
         }
     }
+
+
+    TEST_F(InstanceGettersTestSuite, EnterDisabledProcessing_can_call_recursively)
+    {
+        ASSERT_FALSE(InstanceGettersIsDisabledProcessing() == TRUE);
+
+        InstanceGettersEnterDisabledProcessing();
+        ASSERT_TRUE(InstanceGettersIsDisabledProcessing() == TRUE);
+        InstanceGettersExitDisabledProcessing();
+
+        ASSERT_FALSE(InstanceGettersIsDisabledProcessing() == TRUE);
+    }
 }

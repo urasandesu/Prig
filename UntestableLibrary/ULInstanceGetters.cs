@@ -41,7 +41,7 @@ namespace UntestableLibrary
 {
     public static class ULInstanceGetters
     {
-        static ULInstanceGetters()
+        public static void Initialize()
         {
             var weaverPath = GetWeaverPath();
             var weaverDir = Path.GetDirectoryName(weaverPath);

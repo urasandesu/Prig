@@ -58,9 +58,9 @@ namespace Urasandesu.Prig.Framework
             if (InstanceGetters.IsDisabledProcessing())
                 return false;
 
-            lock (m_dict)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (m_dict)
                 {
                     var key = info + "";
                     if (!m_dict.ContainsKey(key))
@@ -89,9 +89,9 @@ namespace Urasandesu.Prig.Framework
         {
             method = default(TDelegate);
 
-            lock (m_dict)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (m_dict)
                 {
                     var key = info + "";
                     if (!m_dict.ContainsKey(key))
@@ -106,9 +106,9 @@ namespace Urasandesu.Prig.Framework
 
         public TDelegate AddOrUpdate(IndirectionInfo info, TDelegate method)
         {
-            lock (m_dict)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (m_dict)
                 {
                     var key = info + "";
                     m_dict[key] = method;
@@ -138,11 +138,11 @@ namespace Urasandesu.Prig.Framework
 
         protected override void Dispose(bool disposing)
         {
-            lock (m_dict)
+            using (InstanceGetters.DisableProcessing())
             {
                 if (disposing)
                 {
-                    using (InstanceGetters.DisableProcessing())
+                    lock (m_dict)
                         m_dict.Clear();
                 }
             }

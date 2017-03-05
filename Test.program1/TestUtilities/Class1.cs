@@ -112,5 +112,64 @@ namespace Test.program1.TestUtilities
 #elif Xunit
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     sealed class TestFixtureAttribute : Attribute { }
+
+    class Assert
+    {
+        public static void AreEqual<T>(T expected, T actual)
+        {
+            Xunit.Assert.Equal(expected, actual);
+        }
+
+        public static void AreNotEqual<T>(T notExpected, T actual)
+        {
+            Xunit.Assert.NotEqual(notExpected, actual);
+        }
+
+        public static void IsFalse(bool condition)
+        {
+            Xunit.Assert.False(condition);
+        }
+
+        public static void IsTrue(bool condition)
+        {
+            Xunit.Assert.True(condition);
+        }
+
+        public static void IsNotNull(object value)
+        {
+            Xunit.Assert.NotNull(value);
+        }
+    }
+
+    class ExceptionAssert
+    {
+        public static void DoesNotThrow(Action action)
+        {
+            action();
+        }
+
+        public static void Throws<TException>(Action action) where TException : Exception
+        {
+            Xunit.Assert.Throws<TException>(action);
+        }
+    }
+
+    class CollectionAssert
+    {
+        public static void AreEqual(IEnumerable expected, IEnumerable actual)
+        {
+            Xunit.Assert.Equal(expected.OfType<object>(), actual.OfType<object>());
+        }
+
+        public static void AreNotEqual(IEnumerable notExpected, IEnumerable actual)
+        {
+            Xunit.Assert.NotEqual(notExpected.OfType<object>(), actual.OfType<object>());
+        }
+
+        public static void IsEmpty(IEnumerable actual)
+        {
+            Xunit.Assert.Empty(actual);
+        }
+    }
 #endif
 }

@@ -72,9 +72,9 @@ namespace Urasandesu.Prig.Framework
                 return false;
 
             var dict = holder.Source.Value;
-            lock (dict)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (dict)
                 {
                     var key = info + "";
                     if (!dict.ContainsKey(key))
@@ -108,9 +108,9 @@ namespace Urasandesu.Prig.Framework
                 return false;
 
             var dict = holder.Source.Value;
-            lock (dict)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (dict)
                 {
                     var _ = default(Delegate);
                     if (!m_holder.TryRemove(info, out _))
@@ -134,9 +134,9 @@ namespace Urasandesu.Prig.Framework
                 holder.Source = TaggedBagFactory<BodyOfNonPublicMethod>.Make(new Dictionary<string, Work>());
 
             var dict = holder.Source.Value;
-            lock (dict)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (dict)
                 {
                     var key = info + "";
                     holder.Source.Value[key] = method;

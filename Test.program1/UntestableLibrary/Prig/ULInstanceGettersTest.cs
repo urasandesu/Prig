@@ -34,6 +34,8 @@ using TestAttribute = NUnit.Framework.TestAttribute;
 #elif MsTest
 using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
 #endif
 using Microsoft.Win32;
 using Microsoft.Win32.Prig;
@@ -48,7 +50,7 @@ namespace Test.program1.UntestableLibrary.Prig
     public class ULInstanceGettersTest
     {
         [Test]
-        public void ULInstanceGetters_should_set_dll_directory_at_its_static_constructor()
+        public void ULInstanceGetters_should_set_dll_directory_at_its_initializer()
         {
             using (new IndirectionsContext())
             {
@@ -63,8 +65,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
 
                 // Act
-                // static constructor will be called when referencing any static members
-                var _ = ULInstanceGetters.WeaverDirectory;
+                ULInstanceGetters.Initialize();
 
 
                 // Assert
@@ -72,6 +73,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 classesRootMock.VerifyOpenSubKeyString();
                 instanceGetters.VerifySetDllDirectoryString();
             }
+
         }
 
         
@@ -92,6 +94,7 @@ namespace Test.program1.UntestableLibrary.Prig
 
 
                 // Act
+                ULInstanceGetters.Initialize();
                 var result = ULInstanceGetters.WeaverDirectory;
 
 
