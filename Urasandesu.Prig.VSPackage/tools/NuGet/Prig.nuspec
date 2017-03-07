@@ -19,7 +19,12 @@
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
     <releaseNotes>Version 2.3.2
-* 
+* Fixed #83: Namespace / typename confusion. Added global namespace alias when Prig Assembly is generated.
+* Fixed #85: The method of generic type that has declaring type parameter excluding this cannot detour. Against the method that has the type as same as declaring the type as the signature, consider the problem that we cannot make the generic type instance that is instantiated by its generic parameter in the managed code.
+* Fixed #76: Unable to share unit test with team. Modify the processing so that adds Prig Assembly to reference the only assembly that is located at System Directory(e.g. C:\Windows) by full path.
+* Fixed #81: Support VS2013/VS2015 mixed environment. Change the machine wide installer behavior: change the target of Test Explorer for `prig install` from the latest Visual Studio to all versions Visual Studio.
+* Fixed #90, #91: MsTest issues. Indirection Stub is unintendedly crossed plural AppDomains by MsTest. Improve AppDomain isolation against the profiler generated code.
+**NOTE:** You have to reinstall Prig explicitly to enable the above correction. For details, see [our Wiki](https://github.com/urasandesu/Prig/wiki/Migration-from-v2.3.1-to-v2.3.2).
 
 
 Version 2.3.1
@@ -89,22 +94,6 @@ Version 2.0.0-alpha05
 * Improve usability for the command to manage Prig a little(See also [the Wiki](https://github.com/urasandesu/Prig/wiki/Command-Line-Reference#pfind)).
 * Merge Infrastructure Bug Fix(See also Swathe issues [#2](https://github.com/urasandesu/Swathe/issues/2))
 * Make the sequence that builds the indirection stub dll more efficient.
-
-
-Version 2.0.0-alpha04
-* Update NUnit Test Adapter for Prig from based on 1.2.0 to based on 2.0.0.
-* [BREAKING CHANGE] To fix the following issues, alpha04 has lost compatibility with alpha03. Also, `choco upgrade` command cannot even work. I will publish the migration steps in [this page](https://github.com/urasandesu/Prig/wiki/Migration-from-alpha03-to-alpha04) as soon as possible.
-* Fixed #41: Error in remove prig assembly
-* Fixed #40: Test engine crashes while trying to execute a unit test without indirections context even when it doesn't use any stubs
-* Fixed #37: Suggestion add prig files as Copy If Newer to output directory
-* Fixed #33: Make framework assemblies private.
-* Implemented Experimentally #31: Issue with out parameters
-* Merge Infrastructure Enhancement(See also Swathe issues [#1](https://github.com/urasandesu/Swathe/issues/1))
-* Fixed #36: If an assembly is added-removed multiple times there is duplicated prebuild steps
-* Fixed #35: Rebuilding after .prig file had types removed still contains removed types in prig assembly
-* Fix error when enabling Test Adapter and no vstest running
-* Fix more generation issues
-* Response to Strange Behavior. Depending on the replacing method, the static method of the infrastructure is sometimes called before initializing the field of the type. For example, you will find the behavior if you try [a sample of Generics](https://github.com/urasandesu/Prig/wiki/Generics) with [Prig v2.0.0-alpha03](https://github.com/urasandesu/Prig/releases/tag/v2.0.0-alpha03) in Visual Studio integrated environment. It seems very strange behavior, but we have to consider that in this layer.
 
 
 About more previous versions, please see https://github.com/urasandesu/Prig/releases.
