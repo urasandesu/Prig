@@ -148,6 +148,8 @@ namespace Urasandesu.Prig.VSPackage.Models
                 var value = logDir;
                 mwInstl.OnEnvironmentVariableRegistering(name, value);
                 EnvironmentRepository.StoreLogFolder(value);
+                EnvironmentRepository.CreateDirectory(value);
+                EnvironmentRepository.SetFullControlPermissionsToEveryone(value);
                 mwInstl.OnEnvironmentVariableRegistered(name, value);
             }
         }

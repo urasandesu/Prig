@@ -63,7 +63,7 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0" />
     <Reference Include="NuGet.VisualStudio">
-      <HintPath>$(MSBuildProgramFiles32)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\eevtghkx.d2g\NuGet.VisualStudio.dll</HintPath>
+      <HintPath>$(MSBuildProgramFiles32)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\fuvfhwci.gto\NuGet.VisualStudio.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="PresentationCore" />

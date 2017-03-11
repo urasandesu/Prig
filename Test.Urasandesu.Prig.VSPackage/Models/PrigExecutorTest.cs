@@ -76,7 +76,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
                     // Assert
                     Assert.IsEmpty(result);
-                    Assert.AreEqual(6, Directory.GetFiles(source).Length);
+                    Assert.AreEqual(4, Directory.GetFiles(source).Length);
                 }
                 finally
                 {

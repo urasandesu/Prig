@@ -40,6 +40,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 
 namespace Urasandesu.Prig.VSPackage.Models
@@ -74,7 +76,7 @@ namespace Urasandesu.Prig.VSPackage.Models
             Computer.FileSystem.CopyDirectory(GetVsixToolsPath(), GetToolsPath());
             Computer.FileSystem.CopyDirectory(GetVsixLibPath(), GetLibPath());
         }
-        
+
         public void UnregisterPackageFolder()
         {
             if (Computer.FileSystem.DirectoryExists(GetToolsPath()))
@@ -99,7 +101,7 @@ namespace Urasandesu.Prig.VSPackage.Models
             SetEnvironmentVariable(GetPackageFolderKey(), variableValue);
             SetEnvironmentVariable(GetPackageFolderKey(), variableValue, EnvironmentVariableTarget.Machine);
         }
-        
+
         public void RemovePackageFolder()
         {
             SetEnvironmentVariable(GetPackageFolderKey(), null, EnvironmentVariableTarget.Machine);
@@ -376,6 +378,51 @@ namespace Urasandesu.Prig.VSPackage.Models
         public IDictionary<string, string> GetEnvironmentVariables()
         {
             return Environment.GetEnvironmentVariables().OfType<DictionaryEntry>().ToDictionary(_ => (string)_.Key, _ => (string)_.Value);
+        }
+
+        public void SetFullControlPermissionsToEveryone(string directoryPath)
+        {
+            var allUsers = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
+            var accessRule = NewFileSystemAccessRule(allUsers, FileSystemRights.FullControl,
+                InheritanceFlags.None, PropagationFlags.NoPropagateInherit, AccessControlType.Allow);
+
+            var dirInfo = new DirectoryInfo(directoryPath);
+            var dirSecur = DirectoryInfoGetAccessControl(dirInfo, AccessControlSections.Access);
+
+            if (!DirectorySecurityModifyAccessRule(dirSecur, AccessControlModification.Set, accessRule))
+                throw new InvalidOperationException(string.Format("Failed to give full-control permission to all users for '{0}'.", directoryPath));
+
+            var inheritedAccessRule = NewFileSystemAccessRule(allUsers, FileSystemRights.FullControl,
+                InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.InheritOnly, AccessControlType.Allow);
+
+            if (!DirectorySecurityModifyAccessRule(dirSecur, AccessControlModification.Add, inheritedAccessRule))
+                throw new InvalidOperationException(string.Format("Failed to give full-control permission inheritance to all users for '{0}'.", directoryPath));
+
+            dirInfo.SetAccessControl(dirSecur);
+        }
+
+        internal Func<IdentityReference, FileSystemRights, InheritanceFlags, PropagationFlags, AccessControlType, AccessRule> NewFileSystemAccessRule =
+            (identity, fileSystemRights, inheritanceFlags, propagationFlags, type) =>
+                new FileSystemAccessRule(identity, fileSystemRights, inheritanceFlags, propagationFlags, type);
+
+        internal Func<DirectoryInfo, AccessControlSections, DirectorySecurity> DirectoryInfoGetAccessControl =
+            (@this, includeSections) =>
+                @this.GetAccessControl(includeSections);
+
+        internal Action<DirectoryInfo, DirectorySecurity> DirectoryInfoSetAccessControl =
+            (@this, directorySecurity) =>
+                @this.SetAccessControl(directorySecurity);
+
+        internal Func<DirectorySecurity, AccessControlModification, AccessRule, bool> DirectorySecurityModifyAccessRule =
+            (@this, modification, rule) =>
+            {
+                var _ = default(bool);
+                return @this.ModifyAccessRule(modification, rule, out _);
+            };
+
+        public DirectoryInfo CreateDirectory(string directoryPath)
+        {
+            return Directory.CreateDirectory(directoryPath);
         }
     }
 }

@@ -40,6 +40,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.Microsoft.Win32;
 using Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System;
@@ -257,7 +259,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             {
                 // Arrange
                 var fixture = new Fixture().Customize(new AutoMoqCustomization());
-                
+
                 new DirectoryInfo(Utility.Lib).CreateWithContent(fixture);
 
                 var envRepos = new EnvironmentRepository();
@@ -412,7 +414,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             try
             {
                 VerifyEnvironmentRepositoryTest("RegisterToolsPath_should_set_tools_path_as_environment_variable");
-                
+
                 var path = Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
                 Assert.That(path, Is.StringContaining(@";C:\ProgramData\chocolatey\lib\Prig\tools"));
             }
@@ -844,6 +846,129 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
 
 
 
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void SetFullControlPermissionsToEveryone_should_set_the_permission_to_everyone_full_control()
+        {
+            using (var log = new DirectoryInfo(Utility.Log).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                var dummyLog = new DirectoryInfo(Utility.Log).CreateWithContent(fixture);
+
+                var envRepos = new EnvironmentRepository();
+
+                // Act
+                envRepos.SetFullControlPermissionsToEveryone(Utility.Log);
+
+                // Assert
+                Assert.IsTrue(dummyLog.HasUsersFullControlAccess());
+            }
+        }
+
+        [Test]
+        [Explicit("This test has the possibility that your machine environment is changed. You have to understand the content if you will run it.")]
+        public void SetFullControlPermissionsToEveryone_should_set_to_inherit_parent_permission()
+        {
+            using (var log = new DirectoryInfo(Utility.Log).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                var dummyLog = new DirectoryInfo(Utility.Log).CreateWithContent(fixture);
+
+                var envRepos = new EnvironmentRepository();
+                envRepos.SetFullControlPermissionsToEveryone(Utility.Log);
+
+                // Act
+                var dummyLogChild = dummyLog.CreateSubdirectory("logChild");
+
+                // Assert
+                Assert.IsTrue(dummyLogChild.HasUsersFullControlAccess());
+            }
+        }
+
+        [Test]
+        public void SetFullControlPermissionsToEveryone_should_throw_InvalidOperationException_if_failing_to_set_the_permission()
+        {
+            using (var log = new DirectoryInfo(Utility.Log).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                var dummyLog = new DirectoryInfo(Utility.Log).CreateWithContent(fixture);
+
+                var envRepos = new EnvironmentRepository();
+
+                var mocks = new MockRepository(MockBehavior.Default);
+                var accessRule = new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null),
+                    FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.NoPropagateInherit, AccessControlType.Allow);
+                {
+                    var m = mocks.Create<Func<IdentityReference, FileSystemRights, InheritanceFlags, PropagationFlags, AccessControlType, AccessRule>>();
+                    m.Setup(_ => _(It.IsAny<IdentityReference>(), It.IsAny<FileSystemRights>(), InheritanceFlags.None, PropagationFlags.NoPropagateInherit, It.IsAny<AccessControlType>())).
+                      Returns(accessRule);
+                    envRepos.NewFileSystemAccessRule = m.Object;
+                }
+                var dirSecur = dummyLog.GetAccessControl(AccessControlSections.Access);
+                {
+                    var m = mocks.Create<Func<DirectoryInfo, AccessControlSections, DirectorySecurity>>();
+                    m.Setup(_ => _(It.IsAny<DirectoryInfo>(), It.IsAny<AccessControlSections>())).Returns(dirSecur);
+                    envRepos.DirectoryInfoGetAccessControl = m.Object;
+                }
+                {
+                    var m = mocks.Create<Func<DirectorySecurity, AccessControlModification, AccessRule, bool>>();
+                    m.Setup(_ => _(dirSecur, AccessControlModification.Set, accessRule)).Returns(false);
+                    envRepos.DirectorySecurityModifyAccessRule = m.Object;
+                }
+
+                // Act, Assert
+                Assert.Throws<InvalidOperationException>(() => envRepos.SetFullControlPermissionsToEveryone(Utility.Log));
+            }
+        }
+
+        [Test]
+        public void SetFullControlPermissionsToEveryone_should_throw_InvalidOperationException_if_failing_to_set_to_inherit()
+        {
+            using (var log = new DirectoryInfo(Utility.Log).BeginModifying())
+            {
+                // Arrange
+                var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+                var dummyLog = new DirectoryInfo(Utility.Log).CreateWithContent(fixture);
+
+                var envRepos = new EnvironmentRepository();
+
+                var mocks = new MockRepository(MockBehavior.Default);
+                var inheritedAccessRule = new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.FullControl,
+                    InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.InheritOnly, AccessControlType.Allow);
+                {
+                    var m = mocks.Create<Func<IdentityReference, FileSystemRights, InheritanceFlags, PropagationFlags, AccessControlType, AccessRule>>();
+                    m.Setup(_ => _(It.IsAny<IdentityReference>(), It.IsAny<FileSystemRights>(), InheritanceFlags.None, PropagationFlags.NoPropagateInherit, It.IsAny<AccessControlType>()));
+                    m.Setup(_ => _(It.IsAny<IdentityReference>(), It.IsAny<FileSystemRights>(), InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.InheritOnly, It.IsAny<AccessControlType>())).
+                      Returns(inheritedAccessRule);
+                    envRepos.NewFileSystemAccessRule = m.Object;
+                }
+                var dirSecur = dummyLog.GetAccessControl(AccessControlSections.Access);
+                {
+                    var m = mocks.Create<Func<DirectoryInfo, AccessControlSections, DirectorySecurity>>();
+                    m.Setup(_ => _(It.IsAny<DirectoryInfo>(), It.IsAny<AccessControlSections>())).Returns(dirSecur);
+                    envRepos.DirectoryInfoGetAccessControl = m.Object;
+                }
+                {
+                    var m = mocks.Create<Func<DirectorySecurity, AccessControlModification, AccessRule, bool>>();
+                    m.Setup(_ => _(dirSecur, AccessControlModification.Set, It.IsAny<AccessRule>())).Returns(true);
+                    m.Setup(_ => _(dirSecur, AccessControlModification.Add, inheritedAccessRule)).Returns(false);
+                    envRepos.DirectorySecurityModifyAccessRule = m.Object;
+                }
+
+                // Act, Assert
+                Assert.Throws<InvalidOperationException>(() => envRepos.SetFullControlPermissionsToEveryone(Utility.Log));
+            }
+        }
+
+
+
         static int StartProcessWithoutShell(string fileName, string arguments)
         {
             var info = NewProcessStartInfoWithoutShell(fileName, arguments);
@@ -910,6 +1035,7 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
         class Utility
         {
             public static readonly string Tools = @"C:\ProgramData\chocolatey\lib\Prig\tools";
+            public static readonly string Log = @"C:\ProgramData\chocolatey\lib\Prig\tools\log";
             public static readonly string Lib = @"C:\ProgramData\chocolatey\lib\Prig\lib";
 
             static string SourceToolsPath
