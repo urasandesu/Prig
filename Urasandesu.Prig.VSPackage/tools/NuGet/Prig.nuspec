@@ -24,6 +24,7 @@
 * Fixed #76: Unable to share unit test with team. Modify the processing so that adds Prig Assembly to reference the only assembly that is located at System Directory(e.g. C:\Windows) by full path.
 * Fixed #81: Support VS2013/VS2015 mixed environment. Change the machine wide installer behavior: change the target of Test Explorer for `prig install` from the latest Visual Studio to all versions Visual Studio.
 * Fixed #90, #91: MsTest issues. Indirection Stub is unintendedly crossed plural AppDomains by MsTest. Improve AppDomain isolation against the profiler generated code.
+* Fixed #92: Add Prig Assembly is failed immediately after installation. Set the log directory permission to everyone full control when installing.
 **NOTE:** You have to reinstall Prig explicitly to enable the above correction. For details, see [our Wiki](https://github.com/urasandesu/Prig/wiki/Migration-from-v2.3.1-to-v2.3.2).
 
 
