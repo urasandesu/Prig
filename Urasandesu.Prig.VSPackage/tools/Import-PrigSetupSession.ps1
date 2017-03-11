@@ -218,9 +218,6 @@ $ImportPrigSetupSessionDetail = 'Import-PrigSetupSessionDetail' | New-Module {
         
         $refAsmInfos = New-Object 'System.Collections.Generic.List[System.Reflection.Assembly]'
 
-        $refAsmInfo = [System.Reflection.Assembly]::LoadWithPartialName('mscorlib')
-        [void]$refAsmInfos.Add($refAsmInfo)
-
         if (![string]::IsNullOrEmpty($ReferenceInclude) -and ![string]::IsNullOrEmpty($ReferenceHintPath)) {
             $refIncludes = $ReferenceInclude -split ';'
             $refHints =  $ReferenceHintPath -split ';'
