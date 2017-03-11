@@ -83,7 +83,88 @@ namespace Urasandesu { namespace Prig {
             return prigConfigPath;
         }
 
-        bool PrigConfig::TrySerializeFrom(path const &prigConfigPath)
+        bool PrigConfig::IsPrigAttached()
+        {
+            using Urasandesu::CppAnonym::Environment;
+            using Urasandesu::Swathe::Profiling::ProfilingSpecialValues;
+
+            static auto enableProfiling = Environment::GetEnvironmentVariable(ProfilingSpecialValues::ENABLE_PROFILING_KEY);
+            static auto profiler = Environment::GetEnvironmentVariable(ProfilingSpecialValues::PROFILER_KEY);
+            static auto isPrigAttached = enableProfiling == ProfilingSpecialValues::ENABLE_PROFILING_VALUE_ENABLED &&
+                                         boost::iequals(profiler, L"{532C1F05-F8F3-4FBA-8724-699A31756ABD}");
+            return isPrigAttached;
+        }
+        
+        vector<path> PrigConfig::GetLibAllAssemblyPaths()
+        {
+            using boost::filesystem::directory_iterator;
+            using boost::filesystem::is_regular_file;
+            using std::regex_constants::icase;
+            using std::regex_search;
+            using std::wregex;
+
+            auto libAllAsmPaths = vector<path>();
+            auto patternStr = L"\\.dll$";
+            auto pattern = wregex(patternStr, icase);
+            for (directory_iterator i(GetLibPath()), i_end; i != i_end; ++i)
+            {
+                if (!is_regular_file(i->status()))
+                    continue;
+            
+                if (!regex_search(i->path().filename().native(), pattern))
+                    continue;
+            
+                libAllAsmPaths.push_back(i->path());
+            }
+
+            return libAllAsmPaths;
+        }
+
+        vector<path> PrigConfig::GetLibFrameworkAssemblyPaths()
+        {
+            using std::regex_constants::icase;
+            using std::regex_search;
+            using std::wregex;
+
+            auto libAllAsmPaths = GetLibAllAssemblyPaths();
+
+            auto libFrmwrkAsmPaths = vector<path>();
+            auto patternStr = L"(Urasandesu\\.NAnonym\\.dll)|(Urasandesu\\.Prig\\.Framework\\.dll)";
+            auto pattern = wregex(patternStr, icase);
+            BOOST_FOREACH (auto const &libAllAsmPath, libAllAsmPaths)
+            {
+                if (!regex_search(libAllAsmPath.filename().native(), pattern))
+                    continue;
+            
+                libFrmwrkAsmPaths.push_back(libAllAsmPath);
+            }
+
+            return libFrmwrkAsmPaths;
+        }
+
+        vector<path> PrigConfig::GetLibNonFrameworkAssemblyPaths()
+        {
+            using std::regex_constants::icase;
+            using std::regex_search;
+            using std::wregex;
+
+            auto libAllAsmPaths = GetLibAllAssemblyPaths();
+
+            auto libNonFrmwrkAsmPaths = vector<path>();
+            auto patternStr = L"(Urasandesu\\.NAnonym\\.dll)|(Urasandesu\\.Prig\\.Framework\\.dll)";
+            auto pattern = wregex(patternStr, icase);
+            BOOST_FOREACH (auto const &libAllAsmPath, libAllAsmPaths)
+            {
+                if (regex_search(libAllAsmPath.filename().native(), pattern))
+                    continue;
+            
+                libNonFrmwrkAsmPaths.push_back(libAllAsmPath);
+            }
+
+            return libNonFrmwrkAsmPaths;
+        }
+
+        bool PrigConfig::TryDeserializeFrom(path const &prigConfigPath)
         {
             using boost::serialization::make_nvp;
             using namespace Urasandesu::CppAnonym::IO;
@@ -96,7 +177,7 @@ namespace Urasandesu { namespace Prig {
             return true;
         }
 
-        bool PrigConfig::TryDeserializeTo(path const &prigConfigPath) const
+        bool PrigConfig::TrySerializeTo(path const &prigConfigPath) const
         {
             using boost::serialization::make_nvp;
             using namespace Urasandesu::CppAnonym::IO;

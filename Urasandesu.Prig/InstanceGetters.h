@@ -39,14 +39,22 @@
 #define URASANDESU_PRIG_API __declspec(dllimport)
 #endif
 
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(LPCWSTR key, void const *pFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(LPCWSTR key, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr);
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear();
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryAdd(AppDomainID appDomainId, LPCWSTR key, void const *pFuncPtr);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryGet(AppDomainID appDomainId, LPCWSTR key, void const **ppFuncPtr);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersTryRemove(AppDomainID appDomainId, LPCWSTR key, void const **ppFuncPtr);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersGetOrAdd(AppDomainID appDomainId, LPCWSTR key, void const *pFuncPtr, void const **ppFuncPtr);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersClear(AppDomainID appDomainId);
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersEnterDisabledProcessing();
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersExitDisabledProcessing();
 EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersIsDisabledProcessing();
-EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersEmpty();
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersErrorWriteLine(LPCWSTR message);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersWarningWriteLine(LPCWSTR message);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersInfoWriteLine(LPCWSTR message);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersVerboseWriteLine(LPCWSTR message);
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(VOID) InstanceGettersDebugWriteLine(LPCWSTR message);
+
+// The following functions are only called from profiler side.
+EXTERN_C URASANDESU_PRIG_API STDMETHODIMP_(BOOL) InstanceGettersCurrentAppDomainEmpty(void *pProcProf);
+BOOL InstanceGettersCurrentAppDomainUnload(AppDomainID appDomainId);
 
 #endif  // #ifndef INDIRETIONINTERFACES_H

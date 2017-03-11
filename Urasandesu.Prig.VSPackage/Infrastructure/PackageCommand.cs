@@ -29,11 +29,9 @@
 
 
 
-using Codeplex.Reactive;
 using Microsoft.Practices.Unity;
 using System;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 
 namespace Urasandesu.Prig.VSPackage.Infrastructure
 {

@@ -1,10 +1,10 @@
 ﻿/* 
- * File: PInt32Test.cs
+ * File: MarshalByRefRunner.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
  * 
- * Copyright (c) 2014 Akira Sugiura
+ * Copyright (c) 2012 Akira Sugiura
  *  
  *  This software is MIT License.
  *  
@@ -28,41 +28,17 @@
  */
 
 
+using System;
 
-#if NUnit
-using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
-using TestAttribute = NUnit.Framework.TestAttribute;
-#elif MsTest
-using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-#elif Xunit
-using TestAttribute = Xunit.FactAttribute;
-#endif
-using System.Prig;
-using Urasandesu.Prig.Framework;
-using Test.program1.TestUtilities;
-
-namespace Test.program1.System.Prig
+namespace Test.program1.TestUtilities.Mixins.System
 {
-    [TestFixture]
-    public class PInt32Test
+    class MarshalByRefRunner : MarshalByRefObject
     {
-        [Test]
-        public void TryParse_should_be_callable_indirectly()
+        public Delegate Action { get; set; }
+        public void Run(params object[] args)
         {
-            using (new IndirectionsContext())
-            {
-                // Arrange
-                PInt32.TryParseStringInt32Ref().Body = (string s, out int result) => { result = 42; return false; };
-
-                // Act
-                var actualResult = default(int);
-                var actualReturn = int.TryParse("10", out actualResult);
-
-                // Assert
-                Assert.IsFalse(actualReturn);
-                Assert.AreEqual(42, actualResult);
-            }
+            if (Action != null)
+                Action.DynamicInvoke(args);
         }
     }
 }

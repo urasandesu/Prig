@@ -28,13 +28,23 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
+#endif
 using System;
 using System.Collections;
 using System.Globalization;
 using System.Globalization.Prig;
 using System.Reflection;
 using Urasandesu.Prig.Framework;
+using Test.program1.TestUtilities;
 
 namespace Test.program1.System.Globalization.Prig
 {

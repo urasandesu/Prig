@@ -1,74 +1,42 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "program1", "program1\program1.csproj", "{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.program1", "Test.program1\Test.program1.csproj", "{95E1F039-6E0F-4276-934B-1DB270CF6334}"
-	ProjectSection(ProjectDependencies) = preProject
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0} = {68A62EF4-B2AD-4634-8961-F66C2D60CBB0}
-		{23389061-145F-4CB1-86ED-64A9F35F52A6} = {23389061-145F-4CB1-86ED-64A9F35F52A6}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.program1.Xunit", "Test.program1\Test.program1.Xunit.csproj", "{95E1F039-6E0F-4276-934B-1DB270CF6334}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UntestableLibrary", "UntestableLibrary\UntestableLibrary.csproj", "{23389061-145F-4CB1-86ED-64A9F35F52A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug(.NET 3.5)|x64 = Debug(.NET 3.5)|x64
-		Debug(.NET 3.5)|x86 = Debug(.NET 3.5)|x86
 		Debug(.NET 4)|x64 = Debug(.NET 4)|x64
 		Debug(.NET 4)|x86 = Debug(.NET 4)|x86
-		Release(.NET 3.5)|x64 = Release(.NET 3.5)|x64
-		Release(.NET 3.5)|x86 = Release(.NET 3.5)|x86
 		Release(.NET 4)|x64 = Release(.NET 4)|x64
 		Release(.NET 4)|x86 = Release(.NET 4)|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 3.5)|x64.ActiveCfg = Debug(.NET 3.5)|x64
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 3.5)|x64.Build.0 = Debug(.NET 3.5)|x64
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 3.5)|x86.ActiveCfg = Debug(.NET 3.5)|x86
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 3.5)|x86.Build.0 = Debug(.NET 3.5)|x86
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 4)|x64.ActiveCfg = Debug(.NET 4)|x64
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 4)|x64.Build.0 = Debug(.NET 4)|x64
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 4)|x86.ActiveCfg = Debug(.NET 4)|x86
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Debug(.NET 4)|x86.Build.0 = Debug(.NET 4)|x86
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 3.5)|x64.ActiveCfg = Release(.NET 3.5)|x64
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 3.5)|x64.Build.0 = Release(.NET 3.5)|x64
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 3.5)|x86.ActiveCfg = Release(.NET 3.5)|x86
-		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 3.5)|x86.Build.0 = Release(.NET 3.5)|x86
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 4)|x64.ActiveCfg = Release(.NET 4)|x64
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 4)|x64.Build.0 = Release(.NET 4)|x64
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 4)|x86.ActiveCfg = Release(.NET 4)|x86
 		{68A62EF4-B2AD-4634-8961-F66C2D60CBB0}.Release(.NET 4)|x86.Build.0 = Release(.NET 4)|x86
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 3.5)|x64.ActiveCfg = Debug(.NET 3.5)|x64
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 3.5)|x64.Build.0 = Debug(.NET 3.5)|x64
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 3.5)|x86.ActiveCfg = Debug(.NET 3.5)|x86
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 3.5)|x86.Build.0 = Debug(.NET 3.5)|x86
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 4)|x64.ActiveCfg = Debug(.NET 4)|x64
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 4)|x64.Build.0 = Debug(.NET 4)|x64
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 4)|x86.ActiveCfg = Debug(.NET 4)|x86
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Debug(.NET 4)|x86.Build.0 = Debug(.NET 4)|x86
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 3.5)|x64.ActiveCfg = Release(.NET 3.5)|x64
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 3.5)|x64.Build.0 = Release(.NET 3.5)|x64
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 3.5)|x86.ActiveCfg = Release(.NET 3.5)|x86
-		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 3.5)|x86.Build.0 = Release(.NET 3.5)|x86
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 4)|x64.ActiveCfg = Release(.NET 4)|x64
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 4)|x64.Build.0 = Release(.NET 4)|x64
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 4)|x86.ActiveCfg = Release(.NET 4)|x86
 		{95E1F039-6E0F-4276-934B-1DB270CF6334}.Release(.NET 4)|x86.Build.0 = Release(.NET 4)|x86
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x64.ActiveCfg = Debug(.NET 3.5)|Any CPU
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x64.Build.0 = Debug(.NET 3.5)|Any CPU
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x86.ActiveCfg = Debug(.NET 3.5)|Any CPU
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 3.5)|x86.Build.0 = Debug(.NET 3.5)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 4)|x64.ActiveCfg = Debug(.NET 4)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 4)|x64.Build.0 = Debug(.NET 4)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 4)|x86.ActiveCfg = Debug(.NET 4)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Debug(.NET 4)|x86.Build.0 = Debug(.NET 4)|Any CPU
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x64.ActiveCfg = Release(.NET 3.5)|Any CPU
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x64.Build.0 = Release(.NET 3.5)|Any CPU
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x86.ActiveCfg = Release(.NET 3.5)|Any CPU
-		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 3.5)|x86.Build.0 = Release(.NET 3.5)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 4)|x64.ActiveCfg = Release(.NET 4)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 4)|x64.Build.0 = Release(.NET 4)|Any CPU
 		{23389061-145F-4CB1-86ED-64A9F35F52A6}.Release(.NET 4)|x86.ActiveCfg = Release(.NET 4)|Any CPU

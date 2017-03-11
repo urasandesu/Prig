@@ -47,6 +47,7 @@ namespace OriginalMethodPreparationDetail {
 
     OriginalMethodPreparation::OriginalMethodPreparation() : 
         m_pInt32(nullptr), 
+        m_pVoid(nullptr), 
         m_pTryPrigTarget(nullptr), 
         m_pPInvokedTarget(nullptr), 
         m_pNewPInvokeTarget(nullptr), 
@@ -68,6 +69,7 @@ namespace OriginalMethodPreparationDetail {
         auto const *pMSCorLibDll = prigData.m_pMSCorLibDll;
         auto const *pInt32 = pMSCorLibDll->GetType(L"System.Int32");
         auto const *pBoolean = pMSCorLibDll->GetType(L"System.Boolean");
+        auto const *pVoid = pMSCorLibDll->GetType(L"System.Void");
 
         CPPANONYM_V_LOG1("Processing time to get BCL definitions: %|1$s|.", timer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
         timer = cpu_timer();
@@ -122,6 +124,7 @@ namespace OriginalMethodPreparationDetail {
         timer = cpu_timer();
         
         m_pInt32 = pInt32;
+        m_pVoid = pVoid;
         m_pTryPrigTarget = pTryPrigTarget;
         
         if (pTarget->GetAttribute() & MethodAttributes::MA_PINVOKE_IMPL)
@@ -184,7 +187,26 @@ namespace OriginalMethodPreparationDetail {
 
 
 
-    SIZE_T OriginalMethodPreparation::EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen) const
+    void EmitCalliCurrentAppDomainEmpty(MethodBodyGenerator *pNewBodyGen, ProcessProfiler *pProcProf, IType const *pInt32, IType const *pVoid)
+    {
+        using std::vector;
+        
+        auto paramTypes = vector<IType const *>();
+        paramTypes.push_back(pVoid->MakePointerType());
+        
+#ifdef _M_IX86
+        pNewBodyGen->Emit(OpCodes::Ldc_I4, reinterpret_cast<INT>(pProcProf));
+        pNewBodyGen->Emit(OpCodes::Ldc_I4, reinterpret_cast<INT>(&InstanceGettersCurrentAppDomainEmpty));
+#else
+        pNewBodyGen->Emit(OpCodes::Ldc_I8, reinterpret_cast<LONGLONG>(pProcProf));
+        pNewBodyGen->Emit(OpCodes::Ldc_I8, reinterpret_cast<LONGLONG>(&InstanceGettersCurrentAppDomainEmpty));
+#endif
+        pNewBodyGen->EmitCalli(OpCodes::Calli, CallingConventions::UNMANAGED_CC_STDCALL, pInt32, paramTypes);
+    }
+
+
+
+    SIZE_T OriginalMethodPreparation::EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen, ProcessProfiler *pProcProf) const
     {
         using boost::timer::cpu_timer;
         using boost::timer::default_places;
@@ -201,14 +223,7 @@ namespace OriginalMethodPreparationDetail {
 
         auto label0 = pNewBodyGen->DefineLabel();
 
-#ifdef _M_IX86
-        auto funcPtr = reinterpret_cast<INT>(&InstanceGettersEmpty);
-        pNewBodyGen->Emit(OpCodes::Ldc_I4, funcPtr);
-#else
-        auto funcPtr = reinterpret_cast<LONGLONG>(&InstanceGettersEmpty);
-        pNewBodyGen->Emit(OpCodes::Ldc_I8, funcPtr);
-#endif
-        pNewBodyGen->EmitCalli(OpCodes::Calli, CallingConventions::UNMANAGED_CC_STDCALL, m_pInt32, MetadataSpecialValues::EMPTY_TYPES);
+        EmitCalliCurrentAppDomainEmpty(pNewBodyGen, pProcProf, m_pInt32, m_pVoid);
         pNewBodyGen->Emit(OpCodes::Brtrue_S, label0);
         
         if (pRetType->GetKind() != TypeKinds::TK_VOID)
@@ -267,7 +282,7 @@ namespace OriginalMethodPreparationDetail {
             CPPANONYM_V_LOG2("Processing time to define locals of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
             subTimer = cpu_timer();
 
-            auto offset = EmitIndirectMethodBody(pNewBodyGen, pMethodGen);
+            auto offset = EmitIndirectMethodBody(pNewBodyGen, pMethodGen, pFuncProf->GetProcessProfiler());
 
             CPPANONYM_V_LOG2("Processing time to emit indirect method body of the method(Token: 0x%|1$08X|): %|2$s|.", mdt, subTimer.format(default_places, "%ws wall, %us user + %ss system = %ts CPU (%p%)"));
             subTimer = cpu_timer();

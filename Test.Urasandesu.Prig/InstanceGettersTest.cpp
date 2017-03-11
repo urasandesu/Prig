@@ -46,12 +46,12 @@ namespace {
     protected:
         virtual void SetUp() 
         {
-            InstanceGettersClear();
+            InstanceGettersClear(0);
         }
         
         virtual void TearDown()
         {
-            InstanceGettersClear();
+            InstanceGettersClear(0);
         }
     };
 
@@ -67,12 +67,12 @@ namespace {
         {
             HogePtr pfnHoge = Hoge;
             void (*pfnHoge2)() = NULL;
-            ASSERT_TRUE(InstanceGettersTryAdd(key, pfnHoge) == TRUE);
+            ASSERT_TRUE(InstanceGettersTryAdd(0, key, pfnHoge) == TRUE);
         }
 
         {
             void const *pFuncPtr = NULL;
-            ASSERT_TRUE(InstanceGettersTryGet(key, &pFuncPtr) == TRUE);
+            ASSERT_TRUE(InstanceGettersTryGet(0, key, &pFuncPtr) == TRUE);
             ASSERT_EQ(static_cast<HogePtr>(Hoge), pFuncPtr);
         }
     }
@@ -88,14 +88,26 @@ namespace {
         {
             LPCWSTR key = L"Urasandesu.Prig.Framework.IndirectionHolder`1<System.Func`1<System.DateTime>>, Urasandesu.Prig.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6724069a628e8cb0";
             HogePtr pfnHoge = Hoge;
-            ASSERT_TRUE(InstanceGettersTryAdd(key, pfnHoge) == TRUE);
+            ASSERT_TRUE(InstanceGettersTryAdd(0, key, pfnHoge) == TRUE);
         }
 
         {
             LPCWSTR key = L"Urasandesu.Prig.Framework.IndirectionHolder`1<System.Func`1<System.String>>, Urasandesu.Prig.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6724069a628e8cb0";
             void const *pFuncPtr = NULL;
-            ASSERT_TRUE(InstanceGettersTryGet(key, &pFuncPtr) == FALSE);
+            ASSERT_TRUE(InstanceGettersTryGet(0, key, &pFuncPtr) == FALSE);
             ASSERT_EQ(static_cast<HogePtr>(NULL), pFuncPtr);
         }
+    }
+
+
+    TEST_F(InstanceGettersTestSuite, EnterDisabledProcessing_can_call_recursively)
+    {
+        ASSERT_FALSE(InstanceGettersIsDisabledProcessing() == TRUE);
+
+        InstanceGettersEnterDisabledProcessing();
+        ASSERT_TRUE(InstanceGettersIsDisabledProcessing() == TRUE);
+        InstanceGettersExitDisabledProcessing();
+
+        ASSERT_FALSE(InstanceGettersIsDisabledProcessing() == TRUE);
     }
 }

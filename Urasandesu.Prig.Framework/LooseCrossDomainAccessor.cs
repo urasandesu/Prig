@@ -30,11 +30,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.Prig.Framework
@@ -43,13 +38,13 @@ namespace Urasandesu.Prig.Framework
     {
         protected LooseCrossDomainAccessor() { }
 
-        static readonly HashSet<Action> ms_unloadMethods = new HashSet<Action>();
+        static readonly HashSet<Action> ms_unloadMethods = InstanceGetters.DisableProcessing().EnsureDisposalThen(_ => new HashSet<Action>());
 
         public static void Register<T>() where T : InstanceHolder<T>
         {
             LooseCrossDomainAccessor<T>.Register();
-            lock (ms_unloadMethods)
-                using (InstanceGetters.DisableProcessing())
+            using (InstanceGetters.DisableProcessing())
+                lock (ms_unloadMethods)
                     ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
         }
 
@@ -67,8 +62,8 @@ namespace Urasandesu.Prig.Framework
         {
             var holder = LooseCrossDomainAccessor<T>.HolderOrRegistered;
             if (holder != null)
-                lock (ms_unloadMethods)
-                    using (InstanceGetters.DisableProcessing())
+                using (InstanceGetters.DisableProcessing())
+                    lock (ms_unloadMethods)
                         ms_unloadMethods.Add(LooseCrossDomainAccessor<T>.Unload);
             return holder;
         }
@@ -83,13 +78,14 @@ namespace Urasandesu.Prig.Framework
 
         public static void Clear()
         {
-            lock (ms_unloadMethods)
+            using (InstanceGetters.DisableProcessing())
             {
-                using (InstanceGetters.DisableProcessing())
+                lock (ms_unloadMethods)
                 {
                     foreach (var unloadMethod in ms_unloadMethods)
                         unloadMethod();
                 }
+                InstanceGetters.Clear();
             }
         }
 
@@ -139,200 +135,6 @@ namespace Urasandesu.Prig.Framework
             // Don't use AssemblyQualifiedName because the AppDomain may have different permission set from current AppDomain.
             // The property AssemblyQualifiedName tries load its assembly again, so FileLoadException will be thrown in this case.
             return type.FullName;
-        }
-    }
-
-    public class LooseCrossDomainAccessor<T> where T : InstanceHolder<T>
-    {
-        static readonly object ms_lockObj = new object();
-        static T ms_holder = null;
-        static bool ms_ready = false;
-        static readonly Type ms_t = typeof(T);
-        static readonly string ms_key = ms_t.AssemblyQualifiedName;
-
-        static LooseCrossDomainAccessor()
-        {
-            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            foreach (var method in typeof(LooseCrossDomainAccessor<T>).GetMethods(all))
-                RuntimeHelpers.PrepareMethod(method.MethodHandle);
-        }
-
-        protected LooseCrossDomainAccessor() { }
-
-        public static void Register()
-        {
-            if (ms_key == null)
-                return;
-
-            using (InstanceGetters.DisableProcessing())
-            {
-                var funcPtr = GetFunctionPointerCore(ms_t);
-                InstanceGetters.TryAdd(ms_key, funcPtr);
-            }
-        }
-
-        static IntPtr GetFunctionPointerCore(Type t)
-        {
-            var instance = t.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-            var instanceGetter = instance.GetGetMethod();
-            return instanceGetter.MethodHandle.GetFunctionPointer();
-        }
-
-        static T GetOrRegisterHolder()
-        {
-            if (ms_key == null)
-                return default(T);
-
-            var funcPtr = default(IntPtr);
-            if (InstanceGetters.TryGet(ms_key, out funcPtr))
-            {
-                using (InstanceGetters.DisableProcessing())
-                    return GetHolderCore(ms_t, funcPtr);
-            }
-            else
-            {
-                var funcPtrTmp = default(IntPtr);
-                using (InstanceGetters.DisableProcessing())
-                    funcPtrTmp = GetFunctionPointerCore(ms_t);
-
-                while (!InstanceGetters.GetOrAdd(ms_key, funcPtrTmp, out funcPtr)) ;
-
-                using (InstanceGetters.DisableProcessing())
-                    return GetHolderCore(ms_t, funcPtr);
-            }
-        }
-
-        static T GetHolderCore(Type t, IntPtr funcPtr)
-        {
-            var extractor = new DynamicMethod("Extractor", t, null, typeof(InstanceGetters).Module);
-            var gen = extractor.GetILGenerator();
-            if (IntPtr.Size == 4)
-            {
-                gen.Emit(OpCodes.Ldc_I4, funcPtr.ToInt32());
-            }
-            else if (IntPtr.Size == 8)
-            {
-                gen.Emit(OpCodes.Ldc_I8, funcPtr.ToInt64());
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-            gen.EmitCalli(OpCodes.Calli, CallingConventions.Standard, t, null, null);
-            gen.Emit(OpCodes.Ret);
-            var holder = ((Func<T>)extractor.CreateDelegate(typeof(Func<T>)))();
-            holder.Prepare();
-            return holder;
-        }
-
-        static bool TryGetHolder(out T holder)
-        {
-            holder = default(T);
-            if (ms_key == null)
-                return false;
-
-            var funcPtr = default(IntPtr);
-            if (!InstanceGetters.TryGet(ms_key, out funcPtr))
-            {
-                holder = null;
-                return false;
-            }
-            else
-            {
-                using (InstanceGetters.DisableProcessing())
-                    holder = GetHolderCore(ms_t, funcPtr);
-                return true;
-            }
-        }
-
-        public static T Holder
-        {
-            get
-            {
-                if (!ms_ready)
-                {
-                    lock (ms_lockObj)
-                    {
-                        Thread.MemoryBarrier();
-                        if (!ms_ready)
-                        {
-                            var holder = default(T);
-                            if (!TryGetHolder(out holder))
-                                using (InstanceGetters.DisableProcessing())
-                                    throw new InvalidOperationException(string.Format("T({0}) has not been registered yet. Please call Register method.", typeof(T)));
-                            ms_holder = holder;
-                            ms_ready = true;
-                            Thread.MemoryBarrier();
-                        }
-                    }
-                }
-                return ms_holder;
-            }
-        }
-
-        public static T HolderOrDefault
-        {
-            get
-            {
-                if (!ms_ready)
-                {
-                    lock (ms_lockObj)
-                    {
-                        Thread.MemoryBarrier();
-                        if (!ms_ready)
-                        {
-                            var holder = default(T);
-                            if (TryGetHolder(out holder))
-                            {
-                                ms_holder = holder;
-                                ms_ready = true;
-                                Thread.MemoryBarrier();
-                            }
-                        }
-                    }
-                }
-                return ms_holder;
-            }
-        }
-
-        public static T HolderOrRegistered
-        {
-            get
-            {
-                if (!ms_ready)
-                {
-                    lock (ms_lockObj)
-                    {
-                        Thread.MemoryBarrier();
-                        if (!ms_ready)
-                        {
-                            ms_holder = GetOrRegisterHolder();
-                            if (ms_holder != null)
-                            {
-                                ms_ready = true;
-                                Thread.MemoryBarrier();
-                            }
-                        }
-                    }
-                }
-                return ms_holder;
-            }
-        }
-
-        public static void Unload()
-        {
-            lock (ms_lockObj)
-                if (ms_holder != null)
-                    ms_holder.Dispose();
-        }
-    }
-
-    public class LooseCrossDomainAccessorUntyped
-    {
-        public static IndirectionHolderUntyped GetOrRegister(Type indDlgt)
-        {
-            var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
-            return new IndirectionHolderUntyped(holder, indDlgt);
         }
     }
 }

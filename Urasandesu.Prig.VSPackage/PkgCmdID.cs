@@ -31,7 +31,6 @@
 
 // PkgCmdID.cs
 // MUST match PkgCmdID.h
-using System;
 
 namespace Urasandesu.Prig.VSPackage
 {

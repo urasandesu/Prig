@@ -29,9 +29,6 @@
 
 
 
-using Codeplex.Reactive;
-using System.Reactive.Concurrency;
-
 namespace Urasandesu.Prig.VSPackage.Infrastructure
 {
     public class StatusbarViewModel

@@ -28,12 +28,22 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using UntestableLibrary;
 using UntestableLibrary.Prig;
 using Urasandesu.Prig.Framework;
+using Test.program1.TestUtilities;
 
 namespace Test.program1.UntestableLibrary.Prig
 {
@@ -55,20 +65,20 @@ namespace Test.program1.UntestableLibrary.Prig
                 Assert.IsTrue(actual);
             }
         }
-        
+
         [Test]
         public void EnumeratorCurrent_should_be_callable_indirectly()
         {
             using (new IndirectionsContext())
             {
                 // Arrange
-                PULDictionaryOfTKeyOfTValueEnumerator<int, string>.CurrentGet().Body = 
+                PULDictionaryOfTKeyOfTValueEnumerator<int, string>.CurrentGet().Body =
                     (ref ULDictionary<int, string>.Enumerator @this) => new KeyValuePair<int, string>(42, "にゃんぱすー");
-                
+
                 // Act
                 var enumerator = new ULDictionary<int, string>.Enumerator();
                 var actual = enumerator.Current;
-                
+
                 // Assert
                 Assert.AreEqual(42, actual.Key);
                 Assert.AreEqual("にゃんぱすー", actual.Value);

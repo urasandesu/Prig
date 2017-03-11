@@ -28,10 +28,20 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
+#endif
 using System;
 using System.Collections.Generic;
 using System.Collections.Generic.Prig;
+using Test.program1.TestUtilities;
 using Urasandesu.Prig.Framework;
 
 namespace Test.program1.System.Collections.Generic.Prig
@@ -98,8 +108,8 @@ namespace Test.program1.System.Collections.Generic.Prig
                 var list = new List<int>();
 
                 // Act, Assert
-                Assert.Throws<NotImplementedException>(() => list_sut.Add(42));
-                Assert.DoesNotThrow(() => list.Add(10));
+                ExceptionAssert.Throws<NotImplementedException>(() => list_sut.Add(42));
+                ExceptionAssert.DoesNotThrow(() => list.Add(10));
             }
         }
 

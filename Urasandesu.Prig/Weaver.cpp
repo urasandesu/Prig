@@ -35,6 +35,10 @@
 #include <PrigData.h>
 #endif
 
+#ifndef INDIRETIONINTERFACES_H
+#include <InstanceGetters.h>
+#endif
+
 #ifndef INDIRECTIONDELEGATES_H
 #include <IndirectionDelegates.h>
 #endif
@@ -164,7 +168,7 @@ namespace CWeaverDetail {
         }
 
         auto config = PrigConfig();
-        config.TrySerializeFrom(PrigConfig::GetConfigPath());
+        config.TryDeserializeFrom(PrigConfig::GetConfigPath());
             
         auto procDirPath = procPath.parent_path();
         auto result = FindIf(config.Packages, [&procDirPath](PrigPackageConfig const &pkg) { return equivalent(pkg.Source, procDirPath); });
@@ -241,6 +245,7 @@ namespace CWeaverDetail {
         if (!m_pProfInfo)
             return S_OK;
 
+        InstanceGettersCurrentAppDomainUnload(appDomainId);
         auto *pProcProf = m_pProfInfo->GetCurrentProcessProfiler();
         pProcProf->DetachFromAppDomain(appDomainId);
 
@@ -395,6 +400,8 @@ namespace CWeaverDetail {
         auto pAsmProf = pModProf->AttachToAssembly();
         auto pDomainProf = pAsmProf->AttachToAppDomain();
         auto *pDisp = pDomainProf->GetMetadataDispenser();
+        auto &asmResolver = pDisp->GetAssemblyResolver();
+        asmResolver.AddSearchDirectory(m_currentDir);
         auto *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
         auto targetIndDllPath = path(m_currentDir);
         targetIndDllPath /= GetIndirectionDllName(modName, pRuntime, pAsmGen);
@@ -408,9 +415,6 @@ namespace CWeaverDetail {
         pModProf.Persist();
         pAsmProf.Persist();
         pDomainProf.Persist();
-
-        auto &asmResolver = pDisp->GetAssemblyResolver();
-        asmResolver.AddSearchDirectory(m_currentDir);
 
         auto asmId = lexical_cast<wstring>(pAsmProf->GetID());
         auto pData = pDomainProf->GetData(asmId);

@@ -53,10 +53,11 @@ namespace OriginalMethodPreparationDetail {
 
         void FillIndirectionPreparation(MetadataDispenser const *pDisp, MethodGenerator *pTarget, PrigData &prigData);
         void ResolveIndirectionPreparation(AssemblyGenerator *pAsmGen);
-        SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen) const;
+        SIZE_T EmitIndirectMethodBody(MethodBodyGenerator *pNewBodyGen, MethodGenerator const *pMethodGen, ProcessProfiler *pProcProf) const;
         void EmitMethodBody(MethodGenerator *pMethodGen, TempPtr<FunctionProfiler> &pFuncProf) const;
 
         IType const *m_pInt32;
+        IType const *m_pVoid;
         IMethod const *m_pTryPrigTarget;
         IMethod const *m_pPInvokedTarget;
         IMethod const *m_pNewPInvokeTarget;

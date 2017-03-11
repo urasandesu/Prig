@@ -39,36 +39,60 @@
 #include <Urasandesu/Prig/PrigConfig.h>
 #endif
 
+#ifndef URASANDESU_SWATHE_H
+#include <Urasandesu/Swathe.h>
+#endif
+
 namespace prig { 
 
     namespace InstallerCommandDetail {
         
+        using std::vector;
         using Urasandesu::Prig::PrigConfig;
         using Urasandesu::Prig::PrigPackageConfig;
 
-        bool CreateSymLinkForPrigLib(path const &libPath, path const &source)
+        void RemoveSymLinks(vector<path> const &asmPaths, path const &source)
         {
-            using boost::filesystem::create_symlink;
-            using boost::filesystem::exists;
-            using boost::filesystem::recursive_directory_iterator;
-            using boost::filesystem::remove;
             using boost::system::error_code;
 
-            if (!exists(source))
-                return false;
-            
-            for (recursive_directory_iterator i(libPath), i_end; i != i_end; ++i)
+            BOOST_FOREACH (auto const &asmPath, asmPaths)
             {
-                if (!is_regular_file(i->status()))
-                    continue;
-                
-                auto symlink = source / i->path().filename();
+                auto symlink = source / asmPath.filename();
                 auto ec = error_code();
                 remove(symlink, ec);
-                create_symlink(i->path(), symlink);
             }
+        }
 
-            return true;
+        void CreateSymLinks(vector<path> const &asmPaths, path const &source)
+        {
+            BOOST_FOREACH (auto const &asmPath, asmPaths)
+            {
+                auto symlink = source / asmPath.filename();
+                create_symlink(asmPath, symlink);
+            }
+        }
+
+        void RegisterToGAC(vector<path> const &asmPaths)
+        {
+            using namespace Urasandesu::CppAnonym::Traits;
+            using namespace Urasandesu::Swathe::Hosting;
+            using namespace Urasandesu::Swathe::Fusion;
+
+            using boost::remove_reference;
+            using std::map;
+
+            auto const *pHost = HostInfo::CreateHost();
+            auto const &runtimes = pHost->GetRuntimes();
+            
+            typedef remove_reference<RemoveConst<decltype(runtimes)>::type>::type Runtimes;
+            typedef Runtimes::key_type Key;
+            typedef Runtimes::mapped_type Mapped;
+            auto orderedRuntimes = map<Key, Mapped>(runtimes.begin(), runtimes.end());
+            auto const *pLatestRuntime = (*orderedRuntimes.rbegin()).second;
+            auto const *pFuInfo = pLatestRuntime->GetInfo<FusionInfo>();
+            auto pAsmCache = pFuInfo->NewAssemblyCache();
+            BOOST_FOREACH (auto const &asmPath, asmPaths)
+                pAsmCache->InstallAssembly(AssemblyCacheInstallFlags::ACIF_REFRESH, asmPath);
         }
         
         int InstallerCommandImpl::Execute()
@@ -82,7 +106,7 @@ namespace prig {
             auto prigConfigPath = PrigConfig::GetConfigPath();
             
             auto config = PrigConfig();
-            config.TrySerializeFrom(prigConfigPath);
+            config.TryDeserializeFrom(prigConfigPath);
             
             auto result = config.FindPackage(m_source);
             if (result)
@@ -97,18 +121,22 @@ namespace prig {
                 return 1;
             }
 
-            auto libPath = PrigConfig::GetLibPath();
-            if (!CreateSymLinkForPrigLib(libPath, m_source))
+            if (!exists(m_source))
             {
                 wcout << wformat(L"The specified source:%|1$s| is invalid.") % m_source << endl;
                 return 1;
             }
+
+            RemoveSymLinks(PrigConfig::GetLibAllAssemblyPaths(), m_source);
+            CreateSymLinks(PrigConfig::GetLibNonFrameworkAssemblyPaths(), m_source);
+            if (config.Packages.empty())
+                RegisterToGAC(PrigConfig::GetLibFrameworkAssemblyPaths());
             
             auto package = PrigPackageConfig();
             package.Name = m_package;
             package.Source = m_source;
             config.Packages.push_back(package);
-            config.TryDeserializeTo(prigConfigPath);
+            config.TrySerializeTo(prigConfigPath);
             return 0;
         }
 

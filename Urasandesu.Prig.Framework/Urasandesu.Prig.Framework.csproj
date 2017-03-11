@@ -55,6 +55,10 @@
     <Compile Include="BehaviorSetting.cs" />
     <Compile Include="IndirectionBehaviors.cs" />
     <Compile Include="IndirectionAssemblyRepository.cs" />
+    <Compile Include="AppDomainId.cs" />
+    <Compile Include="IndirectionHolderUntyped.cs" />
+    <Compile Include="LooseCrossDomainAccessorUntyped.cs" />
+    <Compile Include="LooseCrossDomainAccessor`1.cs" />
     <Compile Include="Proxy.cs" />
     <Compile Include="IndirectionInfo.cs" />
     <Compile Include="UntypedBehaviorPreparable.cs" />

@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Urasandesu.Prig.VSPackage {
-    using System;
-    
-    
+namespace Urasandesu.Prig.VSPackage
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

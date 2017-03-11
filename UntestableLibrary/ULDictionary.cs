@@ -97,4 +97,12 @@ namespace UntestableLibrary
             }
         }
     }
+
+    public class AppDomainSomething
+    {
+        public static void Do()
+        {
+            throw new InvalidOperationException("We shouldn't get here!!");
+        }
+    }
 }

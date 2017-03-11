@@ -28,7 +28,16 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
+#endif
 using program1.MyLibrary;
 using System;
 using System.Collections.Generic;
@@ -36,6 +45,7 @@ using System.Collections.Generic.Prig;
 using System.Linq;
 using System.Prig;
 using System.Threading;
+using Test.program1.TestUtilities;
 using Urasandesu.Prig.Framework;
 
 namespace Test.program1.MyLibrary
@@ -127,7 +137,7 @@ namespace Test.program1.MyLibrary
                     DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
                 // Act, Assert
-                Assert.Throws<NotImplementedException>(() => new Village());
+                ExceptionAssert.Throws<NotImplementedException>(() => new Village());
             }
         }
 
@@ -166,7 +176,7 @@ namespace Test.program1.MyLibrary
                     DefaultBehavior = IndirectionBehaviors.Fallthrough;
 
                 // Act, Assert
-                Assert.DoesNotThrow(() => new Village());
+                ExceptionAssert.DoesNotThrow(() => new Village());
             }
         }
     }

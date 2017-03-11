@@ -32,6 +32,9 @@
 using Ploeh.AutoFixture;
 using System;
 using System.IO;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO
 {
@@ -54,6 +57,18 @@ namespace Test.Urasandesu.Prig.VSPackage.TestUtilities.Mixins.System.IO
             using (var sw = new StreamWriter(new FileInfo(path).Open(FileMode.Create)))
                 sw.WriteLine(fixture.Create<string>());
             return info;
+        }
+
+        public static bool HasUsersFullControlAccess(this DirectoryInfo info)
+        {
+            var accessCtrl = info.GetAccessControl(AccessControlSections.Access);
+            var accessRules = accessCtrl.GetAccessRules(true, true, typeof(SecurityIdentifier)).OfType<FileSystemAccessRule>();
+            var fullCtrlAccessRules = from accessRule in accessRules
+                                      where accessRule.AccessControlType == AccessControlType.Allow
+                                      where accessRule.IdentityReference == new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null)
+                                      where accessRule.FileSystemRights == FileSystemRights.FullControl
+                                      select accessRule;
+            return fullCtrlAccessRules.Any();
         }
     }
 }

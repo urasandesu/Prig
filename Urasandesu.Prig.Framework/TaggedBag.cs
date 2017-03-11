@@ -38,9 +38,12 @@ namespace Urasandesu.Prig.Framework
     {
         static TaggedBag()
         {
-            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            foreach (var method in typeof(TaggedBag<TTag, TValue>).GetMethods(all))
-                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(TTag).TypeHandle, typeof(TValue).TypeHandle });
+            using (InstanceGetters.DisableProcessing())
+            {
+                var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+                foreach (var method in typeof(TaggedBag<TTag, TValue>).GetMethods(all))
+                    RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(TTag).TypeHandle, typeof(TValue).TypeHandle });
+            }
         }
 
         readonly TValue m_value;

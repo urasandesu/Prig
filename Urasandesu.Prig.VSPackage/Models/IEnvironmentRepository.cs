@@ -32,6 +32,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Urasandesu.Prig.VSPackage.Models
 {
@@ -71,5 +72,7 @@ namespace Urasandesu.Prig.VSPackage.Models
         bool ExistsDirectory(string path);
         string GetFileDescription(string path);
         IDictionary<string, string> GetEnvironmentVariables();
+        void SetFullControlPermissionsToEveryone(string directoryPath);
+        DirectoryInfo CreateDirectory(string directoryPath);
     }
 }

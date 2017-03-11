@@ -28,8 +28,18 @@
  */
 
 
-using NUnit.Framework;
+
+#if NUnit
+using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestAttribute = NUnit.Framework.TestAttribute;
+#elif MsTest
+using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+#elif Xunit
+using TestAttribute = Xunit.FactAttribute;
+#endif
 using System;
+using Test.program1.TestUtilities;
 using UntestableLibrary;
 using UntestableLibrary.Prig;
 using Urasandesu.Prig.Framework;
@@ -67,7 +77,7 @@ namespace Test.program1.UntestableLibrary.Prig
                 PULDllImport.ExcludeGeneric().DefaultBehavior = IndirectionBehaviors.NotImplemented;
 
                 // Act, Assert
-                Assert.Throws<NotImplementedException>(() => new ULDllImport().Start());
+                ExceptionAssert.Throws<NotImplementedException>(() => new ULDllImport().Start());
             }
         }
 

@@ -29,7 +29,6 @@
 
 
 
-using Microsoft.Practices.Unity;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 

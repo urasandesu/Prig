@@ -1,5 +1,5 @@
 ﻿/* 
- * File: PInt32Test.cs
+ * File: LooseCrossDomainAccessorUntyped.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -28,41 +28,16 @@
  */
 
 
+using System;
 
-#if NUnit
-using TestFixtureAttribute = NUnit.Framework.TestFixtureAttribute;
-using TestAttribute = NUnit.Framework.TestAttribute;
-#elif MsTest
-using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
-#elif Xunit
-using TestAttribute = Xunit.FactAttribute;
-#endif
-using System.Prig;
-using Urasandesu.Prig.Framework;
-using Test.program1.TestUtilities;
-
-namespace Test.program1.System.Prig
+namespace Urasandesu.Prig.Framework
 {
-    [TestFixture]
-    public class PInt32Test
+    public class LooseCrossDomainAccessorUntyped
     {
-        [Test]
-        public void TryParse_should_be_callable_indirectly()
+        public static IndirectionHolderUntyped GetOrRegister(Type indDlgt)
         {
-            using (new IndirectionsContext())
-            {
-                // Arrange
-                PInt32.TryParseStringInt32Ref().Body = (string s, out int result) => { result = 42; return false; };
-
-                // Act
-                var actualResult = default(int);
-                var actualReturn = int.TryParse("10", out actualResult);
-
-                // Assert
-                Assert.IsFalse(actualReturn);
-                Assert.AreEqual(42, actualResult);
-            }
+            var holder = LooseCrossDomainAccessor.GetOrRegister<IndirectionHolder<Delegate>>();
+            return new IndirectionHolderUntyped(holder, indDlgt);
         }
     }
 }

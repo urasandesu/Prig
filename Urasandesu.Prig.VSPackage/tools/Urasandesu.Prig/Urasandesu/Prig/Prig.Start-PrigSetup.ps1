@@ -178,6 +178,8 @@ function Start-PrigSetup {
         $envProj.Save($envProj.FullName)
     }
 
+    $vsproj = $(if ($null -eq $Project) { (Get-Project).Object } else { $Project.Object })
+
     [void][System.Reflection.Assembly]::LoadWithPartialName('Microsoft.Build')
     $msbProjCollection = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection
     $allMsbProjs = $msbProjCollection.GetLoadedProjects($envProj.FullName).GetEnumerator()
@@ -216,9 +218,10 @@ function Start-PrigSetup {
     $refIncludes = New-Object 'System.Collections.Generic.List[string]' 
     $refHints =  New-Object 'System.Collections.Generic.List[string]'
     $refs = 
-        $curMsbProj.GetItems('Reference') | 
-            select @{ Name = "Include"; Expression = { $_.EvaluatedInclude } }, 
-                   @{ Name = "HintPath"; Expression = { @($_.Metadata | ? { $_.Name -eq 'HintPath' })[0].EvaluatedValue }}
+        $vsproj.References | 
+            where { $null -eq $_.SourceProject } | 
+            select @{ Name = "Include"; Expression = { $_.Identity } }, 
+                   @{ Name = "HintPath"; Expression = { $_.Path } }
     foreach ($ref in $refs) {
         $refIncludes.Add($ref.Include)
         $refHints.Add($ref.HintPath)
@@ -230,17 +233,11 @@ function Start-PrigSetup {
 
     $projRefIncludes = New-Object 'System.Collections.Generic.List[string]' 
     $projRefs = 
-        $curMsbProj.GetItems('ProjectReference') | 
-            select @{ Name = "Include"; Expression = { $_.EvaluatedInclude } }
+        $vsproj.References | 
+            where { $null -ne $_.SourceProject } | 
+            select @{ Name = "Include"; Expression = { $_.Path } }
     foreach ($projRef in $projRefs) {
-        $projRefFullName = Resolve-Path ([System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($envProj.FullName), $projRef.Include))
-        $allMsbProjs = $msbProjCollection.GetLoadedProjects($projRefFullName).GetEnumerator()
-        if(!$allMsbProjs.MoveNext()) {
-            throw New-Object System.InvalidOperationException ('"{0}" has not been loaded.' -f $projRefFullName)
-        }
-
-        $refMsbProj = $allMsbProjs.Current
-        $projRefIncludes.Add($refMsbProj.ExpandString('$(TargetPath)'))
+        $projRefIncludes.Add($projRef.Include)
     }
     $projRefInclude = $projRefIncludes -join ';'
     Write-Verbose ('ProjectReferenceInclude: {0}' -f $projRefInclude)

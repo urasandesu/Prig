@@ -59,7 +59,7 @@ namespace prig {
             auto prigConfigPath = PrigConfig::GetConfigPath();
             
             auto config = PrigConfig();
-            config.TrySerializeFrom(prigConfigPath);
+            config.TryDeserializeFrom(prigConfigPath);
             
             auto pt = wptree();
             auto pkgspt = wptree();

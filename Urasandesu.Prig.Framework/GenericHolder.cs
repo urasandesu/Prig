@@ -38,9 +38,12 @@ namespace Urasandesu.Prig.Framework
     {
         static GenericHolder()
         {
-            var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-            foreach (var method in typeof(GenericHolder<T>).GetMethods(all))
-                RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
+            using (InstanceGetters.DisableProcessing())
+            {
+                var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+                foreach (var method in typeof(GenericHolder<T>).GetMethods(all))
+                    RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
+            }
         }
 
         GenericHolder() { }

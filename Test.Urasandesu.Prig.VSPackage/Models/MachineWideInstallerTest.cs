@@ -598,11 +598,16 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
             fixture.FreezeUninstalledEnvironment();
             {
                 var pkgDir = @"C:\ProgramData\chocolatey\lib\Prig";
+                var logDir = @"C:\ProgramData\chocolatey\lib\Prig\tools\log";
                 var m = fixture.Freeze<Mock<IEnvironmentRepository>>();
                 m.Setup(_ => _.GetPackageFolder()).Returns(pkgDir).Verifiable();
                 m.Setup(_ => _.GetPackageFolderKey()).ReturnsUsingFixture(fixture).Verifiable();
-                var variableValue = pkgDir;
-                m.Setup(_ => _.StorePackageFolder(variableValue)).Verifiable();
+                m.Setup(_ => _.StorePackageFolder(pkgDir)).Verifiable();
+                m.Setup(_ => _.GetLogFolder()).Returns(logDir).Verifiable();
+                m.Setup(_ => _.GetLogFolderKey()).ReturnsUsingFixture(fixture).Verifiable();
+                m.Setup(_ => _.StoreLogFolder(logDir)).Verifiable();
+                m.Setup(_ => _.CreateDirectory(logDir)).Verifiable();
+                m.Setup(_ => _.SetFullControlPermissionsToEveryone(logDir)).Verifiable();
             }
 
             var mwInstllr = fixture.NewMachineWideInstaller();
@@ -636,6 +641,8 @@ namespace Test.Urasandesu.Prig.VSPackage.Models
                 m.Setup(_ => _.GetLogFolder()).Returns(logDir);
                 m.Setup(_ => _.GetLogFolderKey()).Returns(logDirKey);
                 m.Setup(_ => _.StoreLogFolder(logDir));
+                m.Setup(_ => _.CreateDirectory(logDir));
+                m.Setup(_ => _.SetFullControlPermissionsToEveryone(logDir));
             }
             var mocks = new MockRepository(MockBehavior.Strict);
             var order = new MockOrder();

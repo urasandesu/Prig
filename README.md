@@ -7,7 +7,7 @@ This framework enables that any methods are replaced with mocks. For example, a 
 
 
 ## STATUS
-As of Aug 15, 2016, Released V2.3.1.  
+As of Mar 12, 2017, Released V2.3.2.  
 <a href="https://scan.coverity.com/projects/urasandesu-prig"><img alt="Coverity Scan Build Status" src="https://img.shields.io/coverity/scan/7574.svg"/></a>
 <a href="https://amzn.com/w/ZW5EZ9JC3XKH"><img alt="Donate via Amazon Wish List" src="https://img.shields.io/badge/amazon%20wish%20list-donate-fe9900.svg"/></a>
 
