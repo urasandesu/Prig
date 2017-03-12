@@ -496,7 +496,11 @@ namespace CWeaverDetail {
         auto *pDisp = pDomainProf->GetMetadataDispenser();
         auto asmId = lexical_cast<wstring>(pAsmProf->GetID());
         auto pData = pDomainProf->GetData(asmId);
-        _ASSERTE(pData);
+        if (!pData)
+            // Normally, this condition has never been satisfied.
+            // But it has been satisfied occasionally depending on the timing to unload AppDomain.
+            return S_OK;
+
         auto &prigData = *pData.Get<PrigData *>();
         _ASSERTE(!prigData.m_indDllPath.empty());
         
