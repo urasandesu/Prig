@@ -45,7 +45,7 @@ function Enable-PrigTestAdapter {
         $Project
     )
 
-    $envProj = $Project.Object.Project
+    $envProjs = @($Project.Object.Project)
 
     try {
         $devenv = [System.Diagnostics.Process]::GetCurrentProcess()
@@ -74,12 +74,17 @@ function Enable-PrigTestAdapter {
         }
     }
 
-    $projDir = [System.IO.Path]::GetDirectoryName($envProj.FullName)
-    $outputPath = ($envProj.ConfigurationManager.ActiveConfiguration.Properties | ? { $_.Name -eq 'OutputPath' }).Value
-    $targetDir = [System.IO.Path]::Combine($projDir, $outputPath)
-    if ([string]::IsNullOrEmpty($targetDir)) {
-        throw New-Object System.InvalidOperationException '"$(TargetDir)" has not been able to resolve.'
+    $targetDirs = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($envProj in $envProjs) {
+        $projDir = [System.IO.Path]::GetDirectoryName($envProj.FullName)
+        $outputPath = ($envProj.ConfigurationManager.ActiveConfiguration.Properties | ? { $_.Name -eq 'OutputPath' }).Value
+        $targetDir = [System.IO.Path]::Combine($projDir, $outputPath)
+        if ([string]::IsNullOrEmpty($targetDir)) {
+            throw New-Object System.InvalidOperationException '"$(TargetDir)" has not been able to resolve.'
+        }
+        $targetDirs.Add($targetDir)
     }
+    $targetDir = $targetDirs -join ';'
 
     [System.Environment]::SetEnvironmentVariable($EnableProfilingKey, $EnableProfilingValueEnabled)
     [System.Environment]::SetEnvironmentVariable($ProfilerKey, $ProfilerValue)

@@ -36,6 +36,7 @@ using NuGet.VisualStudio;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -262,6 +263,22 @@ namespace Urasandesu.Prig.VSPackage
             return proj;
         }
 
+        public Project[] GetTargetProjects(DTE dte)
+        {
+            if (dte == null)
+                return new Project[0];
+
+            var sln = dte.Solution;
+            if (sln == null)
+                return new Project[0];
+
+            var projs = sln.Projects;
+            if (projs == null)
+                return new Project[0];
+
+            return projs.OfType<Project>().Where(IsSupportedProject).ToArray();
+        }
+
 
 
         MachineWideProcesses m_mwProc;
@@ -430,6 +447,12 @@ namespace Urasandesu.Prig.VSPackage
             Statusbar.ReportProgress(msg, prog);
         }
 
+        internal void ReportProcessingProjectWideProcessProgress(uint prog, Project[] projs)
+        {
+            Debug.Assert(projs != null);
+            ReportProcessingProjectWideProcessProgress(prog, string.Join(";", projs.Select(_ => _.Name)));
+        }
+
         internal void ReportProcessingProjectWideProcessProgress(uint prog, string include)
         {
             Debug.Assert(m_pwProc != ProjectWideProcesses.None);
@@ -464,6 +487,12 @@ namespace Urasandesu.Prig.VSPackage
         {
             var resName = string.Format("CompletedProjectWideProcessFor_0_{0}_MessageFormat", pwProc);
             return string.Format(PrigResources.GetString(resName), include);
+        }
+
+        internal void EndCompletedProjectWideProcessProgress(Project[] projs)
+        {
+            Debug.Assert(projs != null);
+            EndCompletedProjectWideProcessProgress(string.Join(";", projs.Select(_ => _.Name)));
         }
 
         internal void EndCompletedProjectWideProcessProgress(string include)

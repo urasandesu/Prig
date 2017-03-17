@@ -150,9 +150,6 @@ namespace Urasandesu.Prig.VSPackage
             var menuCommand = new OleMenuCommand(handler, commandId);
             vm.EnableTestAdapterCommand.CanExecuteChanged += (sender, e) => menuCommand.Enabled = ((ICommand)sender).CanExecute(menuCommand);
             menuCommand.BeforeQueryStatus += (sender, e) => vm.TestAdapterBeforeQueryStatusCommand.Execute(sender);
-            var text = PrigResources.GetString("EnableTestAdapterMenu");
-            vm.CurrentProject.Subscribe(
-                proj => menuCommand.Text = proj == null ? text : string.Format(PrigResources.GetString("_0_For_1_MenuFormat"), text, proj.Name));
             return menuCommand;
         }
 
@@ -163,9 +160,6 @@ namespace Urasandesu.Prig.VSPackage
             var menuCommand = new OleMenuCommand(handler, commandId);
             vm.DisableTestAdapterCommand.CanExecuteChanged += (sender, e) => menuCommand.Enabled = ((ICommand)sender).CanExecute(menuCommand);
             menuCommand.Enabled = false;
-            var text = PrigResources.GetString("DisableTestAdapterMenu");
-            vm.CurrentProject.Subscribe(
-                proj => menuCommand.Text = proj == null ? text : string.Format(PrigResources.GetString("_0_For_1_MenuFormat"), text, proj.Name));
             return menuCommand;
         }
 

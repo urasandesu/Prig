@@ -248,13 +248,4 @@ Please select "Prig" - "Register Prig (Needs Restarting)" menu.</value>
     <value>Skipped disabling Prig Test Adapter because Prig has not been registered yet.
 Please select "Prig" - "Register Prig (Needs Restarting)" menu.</value>
   </data>
-  <data name="EnableTestAdapterMenu" xml:space="preserve">
-    <value>&amp;Enable Test Adapter</value>
-  </data>
-  <data name="DisableTestAdapterMenu" xml:space="preserve">
-    <value>&amp;Disable Test Adapter</value>
-  </data>
-  <data name="_0_For_1_MenuFormat" xml:space="preserve">
-    <value>{0} for {1}</value>
-  </data>
 </root>

@@ -50,10 +50,12 @@
 
 namespace PrigDataDetail {
 
+    using namespace Urasandesu::CppAnonym::Utilities;
     using namespace Urasandesu::Swathe::Metadata;
     using boost::filesystem::path;
     using boost::noncopyable;
     using boost::unordered_map;
+    using boost::unordered_set;
     using boost::ptr_vector;
     using std::wstring;
 
@@ -72,7 +74,7 @@ namespace PrigDataDetail {
         }
 
         wstring m_corVersion;
-        path m_indDllPath;
+        unordered_set<path, Hash<path>, EqualTo<path>> m_indDllPaths;
         unordered_map<mdToken, SIZE_T> m_indirectables;
         bool m_indirectablesInit;
         ptr_vector<IndirectionDelegates> m_indirectionDelegatesList;

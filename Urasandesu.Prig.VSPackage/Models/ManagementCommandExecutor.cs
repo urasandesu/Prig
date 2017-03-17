@@ -47,8 +47,8 @@ namespace Urasandesu.Prig.VSPackage.Models
             mci.OnCommandExecuting();
 
             var command = mci.Command;
-            var targetProj = mci.TargetProject;
-            var results = ExecuteCommand(command, targetProj);
+            var targetProjs = mci.TargetProjects;
+            var results = ExecuteCommand(command, targetProjs);
 
             mci.OnCommandExecuted();
 
@@ -60,13 +60,13 @@ namespace Urasandesu.Prig.VSPackage.Models
             return RunspaceFactory.CreateRunspace();
         }
 
-        Collection<PSObject> ExecuteCommand(string command, Project proj)
+        Collection<PSObject> ExecuteCommand(string command, Project[] projs)
         {
             using (var runspace = NewRunspace())
             {
                 runspace.Open();
-                if (proj != null)
-                    runspace.SessionStateProxy.SetVariable("Project", proj);
+                if (projs != null && 0 < projs.Length)
+                    runspace.SessionStateProxy.SetVariable("Project", projs);
                 command = "Set-ExecutionPolicy RemoteSigned -Scope Process -Force\r\n" + command;
                 using (var pipeline = runspace.CreatePipeline(command, false))
                     return pipeline.Invoke();

@@ -63,21 +63,28 @@ namespace CWeaverDetail {
     {
         using boost::filesystem::directory_iterator;
         using boost::filesystem::is_regular_file;
+        using boost::is_any_of;
+        using boost::split;
         using std::regex_search;
         using std::wregex;
 
-        auto patternStr = version + L".v\\d+.\\d+.\\d+.\\d+.((x86)|(AMD64)|(MSIL)).Prig.dll";
-        boost::replace_all(patternStr, L".", L"\\.");
-        auto pattern = wregex(patternStr);
-        for (directory_iterator i(currentDir), i_end; i != i_end; ++i)
+        auto dirs = vector<wstring>();
+        split(dirs, currentDir, is_any_of(L";"));
+        BOOST_FOREACH (auto const &dir, dirs)
         {
-            if (!is_regular_file(i->status()))
-                continue;
-            
-            if (!regex_search(i->path().filename().native(), pattern))
-                continue;
-            
-            indDllPaths.push_back(i->path());
+            auto patternStr = version + L".v\\d+.\\d+.\\d+.\\d+.((x86)|(AMD64)|(MSIL)).Prig.dll";
+            boost::replace_all(patternStr, L".", L"\\.");
+            auto pattern = wregex(patternStr);
+            for (directory_iterator i(dir), i_end; i != i_end; ++i)
+            {
+                if (!is_regular_file(i->status()))
+                    continue;
+                
+                if (!regex_search(i->path().filename().native(), pattern))
+                    continue;
+                
+                indDllPaths.push_back(i->path());
+            }
         }
     }
 
@@ -324,11 +331,20 @@ namespace CWeaverDetail {
         prigData.m_pPrigFrameworkDll = pPrigFrmwrkDll;
 
         auto const *pIndAttrType = pPrigFrmwrkDll->GetType(L"Urasandesu.Prig.Framework.IndirectableAttribute");
-        auto const *pIndAsm = pDisp->GetAssemblyFrom(prigData.m_indDllPath);
-        auto indAttrs = pIndAsm->GetCustomAttributes(pIndAttrType);
-        BOOST_FOREACH (auto const *pIndAttr, indAttrs)
+        auto mdts = unordered_set<mdToken>();
+        BOOST_FOREACH (auto const &indDllPath, prigData.m_indDllPaths)
         {
-            auto mdt = GetIndirectableToken(pIndAttr);
+            auto const pIndAsm = pDisp->GetTempAssemblyFrom(indDllPath);
+            auto indAttrs = pIndAsm->GetCustomAttributes(pIndAttrType);
+            BOOST_FOREACH (auto const *pIndAttr, indAttrs)
+            {
+                auto mdt = GetIndirectableToken(pIndAttr);
+                mdts.insert(mdt);
+            }
+        }
+        
+        BOOST_FOREACH (auto mdt, mdts)
+        {
             auto *pTarget = pAsmGen->GetMethodGenerator(mdt);
 
             auto &orgPrep = prigData.NewPreparation<OriginalMethodPreparation>(mdt);
@@ -345,6 +361,18 @@ namespace CWeaverDetail {
             BOOST_FOREACH (auto const &pair, prigData.m_indirectables)
                 CPPANONYM_D_LOGW1(L"Indirectable Token: 0x%|1$08X|", pair.first);
         }
+    }
+
+    template<class FusionInfoType>
+    void AddSearchDirectory(AssemblyResolver<FusionInfoType> &asmResolver, wstring const &currentDir)
+    {
+        using boost::is_any_of;
+        using boost::split;
+        
+        auto dirs = vector<wstring>();
+        split(dirs, currentDir, is_any_of(L";"));
+        BOOST_FOREACH (auto const &dir, dirs)
+            asmResolver.AddSearchDirectory(dir);
     }
 
     STDMETHODIMP CWeaverImpl::ModuleLoadFinishedCore( 
@@ -401,17 +429,25 @@ namespace CWeaverDetail {
         auto pDomainProf = pAsmProf->AttachToAppDomain();
         auto *pDisp = pDomainProf->GetMetadataDispenser();
         auto &asmResolver = pDisp->GetAssemblyResolver();
-        asmResolver.AddSearchDirectory(m_currentDir);
+        AddSearchDirectory(asmResolver, m_currentDir);
         auto *pAsmGen = pAsmProf->GetAssemblyGenerator(pDisp);
-        auto targetIndDllPath = path(m_currentDir);
-        targetIndDllPath /= GetIndirectionDllName(modName, pRuntime, pAsmGen);
-        CPPANONYM_D_LOGW1(L"Find detour module: %|1$s|.", targetIndDllPath.native());
-        if (candidateIndDllPaths.find(targetIndDllPath) == candidateIndDllPaths.end())
+        auto targetIndDllPaths = unordered_set<path, Hash<path>, EqualTo<path>>();
+        auto targetIndDllName = GetIndirectionDllName(modName, pRuntime, pAsmGen);
+        auto isTarget = [&targetIndDllName](path const &p) { return boost::iequals(p.filename().native(), targetIndDllName); };
+        for_each(candidateIndDllPaths | filtered(isTarget), [&](path const &p) { targetIndDllPaths.insert(p); });
+        if (targetIndDllPaths.empty())
             return S_OK;
         
         
-        CPPANONYM_LOG_NAMED_SCOPE("if (candidateIndDllPaths.find(targetIndDllPath) != candidateIndDllPaths.end())");
-        CPPANONYM_D_LOGW1(L"Detour module: %|1$s| is found. Start to modify the module.", targetIndDllPath.native());
+        CPPANONYM_LOG_NAMED_SCOPE("if (!targetIndDllPaths.empty())");
+        if (CPPANONYM_D_LOG_ENABLED())
+        {
+            auto oss = wostringstream();
+            oss << L"The following detour modules are found. Start to modify the module: ";
+            BOOST_FOREACH (auto const &targetIndDllPath, targetIndDllPaths)
+                oss << boost::wformat(L" \"%|1$s|\"") % targetIndDllPath.native();
+            CPPANONYM_D_LOGW(oss.str());
+        }
         pModProf.Persist();
         pAsmProf.Persist();
         pDomainProf.Persist();
@@ -425,7 +461,7 @@ namespace CWeaverDetail {
             auto &prigData = *pPrigData;
             
             prigData.m_corVersion = pRuntime->GetCORVersion();
-            prigData.m_indDllPath = targetIndDllPath;
+            prigData.m_indDllPaths = targetIndDllPaths;
             FillIndirectionPreparationList(pDisp, pAsmGen, prigData);
             
             pDomainProf->SetData(asmId, pData);
@@ -502,7 +538,7 @@ namespace CWeaverDetail {
             return S_OK;
 
         auto &prigData = *pData.Get<PrigData *>();
-        _ASSERTE(!prigData.m_indDllPath.empty());
+        _ASSERTE(!prigData.m_indDllPaths.empty());
         
         typedef decltype(prigData.m_indirectables) Indirectables;
         typedef Indirectables::iterator Iterator;

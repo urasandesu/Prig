@@ -44,20 +44,20 @@ namespace Urasandesu.Prig.VSPackage.Models
             Command = command;
         }
 
-        public ManagementCommandInfo(string command, Project targetProject)
+        public ManagementCommandInfo(string command, params Project[] targetProjects)
         {
             if (string.IsNullOrEmpty(command))
                 throw new ArgumentNullException("command");
 
-            if (targetProject == null)
-                throw new ArgumentNullException("targetProject");
+            if (targetProjects == null)
+                throw new ArgumentNullException("targetProjects");
 
             Command = command;
-            TargetProject = targetProject;
+            TargetProjects = targetProjects;
         }
 
         public string Command { get; private set; }
-        public Project TargetProject { get; private set; }
+        public Project[] TargetProjects { get; private set; }
 
         public event Action CommandExecuting;
         public event Action CommandExecuted;

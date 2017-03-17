@@ -259,7 +259,7 @@ namespace Urasandesu.Prig.VSPackage
         {
             vm.BeginProjectWideProcessProgress(ProjectWideProcesses.PrigAssemblyAdding);
 
-            
+
             var machinePreq = new MachinePrerequisite(Resources.NuGetRootPackageVersion);
             machinePreq.ProfilerStatusChecking += profLoc => vm.ReportProfilerStatusCheckingProgress(13u, profLoc);
             if (!MachineWideInstaller.HasBeenInstalled(machinePreq))
@@ -348,7 +348,7 @@ Start-PrigSetup -EditorialInclude {0} -Project $Project
                 return;
             }
 
-            
+
             if (!vm.ConfirmRemovingPrigAssembly(deletionalInclude))
                 return;
 
@@ -394,8 +394,8 @@ Start-PrigSetup -DeletionalInclude {0} -Project $Project
                 return false;
             }
 
-            
-            var proj = vm.GetCurrentProjectOrException();
+
+            var projs = vm.GetTargetProjects(vm.GetCurrentProjectOrException().DTE);
 
 
             var command =
@@ -403,9 +403,9 @@ Start-PrigSetup -DeletionalInclude {0} -Project $Project
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
 Enable-PrigTestAdapter -Project $Project
 ";
-            var mci = new ManagementCommandInfo(command, proj);
-            mci.CommandExecuting += () => vm.ReportProcessingProjectWideProcessProgress(50u, proj.Name);
-            mci.CommandExecuted += () => vm.EndCompletedProjectWideProcessProgress(proj.Name);
+            var mci = new ManagementCommandInfo(command, projs);
+            mci.CommandExecuting += () => vm.ReportProcessingProjectWideProcessProgress(50u, projs);
+            mci.CommandExecuted += () => vm.EndCompletedProjectWideProcessProgress(projs);
             ManagementCommandExecutor.Execute(mci);
 
             return true;
@@ -425,15 +425,15 @@ Enable-PrigTestAdapter -Project $Project
                 return false;
             }
 
-            
+
             var command =
 @"
 Import-Module ([IO.Path]::Combine($env:URASANDESU_PRIG_PACKAGE_FOLDER, 'tools\Urasandesu.Prig'))
 Disable-PrigTestAdapter
 ";
             var mci = new ManagementCommandInfo(command);
-            mci.CommandExecuting += () => vm.ReportProcessingProjectWideProcessProgress(50u, null);
-            mci.CommandExecuted += () => vm.EndCompletedProjectWideProcessProgress(null);
+            mci.CommandExecuting += () => vm.ReportProcessingProjectWideProcessProgress(50u, default(string));
+            mci.CommandExecuted += () => vm.EndCompletedProjectWideProcessProgress(default(string));
             ManagementCommandExecutor.Execute(mci);
 
             return true;
