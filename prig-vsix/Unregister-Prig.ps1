@@ -61,7 +61,7 @@ $procVars.GetEnumerator() | % {
 
 foreach ($level in "Machine","User") {
     [System.Environment]::GetEnvironmentVariables($level).GetEnumerator() | % {
-        if($_.Name -match 'Path$') { 
+        if($_.Name -match 'Path$' -and (Test-Path "Env:$($_.Name)")) { 
             $_.Value = ($((Get-Content "Env:$($_.Name)") + ";$($_.Value)") -split ';' | select -Unique) -join ';'
         }
         $_

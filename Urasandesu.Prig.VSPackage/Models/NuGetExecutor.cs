@@ -71,7 +71,7 @@ namespace Urasandesu.Prig.VSPackage.Models
             var nuget = EnvironmentRepository.GetNuGetPath();
             var args = "sources list";
             var nameRecordRegex = new Regex(@"^\s+\d+\.\s+");
-            var nameExtractRegex = new Regex(@"^\s+\d+\.\s+(?<name>.*)(( \[Enabled\])|( \[Disabled\]))$", RegexOptions.IgnoreCase);
+            var nameExtractRegex = new Regex(@"^\s+\d+\.\s+(?<name>.*)( \[[^\]]+\])$", RegexOptions.IgnoreCase);
             var nameRegex = new Regex(string.Format(@"^{0}$", Regex.Escape(name)), RegexOptions.IgnoreCase);
             return StartProcessWithoutShell(nuget, args, p => p.StandardOutput.ReadLines().
                         Where(_ => nameRecordRegex.IsMatch(_)).
