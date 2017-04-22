@@ -51,7 +51,7 @@ namespace Urasandesu.Prig.Framework
             {
                 var all = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly;
                 foreach (var method in typeof(LooseCrossDomainAccessor<T>).GetMethods(all))
-                    RuntimeHelpers.PrepareMethod(method.MethodHandle);
+                    RuntimeHelpers.PrepareMethod(method.MethodHandle, new[] { typeof(T).TypeHandle });
             }
         }
 

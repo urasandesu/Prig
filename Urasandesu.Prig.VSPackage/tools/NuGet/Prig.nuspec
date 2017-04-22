@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Prig</id>
-    <version>2.3.2</version>
+    <version>2.4.0</version>
     <title>Prig - Open Source Alternative to Microsoft Fakes</title>
     <authors>Akira Sugiura</authors>
     <owners>Akira Sugiura</owners>
@@ -18,7 +18,11 @@
     </description>
     <copyright>(c) 2014 Akira Sugiura. All rights reserved.</copyright>
     <tags>tdd isolation mock mocks mocking fake fakes faking unittest unittesting</tags>
-    <releaseNotes>Version 2.3.2
+    <releaseNotes>Version 2.4.0
+* 
+
+
+Version 2.3.2
 * Fixed #83: Namespace / typename confusion. Added global namespace alias when Prig Assembly is generated.
 * Fixed #85: The method of generic type that has declaring type parameter excluding this cannot detour. Against the method that has the type as same as declaring the type as the signature, consider the problem that we cannot make the generic type instance that is instantiated by its generic parameter in the managed code.
 * Fixed #76: Unable to share unit test with team. Modify the processing so that adds Prig Assembly to reference the only assembly that is located at System Directory(e.g. C:\Windows) by full path.

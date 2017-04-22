@@ -45,7 +45,7 @@ New-Variable ProfilerCurrentDirectoryKey 'URASANDESU_PRIG_CURRENT_DIRECTORY' -Op
 New-Variable ProfilerTargetProcessNameKey 'URASANDESU_PRIG_TARGET_PROCESS_NAME' -Option ReadOnly
 New-Variable ProfilerTargetProcessNameValue '' -Option ReadOnly
 New-Variable ProfilerTargetProcessArgumentKey 'URASANDESU_PRIG_TARGET_PROCESS_ARGUMENT' -Option ReadOnly
-New-Variable ProfilerTargetProcessArgumentValue '(vstest\.executionengine)|(te\.processhost\.managed[^/]+/role=testexecution)' -Option ReadOnly
+New-Variable ProfilerTargetProcessArgumentValue '(vstest\.executionengine)|(te\.processhost\.managed[^/]+/role=testexecution)|(JetBrains\.ReSharper\.TaskRunner)' -Option ReadOnly
 
 
 
